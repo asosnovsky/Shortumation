@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "strict": true,
+      "jsx": "react-jsx",
+      "rootDir": "./src",
+      "experimentalDecorators": true,
+      "esModuleInterop": true,
+      "lib": ["dom", "es2015"]
+    },
+    "include": [
+      "src/**/*"
+    ]
+  }

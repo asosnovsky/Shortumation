@@ -1,0 +1,105 @@
+@import "./colors.scss";
+@import "./pages/index.scss";
+@import "./utils.scss";
+@import "./components/index.scss";
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: Tahoma, Geneva, sans-serif;
+  background-color: $primary;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  color: $font-color-primary;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  text-align: center;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: $secondary;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $secondary-accent;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: $primary-accent;
+}
+
+:root {
+  touch-action: pan-x pan-y;
+  height: 100%;
+}
+
+button {
+  background-color: $secondary;
+  color: $primary-accent;
+  border-color: $primary-accent;
+  &:hover {
+    background-color: $primary;
+    border-color: $secondary-accent;
+  }
+
+  &.secondary {
+    background-color: $primary;
+    color: $secondary-accent;
+    border-color: $secondary-accent;
+    &:hover {
+      background-color: $secondary;
+      border-color: $primary-accent;
+    }
+  }
+
+  border-style: solid;
+  border-width: 1px;
+  padding: 2.5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+select {
+  @extend button;
+  margin: 0;
+}

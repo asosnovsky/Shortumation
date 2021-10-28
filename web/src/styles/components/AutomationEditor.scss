@@ -1,0 +1,17 @@
+.automation-editor {
+  &--root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  button.elm-list {
+    width: 90%;
+  }
+  &--elm-list {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 5%;
+  }
+}

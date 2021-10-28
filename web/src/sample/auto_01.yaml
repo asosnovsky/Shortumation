@@ -1,0 +1,31 @@
+alias: On Balcony Door Open
+description: "Determines what to do when the door opens..."
+trigger:
+  - type: opened
+    platform: device
+    device_id: bad6b55ae91b7ced810fd5310c0a0fce
+    entity_id: binary_sensor.door_balcony
+    domain: binary_sensor
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ states('switch.plug_out_bug_lamp') == 'unavailable' }}"
+        sequence:
+          - type: turn_on
+            device_id: 03065414e37dafc42ce0597f5458a084
+            entity_id: switch.plug_balcony_power
+            domain: switch
+          - wait_template: "{{ states('switch.plug_out_bug_lamp') != 'unavailable' }}"
+            timeout: "00:05:00"
+          - type: turn_on
+            device_id: 687cb5b66de19eaab5eb64cbaad90c58
+            entity_id: switch.plug_out_bug_lamp
+            domain: switch
+    default:
+      - type: turn_on
+        device_id: 687cb5b66de19eaab5eb64cbaad90c58
+        entity_id: switch.plug_out_bug_lamp
+        domain: switch
+mode: single
