@@ -56,3 +56,15 @@ export type AutomationCondition =
     | ZoneCondition
     | GenericCondition
 ;
+export const conditionTypes = [
+    'And' ,
+    'Or' ,
+    'Not',
+    'Numeric State',
+    'State',
+    'Template',
+    'Time',
+    'Trigger',
+    'Zone',
+] as const;
+export type ConditionType = typeof conditionTypes[number];

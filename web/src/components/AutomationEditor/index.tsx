@@ -14,14 +14,14 @@ export default function AutomationEditor({ automation }: Props) {
 
     // helper state functions
     const addNode = <T extends types.AutomationNodeType>(node_type: T, node: types.AutomationNodeTypes[T]) => {
-      const nodes: types.AutomationNode[] = state[node_type];
+      const nodes: types.AutomationNode<T>[] = state[node_type];
       setState({
         ...state,
         [node_type]: nodes.concat([node as any])
       });
     }
     const removeNode = <T extends types.AutomationNodeType>(node_type: T, node_id: number) => {
-      const nodes: types.AutomationNode[] = state[node_type];
+      const nodes: types.AutomationNode<T>[] = state[node_type];
       setState({
         ...state,
         [node_type]: nodes
@@ -35,8 +35,8 @@ export default function AutomationEditor({ automation }: Props) {
       });
     }
     // helper element functions
-    const makeChild = (node_type: types.AutomationNodeType) => {
-      const nodes: types.AutomationNode[] = state[node_type];
+    const makeChild = <T extends types.AutomationNodeType>(node_type: T) => {
+      const nodes: types.AutomationNode<T>[] = state[node_type];
       return [
         <div className="automation-box--elm-list" key="list">
           {state[node_type].map((n, i) => (

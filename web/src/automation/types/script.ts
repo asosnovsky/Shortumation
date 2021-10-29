@@ -46,3 +46,12 @@ export type AutomationScript =
     | DeviceScript
     | ChooseScript
 ;
+export const scriptTypes = [
+    'Service',
+    'Repeat',
+    'Wait',
+    'Event',
+    'Device',
+    'Choose'
+] as const;
+export type ScriptType = typeof scriptTypes[number];

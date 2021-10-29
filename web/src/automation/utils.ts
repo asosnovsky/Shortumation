@@ -1,7 +1,7 @@
 import { AutomationNode } from "./types";
 
 
-export const getNameFromAction = (action: AutomationNode): string => {
+export const getNameFromAction = (action: AutomationNode<any>): string => {
     if(typeof action === 'string') {
         return action;
     }

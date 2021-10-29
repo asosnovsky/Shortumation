@@ -1,47 +1,49 @@
+import InputWrapper from "../../components/InputWrapper";
 import { ServiceScript } from "../types/script";
-import { BaseStateManager } from "./BaseManager";
+import { BaseState } from "./BaseState";
 
 
-export class ScriptCallService extends BaseStateManager<ServiceScript> {
-    defaultState(): ServiceScript {
-        return {
-            service: "",
-            alias: "Call Service",
-            target: "",
-            data: {},
-        }
+export default class ScriptCallServiceState extends BaseState<ServiceScript> {
+    defaultState = () =>  ({
+        service: "",
+        alias: "Call Service",
+        target: "",
+        data: {},
+    })
+    isReady(state: ServiceScript): boolean {
+        return state.service !== '' &&
+            state.alias !== '' &&
+            state.target !== ''
     }
-    isReady(): boolean {
-        return this.state.service !== '' &&
-            this.state.alias !== '' &&
-            this.state.target !== ''
-    }
-    renderOptionList(): JSX.Element {
+    renderOptionList(state: ServiceScript): JSX.Element {
         return <div className="state-manager-options">
-            <label htmlFor="#alias">Description</label>
-            <input id="alias" value={this.state.alias} onChange={e => {
-                e.preventDefault();
-                this.setState({
-                    ...this.state,
-                    alias: e.target.value,
-                })
-            }}/>
-            <label htmlFor="#service">Service</label>
-            <input id="service" value={this.state.service} onChange={e => {
-                e.preventDefault();
-                this.setState({
-                    ...this.state,
-                    service: e.target.value,
-                })
-            }}/>
-            <label htmlFor="#target">Target</label>
-            <input id="target" value={this.state.target} onChange={e => {
-                e.preventDefault();
-                this.setState({
-                    ...this.state,
-                    target: e.target.value,
-                })
-            }}/>
+            <InputWrapper label="Description">
+                <input value={state.alias} onChange={e => {
+                    e.preventDefault();
+                    this.setState({
+                        ...state,
+                        alias: e.target.value,
+                    })
+                }}/>
+            </InputWrapper>
+            <InputWrapper label="Service">
+                <input value={state.service} onChange={e => {
+                    e.preventDefault();
+                    this.setState({
+                        ...state,
+                        service: e.target.value,
+                    })
+                }}/>
+            </InputWrapper>
+            <InputWrapper label="Target">
+                <input value={state.target} onChange={e => {
+                    e.preventDefault();
+                    this.setState({
+                        ...state,
+                        target: e.target.value,
+                    })
+                }}/>
+            </InputWrapper>
         </div>
     }
 }

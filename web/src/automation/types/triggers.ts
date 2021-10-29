@@ -88,3 +88,18 @@ export type AutomationTrigger =
     | AutomationTriggerDevice
     | AutomationTriggerGeneric
 ;
+export const triggerTypes = [
+    'Event',
+    'Home Assistant',
+    'MQTT',
+    'Numeric State',
+    'State',
+    'Tag',
+    'Template',
+    'Time',
+    'Time Pattern',
+    'Webhook',
+    'Zone',
+    'Device',
+] as const;
+export type TriggerType = typeof triggerTypes[number];

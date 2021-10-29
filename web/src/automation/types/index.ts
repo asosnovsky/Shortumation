@@ -1,6 +1,6 @@
-import { AutomationCondition } from "./condition";
-import { AutomationScript } from "./script";
-import { AutomationTrigger } from "./triggers";
+import { AutomationCondition, ConditionType, conditionTypes } from "./condition";
+import { AutomationScript, ScriptType, scriptTypes } from "./script";
+import { AutomationTrigger, TriggerType, triggerTypes } from "./triggers";
 
 export interface Automation {
     id: string;
@@ -19,3 +19,14 @@ export type AutomationAction = AutomationScript | AutomationCondition;
 export type AutomationNode<T extends AutomationNodeType> = 
     AutomationNodeTypes[T][number];
 
+export type NodeSubType<T=any> =
+    T extends 'action' ? ScriptType :
+    T extends 'condition' ? ConditionType :
+    T extends 'trigger' ? TriggerType :
+    never;
+
+export const typeList = {
+    'action': scriptTypes,
+    'condition': conditionTypes,
+    'trigger': triggerTypes,
+} as const;
