@@ -1,8 +1,6 @@
 import AutomationEditor from "../components/AutomationEditor";
 import sample from "../sample/auto_01.yaml";
 
-console.log(sample)
-
 export function Home() {
   return (
     <div id="page--home" className="page">

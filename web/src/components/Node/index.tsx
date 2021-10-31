@@ -16,7 +16,6 @@ export default function AutomationNode({
     onXClick = () => {},
 }: PropsWithChildren<Props>) {
     const [isOpen, setOpen] = useState(initialOpenState);
-    console.log(children);
     return <div className="automation-node">
     <div className="automation-node-inner">
       <div

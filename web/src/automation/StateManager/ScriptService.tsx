@@ -1,3 +1,4 @@
+import InputText from "../../components/InputText";
 import InputWrapper from "../../components/InputWrapper";
 import { ServiceScript } from "../types/script";
 import { BaseState } from "./BaseState";
@@ -17,33 +18,18 @@ export default class ScriptCallServiceState extends BaseState<ServiceScript> {
     }
     renderOptionList(state: ServiceScript): JSX.Element {
         return <div className="state-manager-options">
-            <InputWrapper label="Description">
-                <input value={state.alias} onChange={e => {
-                    e.preventDefault();
-                    this.setState({
-                        ...state,
-                        alias: e.target.value,
-                    })
-                }}/>
-            </InputWrapper>
-            <InputWrapper label="Service">
-                <input value={state.service} onChange={e => {
-                    e.preventDefault();
-                    this.setState({
-                        ...state,
-                        service: e.target.value,
-                    })
-                }}/>
-            </InputWrapper>
-            <InputWrapper label="Target">
-                <input value={state.target} onChange={e => {
-                    e.preventDefault();
-                    this.setState({
-                        ...state,
-                        target: e.target.value,
-                    })
-                }}/>
-            </InputWrapper>
+            <InputText label="Description" 
+                value={state.alias} 
+                onChange={alias => this.setState({...state, alias})}
+            />
+            <InputText label="Service" 
+                value={state.service} 
+                onChange={service => this.setState({...state, service})}
+            />
+            <InputText label="Target" 
+                value={state.target} 
+                onChange={target => this.setState({...state, target})}
+            />
         </div>
     }
 }

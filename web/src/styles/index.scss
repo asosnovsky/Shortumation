@@ -80,6 +80,13 @@ button {
     border-color: $secondary-accent;
   }
 
+  &:disabled {
+    background-color: $gray;
+    border-color: $gray;
+    color: darken($gray, 50);
+    cursor: not-allowed;
+  }
+
   &.secondary {
     background-color: $primary;
     color: $secondary-accent;
@@ -102,4 +109,9 @@ button {
 select {
   @extend button;
   margin: 0;
+}
+input {
+  @extend button;
+  margin: 0;
+  cursor: text;
 }

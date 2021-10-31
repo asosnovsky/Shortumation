@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AutomationNodeType, NodeSubType } from "../types";
 import { BaseState } from "./BaseState";
 import Generic from "./Generic";
@@ -24,9 +24,15 @@ export default class StateManager {
         }
         this.nodeType = nodeType;
         this.nodeSubtype = nodeSubtype;
+        useEffect(() => {
+            this.setState(this.baseState.defaultState());
+        }, [this.nodeType, this.nodeSubtype]);
         return this.baseState;
     }
     renderOptionList() {
         return this.baseState.renderOptionList(this.state)
+    }
+    get isReady() {
+        return this.baseState.isReady(this.state);
     }
 }

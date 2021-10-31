@@ -28,14 +28,19 @@ export default function NewNodeModal<T extends AutomationNodeType>({
         <div className="new-node-modal--inner" onClick={e => e.preventDefault()}>
             <div className="new-node-modal--title">Create {node_type[0].toUpperCase()}{node_type.slice(1)}</div>
             <div className="new-node-modal--body">
-                <InputWrapper label="Type:">
-                    <InputList options={typeList[node_type]} current={selectedSubType} onChange={n => setSubType(n as NodeSubType)}/>
-                </InputWrapper>
+                <InputList label="Type:" 
+                    options={typeList[node_type]} 
+                    current={selectedSubType} 
+                    onChange={n => setSubType(n as NodeSubType)}
+                />
                 {stateManager.renderOptionList()}
             </div>
             <div className="new-node-modal--footer">
-                <button className="secondary" onClick={() => onClose()}>Close</button>
-                <button onClick={() => onCreate({} as any)}>Create</button>
+                <button onClick={() => onClose()}>Close</button>
+                <button onClick={() => onCreate({} as any)}
+                        disabled={!stateManager.isReady}>
+                    Create
+                </button>
             </div>
         </div>
     </div>
