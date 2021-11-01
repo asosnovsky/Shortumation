@@ -18,15 +18,19 @@ export default class ScriptCallServiceState extends BaseState<ServiceScript> {
     }
     renderOptionList(state: ServiceScript): JSX.Element {
         return <div className="state-manager-options">
-            <InputText label="Description" 
+            <InputText 
+                label="Description" 
                 value={state.alias} 
                 onChange={alias => this.setState({...state, alias})}
             />
-            <InputText label="Service" 
+            <InputText 
+                textBoxFor="service"
+                label="Service" 
                 value={state.service} 
                 onChange={service => this.setState({...state, service})}
             />
-            <InputText label="Target" 
+            <InputText 
+                label="Target" 
                 value={state.target} 
                 onChange={target => this.setState({...state, target})}
             />

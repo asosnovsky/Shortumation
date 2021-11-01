@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import StateManager from "../../automation/StateManager";
 import { AutomationNodeType, AutomationNodeTypes, NodeSubType, typeList } from "../../automation/types";
 import InputList from "../InputList";
-import InputWrapper from "../InputWrapper";
 
 export interface Props<T extends AutomationNodeType> {
     node_type: T,
