@@ -1,0 +1,21 @@
+import StateManager from "../../automation/StateManager";
+import { AutomationAction } from "../../automation/types";
+import { determineNodeTypes, getNameFromAction } from "../../automation/utils";
+import AutomationNode from "../Node";
+
+
+export interface Props {
+    data: AutomationAction;
+    onDelete: () => void;
+}
+export default function ScriptNode({
+    data,
+    onDelete,
+}: Props) {
+    const [nodeType, nodeSubType] = determineNodeTypes(data);
+    const stateManager = new StateManager(nodeType, nodeSubType, data);
+
+    return <AutomationNode title={getNameFromAction(data)} onXClick={onDelete}>
+        {stateManager.renderOptionList()}
+    </AutomationNode>
+}

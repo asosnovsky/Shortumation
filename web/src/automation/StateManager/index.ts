@@ -11,10 +11,16 @@ export default class StateManager {
 
     constructor(
         public nodeType: AutomationNodeType, 
-        public nodeSubtype: NodeSubType
+        public nodeSubtype: NodeSubType,
+        initialState: any | undefined = undefined,
     ){
-        [this.state, this.setState] = useState({});
+        [this.state, this.setState] = useState(initialState ?? {});
         this.baseState = this.swapBaseState(this.nodeType, this.nodeSubtype);
+        if (!initialState) {
+            useEffect(() => {
+                this.setState(this.baseState.defaultState());
+            }, [this.nodeType, this.nodeSubtype]);
+        }
     }
     swapBaseState(nodeType: AutomationNodeType, nodeSubtype: NodeSubType) {
         try {
@@ -24,9 +30,6 @@ export default class StateManager {
         }
         this.nodeType = nodeType;
         this.nodeSubtype = nodeSubtype;
-        useEffect(() => {
-            this.setState(this.baseState.defaultState());
-        }, [this.nodeType, this.nodeSubtype]);
         return this.baseState;
     }
     renderOptionList() {

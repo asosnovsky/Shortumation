@@ -2,3 +2,7 @@
 @import "./AutomationEditor.scss";
 @import "./NewNodeModal.scss";
 @import "./InputWrapper.scss";
+
+* {
+  transition: all 200ms ease-in;
+}

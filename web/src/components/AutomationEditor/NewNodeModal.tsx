@@ -36,7 +36,7 @@ export default function NewNodeModal<T extends AutomationNodeType>({
             </div>
             <div className="new-node-modal--footer">
                 <button onClick={() => onClose()}>Close</button>
-                <button onClick={() => onCreate({} as any)}
+                <button onClick={() => onCreate(stateManager.state)}
                         disabled={!stateManager.isReady}>
                     Create
                 </button>

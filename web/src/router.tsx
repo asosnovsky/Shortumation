@@ -18,12 +18,12 @@ export default function App() {
         <div>
           <Switch>
             <Route path="/">
-              {/* <Home /> */}
-              <NewNodeModal
+              <Home />
+              {/* <NewNodeModal
                 node_type="action"
                 onClose={()=>{}}
                 onCreate={()=>{}}
-              />
+              /> */}
             </Route>
           </Switch>
         </div>

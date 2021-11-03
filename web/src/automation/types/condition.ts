@@ -66,5 +66,6 @@ export const conditionTypes = [
     'Time',
     'Trigger',
     'Zone',
+    'Generic',
 ] as const;
 export type ConditionType = typeof conditionTypes[number];

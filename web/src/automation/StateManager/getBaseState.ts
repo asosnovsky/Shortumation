@@ -8,7 +8,6 @@ export const getBaseState = <T extends AutomationNodeType>(
     node_type: T, 
     node_subtype: NodeSubType<T>
 ) :  any => {
-    console.log(node_subtype)
     if ( node_type === 'action') {
         switch (node_subtype) {
             case 'Service':

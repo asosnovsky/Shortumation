@@ -3,6 +3,7 @@ import * as types from "../../automation/types";
 import { getNameFromAction } from "../../automation/utils";
 import AutomationNode from "../Node";
 import NewNodeModal from "./NewNodeModal";
+import ScriptNode from "./ScriptNode";
 
 export interface Props {
     automation: types.Automation;
@@ -36,16 +37,13 @@ export default function AutomationEditor({ automation }: Props) {
     }
     // helper element functions
     const makeChild = <T extends types.AutomationNodeType>(node_type: T) => {
-      const nodes: types.AutomationNode<T>[] = state[node_type];
       return [
-        <div className="automation-box--elm-list" key="list">
+        <div className="automation-editor--elm-list" key="list">
           {state[node_type].map((n, i) => (
-            <AutomationNode
+            <ScriptNode
               key={i}
-              title={getNameFromAction(n)}
-              showX={false}
-              initialOpenState={false}
-              onXClick={() => removeNode(node_type, i)}
+              onDelete={() => removeNode(node_type, i)}
+              data={n as any}
             />
           ))}
         </div>,
@@ -63,16 +61,19 @@ export default function AutomationEditor({ automation }: Props) {
         <AutomationNode 
             title={`${automation.alias} (${automation.mode})`}
             initialOpenState={true}
-            showChildren={true}
-            showX={false}
         >
             <div className="automation-editor--root">
-                <h4>Trigger</h4>
-                {makeChild("trigger")}
-                <h4>Condition</h4>
-                {makeChild("condition")}
-                <h4>Actions</h4>
-                {makeChild("action")}
+                <div className="automation-editor--triggers">
+                  <h4>Trigger</h4>
+                  {makeChild("trigger")}
+                  <h4>Condition</h4>
+                  {makeChild("condition")}
+                </div>
+                <div className="automation-editor--playground">
+                  <h4>Actions</h4>
+                  {makeChild("action")}
+                </div>
+
             </div>
         </AutomationNode>
         {modalState && <NewNodeModal

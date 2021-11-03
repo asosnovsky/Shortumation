@@ -101,5 +101,6 @@ export const triggerTypes = [
     'Webhook',
     'Zone',
     'Device',
+    'Generic',
 ] as const;
 export type TriggerType = typeof triggerTypes[number];
