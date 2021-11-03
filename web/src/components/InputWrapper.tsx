@@ -1,11 +1,12 @@
-import { PropsWithChildren } from "react";
+import { CSSProperties, PropsWithChildren } from "react";
 
 
 export interface Props {
     label: string;
+    style?: CSSProperties;
 }
-export default function InputWrapper({label, children}: PropsWithChildren<Props>) {
-    return <div className="input-wrapper">
+export default function InputWrapper({label, children, style={}}: PropsWithChildren<Props>) {
+    return <div className="input-wrapper" style={style}>
         <label>{label}</label>
         {children}
     </div>

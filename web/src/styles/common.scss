@@ -95,3 +95,26 @@ input {
   margin: 0;
   cursor: text;
 }
+input[type="number"]::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  opacity: 0;
+}
+span.checkbox {
+  height: 16px;
+  width: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px $primary-accent solid;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  background-color: $primary;
+  color: $primary-accent;
+  overflow: hidden;
+
+  &:hover {
+    background-color: $secondary;
+    color: $secondary-accent;
+  }
+}
