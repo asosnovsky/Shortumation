@@ -99,6 +99,13 @@ input[type="number"]::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   opacity: 0;
 }
+textarea {
+  @extend button;
+  cursor: text;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
 span.checkbox {
   height: 16px;
   width: 16px;

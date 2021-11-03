@@ -33,11 +33,11 @@ export const determineNodeTypes = (action: AutomationNode<any>) : [AutomationNod
     if ('condition' in action) {
         switch (action.condition) {
             case 'and':
-                return ['condition', 'And']
+                return ['condition', 'Logic']
             case 'or':
-                return ['condition', 'Or']
+                return ['condition', 'Logic']
             case 'not':
-                return ['condition', 'Not']
+                return ['condition', 'Logic']
             case 'numeric_state':
                 return ['condition', 'Numeric State']
             case 'state':

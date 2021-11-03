@@ -1,5 +1,6 @@
 import InputNumber from "../../components/InputNumber";
 import InputText from "../../components/InputText";
+import InputYaml from "../../components/InputYaml";
 import { RepeatScript } from "../types/script";
 import { BaseState } from "./BaseState";
 
@@ -28,9 +29,11 @@ export default class ScriptRepeatState extends BaseState<RepeatScript> {
                 value={state?.repeat?.count} 
                 onChange={count => this.setState({...state, repeat: {...state.repeat, count}})}
             />
-            <div>
-                {JSON.stringify(state?.repeat?.sequence)}
-            </div>
+            <InputYaml
+                label="Sequence"
+                value={state?.repeat?.sequence ?? {}}
+                onChange={sequence => this.setState({...state, repeat: {...state.repeat, sequence}})}
+            />
         </div>
     }
 }

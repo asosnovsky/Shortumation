@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "js-yaml": "^4.1.0",
     "parcel": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -9,6 +10,7 @@
     "@parcel/transformer-sass": "^2.0.0",
     "@parcel/transformer-yaml": "^2.0.0",
     "@types/jest": "^27.0.2",
+    "@types/js-yaml": "^4.0.4",
     "@types/node": "^16.11.6",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",

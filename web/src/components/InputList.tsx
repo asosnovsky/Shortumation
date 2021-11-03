@@ -2,15 +2,18 @@ import { SelectHTMLAttributes } from "react";
 import InputWrapper from "./InputWrapper";
 
 
-export interface Props {
-    current: string;
-    options: readonly string[];
+export interface Props<T extends string> {
+    current: T;
+    options: readonly T[];
     onChange: (n: string) => void;
     id?: string;
     className?: string;
     label: string;
 }
-export default function InputList({current, options, onChange, label, ...selattr}: Props) {
+export default function InputList<T extends string>({
+    current, options, onChange, label, 
+    ...selattr
+}: Props<T>) {
     return <InputWrapper label={label}>
         <select {...selattr} value={current} onChange={e => {
             e.preventDefault();

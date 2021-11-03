@@ -57,9 +57,7 @@ export type AutomationCondition =
     | GenericCondition
 ;
 export const conditionTypes = [
-    'And' ,
-    'Or' ,
-    'Not',
+    'Logic',
     'Numeric State',
     'State',
     'Template',

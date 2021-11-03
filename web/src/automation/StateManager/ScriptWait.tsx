@@ -25,7 +25,7 @@ export default class ScriptWaitState extends BaseState<WaitScript> {
             />
             <InputText
                 textBoxFor="template" 
-                label="Timeout" 
+                label="Template" 
                 value={state.wait_template} 
                 onChange={wait_template => this.setState({...state, wait_template})}
             />
