@@ -46,7 +46,6 @@ export interface GenericCondition extends BaseCondition {
     condition: string;
 }
 export type AutomationCondition = 
-    | string // <-- this is the same as "TemplateCondition"
     | LogicCondition
     | NumericCondition
     | StateCondition

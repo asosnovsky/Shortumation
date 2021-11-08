@@ -9,6 +9,7 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0",
     "@parcel/transformer-yaml": "^2.0.0",
+    "@testing-library/jest-dom": "^5.15.0",
     "@types/jest": "^27.0.2",
     "@types/js-yaml": "^4.0.4",
     "@types/node": "^16.11.6",
@@ -17,8 +18,8 @@
     "@types/react-router-dom": "^5.3.2",
     "concurrently": "^6.3.0",
     "husky": "^7.0.4",
+    "instead": "^1.0.3",
     "jest": "^27.3.1",
-    "jest-dom": "^4.0.0",
     "jest-extended": "^1.1.0",
     "prettier": "^2.4.1",
     "react-test-renderer": "^17.0.2",

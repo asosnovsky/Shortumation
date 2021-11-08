@@ -23,7 +23,7 @@ export default function InputYaml<T>({
             delayId.current = null;
         }
         delayId.current = window.setTimeout(() => {
-            onChange(yaml.load(update))
+            onChange(yaml.load(update) as any)
         }, 1000);
     }
     return <InputWrapper label={label}>

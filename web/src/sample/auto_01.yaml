@@ -6,7 +6,15 @@ trigger:
     device_id: bad6b55ae91b7ced810fd5310c0a0fce
     entity_id: binary_sensor.door_balcony
     domain: binary_sensor
-condition: []
+condition:
+  - condition: and
+    conditions:
+      - condition: not
+        conditions:
+          - condition: template
+            value_template: "{{ states('switch.plug_out_bug_lamp') == 'unavailable' }}"
+      - condition: time
+        after: "10:00:00"
 action:
   - choose:
       - conditions:

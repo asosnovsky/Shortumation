@@ -19,11 +19,6 @@ export default function App() {
           <Switch>
             <Route path="/">
               <Home />
-              {/* <NewNodeModal
-                node_type="action"
-                onClose={()=>{}}
-                onCreate={()=>{}}
-              /> */}
             </Route>
           </Switch>
         </div>
