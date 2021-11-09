@@ -1,6 +1,6 @@
 
 import { GRAPH_HEIGHT, GRAPH_WIDTH, NODE_HEIGHT, NODE_WIDTH } from "./constants";
-import {DAG, Point} from "./types";
+import {DAG, Node, Point} from "./types";
 
 
 export const clip = (p: Point) : Point => {
@@ -12,10 +12,13 @@ export interface NormalizedDag extends DAG {
 }
 export const normalizeDAG = (dag: DAG): NormalizedDag => {
     // let overflow: bo
-    const nodes = dag.nodes.map(n => ({
-        ...n,
-        loc: clip(n.loc),
-    }));
+    const nodes = Object.keys(dag.nodes).map<[string, Node]>(nodeId => [nodeId, {
+        ...dag.nodes[nodeId],
+        loc: clip(dag.nodes[nodeId].loc),
+    }]).reduce((all, [nodeId, next]) => ({
+        [nodeId]: next,
+        ...all,
+    }),{});
     // dag.edges.forEach(edge => {
     //     const n1 = nodes[edge.from];
     //     const n2 = nodes[edge.to];

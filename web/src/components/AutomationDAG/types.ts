@@ -6,12 +6,12 @@ export interface Node {
     text: string;
 }
 export interface Edge {
-    from: number;
-    to: number;
+    from: string;
+    to: string;
     direction: '1->2' | '1<->2' | '1<-2';
 }
 export type EdgeDirection = Edge['direction'];
 export interface DAG {
-    nodes: Array<Node>;
+    nodes: Record<string,Node>;
     edges: Array<Edge>;
 }

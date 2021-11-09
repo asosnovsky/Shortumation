@@ -18,10 +18,7 @@ export default ({p1, p2, direction}: EdgeProp) => {
     const cx2 = x2 - NODE_WIDTH
     const cy2 = my + 30 * Math.cos(theta)
 
-    return <>
-    <circle cx={cx1} cy={cy1} stroke="red" r="1"/>
-    <circle cx={cx2} cy={cy2} stroke="blue" r="1"/>
-    <path className="edge" 
+    return <path className="edge"
         d={ `M${x1} ${y1} C${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}`}
         fill="none"
         markerStart={
@@ -33,5 +30,4 @@ export default ({p1, p2, direction}: EdgeProp) => {
                 "url(#arrow)" : ''
         }
     />
-    </>
 }
