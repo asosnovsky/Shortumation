@@ -1,14 +1,12 @@
 
+import { Automation } from "../../automation/types";
 import { GRAPH_HEIGHT, GRAPH_WIDTH, NODE_HEIGHT, NODE_WIDTH } from "./constants";
-import {DAG, Node, Point} from "./types";
+import {DAG, Node, Point, NormalizedDag} from "./types";
 
 
 export const clip = (p: Point) : Point => {
     const [x,y] = p.map(c => Math.max(0, c));
     return [Math.min(GRAPH_WIDTH-NODE_WIDTH, x), Math.min(GRAPH_HEIGHT-NODE_HEIGHT, y)]
-}
-export interface NormalizedDag extends DAG {
-    // overflow: boolean;
 }
 export const normalizeDAG = (dag: DAG): NormalizedDag => {
     // let overflow: bo
@@ -28,5 +26,33 @@ export const normalizeDAG = (dag: DAG): NormalizedDag => {
     return {
         nodes,
         edges: dag.edges,
+    }
+}
+export const computeDAG = (automation: Automation) : DAG => {
+    const nodes: DAG['nodes'] = {};
+    const edges: DAG['edges'] = [];
+
+    automation.action
+
+    // let currentNode: InputDagNode | null = rootNode;
+    // let currLoc: Point = [0,0];
+    // let idPath = '';
+    // // let 
+    // while (currentNode) {
+    //     const n = {
+    //         text: currentNode.display,
+    //         loc: currLoc,
+    //     }
+    //     if(idPath) {
+    //         nodes[idPath + "." + currentNode.name] = n
+    //         edges
+    //     }   else {
+    //         nodes[currentNode.name] = n
+    //     }
+    //     currentNode = currentNode.next[0]
+    // }
+
+    return {
+        nodes, edges
     }
 }

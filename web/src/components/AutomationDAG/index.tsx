@@ -36,7 +36,7 @@ export default function AutomationDAG({
                 <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
             </defs>
-            <rect x="1" y="1" height={GRAPH_HEIGHT-1} width={GRAPH_WIDTH} stroke="white" fill="none"/>
+            {/* <rect x="1" y="1" height={GRAPH_HEIGHT-1} width={GRAPH_WIDTH} stroke="white" fill="none"/> */}
             <g className="automation-dag-edges">
                 {edges.map(({from, to, direction}, i) => <DAGEdge 
                         key={i}

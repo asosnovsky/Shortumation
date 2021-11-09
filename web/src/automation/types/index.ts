@@ -6,7 +6,7 @@ export interface Automation {
     id: string;
     alias: string;
     description: string;
-    trigger_variables: Record<string, string>;
+    trigger_variables?: Record<string, string>;
     mode: "single" | "restart" | "queued" | "parallel";
     trigger: AutomationTrigger[];
     condition: AutomationCondition[];
