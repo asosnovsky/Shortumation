@@ -32,6 +32,23 @@
       flex-direction: row;
       flex: 1;
 
+      &.top-color {
+        &.red {
+          border-top-color: adjust-color($color: $secondary, $red: 125);
+        }
+        &.blue {
+          border-top-color: adjust-color($color: $secondary, $blue: 125);
+        }
+        &.green {
+          border-top-color: adjust-color($color: $secondary, $green: 125);
+        }
+
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
       &-text {
         flex: 2;
         display: flex;
