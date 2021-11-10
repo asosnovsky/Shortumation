@@ -1,0 +1,31 @@
+import json
+from unittest import TestCase
+from src.config.HassSafeConstructor import SecretValue
+from src.json_serializer import json_dumps, NOT_IMPLEMENTED_SV_MSG
+
+
+class json_serializer_tests(TestCase):
+    def test_convert_secret_value(self):
+        self.assertEqual(
+            json_dumps(
+                {
+                    "int": 1,
+                    "float": 1.3,
+                    "bool": False,
+                    "list": [1, "w"],
+                    "tup": (1, "w"),
+                    "some": {"deep": {"obj": SecretValue("super", "sec")}},
+                }
+            ),
+            json.dumps(
+                {
+                    "int": 1,
+                    "float": 1.3,
+                    "bool": False,
+                    "list": [1, "w"],
+                    "tup": (1, "w"),
+                    "some": {"deep": {"obj": NOT_IMPLEMENTED_SV_MSG}},
+                },
+                separators=(",", ":"),
+            ),
+        )

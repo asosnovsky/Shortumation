@@ -1,19 +1,25 @@
 from pathlib import Path
-from typing import Literal, NamedTuple, Optional, Union
+from typing import Any, Literal, NamedTuple, Optional, Union
 from ruamel.yaml import YAML
 from ruamel.yaml.constructor import SafeConstructor
 from ruamel.yaml.nodes import Node
 from src.logger import logger
 
 
-class LoadedYaml(NamedTuple):
-    secrets: dict
-    config: dict
+class HassConfig(NamedTuple):
+    """The final output for load_hass_config"""
+
+    secrets: dict  # the secrets file content
+    config: dict  # the complete configration.yaml tree
 
 
 class IncludedYaml(NamedTuple):
-    original_path: Path
-    data: dict
+    """Any time something in the yaml is specified as `include !filepath`
+    this data type will represent it.
+    """
+
+    original_path: Path  # path to location of original file
+    data: Any  # the parsed data
 
 
 class SecretValue(NamedTuple):
@@ -21,10 +27,10 @@ class SecretValue(NamedTuple):
     value: str
 
 
-def load_hass_config(file_path: Path) -> LoadedYaml:
+def load_hass_config(file_path: Path) -> HassConfig:
     HAY = HassYaml()
     data = HAY.load(file_path / "configuration.yaml")
-    return LoadedYaml(HAY.secrets, data)
+    return HassConfig(HAY.secrets, data)
 
 
 class HassYaml:

@@ -71,8 +71,10 @@ class hass_db_tests(TestCase):
             "sensor.battery_wleak_kitchen",
         ]
         for entity in entities.search(
-            db, search_text="kitchen", attributes_filter={"state_class": "measurement"}
+            db,
+            search_text="kitchen",
+            attributes_filter={"state_class": "sureme"},
         ):
             self.assertTrue(expected.count(entity.entity_id) > 0)
             self.assertEqual(entity.domain, "sensor")
-            self.assertEqual(entity.attributes["state_class"], "sureme")
+            self.assertEqual(entity.attributes["state_class"], "measurement")
