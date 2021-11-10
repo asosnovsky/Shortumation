@@ -41,3 +41,7 @@ clean:
 	find . -type d -name  "__pycache__" -exec rm -r {} +
 	find . -type d -name  "*tmp" -exec rm -r {} +
 
+run-local:
+	rm -f web
+	ln -s ../web/dist web
+	uvicorn src.api:app

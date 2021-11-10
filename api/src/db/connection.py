@@ -8,6 +8,7 @@ class HassDatabase:
         self.entities = None
         try:
             self.engine = create_engine(db_url)
+            self.connection = self.engine.connect()
         except Exception as exc:
             if isinstance(exc, ImportError):
                 raise RuntimeError(
@@ -20,3 +21,13 @@ class HassDatabase:
     @property
     def db_type(self):
         return self.url.scheme.split("+")[0]
+
+    def execute_sql(self, sql: str, **args):
+        resp = self.engine.execute(text(sql), **args)
+        return resp.fetchall()
+
+    def close(self):
+        self.connection.close()
+
+    def __del__(self):
+        self.close()

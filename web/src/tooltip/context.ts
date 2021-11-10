@@ -2,7 +2,7 @@ import { createContext, useContext } from "react"
 
 export interface TooltipSearchOption {
     searchObject: string;
-    textInput: string;
+    searchText: string;
     filterObjects: Record<string, string>; 
 }
 export interface TooltipState {
