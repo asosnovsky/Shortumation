@@ -74,17 +74,50 @@ def _parse_actions(
                 continue
             elif raw_c.get("service"):
                 action_type = "service"
+                action_data = normalize_obj(raw_c)
             elif raw_c.get("repeat"):
                 action_type = "repeat"
+                repeat_data = raw_c.pop("repeat")
+                action_data = {
+                    **raw_c,
+                    "repeat": {
+                        "count": repeat_data.get("count", 0),
+                        "sequence": list(
+                            _parse_actions(repeat_data.get("sequence", []))
+                        ),
+                    },
+                }
             elif raw_c.get("wait_template"):
                 action_type = "wait"
+                action_data = normalize_obj(raw_c)
             elif raw_c.get("event"):
                 action_type = "event"
+                action_data = normalize_obj(raw_c)
             elif raw_c.get("type") and raw_c.get("device_id"):
                 action_type = "device"
+                action_data = normalize_obj(raw_c)
             elif raw_c.get("choose"):
                 action_type = "choose"
-        yield AutomationActionNode(action=action_type, action_data=normalize_obj(raw_c))
+                choose_data = raw_c.pop("choose")
+                default_data = raw_c.pop("default", [])
+                action_data = {
+                    **raw_c,
+                    "choose": [
+                        {
+                            "conditions": list(
+                                _parse_conditions(option.get("conditions", []))
+                            ),
+                            "sequence": list(
+                                _parse_actions(option.get("sequence", []))
+                            ),
+                        }
+                        for option in choose_data
+                    ],
+                    "default": list(_parse_actions(default_data)),
+                }
+            else:
+                action_data = normalize_obj(raw_c)
+        yield AutomationActionNode(action=action_type, action_data=action_data)
 
 
 def _parse_conditions(
