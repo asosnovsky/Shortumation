@@ -1,7 +1,7 @@
 import os
+from decouple import config
 from pathlib import Path
-from .globals import CONFIGURATION_PATH
-from .configuration_parser import load_hass_config
+from .HassSafeConstructor import load_hass_config
 
 
 def find_hass_config() -> Path:
@@ -11,7 +11,7 @@ def find_hass_config() -> Path:
 
     """Put together the default configuration directory based on the OS."""
     data_dir = Path(
-        os.getenv("APPDATA") if os.name == "nt" else os.path.expanduser("~")
+        config("APPDATA", None) if os.name == "nt" else os.path.expanduser("~")
     )
     config_dir = data_dir / ".homeassistant"
 
@@ -26,8 +26,6 @@ def find_hass_config() -> Path:
 
 def db_url_from_hass_config(path: Path):
     """Find the recorder database url from a HASS config dir."""
-    global CONFIGURATION_PATH
-    CONFIGURATION_PATH = path.resolve()
     config = load_hass_config(path)
 
     recorder = config.get("recorder")

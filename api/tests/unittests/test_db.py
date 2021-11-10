@@ -1,10 +1,8 @@
-from pathlib import Path
 from unittest import TestCase
 from src.db.connection import HassDatabase
 from src.db import entities
+from tests.utils import SAMPLE_DB_PATH
 
-THIS_FOLDER = Path(__file__).parent
-SAMPLE_DB_PATH = THIS_FOLDER.parent / "samples" / "home-assistant_v2.db"
 db = HassDatabase(f"sqlite:///{SAMPLE_DB_PATH.absolute()}")
 
 
