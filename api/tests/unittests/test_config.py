@@ -6,6 +6,7 @@ from src.config.AutomationLoader import (
     AutomationMetdata,
     load_automation,
     _parse_conditions,
+    _parse_actions,
 )
 from src.json_serializer import NOT_IMPLEMENTED_SV_MSG
 from src.config.HassSafeConstructor import SecretValue, load_hass_config, IncludedYaml
@@ -49,6 +50,30 @@ class config_finder_tests(TestCase):
         for parsed, expected in zip(
             expected_process, _parse_conditions(raw_conditions)
         ):
+            self.assertEqual(parsed, expected)
+
+    def test_various_action_types(self):
+        raw_conditions = [
+            {"condition": "template", "value_template": "silly logic here"},
+            "silly logic here",
+            {"condition": "time", "after": "10:00:00", "weekday": ["mon", "tue"]},
+        ]
+        expected_process = [
+            AutomationConditionNode(
+                condition="template",
+                condition_data={"value_template": "silly logic here"},
+            ),
+            AutomationConditionNode(
+                condition="template",
+                condition_data={"value_template": "silly logic here"},
+            ),
+            AutomationConditionNode(
+                condition="time",
+                condition_data={"after": "10:00:00", "weekday": ["mon", "tue"]},
+            ),
+        ]
+
+        for parsed, expected in zip(expected_process, _parse_actions(raw_conditions)):
             self.assertEqual(parsed, expected)
 
     def test_automation_loader(self):

@@ -64,11 +64,14 @@ def _parse_actions(
     raw_actions: Iterable[Union[dict, str]]
 ) -> Iterable[Union[AutomationActionNode, AutomationConditionNode]]:
     for raw_c in raw_actions:
+        action_type = "unknown"
         if isinstance(raw_c, str):
             yield from _parse_conditions([raw_c])
+            continue
         elif isinstance(raw_c, dict):
             if raw_c.get("condition"):
                 yield from _parse_conditions([raw_c])
+                continue
             elif raw_c.get("service"):
                 action_type = "service"
             elif raw_c.get("repeat"):
@@ -81,10 +84,6 @@ def _parse_actions(
                 action_type = "device"
             elif raw_c.get("choose"):
                 action_type = "choose"
-            else:
-                action_type = "unknown"
-        else:
-            action_type = "unknown"
         yield AutomationActionNode(action=action_type, action_data=normalize_obj(raw_c))
 
 
