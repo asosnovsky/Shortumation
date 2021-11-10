@@ -26,7 +26,7 @@ export default class ConditionNumStateState extends BaseState<NumericCondition> 
         return <div className="state-manager-options">
             <InputText 
                 label="Description" 
-                value={state.alias} 
+                value={state.alias ?? ""} 
                 onChange={alias => this.setState({...state, alias})}
             />
             <InputText

@@ -1,7 +1,7 @@
 import { AutomationTime } from "./common";
 
 interface BaseCondition {
-    alias: string;
+    alias?: string;
 };
 export interface LogicCondition extends BaseCondition {
     condition: 'and' | 'or' | 'not';

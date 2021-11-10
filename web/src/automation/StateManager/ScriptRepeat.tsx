@@ -21,7 +21,7 @@ export default class ScriptRepeatState extends BaseState<RepeatScript> {
         return <div className="state-manager-options">
             <InputText 
                 label="Description" 
-                value={state.alias} 
+                value={state.alias ?? ""} 
                 onChange={alias => this.setState({...state, alias})}
             />
             <InputNumber 

@@ -1,40 +1,53 @@
+import { useState } from "react";
 import AutomationDAG from "../components/AutomationDAG";
+import { DAG } from "../components/AutomationDAG/types";
+import { computeDAG } from "../components/AutomationDAG/dagFuncs";
 // import AutomationEditor from "../components/AutomationEditor";
 // import sample from "../sample/auto_01.yaml";
 
 export function Home() {
+  const [dag, setDag] = useState<DAG>(computeDAG({
+    id: "root",
+    alias: "root",
+    description: 'root',
+    mode: 'single',
+    trigger: [
+        {
+            platform: 'time',
+            at: '10:00:00'
+        }
+    ],
+    condition: [
+        {
+            condition: 'template',
+            value_template: 'states(switch.kitchen_light) == "on"'
+        }
+    ],
+    action: [
+        {
+            alias: "Start Music In Kitchen",
+            service: 'media_player.play_media',
+            target: {
+                entity_id: "media_player.kitchen_dot"
+            },
+            data: {
+                media_content_id: "Good Morning",
+                media_content_type: "SPOTIFY",
+            }
+        }
+    ],
+}))
   return (
     <div id="page--home" className="page">
         <AutomationDAG
-          nodes={{
-            0: {text: '1', loc:[-10,-50]},
-            1: {text: '2', loc:[0,50]},
-            2: {text: '3', loc:[-10,200]},
-            3: {text: '4', loc:[100,200]},
-            4: {text: '6', loc:[200,200]},
-          }}
-          edges={[
-            {
-              from: "0", to: "1",
-              direction: '1->2',
-            },
-            {
-              from: "0", to: "2",
-              direction: '1->2',
-            },
-            {
-              from: "2", to: "3",
-              direction: '1->2',
-            },
-            {
-              from: "1", to: "4",
-              direction: '1->2',
-            },
-            {
-              from: "0", to: "3",
-              direction: '1->2',
-            },
-        ]}
+            {...dag}
+            onDelete={nodeId => {
+              const nodes = {...dag.nodes};
+              delete nodes[nodeId];
+              const edges = dag.edges.filter(e => (e.from !== nodeId) && (e.to !== nodeId));
+              setDag({nodes, edges});
+            }}
+            onOpenNode={nodeId => console.log({nodeId})}
         />
       {/* <div
         style={{

@@ -1,0 +1,4 @@
+web/node_modules
+web/.parcel-cache
+web/dist
+api/venv

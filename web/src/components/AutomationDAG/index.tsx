@@ -3,26 +3,18 @@ import { GRAPH_HEIGHT, GRAPH_WIDTH, NODE_WIDTH } from "./constants";
 import DAGEdge from "./DAGEdge";
 import DAGNode from "./DAGNode";
 import { DAG, Node } from "./types";
-import { normalizeDAG } from "./utils";
+import { normalizeDAG } from "./dagFuncs";
 export interface Props extends DAG {
-
+    onDelete: (nodeId: string) => void;
+    onOpenNode: (nodeId: string) => void;
 }
 export default function AutomationDAG({
+    onDelete,
+    onOpenNode,
     ...dag
 }: Props) {
     // state
-    const [{nodes, edges}, _setDAG] = useState(normalizeDAG(dag));
-
-    // set state
-    const setDAG = (dag: DAG) => _setDAG(normalizeDAG(dag));
-    const removeNode = (nodeId: string) => () => {
-        const newNodes = {...nodes}
-        delete newNodes[nodeId];
-        _setDAG({
-            nodes: newNodes,
-            edges: edges.filter(e => e.from !== nodeId && e.to !== nodeId),
-        })
-    }
+    const {nodes, edges} = normalizeDAG(dag);
     // render
     return <div className="automation-dag" >
         <svg 
@@ -48,7 +40,12 @@ export default function AutomationDAG({
             </g>
             <g className="automation-dag-nodes">
                 {Object.keys(nodes).map((nodeId) => 
-                    <DAGNode key={nodeId} {...nodes[nodeId]} onXClick={removeNode(nodeId)}/>
+                    <DAGNode 
+                        key={nodeId} 
+                        {...nodes[nodeId]} 
+                        onXClick={() => onDelete(nodeId)}
+                        onOpenClick={() => onOpenNode(nodeId)}
+                    />
                 )}
             </g>
         </svg>

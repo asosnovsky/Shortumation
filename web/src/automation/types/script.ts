@@ -1,7 +1,7 @@
 import { AutomationCondition } from "./condition";
 
 interface BaseScript {
-    alias: string;
+    alias?: string;
     variables?: Record<string, any>;
 }
 
@@ -28,7 +28,7 @@ export interface FireEventScript extends BaseScript {
 export interface DeviceScript extends BaseScript {
     type: string;
     device_id: string;
-    entity_id: string;
+    entity_id?: string;
     domain: string;
 }
 export interface ChooseScript extends BaseScript {

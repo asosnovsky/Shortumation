@@ -4,6 +4,7 @@ export type Point = [number, number];
 export interface Node {
     loc: Point;
     text: JSX.Element | string;
+    color?: 'red' | 'green' | 'blue' | 'none';
 }
 export interface Edge {
     from: string;

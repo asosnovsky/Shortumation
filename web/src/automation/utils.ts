@@ -1,27 +1,58 @@
 import { AutomationNode, AutomationNodeType, NodeSubType } from "./types";
 
 
-export const getNameFromAction = (action: AutomationNode<any>): string => {
+export const getDescriptionFromAutomationNode = (action: AutomationNode<any>): string => {
     if(typeof action === 'string') {
         return action;
     }
     if ('alias' in action && action.alias){
         return action.alias;
     }
+    if ('condition' in action) {
+        if(
+            (action.condition === 'and') || 
+            (action.condition === 'or') || 
+            (action.condition === 'not')
+        ) {
+            return "Logic"
+        } else {
+            switch(action.condition) {
+                case "numeric_state":
+                    if(action.entity_id) {
+                        const center = typeof action.entity_id === 'string' ? action.entity_id : '...'
+                        if(action.above) {
+                            if(action.below) {
+                                return `${action.above} < ${center} < ${action.below}`
+                            }
+                            return `${center} > ${action.above}`
+                        }
+                        if(action.below) {
+                            return `${center} < ${action.below}`
+                        }
+                        return `${center}?>?<`
+                    }
+                    return "Numeric State Condition"
+                }
+        }
+    }
     if ('service' in action) {
         return action.service
     }
     if ('repeat' in action) {
-        return 'Repeat'
+        return 'Repeat ' + action.repeat.count;
     }
     if ('wait_template' in action) {
-        return 'Wait'
+        let out= 'Wait on ' + action.wait_template;
+        if (action.timeout) {
+            out += (' for ' + action.timeout)
+        }
+        return out;
     }
     if ('event' in action) {
-        return  action.event
+        return  `Trigger ${action.event}`
     }
     if ('type' in action) {
-        return 'Device ' +action.type
+        return `${action.type} on ${action.device_id}`
     }
     if ('choose' in action) {
         return 'Choose'
