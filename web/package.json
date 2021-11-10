@@ -32,7 +32,7 @@
   "scripts": {
     "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
     "start": "parcel ./src/index.html",
-    "build": "npm run type-check && parcel build ./src/index.html --public-url '/'",
+    "build": "npm run type-check && parcel build ./src/index.html --public-url '/web'",
     "prettify": "prettier --write './src/**/*.{ts,tsx}'",
     "test": "jest",
     "test:watch": "jest --watch",

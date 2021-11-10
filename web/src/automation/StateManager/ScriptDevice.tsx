@@ -43,7 +43,7 @@ export default class ScriptDeviceState extends BaseState<DeviceScript> {
             <InputText
                 textBoxFor="entity_id" 
                 label="Entity ID" 
-                value={state.entity_id} 
+                value={state.entity_id ?? ""} 
                 onChange={entity_id => this.setState({...state, entity_id, domain: entity_id.split('.')[0]})}
             />
         </div>
