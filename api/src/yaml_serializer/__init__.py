@@ -19,7 +19,7 @@ def load_hass_config(file_path: Path) -> HassConfig:
     """
     HAY = HassYaml()
     data = HAY.load(file_path / "configuration.yaml")
-    return HassConfig(HAY.secrets, data)
+    return HassConfig(HAY.secrets, data, file_path / "configuration.yaml")
 
 
 def dump_yaml(obj: Any) -> str:

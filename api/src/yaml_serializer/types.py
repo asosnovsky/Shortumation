@@ -61,3 +61,4 @@ class HassConfig(NamedTuple):
 
     secrets: dict  # the secrets file content
     config: dict  # the complete configration.yaml tree
+    root_config_path: Path  # where the root 'configuration.yaml' lives

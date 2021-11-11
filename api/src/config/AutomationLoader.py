@@ -1,7 +1,7 @@
 from typing import Dict, Iterable, List, Literal, Optional, Union
 from pydantic.fields import Field
 from src.json_serializer import NOT_IMPLEMENTED_SV_MSG, json_dumps, normalize_obj
-from src.yaml_serializer import HassConfig, IncludedYaml, SecretValue
+from src.yaml_serializer import HassConfig, IncludedYaml, SecretValue, dump_yaml, simple_load_yaml
 from pydantic import BaseModel
 
 # errors
@@ -189,4 +189,14 @@ class AutomationLoader:
 
     def save(self, index: int, auto: AutomationData):
         if isinstance(self.automation_ref, IncludedYaml):
-            self.automation_ref.original_path
+            with self.automation_ref.original_path.open("r") as f:
+                original_yaml = simple_load_yaml(f)
+            if not isinstance(original_yaml, list):
+                raise AutomationLoaderException(
+                    f"Invalid data received from {self.automation_ref.original_path} expected a list"
+                )
+            original_yaml[index] = auto
+            with self.automation_ref.original_path.open("w") as f:
+                f.write(dump_yaml(original_yaml))
+        else:
+            raise NotImplementedError
