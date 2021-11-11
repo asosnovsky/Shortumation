@@ -1,8 +1,7 @@
 from typing import Dict, Iterable, List, Literal, Optional, Union
 from pydantic.fields import Field
-from pydantic.error_wrappers import ValidationError
 from src.json_serializer import json_dumps, normalize_obj
-from src.config.HassSafeConstructor import HassConfig, IncludedYaml, SecretValue
+from src.yaml_serializer import HassConfig, IncludedYaml, SecretValue
 from pydantic import BaseModel
 
 # errors

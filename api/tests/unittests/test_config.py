@@ -1,3 +1,4 @@
+from tempfile import mkdtemp
 from unittest import TestCase
 from src.config.AutomationLoader import (
     AutomationActionNode,
@@ -10,8 +11,7 @@ from src.config.AutomationLoader import (
     _parse_actions,
 )
 from src.json_serializer import NOT_IMPLEMENTED_SV_MSG
-from src.config.HassSafeConstructor import (
-    HassConfig,
+from src.yaml_serializer import (
     SecretValue,
     load_hass_config,
     IncludedYaml,
@@ -20,6 +20,9 @@ from tests.utils import SAMPLE_HA_PATH
 
 
 class config_finder_tests(TestCase):
+    def test_simple_made_up_config(self):
+        pass
+        
     def test_find_sample_config(self):
         secrets, config = load_hass_config(SAMPLE_HA_PATH)
         self.assertIsInstance(config["template"], IncludedYaml)

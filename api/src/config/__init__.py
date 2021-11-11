@@ -1,7 +1,7 @@
 import os
 from decouple import config
 from pathlib import Path
-from .HassSafeConstructor import load_hass_config
+from src.yaml_serializer import load_hass_config
 
 
 def find_hass_config() -> Path:
