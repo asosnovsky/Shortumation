@@ -1,13 +1,15 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException
 
+from src.config.AutomationLoader import AutomationData, AutomationLoaderException
+
 from ..config import automation_loader
 
 router = APIRouter()
 
 
 @router.get("/list")
-def read_ping(
+def list_autos(
     offset: int = 0,
     limit: int = 10,
     alias: Optional[str] = None,
@@ -26,7 +28,7 @@ def read_ping(
 
 
 @router.get("/{index}")
-def read_ping(index: int):
+def get_auto(index: int):
     if auto := automation_loader.get(index):
         return auto
     else:
@@ -37,4 +39,15 @@ def read_ping(index: int):
                 "must_be": f">= 0 or < {len(automation_loader)}",
                 "specified": index,
             },
+        )
+
+
+@router.post("/{index}")
+def upsert_auto(index: int, auto: AutomationData):
+    try:
+        automation_loader.save(index, auto)
+    except AutomationLoaderException as err:
+        return HTTPException(
+            status_code=500,
+            detail=err.args,
         )

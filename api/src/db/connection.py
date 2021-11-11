@@ -8,7 +8,7 @@ class HassDatabase:
         self.entities = None
         try:
             self.engine = create_engine(db_url)
-            self.connection = self.engine.connect()
+            self.connection = None
         except Exception as exc:
             if isinstance(exc, ImportError):
                 raise RuntimeError(
@@ -23,11 +23,19 @@ class HassDatabase:
         return self.url.scheme.split("+")[0]
 
     def execute_sql(self, sql: str, **args):
+        self.connect()
         resp = self.engine.execute(text(sql), **args)
+        self.close()
         return resp.fetchall()
 
+    def connect(self):
+        if self.connection is None:
+            self.connection = self.engine.connect()
+
     def close(self):
-        self.connection.close()
+        if self.connection is not None:
+            self.connection.close()
+        self.connection = None
 
     def __del__(self):
         self.close()
