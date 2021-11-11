@@ -4,7 +4,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.constructor import SafeConstructor
 from ruamel.yaml.nodes import Node
 from src.logger import logger
-from src.yaml_serializer.types import SecretValue, IncludedYaml
+from src.yaml_serializer.types import IncludedYamlDir, SecretValue, IncludedYaml
 
 
 class HassYaml:
@@ -35,9 +35,7 @@ class HassYaml:
                 device_tracker: !include device_tracker.yaml
             """
             root_path = (
-                self.current_file_path.parent
-                if self.current_file_path is not None
-                else Path("/")
+                self.current_file_path.parent if self.current_file_path is not None else Path("/")
             )
             file_path = _upward_recursive_search(root_path, node.value)
             if file_path is None:
@@ -46,9 +44,7 @@ class HassYaml:
             else:
                 logger.info(f"Found `!include {node.value}` in {file_path.absolute()}!")
 
-            return IncludedYaml(
-                node.value, file_path, self.__internal_constructor_load(file_path)
-            )
+            return IncludedYaml(node.value, file_path, self.__internal_constructor_load(file_path))
 
         def _secret_yaml(loader, node: Node):
             """Load secrets and embed it into the configuration YAML."""
@@ -177,4 +173,4 @@ def _stub_tag(constructor, node: Node):
         logger.warning(f"YAML tag {node.tag} is not supported")
         seen.add(node.tag)
 
-    return {}
+    return IncludedYamlDir(node.tag, node.value)

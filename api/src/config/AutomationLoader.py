@@ -186,3 +186,7 @@ class AutomationLoader:
 
     def __len__(self):
         return len(self.automations_data)
+
+    def save(self, index: int, auto: AutomationData):
+        if isinstance(self.automation_ref, IncludedYaml):
+            self.automation_ref.original_path
