@@ -1,0 +1,31 @@
+[project]
+[build-system]
+requires = ["setuptools >= 40.9.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.isort]
+multi_line_output = 3
+
+[tool.black]
+line-length = 100
+target_version = ['py39']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.coverage.run]
+omit = ["./venv/*", "tests/*"]

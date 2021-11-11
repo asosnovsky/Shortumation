@@ -1,6 +1,6 @@
 from typing import Dict, Iterable, List, Literal, Optional, Union
 from pydantic.fields import Field
-from src.json_serializer import json_dumps, normalize_obj
+from src.json_serializer import NOT_IMPLEMENTED_SV_MSG, json_dumps, normalize_obj
 from src.yaml_serializer import HassConfig, IncludedYaml, SecretValue
 from pydantic import BaseModel
 
@@ -82,9 +82,7 @@ def _parse_actions(
                     **raw_c,
                     "repeat": {
                         "count": repeat_data.get("count", 0),
-                        "sequence": list(
-                            _parse_actions(repeat_data.get("sequence", []))
-                        ),
+                        "sequence": list(_parse_actions(repeat_data.get("sequence", []))),
                     },
                 }
             elif raw_c.get("wait_template"):
@@ -104,12 +102,8 @@ def _parse_actions(
                     **raw_c,
                     "choose": [
                         {
-                            "conditions": list(
-                                _parse_conditions(option.get("conditions", []))
-                            ),
-                            "sequence": list(
-                                _parse_actions(option.get("sequence", []))
-                            ),
+                            "conditions": list(_parse_conditions(option.get("conditions", []))),
+                            "sequence": list(_parse_actions(option.get("sequence", []))),
                         }
                         for option in choose_data
                     ],
@@ -132,7 +126,7 @@ def _parse_conditions(
         elif isinstance(raw_c, SecretValue):
             yield AutomationConditionNode(
                 condition="template",
-                condition_data={"value_template": "SECRETS NOT SUPPORTED"},
+                condition_data={"value_template": NOT_IMPLEMENTED_SV_MSG},
             )
         elif isinstance(raw_c, dict):
             condition = raw_c.pop("condition")
@@ -150,7 +144,7 @@ def _parse_conditions(
 # Global Loader
 class AutomationLoader:
     def __init__(self, loaded_yaml: HassConfig) -> None:
-        self.automation_ref = loaded_yaml.config["automation"]
+        self.automation_ref = loaded_yaml.config.get("automation", None)
 
         if isinstance(self.automation_ref, IncludedYaml):
             self.automation_raw_data: list = self.automation_ref.data
@@ -160,7 +154,7 @@ class AutomationLoader:
 
         if not isinstance(self.automation_raw_data, list):
             raise AutomationLoaderException(
-                f"Invalid automation file, expected it to be a 'list' instead it's a '{type(self.automation_data)}'"
+                f"Invalid automation file, expected it to be a 'list' instead it's a '{type(self.automation_raw_data)}' --> `automation: {self.automation_raw_data}`"
             )
 
         self.automations_data = list(load_automation(self.automation_raw_data))

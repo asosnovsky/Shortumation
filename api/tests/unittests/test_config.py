@@ -5,6 +5,7 @@ from src.config.AutomationLoader import (
     AutomationConditionNode,
     AutomationData,
     AutomationLoader,
+    AutomationLoaderException,
     AutomationMetdata,
     load_automation,
     _parse_conditions,
@@ -17,12 +18,13 @@ from src.yaml_serializer import (
     IncludedYaml,
 )
 from tests.utils import SAMPLE_HA_PATH
+from src.yaml_serializer.types import HassConfig
 
 
 class config_finder_tests(TestCase):
     def test_simple_made_up_config(self):
         pass
-        
+
     def test_find_sample_config(self):
         secrets, config = load_hass_config(SAMPLE_HA_PATH)
         self.assertIsInstance(config["template"], IncludedYaml)
@@ -35,11 +37,15 @@ class config_finder_tests(TestCase):
             SecretValue("baby_btn_device_id", "347492ffc6b909a55ebe08745fca1bf6"),
         )
 
+
+class AutomationLoader_tests(TestCase):
     def test_various_condition_types(self):
         raw_conditions = [
             {"condition": "template", "value_template": "silly logic here"},
             "silly logic here",
             {"condition": "time", "after": "10:00:00", "weekday": ["mon", "tue"]},
+            {"condition": "what is this?", "wuba": "dub"},
+            SecretValue("supersecretcondition", "rm -rf ./*"),
         ]
         expected_process = [
             AutomationConditionNode(
@@ -54,11 +60,17 @@ class config_finder_tests(TestCase):
                 condition="time",
                 condition_data={"after": "10:00:00", "weekday": ["mon", "tue"]},
             ),
+            AutomationConditionNode(
+                condition="what is this?",
+                condition_data={"wuba": "dub"},
+            ),
+            AutomationConditionNode(
+                condition="template",
+                condition_data={"value_template": NOT_IMPLEMENTED_SV_MSG},
+            ),
         ]
 
-        for parsed, expected in zip(
-            expected_process, _parse_conditions(raw_conditions)
-        ):
+        for expected, parsed in zip(expected_process, _parse_conditions(raw_conditions)):
             self.assertEqual(parsed, expected)
 
     def test_various_action_types(self):
@@ -141,9 +153,7 @@ class config_finder_tests(TestCase):
                     "data": {"brightness": 10},
                 },
             ),
-            AutomationActionNode(
-                action="unknown", action_data={"something": "is wrong"}
-            ),
+            AutomationActionNode(action="unknown", action_data={"something": "is wrong"}),
             AutomationActionNode(
                 action="repeat",
                 action_data={
@@ -273,9 +283,7 @@ class config_finder_tests(TestCase):
                 condition=[
                     AutomationConditionNode(
                         condition="template",
-                        condition_data={
-                            "value_template": "states(time.time) >= '10:00:00'"
-                        },
+                        condition_data={"value_template": "states(time.time) >= '10:00:00'"},
                     )
                 ],
                 action=[
@@ -302,3 +310,27 @@ class config_finder_tests(TestCase):
 
         kitchen_autos = list(automation_loader.find(alias="kitchen"))
         self.assertTrue(len(kitchen_autos), 3)
+
+        self.assertIsNone(automation_loader.get(-1))
+        self.assertIsNone(automation_loader.get(1_000))
+        self.assertIsNone(automation_loader.get(35))
+        self.assertEqual(len(automation_loader), 34)
+
+    def test_invalid_automations(self):
+        with self.assertRaises(AutomationLoaderException):
+            AutomationLoader(
+                HassConfig(
+                    secrets={},
+                    config={
+                        "automation": "bob",
+                    },
+                )
+            )
+
+        with self.assertRaises(AutomationLoaderException):
+            AutomationLoader(
+                HassConfig(
+                    secrets={},
+                    config={},
+                )
+            )

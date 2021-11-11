@@ -2,7 +2,7 @@ import io
 from pathlib import Path
 from typing import Any, List
 from src.yaml_serializer.base_yaml import yaml
-from src.yaml_serializer.HassSafeConstructor import HassYaml
+from src.yaml_serializer.HassYaml import HassYaml
 from src.yaml_serializer.types import HassConfig, SecretValue, IncludedYaml
 
 

@@ -2,7 +2,7 @@
 import setuptools  # type: ignore
 
 setuptools.setup(
-    python_requires=">=3.7",
+    python_requires=">=3.9",
     install_requires=[
         "ruamel.yaml==0.17.17",
         "SQLAlchemy==1.4.26",
