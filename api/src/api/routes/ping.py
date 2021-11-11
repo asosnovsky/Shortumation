@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from datetime import datetime
 
-from ..env import BUILD_VERSION
+from src.env import BUILD_VERSION
 
 router = APIRouter()
 
 
-@router.get("/ping")
+@router.get("/")
 def read_ping():
     return {
         "version": BUILD_VERSION,

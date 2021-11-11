@@ -3,13 +3,19 @@ from src.config.AutomationLoader import (
     AutomationActionNode,
     AutomationConditionNode,
     AutomationData,
+    AutomationLoader,
     AutomationMetdata,
     load_automation,
     _parse_conditions,
     _parse_actions,
 )
 from src.json_serializer import NOT_IMPLEMENTED_SV_MSG
-from src.config.HassSafeConstructor import SecretValue, load_hass_config, IncludedYaml
+from src.config.HassSafeConstructor import (
+    HassConfig,
+    SecretValue,
+    load_hass_config,
+    IncludedYaml,
+)
 from tests.utils import SAMPLE_HA_PATH
 
 
@@ -227,7 +233,7 @@ class config_finder_tests(TestCase):
         for expected, parsed in zip(expected_process, _parse_actions(raw_conditions)):
             self.assertEqual(parsed, expected)
 
-    def test_automation_loader(self):
+    def test_load_automation_runs(self):
         auto = list(
             load_automation(
                 [
@@ -283,3 +289,13 @@ class config_finder_tests(TestCase):
                 ],
             ),
         )
+
+    def test_finding_with_AutomationLoader(self):
+        automation_loader = AutomationLoader(load_hass_config(SAMPLE_HA_PATH))
+
+        first_auto_with_find = list(automation_loader.find(limit=1))
+        first_auto_with_get = automation_loader.get(0)
+        self.assertEqual(first_auto_with_find[0], first_auto_with_get)
+
+        kitchen_autos = list(automation_loader.find(alias="kitchen"))
+        self.assertTrue(len(kitchen_autos), 3)

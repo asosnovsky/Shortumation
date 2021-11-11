@@ -1,5 +1,6 @@
-from typing import Dict, Iterable, List, Literal, Optional, Tuple, Union
+from typing import Dict, Iterable, List, Literal, Optional, Union
 from pydantic.fields import Field
+from pydantic.error_wrappers import ValidationError
 from src.json_serializer import json_dumps, normalize_obj
 from src.config.HassSafeConstructor import HassConfig, IncludedYaml, SecretValue
 from pydantic import BaseModel
@@ -150,7 +151,7 @@ def _parse_conditions(
 # Global Loader
 class AutomationLoader:
     def __init__(self, loaded_yaml: HassConfig) -> None:
-        self.automation_ref = loaded_yaml["automation"]
+        self.automation_ref = loaded_yaml.config["automation"]
 
         if isinstance(self.automation_ref, IncludedYaml):
             self.automation_raw_data: list = self.automation_ref.data
@@ -162,3 +163,33 @@ class AutomationLoader:
             raise AutomationLoaderException(
                 f"Invalid automation file, expected it to be a 'list' instead it's a '{type(self.automation_data)}'"
             )
+
+        self.automations_data = list(load_automation(self.automation_raw_data))
+
+    def find(
+        self,
+        offset: int = 0,
+        limit: int = 10,
+        alias: Optional[str] = None,
+        description: Optional[str] = None,
+        mode: Optional[str] = None,
+    ):
+        for auto in self.automations_data[offset : (offset + limit)]:
+            if alias is not None:
+                if auto.metadata.alias.lower().count(alias.lower()) <= 0:
+                    continue
+            if description is not None:
+                if auto.metadata.description.lower().count(description.lower()) <= 0:
+                    continue
+            if mode is not None:
+                if auto.metadata.mode.lower().count(mode.lower()) <= 0:
+                    continue
+            yield auto
+
+    def get(self, index: int):
+        if (index < 0) or (len(self.automations_data) <= index):
+            return None
+        return self.automations_data[index]
+
+    def __len__(self):
+        return len(self.automations_data)

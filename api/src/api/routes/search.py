@@ -1,13 +1,10 @@
-from typing import Dict, Optional
+from typing import Optional
 from fastapi import APIRouter
 from pydantic.main import BaseModel
-from src.db import entities, connection
+from src.db import entities
+from ..config import db_connection
 
 router = APIRouter()
-
-db_connection = connection.HassDatabase(
-    "sqlite:////home/asosnovsky/LinuxProjects/random/Shortumation/api/tests/samples/home-assistant_v2.db"
-)
 
 
 class EntityRequest(BaseModel):

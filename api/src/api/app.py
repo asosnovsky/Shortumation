@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from ..env import ROOT_FOLDER
-from . import ping, search
+from src.env import ROOT_FOLDER
+from .routes import ping, search, automations
 
 app = FastAPI()
 app.mount(
@@ -14,3 +14,4 @@ app.mount(
 )
 app.include_router(ping.router, prefix="/ping")
 app.include_router(search.router, prefix="/search")
+app.include_router(automations.router, prefix="/automations")
