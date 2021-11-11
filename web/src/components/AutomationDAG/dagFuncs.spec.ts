@@ -18,10 +18,12 @@ test('it clips overflowing values', () => {
 
 test('simple empty input dag', () => {
     expect(computeDAG({
-        id: "root",
-        alias: "root",
-        description: 'root',
-        mode: 'single',
+        metadata: {
+            id: "root",
+            alias: "root",
+            description: 'root',
+            mode: 'single',
+        },
         trigger: [],
         condition: [],
         action: [
@@ -35,10 +37,12 @@ test('simple empty input dag', () => {
 
 test('simple single node type input dag', () => {
     expect(computeDAG({
-        id: "root",
-        alias: "root",
-        description: 'root',
-        mode: 'single',
+        metadata: {
+            id: "root",
+            alias: "root",
+            description: 'root',
+            mode: 'single',
+        },
         trigger: [
             {
                 platform: 'time',
@@ -47,20 +51,27 @@ test('simple single node type input dag', () => {
         ],
         condition: [
             {
+                $smType: 'condition',
                 condition: 'template',
-                value_template: 'states(switch.kitchen_light) == "on"'
+                condition_data: {
+                    value_template: 'states(switch.kitchen_light) == "on"'
+                }
             }
         ],
         action: [
             {
-                alias: "Start Music In Kitchen",
-                service: 'media_player.play_media',
-                target: {
-                    entity_id: "media_player.kitchen_dot"
-                },
-                data: {
-                    media_content_id: "Good Morning",
-                    media_content_type: "SPOTIFY",
+                $smType: 'action',
+                action: "service",
+                action_data: {
+                    alias: "Start Music In Kitchen",
+                    service: 'media_player.play_media',
+                    target: {
+                        entity_id: "media_player.kitchen_dot"
+                    },
+                    data: {
+                        media_content_id: "Good Morning",
+                        media_content_type: "SPOTIFY",
+                    }
                 }
             }
         ],
@@ -95,28 +106,37 @@ test('simple single node type input dag', () => {
 
 test('simple dag with no triggers', () => {
     expect(computeDAG({
-        id: "root",
-        alias: "root",
-        description: 'root',
-        mode: 'single',
+        metadata: {
+            id: "root",
+            alias: "root",
+            description: 'root',
+            mode: 'single',
+        },
         trigger: [
         ],
         condition: [
             {
+                $smType: "condition",
                 condition: 'template',
-                value_template: 'states(switch.kitchen_light) == "on"'
+                condition_data: {
+                    value_template: 'states(switch.kitchen_light) == "on"'
+                }
             }
         ],
         action: [
             {
-                alias: "Start Music In Kitchen",
-                service: 'media_player.play_media',
-                target: {
-                    entity_id: "media_player.kitchen_dot"
-                },
-                data: {
-                    media_content_id: "Good Morning",
-                    media_content_type: "SPOTIFY",
+                $smType: "action",
+                action: "service",
+                action_data: {
+                    alias: "Start Music In Kitchen",
+                    service: 'media_player.play_media',
+                    target: {
+                        entity_id: "media_player.kitchen_dot"
+                    },
+                    data: {
+                        media_content_id: "Good Morning",
+                        media_content_type: "SPOTIFY",
+                    }
                 }
             }
         ],
@@ -144,10 +164,12 @@ test('simple dag with no triggers', () => {
 
 test('simple dag with no conditions', () => {
     expect(computeDAG({
-        id: "root",
-        alias: "root",
-        description: 'root',
-        mode: 'single',
+        metadata: {
+            id: "root",
+            alias: "root",
+            description: 'root',
+            mode: 'single',
+        },
         trigger: [
             {
                 platform: 'time',
@@ -157,14 +179,18 @@ test('simple dag with no conditions', () => {
         condition: [],
         action: [
             {
-                alias: "Start Music In Kitchen",
-                service: 'media_player.play_media',
-                target: {
-                    entity_id: "media_player.kitchen_dot"
-                },
-                data: {
-                    media_content_id: "Good Morning",
-                    media_content_type: "SPOTIFY",
+                $smType: 'action',
+                action: 'service',
+                action_data: {
+                    alias: "Start Music In Kitchen",
+                    service: 'media_player.play_media',
+                    target: {
+                        entity_id: "media_player.kitchen_dot"
+                    },
+                    data: {
+                        media_content_id: "Good Morning",
+                        media_content_type: "SPOTIFY",
+                    }
                 }
             }
         ],
@@ -192,10 +218,12 @@ test('simple dag with no conditions', () => {
 
 test('simple dag with no actions', () => {
     expect(computeDAG({
-        id: "root",
-        alias: "root",
-        description: 'root',
-        mode: 'single',
+        metadata: {
+            id: "root",
+            alias: "root",
+            description: 'root',
+            mode: 'single',
+        },
         trigger: [
             {
                 platform: 'time',
@@ -204,8 +232,11 @@ test('simple dag with no actions', () => {
         ],
         condition: [
             {
+                $smType: "condition",
                 condition: 'template',
-                value_template: 'states(switch.kitchen_light) == "on"'
+                condition_data: {
+                    value_template: 'states(switch.kitchen_light) == "on"'
+                }
             }
         ],
         action: [

@@ -4,4 +4,3 @@ export interface AutomationTime {
     seconds?: number;
     milliseconds?: number;
 }
-

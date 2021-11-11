@@ -1,5 +1,5 @@
 
-import { Automation } from "../../automation/types";
+import { AutomationData } from "../../automations/types";
 import { GRAPH_HEIGHT, GRAPH_WIDTH, NODE_HEIGHT, NODE_WIDTH } from "./constants";
 import {DAG, Node, Point, NormalizedDag} from "./types";
 
@@ -22,7 +22,7 @@ export const normalizeDAG = (dag: DAG): NormalizedDag => {
         edges: dag.edges,
     }
 }
-export const computeDAG = (automation: Automation) : DAG => {
+export const computeDAG = (automation: AutomationData) : DAG => {
     const nodes: DAG['nodes'] = {};
     const edges: DAG['edges'] = [];
 
