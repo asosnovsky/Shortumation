@@ -1,7 +1,6 @@
 import { useState } from "react";
 import * as types from "../../automation/types";
-import { getDescriptionFromAutomationNode } from "../../automation/utils";
-import AutomationNode from "../AutomationNode";
+import AutomationNode from "./AutomationNode";
 import NewNodeModal from "./NewNodeModal";
 import ScriptNode from "./ScriptNode";
 

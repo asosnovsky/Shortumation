@@ -1,7 +1,7 @@
 import StateManager from "../../automation/StateManager";
 import { AutomationAction } from "../../automation/types";
 import { determineNodeTypes, getDescriptionFromAutomationNode } from "../../automation/utils";
-import AutomationNode from "../AutomationNode";
+import AutomationNode from "./AutomationNode";
 
 
 export interface Props {
