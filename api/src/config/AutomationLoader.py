@@ -15,11 +15,20 @@ class AutomationConditionNode(BaseModel):
     condition_data: dict
     node_type: Literal["condition"] = Field(alias="$smType", default="condition")
 
+    def to_primitive(self):
+        return {
+            **self.condition_data,
+            "condition": self.condition,
+        }
+
 
 class AutomationActionNode(BaseModel):
     action: str
     action_data: dict
     node_type: Literal["action"] = Field(alias="$smType", default="action")
+
+    def to_primitive(self):
+        return self.action_data
 
 
 class AutomationMetdata(BaseModel):
@@ -35,6 +44,14 @@ class AutomationData(BaseModel):
     trigger: List[dict] = []
     condition: List[AutomationConditionNode] = []
     action: List[Union[AutomationConditionNode, AutomationActionNode]] = []
+
+    def to_primitive(self):
+        return {
+            **self.metadata.dict(),
+            "trigger": self.trigger,
+            "condition": [condition.to_primitive() for condition in self.condition],
+            "action": [action.to_primitive() for action in self.action],
+        }
 
 
 # Single loader
@@ -143,8 +160,9 @@ def _parse_conditions(
 
 # Global Loader
 class AutomationLoader:
-    def __init__(self, loaded_yaml: HassConfig) -> None:
-        self.automation_ref = loaded_yaml.config.get("automation", None)
+    def __init__(self, hass_config: HassConfig) -> None:
+        self.hass_config = hass_config
+        self.automation_ref = hass_config.config.get("automation", None)
 
         if isinstance(self.automation_ref, IncludedYaml):
             self.automation_raw_data: list = self.automation_ref.data
@@ -188,15 +206,48 @@ class AutomationLoader:
         return len(self.automations_data)
 
     def save(self, index: int, auto: AutomationData):
-        if isinstance(self.automation_ref, IncludedYaml):
+        """Save or create automation on disk and in-memory
+
+        Args:
+            index (int): index of the automation
+            auto (AutomationData): automation data
+
+        """
+        # Update in-memory store
+        if len(self) <= index:
+            self.automations_data.append(auto)
+        else:
+            self.automations_data[index] = auto
+        # Load a simple version of the latest data on disk
+        if not isinstance(self.automation_ref, IncludedYaml):
+            with self.hass_config.root_config_path.open("r") as f:
+                hass_config_yaml = simple_load_yaml(f)
+            original_yaml_path = f"{self.hass_config.root_config_path}>automation"
+            if "automation" not in hass_config_yaml:
+                raise AutomationLoaderException(
+                    f'missing "automation" key in {self.hass_config.root_config_path}'
+                )
+            original_yaml = hass_config_yaml["automation"]
+        else:
             with self.automation_ref.original_path.open("r") as f:
                 original_yaml = simple_load_yaml(f)
-            if not isinstance(original_yaml, list):
-                raise AutomationLoaderException(
-                    f"Invalid data received from {self.automation_ref.original_path} expected a list"
-                )
-            original_yaml[index] = auto
+            original_yaml_path = f"{self.automation_ref.original_path}"
+
+        if not isinstance(original_yaml, list):
+            raise AutomationLoaderException(
+                f"Invalid data received from {original_yaml_path} expected a list"
+            )
+        # Upsert automation
+        if len(original_yaml) <= index:
+            original_yaml.append(auto.to_primitive())
+        else:
+            original_yaml[index] = auto.to_primitive()
+
+        # Save back to disk
+        if isinstance(self.automation_ref, IncludedYaml):
             with self.automation_ref.original_path.open("w") as f:
                 f.write(dump_yaml(original_yaml))
         else:
-            raise NotImplementedError
+            hass_config_yaml["automation"] = original_yaml
+            with self.hass_config.root_config_path.open("w") as f:
+                f.write(dump_yaml(hass_config_yaml))
