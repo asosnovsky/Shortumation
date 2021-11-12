@@ -11,7 +11,7 @@ export interface EdgeProp {
 export default ({p1, p2, direction}: EdgeProp) => {
     const [x1,y1] = [p1[0] + NODE_WIDTH, p1[1]+NODE_HEIGHT/2]
     const [x2,y2] = [p2[0], p2[1]+NODE_HEIGHT/2]
-    const [mx,my] = [(x1+x2)/2, (y1+y2)/2]
+    const [_,my] = [(x1+x2)/2, (y1+y2)/2]
     const theta = Math.atan2(y2 -y1, x2-x1) -Math.PI / 2
     const cx1 =  x1 + NODE_WIDTH
     const cy1 = my - 30 * Math.cos(theta)

@@ -1,10 +1,11 @@
+import { AutomationNodeTypes } from "../../automations/types";
 
 
 export type Point = [number, number];
 export interface Node {
     loc: Point;
     text: JSX.Element | string;
-    color?: 'red' | 'green' | 'blue' | 'none';
+    nodeType: AutomationNodeTypes;
 }
 export interface Edge {
     from: string;
@@ -15,7 +16,4 @@ export type EdgeDirection = Edge['direction'];
 export interface DAG {
     nodes: Record<string,Node>;
     edges: Array<Edge>;
-}
-export interface NormalizedDag extends DAG {
-    // overflow: boolean;
 }

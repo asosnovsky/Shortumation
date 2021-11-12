@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, HTMLProps } from "react";
 import CheckMarkIcon from "~/icons/checkmark";
 import PencilIcon from "~/icons/pencil";
 import { useToolTip } from "~/tooltip/context";
@@ -10,6 +10,7 @@ export interface Props {
     value: string;
     onChange: (v: string) => void;
     additionalTooltipFilters?: Record<string, string>;
+    useTextArea?: boolean;
 }
 export default function InputViewEdit({
     label, 
@@ -17,6 +18,7 @@ export default function InputViewEdit({
     value="", 
     onChange,
     additionalTooltipFilters={},
+    useTextArea=false,
 }: Props) {
     const tooltip = useToolTip();
     const [isEditing, setIsEditing] = useState(false);
@@ -29,16 +31,18 @@ export default function InputViewEdit({
         if (isEditing && inputRef.current) {
             inputRef.current.focus()
         }
-    }, [inputRef.current, isEditing])
+    }, [inputRef.current, isEditing]);
+
+    const Text = useTextArea ? (p: HTMLProps<any>) => <textarea {...p}/> : (p: HTMLProps<any>) => <input {...p}/>;
+
     return <InputWrapper label={label}>
-        {isEditing ? <input 
+        {isEditing ? <Text 
             ref={inputRef}
             value={value} 
-            onChange={e => {
-                e.preventDefault();
+            onChange={(e:any) => {
                 onChangeWrapped(e.target.value)
             }} 
-            onFocus={e => textBoxFor && tooltip.setFocus(
+            onFocus={(e: any) => textBoxFor && tooltip.setFocus(
                 e.target.getBoundingClientRect(),
                 {
                     searchObject: textBoxFor,

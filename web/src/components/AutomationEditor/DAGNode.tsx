@@ -9,7 +9,6 @@ export interface NodeProp extends Node {
     isOpen?: boolean;
     onXClick?: () => void;
     onOpenClick?: () => void;
-    color?: Node['color'];
 }
 export default ({
     loc: [x,y],
@@ -19,10 +18,10 @@ export default ({
     onXClick=() => {},
     onOpenClick=() => {},
     isOpen=false,
-    color='none',
+    nodeType,
 }: NodeProp) => <foreignObject x={x} y={y} width={width} height={height}>
     <div className="automation-dag--node">
-        <div className={`automation-dag--node-inner ${color !== 'none' ? `top-color ${color}`: ''}`}>
+        <div className={`automation-dag--node-inner ${nodeType}`}>
             <div className="automation-dag--node-inner-edge left" onClick={onXClick}>
                 <div className="automation-node-side-button">X</div>
             </div>

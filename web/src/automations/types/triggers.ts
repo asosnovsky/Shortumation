@@ -2,7 +2,7 @@ import { AutomationTime } from "./common";
 
 export interface AutomationTriggerEvent {
     platform: 'event';
-    event_type: string;
+    event_type: string | string[];
     event_data?: any;
     context?: any;
 }
@@ -23,15 +23,15 @@ export interface AutomationTriggerNumericState {
     value_template?: string;
     above?: string;
     below?: string;
-    for?: AutomationTime | string;
+    for?: AutomationTime;
 }
 export interface AutomationTriggerState {
     platform: 'state';
     entity_id: string | string[];
     attribute?: string;
-    from?: string;
-    to?: string;
-    for?: AutomationTime | string;
+    from?: string | string[];
+    to?: string | string[];
+    for?: AutomationTime;
 }
 export interface AutomationTriggerTag {
     platform: 'tag';
@@ -41,7 +41,7 @@ export interface AutomationTriggerTag {
 export interface AutomationTriggerTemplate {
     platform: 'template';
     value_template: string;
-    for?: AutomationTime | string;
+    for?: AutomationTime;
 }
 export interface AutomationTriggerTime {
     platform: 'time';

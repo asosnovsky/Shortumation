@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import NewNodeModal from "./components/AutomationEditor/NewNodeModal";
+import { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import Tooltip from "./tooltip";
 import { TooltipContext, TooltipState } from "./tooltip/context";
