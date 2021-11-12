@@ -1,4 +1,3 @@
-import { useToolTip } from "../tooltip/context";
 import InputWrapper from "./InputWrapper";
 
 export interface Props {
@@ -11,7 +10,6 @@ export default function InputNumber({
     value=0, 
     onChange,
 }: Props) {
-    const tooltip = useToolTip();
     return <InputWrapper label={label}>
         <input 
             type="number"

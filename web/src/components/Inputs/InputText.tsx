@@ -1,4 +1,4 @@
-import { useToolTip } from "../tooltip/context";
+import { useToolTip } from "~/tooltip/context";
 import InputWrapper from "./InputWrapper";
 
 export interface Props {
@@ -27,7 +27,7 @@ export default function InputText({
                 e.target.getBoundingClientRect(),
                 {
                     searchObject: textBoxFor,
-                    textInput: value,
+                    searchText: value,
                     filterObjects: additionalTooltipFilters,
                 },
                 onChange

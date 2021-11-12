@@ -1,4 +1,3 @@
-import { SelectHTMLAttributes } from "react";
 import InputWrapper from "./InputWrapper";
 
 
