@@ -1,34 +1,44 @@
-.automation-dag {
+.automation-editor {
   height: 99%;
   width: 99%;
-  border: 1px solid $secondary-accent;
   font-size: 0.5em;
   color: $primary-accent;
+  display: flex;
+  flex-direction: row;
 
-  svg {
-    height: 100%;
+  &-dag {
+    border: 1px solid $secondary-accent;
     width: 100%;
-    padding: 0;
-    margin: 0;
+    svg {
+      height: 99%;
+      width: 99%;
+      padding: 0;
+      margin: 0;
+    }
   }
 
-  &-title {
-    .input-wrapper {
-      max-height: 100%;
-      max-width: 100%;
-      height: 100%;
-      width: 100%;
+  &-info-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: auto;
 
-      * {
-        margin: 0;
-      }
-      input,
-      textarea,
-      div {
-        font-size: 1em;
-        resize: none;
-      }
-    }
+    // .input-wrapper {
+    //   max-height: 100%;
+    //   max-width: 100%;
+    //   height: 100%;
+    //   width: 100%;
+
+    //   * {
+    //     margin: 0;
+    //   }
+    //   input,
+    //   textarea,
+    //   div {
+    //     font-size: 1em;
+    //     resize: none;
+    //   }
+    // }
   }
   .edge {
     stroke: $secondary-accent;

@@ -19,24 +19,20 @@ export default function AutoInfoBox({
     })
 
     // render
-    return <g className="automation-dag-title">
-    <foreignObject x={0} y={0} height={125} width={100}>
-        <div>
-            <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
-            <InputText label="Name" value={metadata.alias} onChange={onUpdateMetadata('alias')} />
-            <InputTextArea label="Description" value={metadata.description} onChange={onUpdateMetadata('description')} />
-            <InputList
-                label="Mode"
-                current={metadata.mode}
-                onChange={onUpdateMetadata('mode')}
-                options={[
-                    'parallel',
-                    'single',
-                    'queued',
-                    'restart'
-                ]}
-            />
-        </div>
-    </foreignObject>
-</g>
+    return <div className="automation-editor-info-box">
+        <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
+        <InputText label="Name" value={metadata.alias} onChange={onUpdateMetadata('alias')} />
+        <InputTextArea label="Description" value={metadata.description} onChange={onUpdateMetadata('description')} />
+        <InputList
+            label="Mode"
+            current={metadata.mode}
+            onChange={onUpdateMetadata('mode')}
+            options={[
+                'parallel',
+                'single',
+                'queued',
+                'restart'
+            ]}
+        />
+    </div>
 }

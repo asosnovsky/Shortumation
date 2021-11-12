@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 interface Size {
   width: number;
   height: number;
+  ratioWbh: number;
 }
 
 // Hook
@@ -13,6 +14,7 @@ export default function useWindowSize(): Size {
   const [windowSize, setWindowSize] = useState<Size>({
     width: window.innerWidth,
     height: window.innerHeight,
+    ratioWbh: window.innerWidth / window.innerHeight,
   });
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function useWindowSize(): Size {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
+        ratioWbh: window.innerWidth / window.innerHeight,
       });
     }
 
