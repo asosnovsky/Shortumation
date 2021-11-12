@@ -11,19 +11,42 @@ export function Home() {
         mode: 'single',
       },
       trigger: [
-          {
-              platform: 'time',
-              at: '10:00:00'
-          }
+        {
+            platform: 'time',
+            at: '10:00:00'
+        },
+        {
+          platform: "device",
+          device_id: "34749",
+          domain: "zha",
+          type: "remote_button_double_press",
+          subtype: "remote_button_double_press"
+        }
       ],
       condition: [
           {
-              $smType: "condition",
-              condition: 'template',
-              condition_data: {
-                value_template: 'states(switch.kitchen_light) == "on"'
-              }
-          }
+            $smType: "condition",
+            condition: 'template',
+            condition_data: {
+              value_template: 'states(switch.kitchen_light) == "on"'
+            }
+        },
+        {
+            $smType: "condition",
+            condition: 'and',
+            condition_data: {
+              conditions: [
+                {
+                  $smType: 'condition',
+                  condition: 'numeric_state',
+                  condition_data: {
+                    entity_id: 'sensor.temperature_kitchen',
+                    below: '15',
+                  }
+                }
+              ]
+            }
+        }
       ],
       action: [
           {

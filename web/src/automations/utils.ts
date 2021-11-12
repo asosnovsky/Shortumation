@@ -66,6 +66,11 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
                     }
                 }
         }
+    } else {
+        if (node.alias) {
+            return node.alias;
+        }
+        return node.platform
     }
     return 'n/a'
 }

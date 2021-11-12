@@ -1,4 +1,3 @@
-import { NODE_HEIGHT, NODE_WIDTH } from "./constants"
 import { EdgeDirection, Point } from "./types"
 
 
@@ -8,14 +7,17 @@ export interface EdgeProp {
     p2: Point,
     direction: EdgeDirection,
 }
-export default ({p1, p2, direction}: EdgeProp) => {
-    const [x1,y1] = [p1[0] + NODE_WIDTH, p1[1]+NODE_HEIGHT/2]
-    const [x2,y2] = [p2[0], p2[1]+NODE_HEIGHT/2]
+export default ({
+    p1: [x1,y1], 
+    p2: [x2,y2], 
+    direction, 
+}: EdgeProp) => {
     const [_,my] = [(x1+x2)/2, (y1+y2)/2]
-    const theta = Math.atan2(y2 -y1, x2-x1) -Math.PI / 2
-    const cx1 =  x1 + NODE_WIDTH
+    const theta = Math.atan2(y2 -y1, x2-x1)  - Math.PI / 2
+    console.log({theta}, Math.sin(theta))
+    const cx1 =  x1 - 45 * Math.sin(theta) 
     const cy1 = my - 30 * Math.cos(theta)
-    const cx2 = x2 - NODE_WIDTH
+    const cx2 = x2 + 45 * Math.sin(theta)
     const cy2 = my + 30 * Math.cos(theta)
 
     return <path className="edge"

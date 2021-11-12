@@ -1,11 +1,8 @@
-import { AutomationNodeTypes } from "../../automations/types";
-
-
 export type Point = [number, number];
 export interface Node {
     loc: Point;
     text: JSX.Element | string;
-    nodeType: AutomationNodeTypes;
+    color: 'red' | 'blue' | 'green';
 }
 export interface Edge {
     from: string;

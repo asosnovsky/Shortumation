@@ -14,6 +14,13 @@
       width: 99%;
       padding: 0;
       margin: 0;
+
+      circle {
+        fill: adjust-color($color: $secondary, $green: 125, $blue: 125);
+        &.blue {
+          fill: adjust-color($color: $secondary, $blue: 125);
+        }
+      }
     }
   }
 

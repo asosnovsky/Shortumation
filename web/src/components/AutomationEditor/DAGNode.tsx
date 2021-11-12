@@ -18,15 +18,15 @@ export default ({
     onXClick=() => {},
     onOpenClick=() => {},
     isOpen=false,
-    nodeType,
+    color,
 }: NodeProp) => <foreignObject x={x} y={y} width={width} height={height}>
-    <div className="automation-dag--node">
-        <div className={`automation-dag--node-inner ${nodeType}`}>
-            <div className="automation-dag--node-inner-edge left" onClick={onXClick}>
+    <div className="automation-editor--node">
+        <div className={`automation-editor--node-inner top-color ${color}`}>
+            <div className="automation-editor--node-inner-edge left" onClick={onXClick}>
                 <div className="automation-node-side-button">X</div>
             </div>
-            <div className="automation-dag--node-inner-text">{text}</div>
-            <div className="automation-dag--node-inner-edge right" onClick={onOpenClick}>
+            <div className="automation-editor--node-inner-text">{text}</div>
+            <div className="automation-editor--node-inner-edge right" onClick={onOpenClick}>
                 <div className="automation-node-side-button">{isOpen ? "▲" : "▼"}</div>
             </div>
         </div>
