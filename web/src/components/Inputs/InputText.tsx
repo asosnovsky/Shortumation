@@ -1,5 +1,6 @@
 import { useToolTip } from "~/tooltip/context";
 import InputWrapper from "./InputWrapper";
+import { useInputTextStyles } from "./styles";
 
 export interface Props {
     textBoxFor?: string;
@@ -15,9 +16,11 @@ export default function InputText({
     onChange,
     additionalTooltipFilters={},
 }: Props) {
+    const {classes} = useInputTextStyles({});
     const tooltip = useToolTip();
-    return <InputWrapper label={label}>
+    return <InputWrapper label={label} labelSize={value === '' ? 'normal' : 'small'}>
         <input 
+            className={classes.input}
             value={value} 
             onChange={e => {
                 e.preventDefault();

@@ -1,7 +1,6 @@
 .automation-editor {
   height: 99%;
   width: 99%;
-  font-size: 0.5em;
   color: $primary-accent;
   display: flex;
   flex-direction: row;
@@ -25,33 +24,21 @@
   }
 
   &-info-box {
+    padding-left: 10px;
+    padding-right: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     overflow: auto;
-
-    // .input-wrapper {
-    //   max-height: 100%;
-    //   max-width: 100%;
-    //   height: 100%;
-    //   width: 100%;
-
-    //   * {
-    //     margin: 0;
-    //   }
-    //   input,
-    //   textarea,
-    //   div {
-    //     font-size: 1em;
-    //     resize: none;
-    //   }
-    // }
   }
   .edge {
     stroke: $secondary-accent;
   }
   #arrow > path {
     fill: $secondary-accent;
+  }
+  span {
+    font-size: 8px;
   }
 
   &--node {

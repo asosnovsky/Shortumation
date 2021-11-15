@@ -6,7 +6,7 @@ import useWindowSize from "~/utils/useWindowSize";
 import AutoInfoBox from "./AutoInfoBox";
 import { NODE_HEIGHT, NODE_WIDTH } from "./constants";
 import DAGEdge from "./DAGEdge";
-import DAGNode from "./DAGNode";
+import DAGNode, { ConditionNode } from "./DAGNode";
 import { Point } from "./types";
 
 interface Props {
@@ -47,8 +47,23 @@ export default function AutomationEditor({
             lastNodeLoc = [nodeLoc[0] + NODE_WIDTH*((i - 1)*nHDF+1), nodeLoc[1] + NODE_HEIGHT/2];
             nodeLoc[0] += NODE_WIDTH*i*nHDF
         }
+        let children = <></>;
+        if (
+            (condition.condition === 'and') ||
+            (condition.condition === 'or') ||
+            (condition.condition === 'not')
+        ) {
+            // children = condition.condition_data.conditions.map((c,i) => renderMidCondition(c,i))
+        }
         return <>
-            <DAGNode key={`node.${i}`} loc={nodeLoc} text={getDescriptionFromAutomationNode(condition)} color="blue"/>
+            <ConditionNode 
+                conditionType={condition.condition}
+                key={`node.${i}`} 
+                loc={nodeLoc} 
+                text={getDescriptionFromAutomationNode(condition)} color="blue"
+            >
+                {children}
+            </ConditionNode>
             <DAGEdge 
                 key={`edge.${i}`}
                 p1={lastNodeLoc}
@@ -81,8 +96,8 @@ export default function AutomationEditor({
                 <g className="triggers">
                     {automation.trigger.map(renderTrigger)}  
                 </g>       
-                <g className="conditions">
-                    {automation.condition.map(renderMidCondition)}  
+                <g className="sequence">
+                    {automation.sequence.map(renderMidCondition)}  
                 </g>       
                 <circle className="blue" cx={pointTrigToCond[0]} cy={pointTrigToCond[1]} r={2}/>
                 <g className="actions">

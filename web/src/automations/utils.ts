@@ -63,6 +63,8 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
                             return "Numeric State Condition"
                         case "state":
                             return `${node.condition_data.entity_id} is '${node.condition_data.state}'`
+                        case 'template':
+                            return node.condition_data.value_template
                     }
                 }
         }

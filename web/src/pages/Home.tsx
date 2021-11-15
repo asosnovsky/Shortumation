@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { ConditionEditor } from "~/components/ConditionEditor";
+import { usePageTheme } from "~/styles/page";
 import { AutomationData } from "../automations/types";
 import AutomationEditor from "../components/AutomationEditor";
 
 export function Home() {
+  const {classes} = usePageTheme({});
   const [automation, setAutomation] = useState<AutomationData>({
       metadata: {
         id: "X12314akx",
@@ -23,14 +26,7 @@ export function Home() {
           subtype: "remote_button_double_press"
         }
       ],
-      condition: [
-          {
-            $smType: "condition",
-            condition: 'template',
-            condition_data: {
-              value_template: 'states(switch.kitchen_light) == "on"'
-            }
-        },
+      sequence: [
         {
             $smType: "condition",
             condition: 'and',
@@ -43,46 +39,51 @@ export function Home() {
                     entity_id: 'sensor.temperature_kitchen',
                     below: '15',
                   }
+                },
+                {
+                  $smType: "condition",
+                  condition: 'template',
+                  condition_data: {
+                    value_template: 'states(switch.kitchen_light) == "on"'
+                  }
                 }
               ]
             }
-        }
-      ],
-      action: [
-          {
-              $smType: "action",
-              action: "service",
-              action_data: {
-                alias: "Start Music In Kitchen",
-                service: 'media_player.play_media',
-                target: {
-                    entity_id: "media_player.kitchen_dot"
-                },
-                data: {
-                    media_content_id: "Good Morning",
-                    media_content_type: "SPOTIFY",
-                }
+        },
+        {
+            $smType: "action",
+            action: "service",
+            action_data: {
+              alias: "Start Music In Kitchen",
+              service: 'media_player.play_media',
+              target: {
+                  entity_id: "media_player.kitchen_dot"
+              },
+              data: {
+                  media_content_id: "Good Morning",
+                  media_content_type: "SPOTIFY",
               }
-          }
+            }
+        }
       ],
   });
   return (
-    <div id="page--home" className="page">
-        <AutomationEditor
+    <div className={classes.page}>
+        {/* <AutomationEditor
             automation={automation}
             onUpdate={setAutomation}
+        /> */}
+        <ConditionEditor
+          onAddChild={() => {}}
+          onDelete={() => {}}
+          condition={{
+            $smType: 'condition',
+            condition: 'template',
+            condition_data: {
+              value_template: "states(asdacaca) is 'on'"
+            }
+          }}
         />
-      {/* <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100vw"
-        }}
-      >
-        <AutomationEditor automation={sample}/>
-      </div> */}
     </div>
   );
 }
