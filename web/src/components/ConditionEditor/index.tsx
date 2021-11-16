@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { AutomationCondition } from "~/automations/types/conditions";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
 import { CheckMarkIcon, PencilIcon } from "~/icons/icons";
-import { getEditor } from "./childrenRender";
+import { getEditor } from "./editorRender";
 import { useStyles } from "./style";
 
 
