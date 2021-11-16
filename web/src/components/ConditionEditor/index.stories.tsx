@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { useState } from "react";
 import { usePageTheme } from "~/styles/page";
 import { ConditionEditor } from ".";
 
@@ -9,10 +10,11 @@ export default {
   } as ComponentMeta<typeof ConditionEditor>;
   
 
-const Template: ComponentStory<typeof ConditionEditor> = args => {
+const Template: ComponentStory<typeof ConditionEditor> = ({condition, ...args}) => {
     const {classes} = usePageTheme({});
+    const [data, setData] = useState(condition);
     return <div className={classes.page}>
-    <ConditionEditor {...args} />
+    <ConditionEditor {...args} condition={data} onUpdate={setData} />
 </div> 
 }
 
@@ -24,5 +26,6 @@ SimpleGraph.args = {
         condition_data: {
             value_template: "states('switch.light_kitchen') == 'on'"
         } 
-    }
+    },
+    displayMode: true,
 }

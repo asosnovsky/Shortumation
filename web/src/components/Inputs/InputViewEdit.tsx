@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, HTMLProps } from "react";
-import CheckMarkIcon from "~/icons/checkmark";
-import PencilIcon from "~/icons/pencil";
+import {CheckMarkIcon, PencilIcon} from "~/icons/icons";
 import { useToolTip } from "~/tooltip/context";
 import InputWrapper from "./InputWrapper";
+import { useInputViewEditStyles } from "./styles";
 
 export interface Props {
     textBoxFor?: string;
@@ -18,29 +18,32 @@ export default function InputViewEdit({
     value="", 
     onChange,
     additionalTooltipFilters={},
-    useTextArea=false,
 }: Props) {
+    // state
     const tooltip = useToolTip();
     const [isEditing, setIsEditing] = useState(false);
+    // alias for on calls
     const onChangeWrapped = (t: string) => {
         onChange(t);
         setIsEditing(false);
     }
+    // ref to grab focus when editing
     const inputRef = useRef<HTMLInputElement | null>(null);
     useEffect(() => {
         if (isEditing && inputRef.current) {
+            console.log('focusing...')
             inputRef.current.focus()
         }
     }, [inputRef.current, isEditing]);
 
-    const Text = useTextArea ? (p: HTMLProps<any>) => <textarea {...p}/> : (p: HTMLProps<any>) => <input {...p}/>;
-
+    // styles
+    const {classes} = useInputViewEditStyles({ isEditing });
     return <InputWrapper label={label}>
-        {isEditing ? <Text 
+        {isEditing ? <input 
             ref={inputRef}
             value={value} 
             onChange={(e:any) => {
-                onChangeWrapped(e.target.value)
+                onChange(e.target.value)
             }} 
             onFocus={(e: any) => textBoxFor && tooltip.setFocus(
                 e.target.getBoundingClientRect(),
@@ -51,10 +54,10 @@ export default function InputViewEdit({
                 },
                 onChangeWrapped
             )}
-        />:<div className="input-view">
+        />:<div className={classes.inputView}>
             {value}
         </div>}
-        <PencilIcon onClick={() => setIsEditing(!isEditing)} className={`icon pencil ${isEditing ? 'opened' : ''}`}/>
-        <CheckMarkIcon onClick={() => setIsEditing(!isEditing)} className={`icon checkmark ${isEditing ? 'opened' : ''}`}/>
+        <PencilIcon onClick={() => setIsEditing(!isEditing)} className={classes.pencil}/>
+        <CheckMarkIcon onClick={() => setIsEditing(!isEditing)} className={classes.checkmark}/>
     </InputWrapper>
 }

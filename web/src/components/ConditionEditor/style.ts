@@ -1,4 +1,5 @@
 import { Styles } from "jss";
+import Color from 'chroma-js';
 import { createAppUseStyles } from "~/styles/theme";
 
 export const useStyles = createAppUseStyles<{
@@ -45,6 +46,25 @@ export const useStyles = createAppUseStyles<{
             left: -35,
             top: 10,
         },
+        modifyBtn: {
+            backgroundColor: theme.primary,
+            fill: theme.primaryAccent,
+            border: `1px solid ${theme.primaryAccent}`,
+            borderRadius: 10,
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            cursor: 'pointer',
+            "&:hover": {
+                backgroundColor: Color(theme.primary).brighten().hex(),
+                fill: Color(theme.primaryAccent).brighten().hex(),
+            },
+            "&:hover $icon": {
+                transform: "rotate(90deg)"
+            }
+        },
+        icon: {
+            transition: "200ms ease-out"
+        },
         deleteBtn,
         children: ({}) => ({
             flex: 1,
@@ -54,9 +74,9 @@ export const useStyles = createAppUseStyles<{
             justifyContent: 'center',
             alignItems: 'center',
             border: `1px solid ${theme.primaryAccent}`,
-            borderRadius: 10,
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
+            // borderRadius: 10,
+            // borderTopLeftRadius: 0,
+            // borderBottomLeftRadius: 0,
         })
     }
 })

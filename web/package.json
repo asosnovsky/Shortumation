@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chroma-js": "^2.1.2",
     "color": "^4.0.1",
     "js-yaml": "^4.1.0",
     "jss": "^10.8.2",
@@ -19,6 +20,7 @@
     "@storybook/addon-links": "^6.3.12",
     "@storybook/react": "^6.3.12",
     "@testing-library/jest-dom": "^5.15.0",
+    "@types/chroma-js": "^2.1.3",
     "@types/color": "^3.0.2",
     "@types/jest": "^27.0.2",
     "@types/js-yaml": "^4.0.4",

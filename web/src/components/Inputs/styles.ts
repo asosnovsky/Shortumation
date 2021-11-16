@@ -52,3 +52,18 @@ export const useInputWrapperStyles = createAppUseStyles<{
 export const useInputTextStyles = createAppUseStyles<{}>(theme => ({
     ...commonInputStyle(theme),
 }));
+
+export const useInputViewEditStyles = createAppUseStyles<{
+    isEditing: boolean;
+}>(theme => ({
+    ...commonInputStyle(theme),
+    inputView: {
+
+    },
+    checkmark: {
+
+    },
+    pencil: {
+        
+    }
+}));

@@ -1,34 +1,47 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { AutomationCondition } from "~/automations/types/conditions";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
+import { CheckMarkIcon, PencilIcon } from "~/icons/icons";
+import { getEditor } from "./childrenRender";
 import { useStyles } from "./style";
 
 
 
 export const ConditionEditor: FC<{
     condition: AutomationCondition;
+    displayMode?: boolean;
     onDelete: (which: 'root' | number) => void;
     onAddChild: () => void;
+    onUpdate: (data: AutomationCondition) => void;
 }> = ({
     condition,
     onDelete,
+    onUpdate,
     // onAddChild,
 }) => {
-    // alias
-    let children = getDescriptionFromAutomationNode(condition);
+    // state
+    const [displayMode, setDisplayMode] = useState(true);
+
+    // children
+    let children: any = 'n/a'
+    if (displayMode) {
+        children = getDescriptionFromAutomationNode(condition);
+    }   else {
+        const Editor = getEditor(condition);
+        children = <Editor condition={condition} onChange={data => {
+            console.log({data})
+            onUpdate(data)
+        }}/>
+    }
+    // styles
     let hasChildren = false;
     if (condition.condition === "not") {
-        children = "not"
         hasChildren = true
     } else if (condition.condition ==='and') {
-        children = "and"
         hasChildren = true
     } else if (condition.condition ==='or') {
-        children = "or"
         hasChildren = true
     }
-
-    // styles
     const {classes} = useStyles({ hasChildren });
 
     // components
@@ -43,5 +56,8 @@ export const ConditionEditor: FC<{
         <div className={classes.children}>
             {children}
         </div>
+        <button className={classes.modifyBtn} onClick={() => setDisplayMode(!displayMode)}>
+            {displayMode ? <PencilIcon className={classes.icon}/> : <CheckMarkIcon className={classes.icon}/>}
+        </button>
     </div>
 }
