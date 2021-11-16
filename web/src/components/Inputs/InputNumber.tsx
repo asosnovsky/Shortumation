@@ -13,7 +13,6 @@ export default function InputNumber({
     onChange,
 }: Props) {
     const {classes} = useInputNumberStyles({});
-    console.log({value})
     return <InputWrapper label={label} labelSize={value !== undefined ? 'small' : 'normal'}>
         <input 
             className={classes.input}

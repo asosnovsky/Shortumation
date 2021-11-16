@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { AutomationCondition, LogicCondition, NumericCondition, TemplateCondition } from "~/automations/types/conditions";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
+import InputNumber from "../Inputs/InputNumber";
 import InputText from "../Inputs/InputText";
 import InputTextArea from "../Inputs/InputTextArea";
 import { InputEntity } from "../Inputs/InputTextBubble";
@@ -72,6 +73,35 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
                 condition_data: {
                     ...condition.condition_data,
                     entity_id
+                }
+            })}
+        />
+        <InputText label="Attribute" value={condition.condition_data.attribute ?? ""} onChange={attribute => onChange({
+            ...condition,
+            condition_data: {
+                ...condition.condition_data,
+                attribute
+            }
+        })}/>
+        <InputNumber
+            label="Above"
+            value={condition.condition_data.above ? Number(condition.condition_data.above) : undefined}
+            onChange={above => onChange({
+                ...condition,
+                condition_data: {
+                    ...condition.condition_data,
+                    above: above ? String(above) : undefined,
+                }
+            })}
+        />
+        <InputNumber
+            label="Below"
+            value={condition.condition_data.below ? Number(condition.condition_data.below) : undefined}
+            onChange={below => onChange({
+                ...condition,
+                condition_data: {
+                    ...condition.condition_data,
+                    below: below ? String(below) : undefined,
                 }
             })}
         />

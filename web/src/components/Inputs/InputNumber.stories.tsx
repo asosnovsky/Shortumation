@@ -25,7 +25,6 @@ return <div className={classes.page}>
 export const SomeStuffAtStart: ComponentStory<typeof InputNumber> = args => {
     const {classes} = usePageTheme({});
     const [value, setValue] = useState<number | undefined>(10)
-    console.log('root', value)
     return <div className={classes.page}>
         <InputNumber {...args} value={value} onChange={setValue}/>
     </div> 

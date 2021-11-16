@@ -62,8 +62,8 @@ export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
         },
         deleteIcon: {
             position: "absolute",
-            right: 40,
-            top: 16,
+            left: 30,
+            top: 17,
             color: theme.secondaryAccent,
             backgroundColor: theme.secondary,
             borderWidth: 1,
