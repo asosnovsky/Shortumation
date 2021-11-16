@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useToolTip } from "~/tooltip/context";
 import InputWrapper from "./InputWrapper";
 import { useInputTextStyles } from "./styles";
@@ -18,7 +19,8 @@ export default function InputText({
 }: Props) {
     const {classes} = useInputTextStyles({});
     const tooltip = useToolTip();
-    return <InputWrapper label={label} labelSize={value === '' ? 'normal' : 'small'}>
+    const [isFocused, setIsFocused] = useState(false)
+    return <InputWrapper label={label} labelSize={(value === '') && !isFocused ? 'normal' : 'small'}>
         <input 
             className={classes.input}
             value={value} 
@@ -26,15 +28,23 @@ export default function InputText({
                 e.preventDefault();
                 onChange(e.target.value)
             }} 
-            onFocus={e => textBoxFor && tooltip.setFocus(
-                e.target.getBoundingClientRect(),
-                {
-                    searchObject: textBoxFor,
-                    searchText: value,
-                    filterObjects: additionalTooltipFilters,
-                },
-                onChange
-            )}
+            onBlur={e => {
+                setIsFocused(false)
+            }}
+            onFocus={e => {
+                setIsFocused(true)
+                if(textBoxFor) {
+                    tooltip.setFocus(
+                       e.target.getBoundingClientRect(),
+                       {
+                           searchObject: textBoxFor,
+                           searchText: value,
+                           filterObjects: additionalTooltipFilters,
+                       },
+                       onChange
+                   )
+                }
+            }}
         />
     </InputWrapper>
 }

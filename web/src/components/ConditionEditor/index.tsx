@@ -9,7 +9,6 @@ import { useStyles } from "./style";
 
 export const ConditionEditor: FC<{
     condition: AutomationCondition;
-    displayMode?: boolean;
     onDelete: (which: 'root' | number) => void;
     onAddChild: () => void;
     onUpdate: (data: AutomationCondition) => void;

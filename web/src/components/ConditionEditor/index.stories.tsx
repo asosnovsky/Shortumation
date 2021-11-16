@@ -27,5 +27,4 @@ SimpleGraph.args = {
             value_template: "states('switch.light_kitchen') == 'on'"
         } 
     },
-    displayMode: true,
 }

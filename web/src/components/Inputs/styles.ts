@@ -1,7 +1,7 @@
 import { Styles } from "jss";
 import { createAppUseStyles, AppTheme } from "~/styles/theme";
 
-const commonInputStyle = (theme: AppTheme): Styles => ({
+const commonInputStyle = (theme: AppTheme) => ({
     input: {
         backgroundColor: theme.secondary,
         color: theme.secondaryAccent,
@@ -9,7 +9,7 @@ const commonInputStyle = (theme: AppTheme): Styles => ({
         borderStyle: 'solid',
         borderWidth: 1,
         borderRadius: 5,
-        padding: 10,
+        padding: 15,
         marginLeft: 5,
         marginRight: 5,
         fontSize: 16,
@@ -52,6 +52,16 @@ export const useInputWrapperStyles = createAppUseStyles<{
 export const useInputTextStyles = createAppUseStyles<{}>(theme => ({
     ...commonInputStyle(theme),
 }));
+
+export const useInputTextAreaStyles = createAppUseStyles<{ resizable: boolean }>(theme => {
+    const styles = commonInputStyle(theme);
+    return {
+        input: ({resizable}) => ({
+            ...styles.input,
+            resize: resizable ? 'both' : 'none' 
+        })
+    }
+});
 
 export const useInputViewEditStyles = createAppUseStyles<{
     isEditing: boolean;

@@ -1,20 +1,20 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { usePageTheme } from "~/styles/page";
-import InputText from "./InputText";
+import InputTextArea from "./InputTextArea";
 
 export default {
-    title: 'Inputs/InputText',
-    component: InputText,
+    title: 'Inputs/InputTextArea',
+    component: InputTextArea,
     parameters: { actions: { argTypesRegex: '^on.*' } },
-  } as ComponentMeta<typeof InputText>;
+  } as ComponentMeta<typeof InputTextArea>;
   
 
-const Template: ComponentStory<typeof InputText> = args => {
+const Template: ComponentStory<typeof InputTextArea> = args => {
     const {classes} = usePageTheme({});
     const [value, setValue] = useState('')
     return <div className={classes.page}>
-        <InputText {...args} value={value} onChange={setValue}/>
+        <InputTextArea {...args} value={value} onChange={setValue}/>
     </div> 
 }
 

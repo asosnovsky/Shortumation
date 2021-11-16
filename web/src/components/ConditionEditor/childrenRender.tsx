@@ -2,6 +2,7 @@ import { FC } from "react";
 import { AutomationCondition, TemplateCondition } from "~/automations/types/conditions";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
 import InputText from "../Inputs/InputText";
+import InputTextArea from "../Inputs/InputTextArea";
 
 
 interface Editor<C extends AutomationCondition> extends FC<{
@@ -31,12 +32,12 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
                 alias
             }
         })}/>
-        <InputText label="Template" value={condition.condition_data.value_template} onChange={value_template => onChange({
+        <InputTextArea label="Template" value={condition.condition_data.value_template} onChange={value_template => onChange({
             ...condition,
             condition_data: {
                 ...condition.condition_data,
                 value_template
             }
-        })}/>
+        })} resizable/>
     </div>
 }

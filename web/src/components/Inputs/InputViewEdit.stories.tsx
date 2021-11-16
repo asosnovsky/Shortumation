@@ -4,7 +4,7 @@ import { usePageTheme } from "~/styles/page";
 import InputViewEdit from "./InputViewEdit";
 
 export default {
-    title: 'InputViewEdit',
+    title: 'Inputs/InputViewEdit',
     component: InputViewEdit,
     parameters: { actions: { argTypesRegex: '^on.*' } },
   } as ComponentMeta<typeof InputViewEdit>;
