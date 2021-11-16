@@ -43,6 +43,7 @@ export const useStyles = createAppUseStyles<{
             borderRadius: 10,
             borderTopRightRadius: hasChildren ? 10 : 0,
             borderBottomRightRadius: hasChildren ? 10 : 0,
+            borderBottomLeftRadius: hasChildren ? 0 : 10,
             padding: 10,
             maxWidth: 80,
             minWidth: 30,
@@ -56,18 +57,25 @@ export const useStyles = createAppUseStyles<{
             top: 10,
         },
         modifyBtn: ({hasChildren}) => ({
+            // styling
             backgroundColor: theme.primary,
             fill: theme.primaryAccent,
-            border: `1px solid ${theme.primaryAccent}`,
-            borderRadius: hasChildren ? 0 : 10,
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: hasChildren ? 10 :  0,
-            borderBottomRightRadius: 10,
+            border: hasChildren ? 'none' : `1px solid ${theme.primaryAccent}`,
+            borderRadius: 10,
+            borderTopLeftRadius: hasChildren ? 10 : 0,
+            borderBottomLeftRadius: hasChildren ? 10 : 0,
             cursor: 'pointer',
+            
+            // positioning
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             padding: 5,
+            position: hasChildren ? 'absolute' : 'block',
+            right: 1,
+            top: 10,
+
+            // on hover
             "&:hover": {
                 backgroundColor: Color(theme.primary).brighten().hex(),
                 fill: Color(theme.primaryAccent).brighten().hex(),
@@ -88,6 +96,8 @@ export const useStyles = createAppUseStyles<{
             flexDirection: 'column',
             justifyContent:  'center',
             border: `1px solid ${theme.primaryAccent}`,
+            borderBottomRightRadius: hasChildren ? 10 : 0,
+            borderBottomLeftRadius: hasChildren ? 10 : 0,
         })
     }
 })
