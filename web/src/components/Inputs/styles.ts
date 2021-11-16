@@ -53,6 +53,32 @@ export const useInputTextStyles = createAppUseStyles<{}>(theme => ({
     ...commonInputStyle(theme),
 }));
 
+export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
+    const styles = commonInputStyle(theme);
+    return {
+        input: {
+            ...styles.input,
+            textAlign: 'center'
+        },
+        deleteIcon: {
+            position: "absolute",
+            right: 40,
+            top: 16,
+            color: theme.secondaryAccent,
+            backgroundColor: theme.secondary,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme.secondaryAccent,
+            borderRadius: 5,
+            cursor: 'pointer',
+            padding: "1px 5px",
+            "&:hover": {
+                backgroundColor: theme.primary,
+            }
+        },
+    }
+});
+
 export const useInputTextAreaStyles = createAppUseStyles<{ resizable: boolean }>(theme => {
     const styles = commonInputStyle(theme);
     return {

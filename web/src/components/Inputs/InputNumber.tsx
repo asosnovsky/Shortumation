@@ -1,23 +1,30 @@
+// import { useState } from "react";
 import InputWrapper from "./InputWrapper";
+import { useInputNumberStyles } from "./styles";
 
 export interface Props {
     label: string;
-    value: number;
-    onChange: (v: number) => void;
+    value: number | undefined;
+    onChange: (v: number | undefined) => void;
 }
 export default function InputNumber({
     label, 
-    value=0, 
+    value=undefined, 
     onChange,
 }: Props) {
-    return <InputWrapper label={label}>
+    const {classes} = useInputNumberStyles({});
+    console.log({value})
+    return <InputWrapper label={label} labelSize={value !== undefined ? 'small' : 'normal'}>
         <input 
+            className={classes.input}
             type="number"
-            value={value} 
+            value={value ?? ""} 
             onChange={e => {
                 e.preventDefault();
+                console.log(e.target.value)
                 onChange(Number(e.target.value))
             }} 
         />
+        {value && <button className={classes.deleteIcon} onClick={() => onChange(undefined)}>X</button>}
     </InputWrapper>
 }
