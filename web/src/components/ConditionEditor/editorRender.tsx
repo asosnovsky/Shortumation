@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { AutomationCondition, LogicCondition, TemplateCondition } from "~/automations/types/conditions";
+import { AutomationCondition, LogicCondition, NumericCondition, TemplateCondition } from "~/automations/types/conditions";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
 import InputText from "../Inputs/InputText";
 import InputTextArea from "../Inputs/InputTextArea";
+import { InputEntity } from "../Inputs/InputTextBubble";
 import { ConditionNode } from "./ConditionNode";
 
 
@@ -22,6 +23,8 @@ export const getEditor = (condition: AutomationCondition): Editor<any> => {
             return LogicViewer;
         case 'not':
             return LogicViewer;
+        case 'numeric_state':
+            return NumericStateEditor;
         default:
             return () => <div>Not Ready</div>
     }
@@ -40,6 +43,39 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
             }
         })}/>
         <InputTextArea label="Template" value={condition.condition_data.value_template} onChange={value_template => onChange({
+            ...condition,
+            condition_data: {
+                ...condition.condition_data,
+                value_template
+            }
+        })} resizable/>
+    </div>
+}
+
+
+export const NumericStateEditor: Editor<NumericCondition> = ({
+    onChange,
+    condition,
+}) => {
+    return <div>
+        <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+            ...condition,
+            condition_data: {
+                ...condition.condition_data,
+                alias
+            }
+        })}/>
+        <InputEntity
+            value={condition.condition_data.entity_id}
+            onChange={entity_id => onChange({
+                ...condition,
+                condition_data: {
+                    ...condition.condition_data,
+                    entity_id
+                }
+            })}
+        />
+        <InputTextArea label="Template" value={condition.condition_data.value_template ?? ""} onChange={value_template => onChange({
             ...condition,
             condition_data: {
                 ...condition.condition_data,

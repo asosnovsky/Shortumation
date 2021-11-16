@@ -48,7 +48,7 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
                     switch(node.condition) {
                         case "numeric_state":
                             if(node.condition_data.entity_id) {
-                                const center = typeof node.condition_data.entity_id === 'string' ? node.condition_data.entity_id : '...'
+                                const center = prettyEntityId(node.condition_data.entity_id);
                                 if(node.condition_data.above) {
                                     if(node.condition_data.below) {
                                         return `${node.condition_data.above} < ${center} < ${node.condition_data.below}`
@@ -75,6 +75,16 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
         return node.platform
     }
     return 'n/a'
+}
+
+export const prettyEntityId = (entityId: string| string[]) => {
+    if (typeof entityId === 'string') {
+        return entityId
+    }   else if(entityId.length === 1) {
+        return entityId[0]
+    }   else {
+        return "..."
+    }
 }
 
 // export const determineNodeTypes = (action: AutomationNode<any>) : [AutomationNodeType, NodeSubType] => {

@@ -1,5 +1,5 @@
-import { Styles } from "jss";
 import { createAppUseStyles, AppTheme } from "~/styles/theme";
+import Color from 'chroma-js';
 
 const commonInputStyle = (theme: AppTheme) => ({
     input: {
@@ -77,3 +77,66 @@ export const useInputViewEditStyles = createAppUseStyles<{
         
     }
 }));
+
+
+export const useInputBubblesStyles = createAppUseStyles<{}>(theme => ({
+    bubbles: {
+        display: 'flex',
+        flexDirection: 'row',
+        maxHeight: 50,
+        maxWidth: '100%',
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        scrollbarWidth: 'thin',
+    },
+    bubble: {
+        position: 'relative',
+        border: `1px solid ${theme.primaryAccent}`,
+        borderRadius: 10,
+        backgroundColor: Color(theme.primary).set('rgb.g', 150).alpha(0.35).hex(),
+        color: Color(theme.primary).brighten(5).hex(),
+        fontSize: 16,
+        
+        marginLeft: 1,
+        padding: 5,
+        width: 'fit-content',
+        whiteSpace: 'nowrap',
+        
+        cursor: 'pointer',
+        "&:hover": {
+            backgroundColor: Color(theme.primary).set('rgb.r', 150).alpha(0.35).hex(),
+            color: Color(theme.primary).brighten(5).alpha(0.35).hex(),
+        },
+
+        "&:hover $deleteIcon": {
+            display: 'block',
+        }
+    },
+    deleteIcon: {
+        display: 'none',
+        position: "absolute",
+        left: "48%",
+        top: 5,
+        color: "white",
+    },
+    addBtn: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+        fontSize: 20,
+        cursor: 'pointer',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: theme.secondary,
+        backgroundColor: theme.secondary,
+        color: theme.secondaryAccent,
+        padding: "3px 7px",
+        transition: "200ms ease-out",
+        "&:hover": {
+            borderRadius: 100,
+            backgroundColor: Color(theme.primary).set('rgb.g', 150).alpha(0.35).hex(),
+            borderColor: theme.secondaryAccent,
+        },
+    }
+}));
+

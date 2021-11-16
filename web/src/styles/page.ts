@@ -7,7 +7,7 @@ export const usePageTheme = createAppUseStyles(theme => ({
         width: '100vw',
         margin: 0,
         padding: 0,
-        overflow: 'hidden',
+        overflow: 'auto',
         maxWidth: '100vw',
         maxHeight: '100vh',
 
@@ -22,7 +22,7 @@ export const usePageTheme = createAppUseStyles(theme => ({
         // children
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
 
         '> div': {

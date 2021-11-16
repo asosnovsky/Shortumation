@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { useToolTip } from "~/tooltip/context";
 import InputWrapper from "./InputWrapper";
 import { useInputTextStyles } from "./styles";
@@ -8,6 +8,7 @@ export interface Props {
     label: string;
     value: string;
     onChange: (v: string) => void;
+    onEnter?: () => void;
     additionalTooltipFilters?: Record<string, string>;
 }
 export default function InputText({
@@ -15,8 +16,10 @@ export default function InputText({
     textBoxFor, 
     value="", 
     onChange,
+    onEnter=()=>{},
     additionalTooltipFilters={},
-}: Props) {
+    children,
+}: PropsWithChildren<Props>) {
     const {classes} = useInputTextStyles({});
     const tooltip = useToolTip();
     const [isFocused, setIsFocused] = useState(false)
@@ -24,6 +27,11 @@ export default function InputText({
         <input 
             className={classes.input}
             value={value} 
+            onKeyDown={e => {
+                if (e.key === 'Enter') {
+                    onEnter();
+                }
+            }}
             onChange={e => {
                 e.preventDefault();
                 onChange(e.target.value)
@@ -46,5 +54,6 @@ export default function InputText({
                 }
             }}
         />
+        {children}
     </InputWrapper>
 }
