@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
+import { AutomationCondition } from "~/automations/types/conditions";
 import { usePageTheme } from "~/styles/page";
 import { ConditionEditor } from ".";
 
@@ -18,8 +19,8 @@ const Template: ComponentStory<typeof ConditionEditor> = ({condition, ...args}) 
 </div> 
 }
 
-export const SimpleGraph = Template.bind({})
-SimpleGraph.args = {
+export const TemplateViewer = Template.bind({})
+TemplateViewer.args = {
     condition: {
         $smType: 'condition',
         condition: 'template',
@@ -27,4 +28,56 @@ SimpleGraph.args = {
             value_template: "states('switch.light_kitchen') == 'on'"
         } 
     },
+}
+
+export const LogicCondition = Template.bind({})
+LogicCondition.args = {
+    condition: {
+        $smType: 'condition',
+        condition: 'or',
+        condition_data: {
+            conditions: [
+                {
+                    $smType: 'condition',
+                    condition: 'numeric_state',
+                    condition_data: {
+                        entity_id: 'sensor.humidity_kitchen',
+                        above: '60'
+                    }
+                },
+                {
+                    $smType: 'condition',
+                    condition: 'numeric_state',
+                    condition_data: {
+                        entity_id: 'sensor.humidity_living_room',
+                        above: '60'
+                    }
+                },
+                {
+                    $smType: 'condition',
+                    condition: 'and',
+                    condition_data: {
+                        conditions: [
+                            {
+                                $smType: 'condition',
+                                condition: 'numeric_state',
+                                condition_data: {
+                                    entity_id: 'sensor.humidity_bedroom',
+                                    above: '60'
+                                }
+                            },
+                            {
+                                $smType: 'condition',
+                                condition: 'numeric_state',
+                                condition_data: {
+                                    entity_id: 'sensor.humidity_bathroom',
+                                    above: '60'
+                                }
+                            }
+                        ]
+                    }
+                },
+            ]
+        } 
+    } as AutomationCondition,
 }

@@ -1,3 +1,4 @@
+import { Classes } from "jss";
 import { Context, createContext } from "react"
 import { createUseStyles, Styles } from "react-jss";
 import { createTheming } from "theming"
@@ -19,14 +20,18 @@ export const {
     redAccent: '#9f3a3a'
 }));
 
-type GetThemeType<C extends Context<any>> = C extends Context<infer T> ? T : unknown; 
+export type GetThemeType<C extends Context<any>> = C extends Context<infer T> ? T : unknown; 
+export type ClassNamesOfStyle<F extends Function> = Record<keyof ReturnType<F>, string>;
 export type AppTheme = GetThemeType<typeof ThemeContext>;
 export const createAppUseStyles = <
     Props extends {} = {},
     C extends string = string,
->(f: (theme: AppTheme) => Styles<C, Props, AppTheme>) => (props: Props) => {
+>(f: (theme: AppTheme) => Styles<C, Props, AppTheme>) => (props: Props): {
+    classes: Classes<keyof Styles<C, Props, AppTheme>>,
+    theme: AppTheme,
+} => {
     const theme = useTheme();
     const useStyles = createUseStyles<C,Props,AppTheme>(f)
-    const classes = useStyles({...props, theme});
+    const classes = useStyles({...props, theme}) as Classes<keyof  Styles<C, Props, AppTheme>>;
     return {classes, theme};
 }
