@@ -15,7 +15,9 @@ const Template: ComponentStory<typeof ConditionEditor> = ({condition, ...args}) 
     const {classes} = usePageTheme({});
     const [data, setData] = useState(condition);
     return <div className={classes.page}>
-    <ConditionEditor {...args} condition={data} onUpdate={setData} />
+    <ConditionEditor {...args} condition={data} onUpdate={data => {
+        setData(data)
+    }} />
 </div> 
 }
 

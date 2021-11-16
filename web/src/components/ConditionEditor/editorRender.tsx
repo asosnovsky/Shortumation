@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { AutomationCondition, TemplateCondition } from "~/automations/types/conditions";
+import { AutomationCondition, LogicCondition, TemplateCondition } from "~/automations/types/conditions";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
 import InputText from "../Inputs/InputText";
 import InputTextArea from "../Inputs/InputTextArea";
+import { ConditionNode } from "./ConditionNode";
 
 
 interface Editor<C extends AutomationCondition> extends FC<{
@@ -15,6 +16,12 @@ export const getEditor = (condition: AutomationCondition): Editor<any> => {
     switch (condition.condition) {
         case 'template':
             return TemplateEditor;
+        case 'and':
+            return LogicViewer;
+        case 'or':
+            return LogicViewer;
+        case 'not':
+            return LogicViewer;
         default:
             return () => <div>Not Ready</div>
     }
@@ -40,4 +47,65 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
             }
         })} resizable/>
     </div>
+}
+
+
+export const LogicViewer: Editor<LogicCondition> = ({
+    condition,
+    onChange,
+}) => {
+
+    return <>
+        {condition.condition_data.conditions.map( (c, i) => {
+            return <ConditionNode 
+                key={i} 
+                condition={c} 
+                displayMode={false}
+                onUpdate={update => onChange({
+                    ...condition,
+                    condition_data: {
+                        ...condition.condition_data,
+                        conditions: [
+                            ...condition.condition_data.conditions.slice(0, i),
+                            update,
+                            ...condition.condition_data.conditions.slice(i+1)
+                        ]
+                    }
+                })}
+                onDelete={which => {
+                    if (which === 'root') {
+                        onChange({
+                            ...condition,
+                            condition_data: {
+                                ...condition.condition_data,
+                                conditions: condition.condition_data.conditions.slice(0, i).concat(
+                                    condition.condition_data.conditions.slice(i+1)
+                                )
+                            }
+                        })
+                    }   else  {
+                        const data = (c as LogicCondition).condition_data;
+                        const update = {
+                            ...condition.condition_data,
+                            conditions: [
+                                ...condition.condition_data.conditions.slice(0, i),
+                                {
+                                    ...c,
+                                    condition_data: {
+                                        ...data,
+                                        conditions: data.conditions.slice(0, which).concat(data.conditions.concat(which+1))
+                                    }
+                                },
+                                ...condition.condition_data.conditions.slice(i+1)
+                            ]
+                        }
+                        onChange({
+                            ...condition,
+                            condition_data: update as any
+                        })
+                    }
+                }}
+            />
+        } )}
+    </>
 }

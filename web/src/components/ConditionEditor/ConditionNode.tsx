@@ -34,7 +34,6 @@ export const ConditionNode: FC<{
     }   else {
         const Editor = getEditor(condition);
         childrenConditions = <Editor condition={condition} onChange={data => {
-            console.log({data})
             onUpdate(data)
         }}/>
     }

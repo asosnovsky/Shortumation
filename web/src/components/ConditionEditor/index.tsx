@@ -27,7 +27,9 @@ export const ConditionEditor: FC<{
         displayMode={displayMode}
         condition={condition}
         onDelete={onDelete}
-        onUpdate={onUpdate}
+        onUpdate={update => {
+            onUpdate(update)
+        }}
         onAddChild={onAddChild}
         showDelete
     >

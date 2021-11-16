@@ -14,7 +14,6 @@ export default ({
 }: EdgeProp) => {
     const [_,my] = [(x1+x2)/2, (y1+y2)/2]
     const theta = Math.atan2(y2 -y1, x2-x1)  - Math.PI / 2
-    console.log({theta}, Math.sin(theta))
     const cx1 =  x1 - 45 * Math.sin(theta) 
     const cy1 = my - 30 * Math.cos(theta)
     const cx2 = x2 + 45 * Math.sin(theta)

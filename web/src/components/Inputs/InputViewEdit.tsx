@@ -31,7 +31,6 @@ export default function InputViewEdit({
     const inputRef = useRef<HTMLInputElement | null>(null);
     useEffect(() => {
         if (isEditing && inputRef.current) {
-            console.log('focusing...')
             inputRef.current.focus()
         }
     }, [inputRef.current, isEditing]);
