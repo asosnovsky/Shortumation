@@ -1,4 +1,6 @@
+import { useState } from "react";
 import InputWrapper from "./InputWrapper";
+import { useInputTextStyles } from "./styles";
 
 
 export interface Props<T extends string> {
@@ -13,11 +15,16 @@ export default function InputList<T extends string>({
     current, options, onChange, label, 
     ...selattr
 }: Props<T>) {
-    return <InputWrapper label={label}>
-        <select {...selattr} value={current} onChange={e => {
-            e.preventDefault();
-            onChange(e.currentTarget.value);
-        }}>
+    const {classes} = useInputTextStyles({});
+    return <InputWrapper label={label} labelSize={'small'}>
+        <select 
+            className={classes.input}
+            {...selattr} value={current} 
+            onChange={e => {
+                e.preventDefault();
+                onChange(e.currentTarget.value);
+            }}
+        >
             {options.map((t, i) => <option id={String(i)} key={i}>{t}</option>)}
         </select>
     </InputWrapper>
