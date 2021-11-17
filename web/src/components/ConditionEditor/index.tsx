@@ -21,20 +21,14 @@ export const ConditionEditor: FC<{
     onAddChild,
 }) => {
     // state
-    const [displayMode, setDisplayMode] = useState(true);
-
     return <ConditionNode
-        displayMode={displayMode}
         condition={condition}
         onDelete={onDelete}
         onUpdate={update => {
             onUpdate(update)
         }}
         onAddChild={onAddChild}
+        displayMode
         showDelete
-    >
-        {/* {({classes}) => <button className={classes.modifyBtn} onClick={() => setDisplayMode(!displayMode)}>
-            {displayMode ? <PencilIcon className={classes.icon}/> : <CheckMarkIcon className={classes.icon}/>}
-        </button>} */}
-    </ConditionNode>
+    />
 }
