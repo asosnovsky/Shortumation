@@ -7,6 +7,7 @@ import AutoInfoBox from "./AutoInfoBox";
 import { NODE_HEIGHT, NODE_WIDTH } from "./constants";
 import DAGEdge from "./DAGEdge";
 import DAGNode from "./DAGNode";
+import { SequenceNodes } from "./SequenceNodes";
 import { useEditorStyles } from "./styles";
 import { Point } from "./types";
 
@@ -33,36 +34,26 @@ export default function AutomationEditor({
     const renderTrigger = (trigger: AutomationTrigger, i: number) => {
         const nodeLoc: Point = [0 ,i*NODE_HEIGHT*1.25];
         return <>
-            <DAGNode key={`node.${i}`} loc={nodeLoc} text={getDescriptionFromAutomationNode(trigger)} color="red"/>
+            <DAGNode key={`node.${i}`} 
+                loc={nodeLoc} 
+                text={getDescriptionFromAutomationNode(trigger)} 
+                color="red"
+                onXClick={() => {
+                    onUpdate({
+                        ...automation,
+                        trigger: [
+                            ...automation.trigger.slice(0, i),
+                            ...automation.trigger.slice(i+1),
+                        ]
+                    })
+                }}
+            />
             <DAGEdge 
                 key={`edge.${i}`}
                 p1={[NODE_WIDTH , nodeLoc[1] + 0.5 * NODE_HEIGHT]} 
                 p2={pointTrigToCond} 
                 className={classes.dagEdge}
                 direction="1->2" 
-            />
-        </>
-    }
-    const renderSequence = (node: AutomationSequenceNode, i: number) => {
-        const nodeLoc: Point = [pointTrigToCond[0] + NODE_WIDTH/2 , 0];
-        let lastNodeLoc = pointTrigToCond;
-        if (i > 0) {
-            lastNodeLoc = [nodeLoc[0] + NODE_WIDTH*((i - 1)*nHDF+1), nodeLoc[1] + NODE_HEIGHT/2];
-            nodeLoc[0] += NODE_WIDTH*i*nHDF
-        }
-        return <>
-            <DAGNode 
-                key={`node.${i}`} 
-                loc={nodeLoc} 
-                text={getDescriptionFromAutomationNode(node)}
-                color={node.$smType === 'action' ? 'green' : 'blue'}
-            />
-            <DAGEdge 
-                key={`edge.${i}`}
-                p1={lastNodeLoc}
-                p2={[nodeLoc[0], nodeLoc[1] + NODE_HEIGHT/2]} 
-                direction="1->2" 
-                className={classes.dagEdge}
             />
         </>
     }
@@ -92,9 +83,18 @@ export default function AutomationEditor({
                 <g className="triggers">
                     {automation.trigger.map(renderTrigger)}  
                 </g>       
-                <g className="sequence">
-                    {automation.sequence.map(renderSequence)}  
-                </g>       
+                <SequenceNodes 
+                    styles={{classes, theme}} 
+                    sequence={automation.sequence} 
+                    onUpdate={sequence => onUpdate({
+                        ...automation,
+                        sequence,
+                    })}
+                    nHDF={nHDF}
+                    nodeHeight={NODE_HEIGHT}
+                    nodeWidth={NODE_WIDTH}
+                    triggerPoint={pointTrigToCond}
+                />
                 <circle className={classes.circle} cx={pointTrigToCond[0]} cy={pointTrigToCond[1]} r={2}/>
                 <g className="actions">
                 </g>       
