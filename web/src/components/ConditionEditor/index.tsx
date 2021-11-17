@@ -1,11 +1,7 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { AutomationCondition } from "~/automations/types/conditions";
-import { getDescriptionFromAutomationNode } from "~/automations/utils";
-import { CheckMarkIcon, PencilIcon } from "~/icons/icons";
 import { ConditionNode } from "./ConditionNode";
-import { getEditor } from "./editorRender";
-import { useStyles } from "./style";
-import { getViewer } from "./viewRender";
+
 
 
 
