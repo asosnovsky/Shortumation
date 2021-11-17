@@ -6,6 +6,7 @@ import InputText from "../Inputs/InputText";
 import InputTextArea from "../Inputs/InputTextArea";
 import { InputEntity } from "../Inputs/InputTextBubble";
 import { ConditionNode } from "./ConditionNode";
+import { genUpdateMethods } from "./nestedUpdater";
 
 
 interface Editor<C extends AutomationCondition> extends FC<{
@@ -127,50 +128,7 @@ export const LogicViewer: Editor<LogicCondition> = ({
                 key={i} 
                 condition={c} 
                 displayMode={false}
-                onUpdate={update => onChange({
-                    ...condition,
-                    condition_data: {
-                        ...condition.condition_data,
-                        conditions: [
-                            ...condition.condition_data.conditions.slice(0, i),
-                            update,
-                            ...condition.condition_data.conditions.slice(i+1)
-                        ]
-                    }
-                })}
-                onDelete={which => {
-                    if (which === 'root') {
-                        onChange({
-                            ...condition,
-                            condition_data: {
-                                ...condition.condition_data,
-                                conditions: condition.condition_data.conditions.slice(0, i).concat(
-                                    condition.condition_data.conditions.slice(i+1)
-                                )
-                            }
-                        })
-                    }   else  {
-                        const data = (c as LogicCondition).condition_data;
-                        const update = {
-                            ...condition.condition_data,
-                            conditions: [
-                                ...condition.condition_data.conditions.slice(0, i),
-                                {
-                                    ...c,
-                                    condition_data: {
-                                        ...data,
-                                        conditions: data.conditions.slice(0, which).concat(data.conditions.concat(which+1))
-                                    }
-                                },
-                                ...condition.condition_data.conditions.slice(i+1)
-                            ]
-                        }
-                        onChange({
-                            ...condition,
-                            condition_data: update as any
-                        })
-                    }
-                }}
+                {...genUpdateMethods(condition, onChange)(i)}
             />
         } )}
     </>

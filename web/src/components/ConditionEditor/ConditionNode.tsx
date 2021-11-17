@@ -1,6 +1,7 @@
 import { Classes } from "jss";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { AutomationCondition } from "~/automations/types/conditions";
+import { CheckMarkIcon, PencilIcon } from "~/icons/icons";
 import { getEditor } from "./editorRender";
 import { useStyles } from "./style";
 import { getViewer } from "./viewRender";
@@ -26,11 +27,18 @@ export const ConditionNode: FC<{
     onAddChild=() => {},
     children=() => {},
 }) => {
+    // state
+    const [internalDisplayMode, setInternalDisplayMode] = useState(true);
+    // alias
+    const effectiveDM = displayMode && internalDisplayMode;
+    console.log({effectiveDM})
     // children
     let childrenConditions: JSX.Element;
-    if (displayMode) {
+    if (effectiveDM) {
         const Viewer = getViewer(condition);
-        childrenConditions = <Viewer condition={condition}/>
+        childrenConditions = <Viewer condition={condition} onChange={data => {
+            onUpdate(data)
+        }}/>
     }   else {
         const Editor = getEditor(condition);
         childrenConditions = <Editor condition={condition} onChange={data => {
@@ -53,9 +61,12 @@ export const ConditionNode: FC<{
         <button className={p.isRoot ? classes.deleteBtnRoot : classes.deleteBtn} onClick={p?.onClick}>X</button>
 
     return <div className={classes.root}>
-        {(showDelete || !displayMode) && <DeleteButton isRoot onClick={ () => onDelete('root')}/>}
+        {(showDelete || !effectiveDM) && <DeleteButton isRoot onClick={ () => onDelete('root')}/>}
         <div className={classes.title}>
             <span className={classes.titleText}>{condition.condition.replace('_', ' ')}</span>
+            <button className={classes.modifyBtn} onClick={() => setInternalDisplayMode(!effectiveDM)}>
+                {effectiveDM ? <PencilIcon className={classes.icon}/> : <CheckMarkIcon className={classes.icon}/>}
+            </button>
         </div>
         <div className={classes.children}>
             {childrenConditions}

@@ -33,8 +33,8 @@ export const ConditionEditor: FC<{
         onAddChild={onAddChild}
         showDelete
     >
-        {({classes}) => <button className={classes.modifyBtn} onClick={() => setDisplayMode(!displayMode)}>
+        {/* {({classes}) => <button className={classes.modifyBtn} onClick={() => setDisplayMode(!displayMode)}>
             {displayMode ? <PencilIcon className={classes.icon}/> : <CheckMarkIcon className={classes.icon}/>}
-        </button>}
+        </button>} */}
     </ConditionNode>
 }
