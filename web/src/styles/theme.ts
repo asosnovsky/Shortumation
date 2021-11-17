@@ -17,7 +17,7 @@ export const {
         primaryColor: '#4f4f77',
     },
     red: '#ed0c0c',
-    redAccent: '#9f3a3a'
+    redAccent: '#9f3a3a',
 }));
 
 export type GetThemeType<C extends Context<any>> = C extends Context<infer T> ? T : unknown; 

@@ -8,13 +8,11 @@ import { ConditionNode } from "./ConditionNode";
 export const ConditionEditor: FC<{
     condition: AutomationCondition;
     onDelete: (which: 'root' | number) => void;
-    onAddChild: () => void;
     onUpdate: (data: AutomationCondition) => void;
 }> = ({
     condition,
     onDelete,
     onUpdate,
-    onAddChild,
 }) => {
     // state
     return <ConditionNode
@@ -23,7 +21,6 @@ export const ConditionEditor: FC<{
         onUpdate={update => {
             onUpdate(update)
         }}
-        onAddChild={onAddChild}
         displayMode
         showDelete
     />

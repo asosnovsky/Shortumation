@@ -48,13 +48,3 @@ export type AutomationCondition =
     | TriggerCondition
     | ZoneCondition
 ;
-export const conditionTypes = [
-    'Logic',
-    'Numeric State',
-    'State',
-    'Template',
-    'Time',
-    'Trigger',
-    'Zone',
-] as const;
-export type ConditionType = typeof conditionTypes[number];
