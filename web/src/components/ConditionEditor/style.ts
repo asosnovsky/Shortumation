@@ -27,8 +27,7 @@ export const useStyles = createAppUseStyles<{
             position: 'relative',
             display: 'flex',
             flexDirection: hasChildren? 'column' : 'row',
-            // width: hasChildren? '100%' : undefined,
-            // height: hasChildren? '100%' : undefined,
+            alignItems: hasChildren ? undefined : 'flex-start',
         }),
         title: ({hasChildren}) => ({
             display: 'flex',
@@ -101,10 +100,25 @@ export const useStyles = createAppUseStyles<{
             border: `1px solid ${theme.primaryAccent}`,
             borderBottomRightRadius: hasChildren ? 10 : 0,
             borderBottomLeftRadius: hasChildren ? 10 : 0,
+            minHeight: hasChildren ? undefined : '100%'
         }),
         addBtnContainer: {
             display: 'flex',
             justifyContent: 'center',
+        },
+        yamlBtn: {
+            backgroundColor: theme.secondary,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme.secondaryAccent,
+            color: theme.secondaryAccent,
+            paddingLeft: 20,
+            paddingRight: 20,
+            cursor: 'pointer',
+            "&:hover": {
+                backgroundColor: Color(theme.primary).brighten().hex(),
+                fill: Color(theme.primaryAccent).brighten().hex(),
+            },
         },
         addBtn: {
             backgroundColor: theme.secondary,
@@ -115,7 +129,6 @@ export const useStyles = createAppUseStyles<{
             borderRadius: 5,
             marginTop: 5,
             marginBottom: 5,
-            marginRight: 5,
             paddingLeft: 20,
             paddingRight: 20,
             cursor: 'pointer',

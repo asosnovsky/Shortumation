@@ -4,6 +4,7 @@ import { getConditionDefaultValues } from "~/automations/defaults";
 import { AutomationCondition } from "~/automations/types/conditions";
 import { CheckMarkIcon, PencilIcon } from "~/icons/icons";
 import InputList from "../Inputs/InputList";
+import InputYaml from "../Inputs/InputYaml";
 import { getEditor } from "./editorRender";
 import { useStyles } from "./style";
 import { getViewer } from "./viewRender";
@@ -29,6 +30,7 @@ export const ConditionNode: FC<{
 }) => {
     // state
     const [internalDisplayMode, setInternalDisplayMode] = useState(true);
+    const [yamlMode, setYamlMode] = useState(false);
     // alias
     const effectiveDM = displayMode && internalDisplayMode;
     const onAddChild = () => {
@@ -74,7 +76,6 @@ export const ConditionNode: FC<{
     } else if (condition.condition ==='or') {
         hasChildren = true
     }
-    console.log({condition: condition.condition, hasChildren})
     const {classes} = useStyles({ hasChildren });
 
     // components
@@ -86,6 +87,7 @@ export const ConditionNode: FC<{
         <div className={classes.title}>
             {/* <span className={classes.titleText}>{condition.condition.replace('_', ' ')}</span> */}
             <InputList
+                label=""
                 className={classes.titleText}
                 current={condition.condition}
                 options={[
@@ -105,13 +107,25 @@ export const ConditionNode: FC<{
                     }
                 } as any)}
             />
-            <button className={classes.modifyBtn} onClick={() => setInternalDisplayMode(!effectiveDM)}>
+            {effectiveDM && <button className={classes.yamlBtn} onClick={() => setYamlMode(!yamlMode)}>
+                {yamlMode ? 'visual' : 'yaml'}
+            </button>}
+            {!yamlMode && <button className={classes.modifyBtn} onClick={() => setInternalDisplayMode(!effectiveDM)}>
                 {effectiveDM ? <PencilIcon className={classes.icon}/> : <CheckMarkIcon className={classes.icon}/>}
-            </button>
+            </button>}
         </div>
         <div className={classes.children}>
-            {childrenConditions}
-            {hasChildren && <div className={classes.addBtnContainer}>
+            {yamlMode && <InputYaml
+                label=""
+                value={condition.condition_data}
+                onChange={update => onUpdate({
+                    ...condition,
+                    condition_data: update as any
+                })}
+                resizable
+            />}
+            {!yamlMode && childrenConditions}
+            {!yamlMode && hasChildren && <div className={classes.addBtnContainer}>
                 <button className={classes.addBtn} onClick={() => onAddChild()}>Add</button>
             </div>}
         </div>

@@ -1,12 +1,11 @@
-import { useState } from "react";
 import InputWrapper from "./InputWrapper";
-import { useInputTextStyles } from "./styles";
+import { useInputListStyles } from "./styles";
 
 
 export interface Props<T extends string> {
     current: T;
     options: readonly T[];
-    onChange: (n: string) => void;
+    onChange: (n: T) => void;
     id?: string;
     className?: string;
     label: string;
@@ -15,8 +14,8 @@ export default function InputList<T extends string>({
     current, options, onChange, label, 
     ...selattr
 }: Props<T>) {
-    const {classes} = useInputTextStyles({});
-    return <InputWrapper label={label} labelSize={'small'}>
+    const {classes} = useInputListStyles({});
+    return <InputWrapper label={label} labelSize={'small'} noMargin>
         <select 
             className={classes.input}
             {...selattr} value={current} 

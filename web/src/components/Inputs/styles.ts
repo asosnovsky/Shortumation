@@ -29,15 +29,16 @@ const commonInputStyle = (theme: AppTheme) => ({
 
 export const useInputWrapperStyles = createAppUseStyles<{
     labelSize: 'normal' | 'small',
+    noMargin: boolean,
 }>(theme => {
     return {
-        wrapper: {
+        wrapper: ({ noMargin }) => ({
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            marginTop: 10,
-            marginBottom: '0.25em',
-        },
+            marginTop: noMargin ? 0 : 10,
+            marginBottom: noMargin ? 0 : '0.25em',
+        }),
         label: ({ labelSize }) => ({
             fontSize: labelSize === 'normal' ? 16 : 10,
             position: 'absolute',
@@ -76,6 +77,16 @@ export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
                 backgroundColor: theme.primary,
             }
         },
+    }
+});
+
+export const useInputListStyles = createAppUseStyles<{}>(theme => {
+    const styles = commonInputStyle(theme);
+    return {
+        input: {
+            ...styles.input,
+            cursor: 'pointer'
+        }
     }
 });
 
