@@ -1,18 +1,22 @@
+import { ComponentStory } from "@storybook/react";
 import { usePageTheme } from "~/styles/page";
+import { IconBase } from "./IconBase";
 import {PencilIcon, CheckMarkIcon} from "./icons";
 
 export default {
     title: 'Icons',
+    component: IconBase,
 };
   
 
-const Template = () => {
+export const IconList: ComponentStory<typeof IconBase> = (args) => {
     const {classes} = usePageTheme({});
     return <div className={classes.page}>
-        <PencilIcon/>
-        <CheckMarkIcon/>
+        <PencilIcon {...args}/>
+        <CheckMarkIcon {...args}/>
     </div> 
 }
-
-export const IconList = Template.bind({})
-// SimpleText.args = {}
+IconList.args = {
+    size: 2,
+    color: 'red'
+}

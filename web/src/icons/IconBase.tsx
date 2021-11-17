@@ -3,21 +3,30 @@ import { createAppUseStyles } from "~/styles/theme";
 
 
 
-export const useIconStyles = createAppUseStyles(theme => ({
-    icon: {
-        height: '1em',
-        width: '1em',
+export const useIconStyles = createAppUseStyles<{size: number, color?: string}>(theme => ({
+    icon: ({size}) => ({
+        height: `${size}em`,
+        width: `${size}em`,
         display: 'flex',
-    },
-    svg: {
-        fill: theme.primaryAccent
-    }
+    }),
+    svg: ({color=theme.primaryAccent}) => ({
+        fill: color
+    })
 }))
 
-export const IconBase: FC<AnchorHTMLAttributes<HTMLAnchorElement> & {
-    viewBox: string;
-}> = ({children, viewBox, className="", ...props}) => {
-    const {classes} = useIconStyles({});
+export type IconBaseProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+    size?: number;
+    color?: string;
+}
+export const IconBase: FC<IconBaseProps & { viewBox: string }> = ({
+    children, 
+    viewBox, 
+    size=1,
+    color,
+    className="", 
+    ...props
+}) => {
+    const {classes} = useIconStyles({ size, color });
     return <a className={`${classes.icon} ${className}`} {...props}>
             <svg className={classes.svg} version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox={viewBox}>
             <g>

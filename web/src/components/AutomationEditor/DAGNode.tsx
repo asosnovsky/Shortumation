@@ -1,5 +1,7 @@
-import { FC } from "react"
+import Color from "chroma-js";
+import { PencilIcon } from "~/icons/icons"
 import { NODE_HEIGHT, NODE_WIDTH } from "./constants"
+import { useNodeStyles } from "./styles"
 import { Node } from "./types"
 
 
@@ -20,43 +22,27 @@ export default ({
     onOpenClick=() => {},
     isOpen=false,
     color,
-}: NodeProp) => <foreignObject x={x} y={y} width={width} height={height}>
-    <div className="automation-editor--node">
-        <div className={`automation-editor--node-inner top-color ${color}`}>
-            <div className="automation-editor--node-inner-edge left" onClick={onXClick}>
-                <span className="automation-node-side-button">X</span>
-            </div>
-            <div className="automation-editor--node-inner-text">
-                <span>{text}</span>
-            </div>
-            <div className="automation-editor--node-inner-edge right" onClick={onOpenClick}>
-                <span className="automation-node-side-button">{isOpen ? "▲" : "▼"}</span>
+}: NodeProp) => {
+    const {classes, theme} = useNodeStyles({ 
+        color,
+        nodeHeight: height,
+        nodeWidth: width,
+     });
+    return <foreignObject x={x} y={y} width={width} height={height}>
+        <div className={classes.root}>
+            <div className={classes.inner}>
+                <div className={classes.leftEdge} onClick={onXClick}>
+                    <button className={classes.buttonDelete}>X</button>
+                </div>
+                <div className={classes.text}>
+                    {text}
+                </div>
+                <div className={classes.rightEdge} onClick={onOpenClick}>
+                    <button className={classes.buttonEdit}>
+                        <PencilIcon size={1.1} color={Color(theme.primary).set('rgb.g', 200).hex()}/>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</foreignObject>
-
-export interface ConditionNodeProps extends NodeProp {
-    conditionType: string;
+    </foreignObject>
 }
-export const ConditionNode: FC<ConditionNodeProps> = ({
-    loc: [x,y],
-    text,
-    height=NODE_HEIGHT,
-    width=NODE_WIDTH,
-    onXClick=() => {},
-    onOpenClick=() => {},
-    isOpen=false,
-    color,
-    conditionType,
-    children,
-}) => <foreignObject x={x} y={y} width={width} height={height}>
-    <div className="automation-editor--condition-node">
-        <div className="automation-editor--condition-node-type">
-            {conditionType}
-        </div>
-        <div>
-            {children}
-        </div>
-    </div>
-</foreignObject>

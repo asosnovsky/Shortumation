@@ -1,14 +1,18 @@
 import { FC } from "react";
-import { AutomationSequenceNode } from "~/automations/types";
+import { AutomationAction } from "~/automations/types/actions";
 
 
 export const SequenceEditor: FC<{
-    node: AutomationSequenceNode
-}> = ({}) => {
+    node: AutomationAction,
+    onUpdate: (u: AutomationAction) => void,
+}> = ({
+    node,
+    onUpdate,
+}) => {
 
     return <div>
         <div>
-            <span></span>
+            <span>{node.action}</span>
         </div>
     </div>
 }

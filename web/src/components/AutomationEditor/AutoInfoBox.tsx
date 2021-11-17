@@ -4,12 +4,14 @@ import InputText from "../Inputs/InputText";
 import InputTextArea from "../Inputs/InputTextArea";
 
 interface Props {
+    className: string;
     metadata: AutomationMetadata;
     onUpdate: (m: AutomationMetadata) => void;
 }
 export default function AutoInfoBox({
     metadata,
     onUpdate,
+    className,
 }: Props) {
 
        // aliases
@@ -19,7 +21,7 @@ export default function AutoInfoBox({
     })
 
     // render
-    return <div className="automation-editor-info-box">
+    return <div className={className}>
         <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
         <InputText label="Name" value={metadata.alias} onChange={onUpdateMetadata('alias')} />
         <InputTextArea label="Description" value={metadata.description} onChange={onUpdateMetadata('description')} />

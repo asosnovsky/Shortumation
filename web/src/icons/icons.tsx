@@ -1,8 +1,8 @@
-import { AnchorHTMLAttributes, FC } from "react";
-import { IconBase } from "./IconBase";
+import { FC } from "react";
+import { IconBase, IconBaseProps } from "./IconBase";
 
 
-export const PencilIcon: FC<AnchorHTMLAttributes<HTMLAnchorElement>> = props => <IconBase {...props} viewBox="0 0 512 512">
+export const PencilIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox="0 0 512 512">
     <path d="M358.752,51.159L70.113,339.798l102.063,102.064L455.088,158.95L512,0.282L358.752,51.159z M172.176,419.287
         l-79.488-79.489L349.536,82.949l0.069,11.622l22.52-0.089l0.089,22.667l22.625,0.048l-0.048,22.691l22.467-0.271l0.27,22.847
         l11.538-0.068L172.176,419.287z M442.648,146.351l-9.345,0.055l-0.27-22.946l-22.244,0.269l0.048-22.464l-22.721-0.048
@@ -16,6 +16,6 @@ export const PencilIcon: FC<AnchorHTMLAttributes<HTMLAnchorElement>> = props => 
         l25.785-25.785l79.215,79.216L100.891,490.025z"/>
 </IconBase>;
 
-export const CheckMarkIcon: FC<AnchorHTMLAttributes<HTMLAnchorElement>> = props => <IconBase {...props} viewBox="0 0 24 24">
+export const CheckMarkIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox="0 0 24 24">
     <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
 </IconBase>;

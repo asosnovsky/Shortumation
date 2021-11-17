@@ -1,4 +1,4 @@
-import { AutomationData } from "~/automations/types";
+import { AutomationData, AutomationSequenceNode } from "~/automations/types";
 import { AutomationCondition } from "~/automations/types/conditions";
 import { AutomationTrigger } from "~/automations/types/triggers";
 import { getDescriptionFromAutomationNode } from "~/automations/utils";
@@ -6,7 +6,8 @@ import useWindowSize from "~/utils/useWindowSize";
 import AutoInfoBox from "./AutoInfoBox";
 import { NODE_HEIGHT, NODE_WIDTH } from "./constants";
 import DAGEdge from "./DAGEdge";
-import DAGNode, { ConditionNode } from "./DAGNode";
+import DAGNode from "./DAGNode";
+import { useEditorStyles } from "./styles";
 import { Point } from "./types";
 
 interface Props {
@@ -20,6 +21,7 @@ export default function AutomationEditor({
 
     // state
     const {ratioWbh} = useWindowSize();
+    const {classes, theme} = useEditorStyles({});
 
     // alias
     const nHDF = 1.5 // node horizontal distance factor
@@ -36,70 +38,64 @@ export default function AutomationEditor({
                 key={`edge.${i}`}
                 p1={[NODE_WIDTH , nodeLoc[1] + 0.5 * NODE_HEIGHT]} 
                 p2={pointTrigToCond} 
+                className={classes.dagEdge}
                 direction="1->2" 
             />
         </>
     }
-    const renderMidCondition = (condition: AutomationCondition, i: number) => {
+    const renderSequence = (node: AutomationSequenceNode, i: number) => {
         const nodeLoc: Point = [pointTrigToCond[0] + NODE_WIDTH/2 , 0];
         let lastNodeLoc = pointTrigToCond;
         if (i > 0) {
             lastNodeLoc = [nodeLoc[0] + NODE_WIDTH*((i - 1)*nHDF+1), nodeLoc[1] + NODE_HEIGHT/2];
             nodeLoc[0] += NODE_WIDTH*i*nHDF
         }
-        let children = <></>;
-        if (
-            (condition.condition === 'and') ||
-            (condition.condition === 'or') ||
-            (condition.condition === 'not')
-        ) {
-            // children = condition.condition_data.conditions.map((c,i) => renderMidCondition(c,i))
-        }
         return <>
-            <ConditionNode 
-                conditionType={condition.condition}
+            <DAGNode 
                 key={`node.${i}`} 
                 loc={nodeLoc} 
-                text={getDescriptionFromAutomationNode(condition)} color="blue"
-            >
-                {children}
-            </ConditionNode>
+                text={getDescriptionFromAutomationNode(node)}
+                color={node.$smType === 'action' ? 'green' : 'blue'}
+            />
             <DAGEdge 
                 key={`edge.${i}`}
                 p1={lastNodeLoc}
                 p2={[nodeLoc[0], nodeLoc[1] + NODE_HEIGHT/2]} 
                 direction="1->2" 
+                className={classes.dagEdge}
             />
         </>
     }
 
     // render
-    return <div className="automation-editor" style={{
+    return <div className={classes.root} style={{
         flexDirection: ratioWbh >= 0.75 ? 'row' : 'column'
     }}>
         <AutoInfoBox 
+            className={classes.infoBox}
             metadata={automation.metadata}
             onUpdate={metadata => onUpdate({...automation, metadata})}
         />
-        <div className="automation-editor-dag">
+        <div className={classes.dag}>
             <svg 
+                className={classes.svg}
                 viewBox={[0,0,graphWidth, graphHeight].join(" ")}
                 xmlns="http://www.w3.org/2000/svg" 
             >
                 <defs>
-                <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5"
+                <marker  id="arrow" viewBox="0 0 10 10" refX="10" refY="5"
                     markerWidth="6" markerHeight="6"
                     orient="auto-start-reverse">
-                    <path d="M 0 0 L 10 5 L 0 10 z" />
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill={theme.secondaryAccent} />
                 </marker>
                 </defs>
                 <g className="triggers">
                     {automation.trigger.map(renderTrigger)}  
                 </g>       
                 <g className="sequence">
-                    {automation.sequence.map(renderMidCondition)}  
+                    {automation.sequence.map(renderSequence)}  
                 </g>       
-                <circle className="blue" cx={pointTrigToCond[0]} cy={pointTrigToCond[1]} r={2}/>
+                <circle className={classes.circle} cx={pointTrigToCond[0]} cy={pointTrigToCond[1]} r={2}/>
                 <g className="actions">
                 </g>       
             </svg>
