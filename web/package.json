@@ -1,72 +1,72 @@
 {
-  "dependencies": {
-    "chroma-js": "^2.1.2",
-    "color": "^4.0.1",
-    "js-yaml": "^4.1.0",
-    "jss": "^10.8.2",
-    "jss-preset-default": "^10.8.2",
-    "parcel": "^2.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-jss": "^10.8.2",
-    "react-router-dom": "^5.3.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@parcel/transformer-sass": "^2.0.0",
-    "@parcel/transformer-yaml": "^2.0.0",
-    "@storybook/addon-actions": "^6.3.12",
-    "@storybook/addon-essentials": "^6.3.12",
-    "@storybook/addon-links": "^6.3.12",
-    "@storybook/react": "^6.3.12",
-    "@testing-library/jest-dom": "^5.15.0",
-    "@types/chroma-js": "^2.1.3",
-    "@types/color": "^3.0.2",
-    "@types/jest": "^27.0.2",
-    "@types/js-yaml": "^4.0.4",
-    "@types/node": "^16.11.6",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
-    "@types/react-router-dom": "^5.3.2",
-    "babel-loader": "^8.2.3",
-    "babel-plugin-module-resolver": "^4.1.0",
-    "concurrently": "^6.3.0",
-    "husky": "^7.0.4",
-    "instead": "^1.0.3",
-    "jest": "^27.3.1",
-    "jest-extended": "^1.1.0",
-    "prettier": "^2.4.1",
-    "react-test-renderer": "^17.0.2",
-    "react-testing-library": "^8.0.1",
-    "ts-jest": "^27.0.7",
-    "tslint": "^6.1.3",
-    "tslint-react": "^5.0.0",
-    "typescript": "^4.4.4"
-  },
-  "scripts": {
-    "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
-    "start": "parcel ./src/index.html",
-    "build": "npm run type-check && parcel build ./src/index.html --public-url '/web'",
-    "prettify": "prettier --write './src/**/*.{ts,tsx}'",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "moduleNameMapper": {
-      ".+\\.css$": "<rootDir>/src/styleMock.ts"
+    "dependencies": {
+        "chroma-js": "^2.1.2",
+        "color": "^4.0.1",
+        "js-yaml": "^4.1.0",
+        "jss": "^10.8.2",
+        "jss-preset-default": "^10.8.2",
+        "parcel": "^2.0.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-jss": "^10.8.2",
+        "react-router-dom": "^5.3.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.16.0",
+        "@parcel/transformer-sass": "^2.0.0",
+        "@parcel/transformer-yaml": "^2.0.0",
+        "@storybook/addon-actions": "^6.3.12",
+        "@storybook/addon-essentials": "^6.3.12",
+        "@storybook/addon-links": "^6.3.12",
+        "@storybook/react": "^6.3.12",
+        "@testing-library/jest-dom": "^5.15.0",
+        "@types/chroma-js": "^2.1.3",
+        "@types/color": "^3.0.2",
+        "@types/jest": "^27.0.2",
+        "@types/js-yaml": "^4.0.4",
+        "@types/node": "^16.11.6",
+        "@types/react": "^17.0.33",
+        "@types/react-dom": "^17.0.10",
+        "@types/react-router-dom": "^5.3.2",
+        "babel-loader": "^8.2.3",
+        "babel-plugin-module-resolver": "^4.1.0",
+        "concurrently": "^6.3.0",
+        "husky": "^7.0.4",
+        "instead": "^1.0.3",
+        "jest": "^27.3.1",
+        "jest-extended": "^1.1.0",
+        "prettier": "^2.4.1",
+        "react-test-renderer": "^17.0.2",
+        "react-testing-library": "^8.0.1",
+        "ts-jest": "^27.0.7",
+        "tslint": "^6.1.3",
+        "tslint-react": "^5.0.0",
+        "typescript": "^4.4.4"
+    },
+    "scripts": {
+        "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
+        "start": "parcel ./src/index.html",
+        "build": "npm run type-check && parcel build ./src/index.html --public-url '/web'",
+        "prettify": "prettier --write './src/**/*.{ts,tsx}'",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "type-check": "tsc --noEmit",
+        "type-check:watch": "tsc --noEmit --watch",
+        "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+        "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js"
+        ],
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/setupTests.ts"
+        ],
+        "moduleNameMapper": {
+            ".+\\.css$": "<rootDir>/src/styleMock.ts"
+        }
     }
-  }
 }
