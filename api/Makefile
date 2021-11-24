@@ -7,7 +7,7 @@ setup:
 	rm -rf $(VENV_FOLDER)
 	python3 -m venv $(VENV_FOLDER)
 	$(PIP) install wheel==0.35.1
-	$(PIP) install .[dev,boto]
+	$(PIP) install .[dev]
 	$(VENV_BIN)/pre-commit install
 
 lint:
