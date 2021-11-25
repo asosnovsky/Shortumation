@@ -163,7 +163,8 @@ Multinode.args = {
               }
             ]
           }
-        ]
+        ],
+        default: [],
       }
     },
     {

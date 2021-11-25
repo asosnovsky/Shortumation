@@ -5,6 +5,7 @@ import { BaseSequenceNodeSettings, SequenceNodeSettings } from './types';
 import { AddButton } from '../DAGSvgs/AddButton';
 import { makeUpdater, Updater } from "./updater";
 import { ChooseAction } from "types/automations/actions";
+import { AutomationSequenceNode } from '../../types/automations/index';
 
 
 export function* computeNodesEdges(
@@ -40,21 +41,24 @@ export function* computeNodesEdges(
       onXClick={() => rootUpdater.removeNode(i)}
     />
     if ((node.$smType === 'action') && (node.action === 'choose')) {
-      const it = computeChooseNodesEdges(
+      const it = (new computeChooseNodesEdges(
         node,
         nodeLoc,
         lastStartPoint,
         nextNodeLoc,
         j => rootUpdater.makeChildUpdaterForChooseAction(i, j),
         { ...st, keyPrefix: `${keyPrefix}.${i}` }
-      );
+      )).iter();
       let next = it.next();
       while (!next.done) {
         yield next.value
         next = it.next();
       };
       nextNodeLoc = next.value.nextNodeLoc
-      lastStartPoint = next.value.lastStartPoint
+      lastStartPoint = [
+        next.value.lastStartPoint[0],
+        lastStartPoint[1],
+      ]
     }
     if (i === sequence.length - 1) {
       yield <DAGEdge
@@ -77,26 +81,31 @@ export function* computeNodesEdges(
   return lastStartPoint
 }
 
-export function* computeChooseNodesEdges(
-  node: ChooseAction,
-  nodeLoc: Point,
-  lastStartPoint: Point,
-  nextNodeLoc: Point,
-  makeChildUpder: (j: number) => Updater,
-  st: BaseSequenceNodeSettings,
-) {
-  for (let j = 0; j < node.action_data.choose.length; j++) {
-    const subStartLoc: Point = [
-      nodeLoc[0] + st.nodeWidth * st.distanceFactor,
-      nodeLoc[1] + st.nodeHeight * (j + 1)
-    ];
-    const updater = makeChildUpder(j);
-    const it = computeNodesEdges({
+class computeChooseNodesEdges {
+  constructor(
+    private node: ChooseAction,
+    private nodeLoc: Point,
+    private lastStartPoint: Point,
+    private nextNodeLoc: Point,
+    private makeChildUpder: (j: number | null) => Updater,
+    private st: BaseSequenceNodeSettings,
+  ) { }
+
+  private *genNodesEdges(
+    seq: AutomationSequenceNode[],
+    subStartLoc: Point,
+    updater: Updater,
+    keyPrefix: string
+  ) {
+    const {
+      st, nodeLoc,
+    } = this;
+    let it = computeNodesEdges({
       ...st,
       onChange: updater.onChange,
-      sequence: node.action_data.choose[j].sequence,
+      sequence: seq,
       startPoint: subStartLoc,
-      keyPrefix: `.${j}`
+      keyPrefix: keyPrefix
     });
     let next = it.next();
     while (!next.done) {
@@ -104,18 +113,18 @@ export function* computeChooseNodesEdges(
       next = it.next()
     }
     yield <DAGEdge
-      key={`edge${st.keyPrefix}.${j}`}
+      key={`edge${keyPrefix}`}
       p1={[nodeLoc[0] + st.nodeWidth, nodeLoc[1] + st.nodeHeight / 2]}
       p2={[subStartLoc[0], subStartLoc[1] + st.nodeHeight / 2]}
       direction="1->2"
       color={st.edgeColor}
     />
     if (next.value) {
-      nextNodeLoc[0] = next.value[0] + st.nodeWidth * st.distanceFactor
-      lastStartPoint = [Math.max(next.value[0], lastStartPoint[0]), lastStartPoint[1]]
+      this.nextNodeLoc[0] = next.value[0] + st.nodeWidth * st.distanceFactor
+      this.lastStartPoint = [Math.max(next.value[0], this.lastStartPoint[0]), Math.max(this.lastStartPoint[1], next.value[1])]
     } else {
       yield <AddButton
-        key={`add${st.keyPrefix}.${j}`}
+        key={`add${keyPrefix}`}
         loc={[subStartLoc[0], subStartLoc[1] + st.nodeHeight / 2 - 4.5]}
         height={10}
         width={10}
@@ -123,5 +132,43 @@ export function* computeChooseNodesEdges(
       />
     }
   }
-  return { lastStartPoint, nextNodeLoc }
+
+  *iter() {
+    const { st, node, makeChildUpder, nodeLoc } = this;
+    for (let j = 0; j < node.action_data.choose.length; j++) {
+      const it = this.genNodesEdges(
+        node.action_data.choose[j].sequence,
+        [
+          nodeLoc[0] + st.nodeWidth * st.distanceFactor,
+          Math.max(nodeLoc[1] + st.nodeHeight * (j + 1), this.lastStartPoint[1])
+        ],
+        makeChildUpder(j),
+        `${st.keyPrefix}.${j}`,
+      );
+      let next = it.next();
+      while (!next.done) {
+        yield next.value
+        next = it.next();
+      }
+    }
+    const it = this.genNodesEdges(
+      node.action_data.default,
+      [
+        nodeLoc[0] + st.nodeWidth * st.distanceFactor,
+        nodeLoc[1] + st.nodeHeight * (node.action_data.choose.length + 1)
+      ],
+      makeChildUpder(null),
+      `${st.keyPrefix}.default`,
+    );
+    let next = it.next();
+    while (!next.done) {
+      yield next.value
+      next = it.next();
+    }
+    return {
+      lastStartPoint: this.lastStartPoint,
+      nextNodeLoc: this.nextNodeLoc
+    }
+  }
 }
+
