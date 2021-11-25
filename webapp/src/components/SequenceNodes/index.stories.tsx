@@ -3,6 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SequenceNodes } from './index';
 import { SVGBoard } from '../DAGSvgs/Board';
 import { NODE_HEIGHT, NODE_WIDTH } from '../DAGSvgs/constants';
+import { useState } from 'react';
 
 
 export default {
@@ -13,15 +14,20 @@ export default {
     nodeHeight: NODE_HEIGHT,
     nodeWidth: NODE_WIDTH,
     distanceFactor: 1.5,
-    startLoc: [50,50]
+    startPoint: [50, 50]
   }
 } as ComponentMeta<typeof SequenceNodes>
 
-const Template: ComponentStory<typeof SequenceNodes> = args => <SVGBoard>
-  <SequenceNodes
-    {...args}
-  />
-</SVGBoard>
+const Template: ComponentStory<typeof SequenceNodes> = args => {
+  const [state, setState] = useState(args.sequence)
+  return <SVGBoard>
+    <SequenceNodes
+      {...args}
+      sequence={state}
+      onChange={setState}
+    />
+  </SVGBoard>
+}
 
 export const Simple = Template.bind({})
 Simple.args = {
@@ -71,7 +77,7 @@ Simple.args = {
 export const Multinode = Template.bind({})
 Multinode.args = {
   ...Multinode.args,
-  startLoc: [0,0],
+  startPoint: [0, 0],
   sequence: [
     {
       $smType: "condition",
