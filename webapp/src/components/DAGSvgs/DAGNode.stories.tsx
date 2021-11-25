@@ -38,7 +38,7 @@ WithEdge.args = {
   }
 }
 
-export const WithManyEdge: ComponentStory<typeof DAGNode> = args => <SVGBoard 
+export const WithManyEdges: ComponentStory<typeof DAGNode> = args => <SVGBoard 
   graphHeight={GRAPH_HEIGHT}
 >
   <DAGNode {...args} />
