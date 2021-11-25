@@ -25,19 +25,29 @@ export const Basic: ComponentStory<typeof DAGNode> = args => <SVGBoard
     <DAGNode {...args}/>
 </SVGBoard>
 
-export const WithEdge: ComponentStory<typeof DAGNode> = args => <SVGBoard 
+export const WithFromEdge: ComponentStory<typeof DAGNode> = args => <SVGBoard 
   graphHeight={GRAPH_HEIGHT}
 >
     <DAGNode {...args} />
 </SVGBoard>
-WithEdge.args = {
-  ...(WithEdge.args ?? {}),
+WithFromEdge.args = {
+  ...(WithFromEdge.args ?? {}),
   edge: {
     color: 'white',
-    loc: [ NODE_WIDTH * 4, NODE_HEIGHT * 2 ]
+    loc: [NODE_WIDTH * 4, NODE_HEIGHT * 2],
+    direction: '1->2',
   }
 }
 
+export const WithToEdge: ComponentStory<typeof DAGNode> = args => <SVGBoard 
+  graphHeight={GRAPH_HEIGHT}
+>
+  <DAGNode {...args} edge={{
+    color: 'white',
+    loc: [args.loc[0] - args.width, args.loc[1] + args.height / 2],
+    direction: '1<-2',
+  }}/>
+</SVGBoard>
 export const WithManyEdges: ComponentStory<typeof DAGNode> = args => <SVGBoard 
   graphHeight={GRAPH_HEIGHT}
 >

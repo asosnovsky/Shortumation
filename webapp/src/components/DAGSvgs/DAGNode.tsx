@@ -1,7 +1,7 @@
 import Color from "chroma-js";
 import { PencilIcon } from "components/Icons"
 import { useNodeStyles } from "./styles"
-import { Node, Point } from "types/graphs";
+import { Edge, Node, Point } from "types/graphs";
 import { DAGEdge } from "./DAGEdge";
 
 
@@ -11,9 +11,11 @@ export interface NodeProp extends Node {
   width: number;
   onXClick?: () => void;
   onOpenClick?: () => void;
+  debug?: boolean;
   edge?: {
     color: string;
     loc: Point;
+    direction: Edge['direction'];
   }
 }
 export const DAGNode = ({
@@ -25,6 +27,7 @@ export const DAGNode = ({
   onOpenClick = () => { },
   color,
   edge,
+  debug=false,
 }: NodeProp) => {
   const { classes, theme } = useNodeStyles({
     color,
@@ -51,11 +54,22 @@ export const DAGNode = ({
         </div>
       </div>
     </foreignObject>
-    {edge && <DAGEdge
-      p1={[x + width, y + height/ 2]}
-      p2={edge.loc}
-      direction="1->2"
-      color={edge.color}
-    />}
+    {
+      edge && (edge.direction === '1->2' ?
+      <DAGEdge
+        p1={[x + width, y + height/ 2]}
+        p2={edge.loc}
+        direction={edge.direction}
+        color={edge.color}
+        debug={debug}
+      /> :
+      <DAGEdge
+        p1={[x, y + height/ 2]}
+        p2={edge.loc}
+        direction={edge.direction}
+        color={edge.color}
+        debug={debug}
+        />)
+    }
   </>
 }

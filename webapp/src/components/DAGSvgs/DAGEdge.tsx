@@ -27,10 +27,6 @@ export const DAGEdge = ({
     cx1 = x1 + 2 * l1 * Math.cos(theta) 
     cy2 = y2 + 0.5 * l2 * Math.sin(theta)
     cx2 = x2 -  2 * l2 * Math.cos(theta) 
-  } else if (theta === Math.PI) {
-    cy1 *= 1.5
-    cx1 = x1 - 2 * l1 * Math.cos(theta)
-    cy2 *= 0.9
   } else if ((theta > Math.PI / 2) && (theta < Math.PI)) {
     cy2 += l2 * Math.sin(theta)
     cx2 += 10 * l2 * Math.cos(theta) 
