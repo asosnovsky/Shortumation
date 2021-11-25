@@ -108,6 +108,10 @@ Multinode.args = {
       action_data: {
         choose: [
           {
+            conditions: [],
+            sequence: []
+          },
+          {
             conditions: [
               {
                 $smType: "condition",

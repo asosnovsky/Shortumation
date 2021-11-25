@@ -42,7 +42,7 @@ export interface ChooseAction extends AutomationActionNodeBase<"choose", {
         conditions: AutomationCondition[];
         sequence: AutomationSequenceNode[];
     }>;
-    default: AutomationAction[];
+    default: AutomationSequenceNode[];
 }>{}
 export type AutomationAction = 
     | ServiceAction
