@@ -7,10 +7,11 @@ import { useBoardStyles } from "./styles";
 
 export const SVGBoard: FC<{
   graphHeight?: number,
-  children?: JSX.Element;
+  minGraphWidth?: number,
 }> = ({
   children,
   graphHeight = 300,
+  minGraphWidth = 300,
 }) => {
 
     // state
@@ -19,7 +20,10 @@ export const SVGBoard: FC<{
     const [[offX, offY], setOffset] = useState<Point>([0, 0])
 
     // alias
-    const graphWidth = Math.round(graphHeight * ratioWbh);
+    const graphWidth = Math.max(
+      Math.round(graphHeight * ratioWbh),
+      minGraphWidth
+    );
 
     // render
     return <div className={classes.root} style={{
@@ -28,7 +32,7 @@ export const SVGBoard: FC<{
       <div className={classes.dag}>
         <svg
           className={classes.svg}
-          viewBox={[offX, offY, graphWidth + offX, graphHeight + offY].join(" ")}
+          viewBox={[offX, offY, graphWidth, graphHeight].join(" ")}
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
@@ -41,9 +45,5 @@ export const SVGBoard: FC<{
           {children}
         </svg>
       </div>
-      <div className="board-btn top" onClick={() => setOffset([offX, offY - 10])}></div>
-      <div className="board-btn left" onClick={() => setOffset([offX - 10, offY])}></div>
-      <div className="board-btn right" onClick={() => setOffset([offX + 10, offY])}></div>
-      <div className="board-btn bottom" onClick={() => setOffset([offX, offY + 10])}></div>
     </div>
   }

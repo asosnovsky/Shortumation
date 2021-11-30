@@ -18,10 +18,12 @@ export const useBoardStyles = createAppUseStyles(theme => ({
     borderStyle: 'solid',
     borderColor: theme.secondaryAccent,
     width: '100%',
+    height: '100%',
+    overflow: 'scroll'
   },
   svg: {
-    height: '99%',
-    width: '99%',
+    minHeight: '800px',
+    minWidth: '800px',
     padding: 0,
     margin: 0,
   },
