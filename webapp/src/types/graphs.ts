@@ -1,16 +1,12 @@
 export type Point = [number, number];
+export type BBox = [Point, Point];
 export interface Node {
   loc: Point;
   text: string;
   color: 'red' | 'blue' | 'green';
 }
-export interface Edge {
-  from: string;
-  to: string;
-  direction: '1->2' | '1<->2' | '1<-2';
-}
-export type EdgeDirection = Edge['direction'];
-export interface DAG {
-  nodes: Record<string, Node>;
-  edges: Array<Edge>;
+export type EdgeDirection = '1->2' | '1<->2' | '1<-2';
+export interface BoundedObj<J> {
+  elm: J;
+  bbox: BBox;
 }
