@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DAGBoard, DAGElement, DAGNodeElm } from "./DAGBoard";
-import { NODE_HEIGHT, NODE_WIDTH } from './constants';
+import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, DISTANCE_FACTOR } from './constants';
 
 
 export default {
@@ -9,12 +9,13 @@ export default {
   component: DAGBoard,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
+    zoomLevel: 1,
     settings: {
       nodeHeight: NODE_HEIGHT,
       nodeWidth: NODE_WIDTH,
-      addHeight: 10,
-      addWidth: 10,
-      distanceFactor: 1.5,
+      addHeight: ADD_HEIGHT,
+      addWidth: ADD_WIDTH,
+      distanceFactor: DISTANCE_FACTOR,
       edgeChildColor: 'blue',
       edgeNextColor: 'white',
     },
@@ -38,9 +39,28 @@ const nodeFromPoint = ([x, y, add = true]: any): DAGNodeElm => ({
   }
 })
 
-export const Basic: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
-Basic.args = {
-  ...Basic.args,
+export const Simple: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
+Simple.args = {
+  ...Simple.args,
+  elements: [
+    [0, 0, false],
+    [1, 0, false],
+    [2, 1, false],
+  ].map<DAGElement>(nodeFromPoint).concat([
+    {
+      type: 'edge',
+      key: 'e1',
+      p1: [0, 0],
+      p2: [1, 0],
+      direction: '1->2'
+    },
+  ])
+}
+
+
+export const Complex: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
+Complex.args = {
+  ...Complex.args,
   elements: [
     [0, 0, false],
     [1, 0, false],

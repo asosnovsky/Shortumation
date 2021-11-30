@@ -25,18 +25,20 @@ export interface DAGEdgeElm {
   toChild?: boolean;
 }
 export type DAGElement = DAGEdgeElm | DAGNodeElm;
-export interface DAGBoardSettings {
+export interface DAGBoardSettings extends DAGBoardElmDims {
+  edgeChildColor: string;
+  edgeNextColor: string;
+}
+export interface DAGBoardElmDims {
   nodeHeight: number;
   nodeWidth: number;
   addHeight: number;
   addWidth: number;
   distanceFactor: number;
-  edgeChildColor: string;
-  edgeNextColor: string;
 }
 
 export interface Props {
-  elements: DAGElement[];
+  elements: Generator<DAGElement>;
   settings: DAGBoardSettings;
 }
 
@@ -67,6 +69,7 @@ export function* mapDataToElements({
     y * st.nodeHeight * st.distanceFactor + oy,
   ])
   for (let elm of elements) {
+    console.log({ elm })
     switch (elm.type) {
       case 'node':
         const nodeLoc = mapWithNode(elm.loc);
@@ -117,14 +120,17 @@ export function* mapDataToElements({
 }
 
 
-export const DAGBoard: FC<{
-  elements: DAGElement[];
-  settings: DAGBoardSettings;
-}> = props => {
+export const DAGBoard: FC<Props & { zoomLevel: number }> = props => {
   const it = new IteratorWrap(mapDataToElements(props));
   const el = it.toArray();
   const [[x0, y0], [x1, y1]] = it.returnValue as BBox;
-  return <SVGBoard graphHeight={y1 - y0} minGraphWidth={x1 - x0}>
+  return <SVGBoard
+    graphHeight={y1 - y0}
+    minGraphWidth={x1 - x0}
+    nodeHeight={props.settings.nodeHeight}
+    nodeWidth={props.settings.nodeWidth}
+    zoomLevel={props.zoomLevel}
+  >
     {el}
   </SVGBoard>
 }

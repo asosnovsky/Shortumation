@@ -3,27 +3,36 @@ import { FC, useState } from 'react';
 import { Point } from 'types/graphs';
 import useWindowSize from "utils/useWindowSize";
 import { useBoardStyles } from "./styles";
+import { NODE_HEIGHT, NODE_WIDTH } from './constants';
 
 
 export const SVGBoard: FC<{
   graphHeight?: number,
   minGraphWidth?: number,
+  nodeHeight?: number,
+  nodeWidth?: number,
+  zoomLevel?: number,
 }> = ({
   children,
   graphHeight = 300,
   minGraphWidth = 300,
+  nodeHeight = NODE_HEIGHT,
+  nodeWidth = NODE_WIDTH,
+  zoomLevel = 1,
 }) => {
 
     // state
     const { ratioWbh } = useWindowSize();
-    const { classes, theme } = useBoardStyles({});
-    const [[offX, offY], setOffset] = useState<Point>([0, 0])
-
     // alias
     const graphWidth = Math.max(
       Math.round(graphHeight * ratioWbh),
       minGraphWidth
     );
+    const { classes, theme } = useBoardStyles({
+      boardHeight: Math.max(nodeHeight, graphHeight) * zoomLevel,
+      boardWidth: Math.max(5 * nodeWidth, graphWidth) * zoomLevel,
+    });
+
 
     // render
     return <div className={classes.root} style={{
@@ -32,7 +41,7 @@ export const SVGBoard: FC<{
       <div className={classes.dag}>
         <svg
           className={classes.svg}
-          viewBox={[offX, offY, graphWidth, graphHeight].join(" ")}
+          viewBox={[0, 0, graphWidth, graphHeight].join(" ")}
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>

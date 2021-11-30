@@ -4,7 +4,10 @@ import { createAppUseStyles } from "styles/theme";
 import { Node } from "types/graphs";
 
 
-export const useBoardStyles = createAppUseStyles(theme => ({
+export const useBoardStyles = createAppUseStyles<{
+  boardHeight: number,
+  boardWidth: number,
+}>(theme => ({
   root: {
     height: '99%',
     width: '99%',
@@ -21,12 +24,12 @@ export const useBoardStyles = createAppUseStyles(theme => ({
     height: '100%',
     overflow: 'scroll'
   },
-  svg: {
-    minHeight: '800px',
-    minWidth: '800px',
+  svg: ({boardHeight, boardWidth}) => ({
+    minHeight: `${boardHeight}px`,
+    minWidth: `${boardWidth}px`,
     padding: 0,
     margin: 0,
-  },
+  }),
   circle: {
     fill: Color(theme.secondary).set('rgb.b', 125).hex(),
   },
