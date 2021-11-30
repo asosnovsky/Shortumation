@@ -1,0 +1,32 @@
+.board-btn {
+    position: absolute;
+}
+.board-btn:hover {
+    background: #5e44444f;
+    cursor: pointer;
+}
+.board-btn.right {
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5%;
+}
+.board-btn.left {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 5%;
+}
+.board-btn.top {
+    left: 0;
+    top: 0;
+    height: 5%;
+    width: 100%;
+}
+
+.board-btn.bottom {
+    left: 0;
+    bottom: 0;
+    height: 5%;
+    width: 100%;
+}
