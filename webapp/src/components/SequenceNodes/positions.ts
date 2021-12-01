@@ -45,10 +45,8 @@ const makeOffsetMaintainer = (startPoint: Point) => {
       offset[1] = 0;
     },
     update(p: Point, innerStartLoc: Point) {
-      console.log('updating', JSON.stringify({i, offset, p, innerStartLoc}))
       offset[0] = Math.max(offset[0], p[0] - i - 0.5 - startPoint[0])
       offset[1] = Math.max(offset[1], p[1] - innerStartLoc[1] + 1)
-      console.log('|->', JSON.stringify({offset}))
     },
     get x() {
       return offset[0]
