@@ -11,13 +11,11 @@ import { DAGCircle } from "./DAGCircle";
 
 export interface DAGCircleElm {
   type: 'circle';
-  key: string;
   loc: Point;
   onClick?: () => void;
 }
 export interface DAGNodeElm {
   type: 'node';
-  key: string;
   loc: Point;
   node: AutomationNode;
   onRemove: () => void;
@@ -25,11 +23,10 @@ export interface DAGNodeElm {
 }
 export interface DAGEdgeElm {
   type: 'edge';
-  key: string;
   p1: Point;
   p2: Point;
   direction: EdgeDirection;
-  toChild?: boolean;
+  fromCircle?: boolean;
   onAdd?: () => void;
 }
 export type DAGElement = DAGEdgeElm | DAGNodeElm | DAGCircleElm;
@@ -86,7 +83,7 @@ export function* mapDataToElements({
           st.addHeight + st.addHeight / 2
         ])
         yield <DAGNode
-          key={`(${elm.loc})${elm.key}-*`}
+          key={`(${elm.loc})-*`}
           height={st.nodeHeight}
           width={st.nodeWidth}
           loc={nodeLoc}
@@ -96,14 +93,14 @@ export function* mapDataToElements({
         />
         if (elm.onAdd) {
           yield <DAGEdge
-            key={`${elm.key}->+`}
+            key={`(${elm.loc})->+`}
             p1={offsetPoint(nodeLoc, [st.nodeWidth, st.nodeHeight / 2])}
             p2={offsetPoint(addLoc, [0, st.addHeight / 2])}
             direction="1->2"
             color={st.edgeNextColor}
           />
           yield <AddButton
-            key={`${elm.key}-+`}
+            key={`(${elm.loc})-+`}
             loc={addLoc}
             height={st.addHeight}
             width={st.addWidth}
@@ -113,16 +110,22 @@ export function* mapDataToElements({
         break
       case 'edge':
         const p2 = mapWithNode(elm.p2, [0, st.nodeHeight / 2]);
+        let p1: Point;
+        if (elm.fromCircle) {
+          p1 = mapWithNode(elm.p1, [st.circleSize * 0.95, 1.3 * st.circleSize / 2])
+        } else {
+          p1 = mapWithNode(elm.p1, [st.nodeWidth, st.nodeHeight / 2])
+        }
         yield <DAGEdge
-          key={`${elm.key}->`}
-          p1={mapWithNode(elm.p1, [st.nodeWidth, st.nodeHeight / 2])}
+          key={`(${elm.p1})->(${elm.p2})`}
+          p1={p1}
           p2={p2}
           direction={elm.direction}
-          color={elm.toChild ? st.edgeChildColor : st.edgeNextColor}
+          color={st.edgeNextColor}
         />
         if (elm.onAdd) {
           yield <AddButton
-            key={`${elm.key}-+`}
+            key={`(${elm.p2})-+`}
             loc={offsetPoint(p2, [0, -st.addHeight / 2])}
             height={st.addHeight}
             width={st.addWidth}
@@ -133,7 +136,7 @@ export function* mapDataToElements({
       case 'circle':
         const loc = mapWithNode(elm.loc, [0, st.nodeHeight / 2 - st.circleSize / 2]);
         yield <DAGCircle
-          key={`${elm.key}-o`}
+          key={`(${elm.loc})-o`}
           loc={loc}
           size={st.circleSize}
           onClick={elm.onClick}

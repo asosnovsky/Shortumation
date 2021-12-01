@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SequenceNodes } from './index';
-import { NODE_HEIGHT, NODE_WIDTH, DISTANCE_FACTOR, ADD_HEIGHT, ADD_WIDTH } from '../DAGSvgs/constants';
+import { NODE_HEIGHT, NODE_WIDTH, DISTANCE_FACTOR, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE } from '../DAGSvgs/constants';
 import { useState } from 'react';
 
 
@@ -17,6 +17,7 @@ export default {
       nodeWidth: NODE_WIDTH,
       addHeight: ADD_HEIGHT,
       addWidth: ADD_WIDTH,
+      circleSize: CIRCLE_SIZE,
       distanceFactor: DISTANCE_FACTOR,
     }
   }

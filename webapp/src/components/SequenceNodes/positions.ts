@@ -6,7 +6,7 @@ import { ChooseAction } from '../../types/automations/actions';
 
 const offsetPoint = (
   [x, y]: Point,
-  [ox, oy]: Point = [0, 0]
+  [ox, oy]: Point = [0, 0],
 ): Point => [x + ox, y + oy];
 
 const makeOffsetMaintainer = (startPoint: Point) => {
@@ -36,22 +36,33 @@ function* inner(
   nodeLoc: Point,
   innerStartLoc: Point,
   updater: Updater,
-  keyPrefix: string,
   sequence: AutomationSequenceNode[],
+  onEdit?: () => void,
 ): Generator<DAGElement>  {
+  const np = offsetPoint(innerStartLoc, [0.5, 0]);
   yield {
     type: 'edge',
     p1: nodeLoc,
     p2: innerStartLoc,
     direction: '1->2',
-    key: `${keyPrefix}-${nodeLoc}:${innerStartLoc}`,
+  }
+  yield {
+    type: 'circle',
+    loc: innerStartLoc,
+    onClick: onEdit
+  }
+  yield {
+    type: 'edge',
+    p1: innerStartLoc,
+    p2: np,
+    direction: '1->2',
     onAdd: sequence.length === 0 ? updater.addNode : undefined,
+    fromCircle: true,
   }
   for (let childNode of computeNodesEdgesPos(
-    innerStartLoc,
+    np,
     sequence,
     updater.onChange,
-    keyPrefix,
   )) {
     yield childNode
   }
@@ -62,7 +73,6 @@ function* dealWithChoose(
   nodeLoc: Point,
   makeUpdater: (j: number | null) => Updater,
   offset: ReturnType<typeof makeOffsetMaintainer>,
-  keyPrefix: string,
 ) {
   offset.resetY()
   for (let j = 0; j < node.action_data.choose.length; j++) {
@@ -71,8 +81,8 @@ function* dealWithChoose(
       nodeLoc,
       innerStartLoc ,
       makeUpdater(j),
-      `${keyPrefix}.${j}`,
-      node.action_data.choose[j].sequence
+      node.action_data.choose[j].sequence,
+      () => {},
     )) {
       yield elm
       if (elm.type === 'node') {
@@ -80,12 +90,14 @@ function* dealWithChoose(
       }
     }
   }
-  const innerStartLoc = offsetPoint(nodeLoc, [1, node.action_data.choose.length + 1 + offset.y]);
+  const innerStartLoc = offsetPoint(
+    nodeLoc,
+    [1, node.action_data.choose.length + 1 + offset.y],
+  );
   for (let elm of inner(
     nodeLoc,
     innerStartLoc,
     makeUpdater(null),
-    `${keyPrefix}-d`,
     node.action_data.default,
   )) {
     yield elm
@@ -100,7 +112,6 @@ export function* computeNodesEdgesPos(
   startPoint: Point,
   sequence: AutomationSequenceNode[],
   onChange: (s: AutomationSequenceNode[]) => void,
-  keyPrefix: string = '$',
 ): Generator<DAGElement> {
   const rootUpdater = makeUpdater(sequence, onChange);
   const offset = makeOffsetMaintainer(startPoint)
@@ -111,7 +122,6 @@ export function* computeNodesEdgesPos(
     const nodeLoc = offsetPoint(startPoint, [i + offset.x, 0]);
     yield {
       type: 'node',
-      key: `${keyPrefix}${i}`,
       loc: nodeLoc,
       node,
       onRemove: () => rootUpdater.removeNode(i),
@@ -120,7 +130,6 @@ export function* computeNodesEdgesPos(
     if (lastNodeLoc) {
       yield {
         type: 'edge',
-        key: `${keyPrefix}(${i-1}->${i})`,
         p1: lastNodeLoc,
         p2: nodeLoc,
         direction: '1->2',
@@ -135,7 +144,6 @@ export function* computeNodesEdgesPos(
         nodeLoc,
         j => rootUpdater.makeChildUpdaterForChooseAction(i, j),
         offset,
-        `${keyPrefix}.${i}`,
       )
     }
   }

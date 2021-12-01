@@ -7,14 +7,6 @@ import { computeNodesEdgesPos } from './positions';
 
 export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (props) => {
   const theme = useTheme();
-
-  // return <>
-  //   {Array.from(computeNodesEdges({
-  //     ...props,
-  //     keyPrefix: "",
-  //     edgeColor: theme.secondaryAccent,
-  //   }))}
-  // </>
   return <DAGBoard
     zoomLevel={props.zoomLevel}
     elements={computeNodesEdgesPos(
