@@ -48,3 +48,4 @@ export type AutomationCondition =
     | TriggerCondition
     | ZoneCondition
 ;
+export type ConditionType = AutomationCondition['condition'];

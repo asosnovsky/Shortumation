@@ -28,7 +28,11 @@ const commonInputStyle = (theme: AppTheme) => ({
 })
 
 export const useButtonStyles = createAppUseStyles<{}>(theme => ({
-  ...commonInputStyle(theme),
+  input: {
+    ...commonInputStyle(theme).input,
+    paddingTop: '2%',
+    paddingBottom: '2%',
+  },
 }));
 
 export const useInputWrapperStyles = createAppUseStyles<{
@@ -50,6 +54,7 @@ export const useInputWrapperStyles = createAppUseStyles<{
       top: labelSize === 'normal' ? '0.5em' : '0.25em',
       fontWeight: 'bold',
       transition: 'all 200ms',
+      color: theme.primaryAccent,
     })
   }
 })

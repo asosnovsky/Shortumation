@@ -74,9 +74,6 @@ export interface AutomationTriggerDevice extends AutomationTriggerBase {
     type: string;
     subtype: string;
 }
-export interface AutomationTriggerGeneric extends AutomationTriggerBase {
-    platform: string;
-}
 export type AutomationTrigger = 
     | AutomationTriggerEvent
     | AutomationTriggerHA
@@ -90,21 +87,5 @@ export type AutomationTrigger =
     | AutomationTriggerWebhook
     | AutomationTriggerZone
     | AutomationTriggerDevice
-    | AutomationTriggerGeneric
 ;
-export const triggerTypes = [
-    'Event',
-    'Home Assistant',
-    'MQTT',
-    'Numeric State',
-    'State',
-    'Tag',
-    'Template',
-    'Time',
-    'Time Pattern',
-    'Webhook',
-    'Zone',
-    'Device',
-    'Generic',
-] as const;
-export type TriggerType = typeof triggerTypes[number];
+export type TriggerType = AutomationTrigger['platform'];

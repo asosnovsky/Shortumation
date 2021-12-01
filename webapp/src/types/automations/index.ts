@@ -1,6 +1,6 @@
-import { AutomationAction } from "./actions";
-import { AutomationCondition } from "./conditions";
-import { AutomationTrigger } from "./triggers";
+import { ActionType, AutomationAction } from "./actions";
+import { AutomationCondition, ConditionType } from "./conditions";
+import { AutomationTrigger, TriggerType } from "./triggers";
 
 
 export interface AutomationMetadata {
@@ -24,3 +24,9 @@ type AutomationNodeMapping = {
 }
 export type AutomationNodeTypes = keyof AutomationNodeMapping;
 export type AutomationNode<N extends AutomationNodeTypes = any> = AutomationNodeMapping[N];
+export type AutomationNodeSubtype<T extends AutomationNodeTypes = any> =
+  T extends 'trigger' ? TriggerType :
+  T extends 'action' ? ActionType :
+  T extends 'condtion' ? ConditionType :
+  T extends 'sequence' ? ConditionType | ActionType :
+  never;

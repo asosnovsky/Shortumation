@@ -52,12 +52,4 @@ export type AutomationAction =
     | DeviceAction
     | ChooseAction
 ;
-export const ActionTypes = [
-    'Service',
-    'Repeat',
-    'Wait',
-    'Event',
-    'Device',
-    'Choose'
-] as const;
-export type ActionType = typeof ActionTypes[number];
+export type ActionType = AutomationAction['action'];
