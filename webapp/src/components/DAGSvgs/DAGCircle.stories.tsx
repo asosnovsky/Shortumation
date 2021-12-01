@@ -17,11 +17,18 @@ export default {
 export const Basic: ComponentStory<typeof DAGCircle> = args => {
   return <SVGBoard>
     <DAGCircle
-      {...args}
+      size={args.size}
+      loc={args.loc}
     />
     <DAGCircle
       size={args.size}
       loc={[args.loc[0] + args.size, args.loc[1]]}
+      onAdd={args.onAdd}
+    />
+    <DAGCircle
+      size={args.size}
+      loc={[args.loc[0] + 2 * args.size, args.loc[1]]}
+      onEdit={args.onEdit}
     />
   </SVGBoard>
 }

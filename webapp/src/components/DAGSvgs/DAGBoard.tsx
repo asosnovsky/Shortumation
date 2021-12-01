@@ -12,7 +12,7 @@ import { DAGCircle } from "./DAGCircle";
 export interface DAGCircleElm {
   type: 'circle';
   loc: Point;
-  onClick?: () => void;
+  onClick?: ['add', () => void] | ['edit', () => void];
 }
 export interface DAGNodeElm {
   type: 'node';
@@ -135,11 +135,16 @@ export function* mapDataToElements({
         break
       case 'circle':
         const loc = mapWithNode(elm.loc, [0, st.nodeHeight / 2 - st.circleSize / 2]);
+        const clickProps = elm.onClick ? (
+          elm.onClick[0] === 'add' ?
+            { onAdd: elm.onClick[1] } :
+            { onEdit: elm.onClick[1] }
+        ) : {}
         yield <DAGCircle
           key={`(${elm.loc})-o`}
           loc={loc}
           size={st.circleSize}
-          onClick={elm.onClick}
+          {...clickProps}
         />
         break
       default:

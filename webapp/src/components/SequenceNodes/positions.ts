@@ -32,7 +32,7 @@ const makeOffsetMaintainer = (startPoint: Point) => {
   }
 }
 
-function* inner(
+function* dealWithNested(
   nodeLoc: Point,
   innerStartLoc: Point,
   updater: Updater,
@@ -49,7 +49,7 @@ function* inner(
   yield {
     type: 'circle',
     loc: innerStartLoc,
-    onClick: onEdit
+    onClick: ['edit', onEdit],
   }
   yield {
     type: 'edge',
@@ -72,12 +72,14 @@ function* dealWithChoose(
   node: ChooseAction,
   nodeLoc: Point,
   makeUpdater: (j: number | null) => Updater,
+  onAdd: () => void,
   offset: ReturnType<typeof makeOffsetMaintainer>,
-) {
+): Generator<DAGElement> {
   offset.resetY()
+  // conditions
   for (let j = 0; j < node.action_data.choose.length; j++) {
     const innerStartLoc = offsetPoint(nodeLoc, [1, j + 1 + offset.y]);
-    for (let elm of inner(
+    for (let elm of dealWithNested(
       nodeLoc,
       innerStartLoc ,
       makeUpdater(j),
@@ -88,13 +90,17 @@ function* dealWithChoose(
       if (elm.type === 'node') {
         offset.update(elm.loc, innerStartLoc)
       }
+      if (elm.type === 'circle') {
+        offset.update(offsetPoint(elm.loc, [0, -1]), innerStartLoc)
+      }
     }
   }
+  // default
   const innerStartLoc = offsetPoint(
     nodeLoc,
-    [1, node.action_data.choose.length + 1 + offset.y],
+    [1, node.action_data.choose.length + 2 + offset.y],
   );
-  for (let elm of inner(
+  for (let elm of dealWithNested(
     nodeLoc,
     innerStartLoc,
     makeUpdater(null),
@@ -104,6 +110,16 @@ function* dealWithChoose(
     if (elm.type === 'node') {
       offset.update(elm.loc, innerStartLoc)
     }
+  }
+  // add new conditions
+  const newCondLoc = offsetPoint(
+    nodeLoc,
+    [1, node.action_data.choose.length + 1 + offset.y],
+  );
+  yield {
+    type: 'circle',
+    loc: newCondLoc,
+    onClick: ['add', onAdd],
   }
 }
 
@@ -143,6 +159,19 @@ export function* computeNodesEdgesPos(
         node,
         nodeLoc,
         j => rootUpdater.makeChildUpdaterForChooseAction(i, j),
+        () => rootUpdater.updateNode(i, {
+          ...node,
+          action_data: {
+            ...node.action_data,
+            choose: [
+              ...node.action_data.choose,
+              {
+                conditions: [],
+                sequence: [],
+              }
+            ]
+          }
+        }),
         offset,
       )
     }
