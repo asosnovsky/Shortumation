@@ -23,6 +23,7 @@ export interface DAGEdgeElm {
   p2: Point;
   direction: EdgeDirection;
   toChild?: boolean;
+  onAdd?: () => void;
 }
 export type DAGElement = DAGEdgeElm | DAGNodeElm;
 export interface DAGBoardSettings extends DAGBoardElmDims {
@@ -69,7 +70,6 @@ export function* mapDataToElements({
     y * st.nodeHeight * st.distanceFactor + oy,
   ])
   for (let elm of elements) {
-    console.log({ elm })
     switch (elm.type) {
       case 'node':
         const nodeLoc = mapWithNode(elm.loc);
@@ -78,7 +78,7 @@ export function* mapDataToElements({
           st.addHeight + st.addHeight / 2
         ])
         yield <DAGNode
-          key={elm.key}
+          key={`(${elm.loc})${elm.key}-*`}
           height={st.nodeHeight}
           width={st.nodeWidth}
           loc={nodeLoc}
@@ -88,14 +88,14 @@ export function* mapDataToElements({
         />
         if (elm.onAdd) {
           yield <DAGEdge
-            key={`${elm.key}-edge`}
+            key={`${elm.key}->+`}
             p1={offsetPoint(nodeLoc, [st.nodeWidth, st.nodeHeight / 2])}
             p2={offsetPoint(addLoc, [0, st.addHeight / 2])}
             direction="1->2"
             color={st.edgeNextColor}
           />
           yield <AddButton
-            key={`${elm.key}-add`}
+            key={`${elm.key}-+`}
             loc={addLoc}
             height={st.addHeight}
             width={st.addWidth}
@@ -104,13 +104,23 @@ export function* mapDataToElements({
         }
         break
       case 'edge':
+        const p2 = mapWithNode(elm.p2, [0, st.nodeHeight / 2]);
         yield <DAGEdge
-          key={elm.key}
+          key={`${elm.key}->`}
           p1={mapWithNode(elm.p1, [st.nodeWidth, st.nodeHeight / 2])}
-          p2={mapWithNode(elm.p2, [0, st.nodeHeight / 2])}
+          p2={p2}
           direction={elm.direction}
           color={elm.toChild ? st.edgeChildColor : st.edgeNextColor}
         />
+        if (elm.onAdd) {
+          yield <AddButton
+            key={`${elm.key}-+`}
+            loc={offsetPoint(p2, [0, -st.addHeight / 2])}
+            height={st.addHeight}
+            width={st.addWidth}
+            onClick={elm.onAdd}
+          />
+        }
         break
       default:
         break
