@@ -6,8 +6,15 @@ import { DAGNode } from "./DAGNode";
 import { DAGEdge } from "./DAGEdge";
 import { AddButton } from "./AddButton";
 import { IteratorWrap } from "utils/iter";
+import { DAGCircle } from "./DAGCircle";
 
 
+export interface DAGCircleElm {
+  type: 'circle';
+  key: string;
+  loc: Point;
+  onClick?: () => void;
+}
 export interface DAGNodeElm {
   type: 'node';
   key: string;
@@ -25,7 +32,7 @@ export interface DAGEdgeElm {
   toChild?: boolean;
   onAdd?: () => void;
 }
-export type DAGElement = DAGEdgeElm | DAGNodeElm;
+export type DAGElement = DAGEdgeElm | DAGNodeElm | DAGCircleElm;
 export interface DAGBoardSettings extends DAGBoardElmDims {
   edgeChildColor: string;
   edgeNextColor: string;
@@ -35,6 +42,7 @@ export interface DAGBoardElmDims {
   nodeWidth: number;
   addHeight: number;
   addWidth: number;
+  circleSize: number;
   distanceFactor: number;
 }
 
@@ -121,6 +129,15 @@ export function* mapDataToElements({
             onClick={elm.onAdd}
           />
         }
+        break
+      case 'circle':
+        const loc = mapWithNode(elm.loc, [0, st.nodeHeight / 2 - st.circleSize / 2]);
+        yield <DAGCircle
+          key={`${elm.key}-o`}
+          loc={loc}
+          size={st.circleSize}
+          onClick={elm.onClick}
+        />
         break
       default:
         break

@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DAGBoard, DAGElement, DAGNodeElm } from "./DAGBoard";
-import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, DISTANCE_FACTOR } from './constants';
+import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, DISTANCE_FACTOR, CIRCLE_SIZE } from './constants';
 
 
 export default {
@@ -15,6 +15,7 @@ export default {
       nodeWidth: NODE_WIDTH,
       addHeight: ADD_HEIGHT,
       addWidth: ADD_WIDTH,
+      circleSize: CIRCLE_SIZE,
       distanceFactor: DISTANCE_FACTOR,
       edgeChildColor: 'blue',
       edgeNextColor: 'white',
@@ -54,6 +55,31 @@ Simple.args = {
       p2: [1, 0],
       direction: '1->2'
     },
+    {
+      type: 'edge',
+      key: 'e2',
+      p1: [2, 1],
+      p2: [2, 3],
+      direction: '1->2'
+    },
+    {
+      type: 'circle',
+      key: 'c1',
+      loc: [2, 3]
+    },
+    {
+      type: 'edge',
+      key: 'e2',
+      p1: [2, 1],
+      p2: [2, 2],
+      direction: '1->2'
+    },
+    {
+      type: 'circle',
+      key: 'c1',
+      loc: [2, 2],
+      onClick: () => { }
+    }
   ])
 }
 

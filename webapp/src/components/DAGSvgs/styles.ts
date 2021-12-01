@@ -147,3 +147,23 @@ export const useNodeStyles = createAppUseStyles<{
     },
   }
 })
+
+export const useCircleStyles = createAppUseStyles<{ size: number }>(theme => ({
+  root: ({size}) => ({
+    backgroundColor: Color(theme.primary).set('rgb.g', 100).hex(),
+    borderRadius: 500,
+    height: size,
+    width: size,
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: Color(theme.primary).set('rgb.g', 150).hex(),
+    },
+    fontSize: `${size * 0.4}px`,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  icon: {
+    padding: "15%",
+  }
+}))
