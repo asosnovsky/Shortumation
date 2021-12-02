@@ -100,7 +100,7 @@ export const ConditionNode: FC<{
       <button className={p.isRoot ? classes.deleteBtnRoot : classes.deleteBtn} onClick={p?.onClick}>X</button>
 
     return <div className={classes.root}>
-      {(showDelete || !effectiveDM) && <DeleteButton isRoot onClick={() => onDelete('root')} />}
+      {(showDelete && !effectiveDM) && <DeleteButton isRoot onClick={() => onDelete('root')} />}
       <div className={classes.title}>
         <InputList
           label=""

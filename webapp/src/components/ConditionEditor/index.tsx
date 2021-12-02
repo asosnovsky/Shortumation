@@ -22,6 +22,6 @@ export const ConditionEditor: FC<{
         onUpdate(update)
       }}
       displayMode
-      showDelete
+      showDelete={false}
     />
   }

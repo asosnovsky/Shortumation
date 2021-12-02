@@ -129,6 +129,7 @@ export const LogicViewer: Editor<LogicCondition> = ({
         condition={c}
         displayMode={false}
         {...genUpdateMethods(condition, onChange)(i)}
+        showDelete
       />
     })}
   </>
