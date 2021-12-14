@@ -21,7 +21,6 @@ const commonInputStyle = (theme: AppTheme) => ({
     "&:disabled": {
       backgroundColor: '#403f3f',
       borderColor: '#403f3f',
-      color: '#403f3faa',
       cursor: 'not-allowed',
     },
   }

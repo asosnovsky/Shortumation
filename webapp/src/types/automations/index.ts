@@ -16,17 +16,21 @@ export interface AutomationData {
     sequence: AutomationSequenceNode[];
 }
 export type AutomationSequenceNode = AutomationAction | AutomationCondition;
-type AutomationNodeMapping = {
+export type AutomationNodeMapping = {
     "trigger": AutomationTrigger;
     "action": AutomationAction;
     "condition": AutomationCondition;
-    "sequence": AutomationSequenceNode;
 }
-export type AutomationNodeTypes = keyof AutomationNodeMapping;
-export type AutomationNode<N extends AutomationNodeTypes = any> = AutomationNodeMapping[N];
+export type AutomationNodeTypes = keyof AutomationNodeMapping | undefined;
+export type AutomationNode<N extends AutomationNodeTypes = any> =
+  N extends undefined ? AutomationTrigger :
+  N extends 'trigger' ? AutomationTrigger :
+  N extends 'action' ? AutomationAction :
+  N extends 'condition' ? AutomationCondition :
+  never;
 export type AutomationNodeSubtype<T extends AutomationNodeTypes = any> =
+  T extends undefined ? TriggerType :
   T extends 'trigger' ? TriggerType :
   T extends 'action' ? ActionType :
   T extends 'condtion' ? ConditionType :
-  T extends 'sequence' ? ConditionType | ActionType :
   never;

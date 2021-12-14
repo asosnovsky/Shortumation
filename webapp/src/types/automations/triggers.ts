@@ -1,7 +1,8 @@
 import { AutomationTime } from "./common";
 
 interface AutomationTriggerBase {
-    alias?: string;
+  alias?: string;
+  $smType: undefined;
 }
 
 export interface AutomationTriggerEvent extends AutomationTriggerBase {

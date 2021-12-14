@@ -1,4 +1,5 @@
 import { AutomationNodeSubtype, AutomationNodeTypes } from "types/automations";
+import { AutomationNode } from '../../types/automations/index';
 
 
 const actionTypes = [
@@ -39,15 +40,25 @@ const triggerTypes = [
 
 export const getSubTypeList = <T extends AutomationNodeTypes>(
   nodeType: T
-): AutomationNodeSubtype<T>[] => {
+): Array<AutomationNodeSubtype<T>| 'condition'> => {
   if (nodeType === 'action') {
     return actionTypes as any;
   } else if (nodeType === 'condition') {
     return conditionTypes as any;
   } else if (nodeType === 'trigger') {
     return triggerTypes  as any;
-  } else if (nodeType === 'sequence') {
-    return actionTypes.concat(conditionTypes) as any;
   }
   return [];
+}
+
+export const getNodeSubType = <T extends AutomationNodeTypes>(
+  node: AutomationNode<T>
+): AutomationNodeSubtype<T> => {
+  if (node.$smType === 'action') {
+    return node.action as any;
+  } else if(node.$smType === 'condition') {
+    return node.condition as any;
+  } else {
+    return node.platform as any;
+  }
 }

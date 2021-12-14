@@ -1,56 +1,50 @@
-import { Button } from "components/Inputs/Button";
-import { useState, useEffect } from "react";
-import { AutomationNodeTypes, AutomationNode, AutomationNodeSubtype } from "types/automations";
-import { useNodeEditorStyles } from './styles';
-import { getSubTypeList } from './constants';
+
+import { FC } from "react";
+import { useNodeEditorStyles } from "./styles";
+import { AutomationNode, AutomationNodeMapping } from 'types/automations/index';
+import { useEditorNodeState } from "./OptionManager";
 import InputList from "components/Inputs/InputList";
+import { Button } from "components/Inputs/Button";
 
-export interface Props<T extends AutomationNodeTypes> {
-  nodeType: T,
-  subType: AutomationNodeSubtype<T>,
-  onClose: () => void,
-  onUpdate: (node: AutomationNode[T]) => void,
+
+
+
+export interface Props {
+  node: AutomationNode
+  allowedTypes?: Array<keyof AutomationNodeMapping>;
 }
-export function NodeEditor<T extends AutomationNodeTypes>({
-  nodeType,
-  subType,
-  onClose,
-  onUpdate,
-}: Props<T>) {
-  const { classes } = useNodeEditorStyles({});
-  const currentSubTypeList = getSubTypeList(nodeType);
-  const [selectedSubType, setSubType] = useState<AutomationNodeSubtype>(subType);
-  // const stateManager = new StateManager(node_type, selectedSubType);
 
-  // useEffect(() => {
-  //   if (stateManager.nodeType !== node_type || stateManager.nodeSubtype !== selectedSubType) {
-  //     stateManager.swapBaseState(node_type, selectedSubType)
-  //   }
-  // }, [node_type, selectedSubType]);
+export const NodeEditor: FC<Props> = ({
+  node,
+  allowedTypes = ["action", "condition", "trigger"]
+}) => {
+  const { classes } = useNodeEditorStyles({});
+  const state = useEditorNodeState(node);
 
   return <div className={classes.root}>
-    <div className={classes.background} onClick={() => onClose()}></div>
-    <div className={classes.inner} onClick={e => e.preventDefault()}>
+    <div className={classes.background} />
+    <div className={classes.inner}>
       <div className={classes.title}>
-        Create {nodeType[0].toUpperCase()}{nodeType.slice(1)}
+
       </div>
       <div className={classes.body}>
+        {allowedTypes.length > 1 ? <InputList
+          label="Type"
+          current={state.nodeType}
+          options={allowedTypes}
+          onChange={state.setNodeType}
+        /> : <span>{state.nodeType}</span>}
         <InputList
-          label="Type:"
-          options={currentSubTypeList}
-          current={selectedSubType}
-          onChange={setSubType}
+          label={`${state.nodeType} type`}
+          current={state.subType as any}
+          options={state.subTypes}
+          onChange={state.setSubType}
         />
-        {/*{stateManager.renderOptionList()} */}
+        {state.renderOptionList()}
       </div>
       <div className={classes.footer}>
-        <Button onClick={() => onClose()}>Close</Button>
-        <Button
-        // onClick={() => onUpdate(stateManager.state)}
-        // disabled={!stateManager.isReady}
-        >
-          Save
-        </Button>
+        <Button>Close</Button>
+        <Button disabled={!state.isReady()}>Save</Button>
       </div>
     </div>
   </div>

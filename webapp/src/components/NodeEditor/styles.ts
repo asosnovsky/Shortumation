@@ -43,6 +43,7 @@ export const useNodeEditorStyles = createAppUseStyles<{
     color: theme.secondaryAccent,
   },
   body: {
+    overflow: 'auto',
     flexGrow: 1
   },
   footer: {
