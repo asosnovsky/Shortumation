@@ -1,11 +1,11 @@
 import InputYaml from "components/Inputs/InputYaml";
 import InputText from "components/Inputs/InputText";
 import { ChooseAction } from "types/automations/actions";
-import { BaseOptionManager, updateActionData } from './BaseOptionManager';
+import { OptionManager, updateActionData } from './OptionManager';
 
 
-export default class ActionChooseState extends BaseOptionManager<ChooseAction> {
-  defaultState = () => ({
+export const ActionChooseState: OptionManager<ChooseAction> = {
+  defaultState: () => ({
     $smType: 'action',
     action: 'choose',
     action_data: {
@@ -13,12 +13,12 @@ export default class ActionChooseState extends BaseOptionManager<ChooseAction> {
       default: [],
       choose: [],
     }
-  } as ChooseAction)
-  isReady(state: ChooseAction): boolean {
-    return state.action_data.alias !== ''
-  }
-  renderOptionList(state: ChooseAction): JSX.Element {
-    const update = updateActionData(state, this.setState);
+  }),
+  isReady: ({ action_data: { alias } }) => {
+    return alias !== ''
+  },
+  renderOptionList: (state, setState) => {
+    const update = updateActionData(state, setState);
     return <div className="state-manager-options">
       <InputText
         label="Description"

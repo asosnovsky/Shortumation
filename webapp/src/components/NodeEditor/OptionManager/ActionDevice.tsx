@@ -1,10 +1,10 @@
 import InputText from "components/Inputs/InputText";
 import { DeviceAction } from "types/automations/actions";
-import { BaseOptionManager, updateActionData } from './BaseOptionManager';
+import { OptionManager, updateActionData } from './OptionManager';
 
 
-export default class ActionDeviceState extends BaseOptionManager<DeviceAction> {
-  defaultState = () => ({
+export const ActionDeviceState: OptionManager<DeviceAction> = {
+  defaultState: () => ({
     $smType: 'action',
     action: 'device',
     action_data: {
@@ -14,16 +14,24 @@ export default class ActionDeviceState extends BaseOptionManager<DeviceAction> {
       device_id: "",
       domain: "",
     }
-  } as DeviceAction)
-  isReady(state: DeviceAction): boolean {
-    return state.action_data.alias !== '' &&
-      state.action_data.type !== "" &&
-      state.action_data.entity_id !== "" &&
-      state.action_data.device_id !== "" &&
-      state.action_data.domain !== ""
-  }
-  renderOptionList(state: DeviceAction): JSX.Element {
-    const update = updateActionData(state, this.setState);
+  }),
+  isReady: ({
+    action_data: {
+      alias,
+      type,
+      entity_id,
+      device_id,
+      domain,
+    }
+  }) => (
+    alias !== '' &&
+    type !== "" &&
+    entity_id !== "" &&
+    device_id !== "" &&
+    domain !== ""
+  ),
+  renderOptionList: (state, setState) => {
+    const update = updateActionData(state, setState);
     return <div className="state-manager-options">
       <InputText
         label="Description"

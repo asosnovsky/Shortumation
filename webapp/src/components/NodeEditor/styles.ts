@@ -44,6 +44,7 @@ export const useNodeEditorStyles = createAppUseStyles<{
   },
   body: {
     overflow: 'auto',
+    resize: 'auto',
     flexGrow: 1
   },
   footer: {

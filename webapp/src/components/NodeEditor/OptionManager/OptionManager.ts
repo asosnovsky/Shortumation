@@ -1,11 +1,9 @@
 import { AutomationAction } from 'types/automations/actions';
 import { AutomationCondition } from 'types/automations/conditions';
-export abstract class BaseOptionManager<T> {
-  abstract defaultState(): T ;
-  abstract isReady(s: T): boolean;
-  abstract renderOptionList(s: T): JSX.Element;
-
-  constructor(public setState: (s: T) => void) { }
+export interface OptionManager<T> {
+  defaultState(): T ;
+  isReady(s: T): boolean;
+  renderOptionList(s: T, set: (s:T) => void): JSX.Element;
 }
 
 

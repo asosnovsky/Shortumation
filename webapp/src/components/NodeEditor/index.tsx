@@ -34,12 +34,12 @@ export const NodeEditor: FC<Props> = ({
           options={allowedTypes}
           onChange={state.setNodeType}
         /> : <span>{state.nodeType}</span>}
-        <InputList
+        {state.nodeType !== 'condition' ? <InputList
           label={`${state.nodeType} type`}
           current={state.subType as any}
           options={state.subTypes}
           onChange={state.setSubType}
-        />
+        /> : <></>}
         {state.renderOptionList()}
       </div>
       <div className={classes.footer}>

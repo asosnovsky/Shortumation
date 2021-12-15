@@ -27,7 +27,6 @@ export const useStyles = createAppUseStyles<{
             position: 'relative',
             display: 'flex',
             flexDirection: hasChildren? 'column' : 'row',
-            alignItems: hasChildren ? undefined : 'flex-start',
         }),
         title: ({hasChildren}) => ({
             display: 'flex',
@@ -35,6 +34,7 @@ export const useStyles = createAppUseStyles<{
             borderRadius: 10,
             borderBottomRightRadius: 0,
             borderBottomLeftRadius: 0,
+            height: '100%',
         }),
         titleText: ({hasChildren}) => ({
             background: theme.condition.primaryColor,

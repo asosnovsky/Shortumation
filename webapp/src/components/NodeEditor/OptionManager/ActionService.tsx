@@ -1,10 +1,10 @@
 import InputText from "components/Inputs/InputText";
 import { ServiceAction } from "types/automations/actions";
-import { BaseOptionManager, updateActionData } from './BaseOptionManager';
+import { OptionManager, updateActionData } from './OptionManager';
 
 
-export default class ActionCallServiceState extends BaseOptionManager<ServiceAction> {
-  defaultState = () => ({
+export const ActionCallServiceState: OptionManager<ServiceAction> = {
+  defaultState: () => ({
     $smType: 'action',
     action: 'service',
     action_data: {
@@ -12,16 +12,17 @@ export default class ActionCallServiceState extends BaseOptionManager<ServiceAct
       target: "",
       data: {},
     }
-  } as ServiceAction)
-  isReady(state: ServiceAction): boolean {
-    const { service, alias, target } = state.action_data;
-    return service !== '' &&
-      alias !== '' &&
-      target !== ''
-  }
-  renderOptionList(state: ServiceAction): JSX.Element {
+  }),
+  isReady: ({
+    action_data: { service, alias, target }
+  }) => (
+    service !== '' &&
+    alias !== '' &&
+    target !== ''
+  ),
+  renderOptionList: (state, setState) => {
     const { service, alias = "", target } = state.action_data;
-    const update = updateActionData(state, this.setState);
+    const update = updateActionData(state, setState);
     return <div className="state-manager-options">
       <InputText
         label="Description"

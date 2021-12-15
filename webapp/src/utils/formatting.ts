@@ -10,7 +10,7 @@ export const convertTimeToString = ({
 }: AutomationTime) => [hours,minutes,seconds,milliseconds].map(n => String(n).padStart(2, '0')).join(':')
 
 export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(node: AutomationNode<N>): string => {
-    if ('$smType' in node) {
+    if (node.$smType) {
         switch (node['$smType']) {
             case "action":
                 if (node.action_data.alias) {
@@ -32,7 +32,9 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
                     case 'device':
                         return `${node.action_data.type} on ${node.action_data.device_id}`
                     case 'choose':
-                        return "Choose"
+                      return "Choose"
+                    default:
+                      return 'n/a'
                 }
             case "condition":
                 if (node.condition_data.alias) {
@@ -64,7 +66,9 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
                         case "state":
                             return `${node.condition_data.entity_id} is '${node.condition_data.state}'`
                         case 'template':
-                            return node.condition_data.value_template
+                          return node.condition_data.value_template
+                      default:
+                          return 'n/a'
                     }
                 }
         }

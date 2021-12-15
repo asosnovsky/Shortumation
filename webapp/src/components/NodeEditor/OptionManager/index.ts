@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
-import { BaseOptionManager } from './BaseOptionManager';
 import { getOptionManager } from './getOptionManager';
 
 
@@ -10,67 +9,27 @@ export const useEditorNodeState = (node: AutomationNode) => {
   const nodeType: AutomationNodeTypes = state.$smType ?? 'trigger';
   const subType: AutomationNodeSubtype =
     state.$smType === 'action' ? state.action :
-    state.$smType === 'condition' ? state.condition :
-    state.platform;  
-  const optionManager: BaseOptionManager<any> = new (getOptionManager(nodeType, subType as any))(setState);
+      state.$smType === 'condition' ? state.condition :
+        state.platform;
+  const subTypes  = getSubTypeList(nodeType)
+  const optionManager = getOptionManager(nodeType, subType as any);
   return {
     nodeType,
     subType,
+    subTypes,
     renderOptionList() {
-      return optionManager.renderOptionList(state);
+      return optionManager.renderOptionList(state, setState);
     },
     isReady() {
       return optionManager.isReady(state);
     },
-    get subTypes(): AutomationNodeSubtype<typeof nodeType>[] {
-      switch (nodeType) {
-        case 'action':
-          return [
-            "service",
-            "repeat",
-            "wait",
-            "device",
-            "choose",
-          ]
-        case "condition":
-          return [
-            'or',
-            'and',
-            'not',
-            'numeric_state',
-            'state',
-            'template',
-            'time',
-            'trigger',
-            'zone',
-          ]
-        case 'trigger':
-          return [ 
-            'event',
-            'homeassistant',
-            'mqtt',
-            'numeric_state',
-            'state',
-            'tag',
-            'template',
-            'time',
-            'time_pattern',
-            'webhook',
-            'zone',
-            'device',
-          ]
-        default:
-          return [];
-      }
-    },
-
     setNodeType(newType: AutomationNodeTypes) {
       if (newType === (node.$smType ?? 'trigger')) {
         if (node.$smType === 'action') {
           setState({
             ...state,
             $smType: 'action',
-            action: node.action
+            action: node.action,
           } as any)
         } else if (node.$smType === 'condition') {
           setState({
@@ -89,6 +48,7 @@ export const useEditorNodeState = (node: AutomationNode) => {
         setState({
           ...state,
           $smType: newType === 'trigger' ? undefined : newType,
+          ...getOptionManager(newType, getSubTypeList(newType)[0]).defaultState()
         } as any)
       }
     },
@@ -97,18 +57,64 @@ export const useEditorNodeState = (node: AutomationNode) => {
         setState({
           ...state,
           action: newSubType,
+          ...getOptionManager(state.$smType, newSubType as any).defaultState()
         } as any)
       } else if (state.$smType === 'condition') {
         setState({
           ...state,
           condition: newSubType,
+          ...getOptionManager(state.$smType, newSubType as any).defaultState()
         } as any)
       } else {
         setState({
           ...state,
           platform: newSubType,
+          ...getOptionManager(state.$smType, newSubType as any).defaultState()
         } as any)
       }
     }
+  }
+}
+
+
+const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): AutomationNodeSubtype<T>[] => {
+  switch (nodeType) {
+    case 'action':
+      return [
+        "service",
+        "repeat",
+        "wait",
+        "device",
+        "choose",
+      ] as any
+    case "condition":
+      return [
+        'or',
+        'and',
+        'not',
+        'numeric_state',
+        'state',
+        'template',
+        'time',
+        'trigger',
+        'zone',
+      ]as any
+    case 'trigger':
+      return [
+        'event',
+        'homeassistant',
+        'mqtt',
+        'numeric_state',
+        'state',
+        'tag',
+        'template',
+        'time',
+        'time_pattern',
+        'webhook',
+        'zone',
+        'device',
+      ]as any
+    default:
+      return [];
   }
 }

@@ -1,14 +1,10 @@
-import { BaseOptionManager } from "./BaseOptionManager";
+import { OptionManager } from "./OptionManager";
 
 
-export default class Generic extends BaseOptionManager<any> {
-  defaultState = () => ({})
-  isReady(state: any): boolean {
-    return true;
-  }
-  renderOptionList(state: any): JSX.Element {
-    return <div className="state-manager-options">
-      <b>THIS IS NOT SUPPORTED YET!</b>
-    </div>
-  }
+export const Generic: OptionManager<any> = {
+  defaultState: () => ({}),
+  isReady: _ => true,
+  renderOptionList: () => <div className="state-manager-options">
+    <b>THIS IS NOT SUPPORTED YET!</b>
+  </div>
 }
