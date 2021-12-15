@@ -7,6 +7,7 @@ import { DAGEdge } from "./DAGEdge";
 import { AddButton } from "./AddButton";
 import { IteratorWrap } from "utils/iter";
 import { DAGCircle } from "./DAGCircle";
+import { getDescriptionFromAutomationNode } from "utils/formatting";
 
 
 export interface DAGCircleElm {
@@ -87,7 +88,7 @@ export function* mapDataToElements({
           height={st.nodeHeight}
           width={st.nodeWidth}
           loc={nodeLoc}
-          text={elm.node?.alias ?? elm.node.$smType}
+          text={getDescriptionFromAutomationNode(elm.node)}
           color={elm.node.$smType === 'action' ? 'green' : 'blue'}
           onXClick={elm.onRemove}
         />

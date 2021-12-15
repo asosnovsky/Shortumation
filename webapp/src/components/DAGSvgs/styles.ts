@@ -120,6 +120,7 @@ export const useNodeStyles = createAppUseStyles<{
       textOverflow: 'ellipsis',
       overflow: "hidden",
       whiteSpace: "nowrap",
+      cursor: 'default',
     },
     buttonDelete: {
       ...buttonStyle,

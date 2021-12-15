@@ -42,7 +42,7 @@ export const DAGNode = ({
             <button className={classes.buttonDelete}>X</button>
           </div>
           <div className={classes.textWrap}>
-            <span className={classes.text}>
+            <span className={classes.text} title={text}>
               {text}
             </span>
           </div>
