@@ -12,8 +12,12 @@ export const useIconStyles = createAppUseStyles<IconStyleProps>(theme => ({
     height: `${size}${units}`,
     width: `${size}${units}`,
     display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   }),
-  svg: ({ color = theme.primaryAccent }) => ({
+  svg: ({ color = theme.primaryAccent, size, units = 'em' }) => ({
+    height: `${size}${units}`,
+    width: `${size}${units}`,
     fill: color
   })
 }))
