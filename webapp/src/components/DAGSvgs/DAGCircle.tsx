@@ -17,7 +17,10 @@ export const DAGCircle = ({
   onEdit,
   onAdd,
 }: AddProps) => {
-  const { classes } = useCircleStyles({ size: size * 0.9 });
+  const { classes } = useCircleStyles({
+    size: size * 0.9,
+    hasOnFunction: !!onEdit || !!onAdd
+  });
   console.log({ onEdit })
   return <>
     <foreignObject x={x} y={y} width={size} height={size}>

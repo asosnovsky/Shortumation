@@ -149,15 +149,20 @@ export const useNodeStyles = createAppUseStyles<{
   }
 })
 
-export const useCircleStyles = createAppUseStyles<{ size: number }>(theme => ({
-  root: ({size}) => ({
+export const useCircleStyles = createAppUseStyles<{ 
+  size: number,
+  hasOnFunction: boolean,
+ }>(theme => ({
+  root: ({size, hasOnFunction}) => ({
     backgroundColor: Color(theme.primary).set('rgb.g', 100).hex(),
     borderRadius: 500,
     height: size,
     width: size,
-    cursor: "pointer",
+    cursor: hasOnFunction ? "pointer" : 'default',
     "&:hover": {
-      backgroundColor: Color(theme.primary).set('rgb.g', 150).hex(),
+      backgroundColor: hasOnFunction ?
+        Color(theme.primary).set('rgb.g', 150).hex() :
+        Color(theme.primary).set('rgb.g', 100).hex(),
     },
     fontSize: `${size * 0.4}px`,
     display: 'flex',

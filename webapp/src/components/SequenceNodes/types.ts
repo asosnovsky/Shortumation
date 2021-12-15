@@ -9,16 +9,14 @@ export interface SequenceNodeProps {
   onChange: (s: AutomationSequenceNode[]) => void;
 }
 
-// export interface SequenceNodeSettings extends BaseSequenceNodeSettings{
-//   sequence: AutomationSequenceNode[],
-//   onChange?: (s: AutomationSequenceNode[]) => void;
-// }
-
-// export interface BaseSequenceNodeSettings {
-//   startPoint: Point;
-//   nodeHeight: number;
-//   nodeWidth: number;
-//   distanceFactor: number;
-//   edgeColor: string;
-//   keyPrefix?: string;
-// }
+export type ModalState = {
+  single: true,
+  node: AutomationSequenceNode
+  update: (n: AutomationSequenceNode) => void;
+  onlyConditions: boolean;
+} | {
+  single: false,
+  node: AutomationSequenceNode[]
+  update: (n: AutomationSequenceNode[]) => void;
+  onlyConditions: boolean;
+}

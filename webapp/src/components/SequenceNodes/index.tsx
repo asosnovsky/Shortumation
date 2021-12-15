@@ -1,23 +1,48 @@
 import { DAGBoard } from "components/DAGSvgs/DAGBoard";
 import { FC, useState } from "react";
-import { AutomationSequenceNode } from 'types/automations';
 import { useTheme } from "styles/theme";
-import { SequenceNodeProps } from './types';
+import { SequenceNodeProps, ModalState } from './types';
 import Color from 'chroma-js';
 import { computeNodesEdgesPos } from './positions';
 import { Modal } from 'components/Modal';
 import { NodeEditor } from 'components/NodeEditor';
-
-interface ModalState {
-  node: AutomationSequenceNode;
-  update: (n: AutomationSequenceNode) => void;
-  onlyConditions: boolean;
-}
+import { MultiNodeEditor } from "components/MultiNodeEditors";
 
 export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (props) => {
   const theme = useTheme();
   const [modalState, setModalState] = useState<ModalState | null>(null);
-  console.log({ modalState });
+  let modalBody = <></>
+  if (modalState) {
+    if (modalState.single) {
+      modalBody = <NodeEditor
+        node={modalState.node}
+        onClose={() => setModalState(null)}
+        onSave={n => { modalState.update(n as any); setModalState(null) }}
+        allowedTypes={modalState.onlyConditions ? ['condition'] : ['action', 'condition']}
+      />
+    } else {
+      modalBody = <MultiNodeEditor
+        sequence={modalState.node}
+        onClose={() => setModalState(null)}
+        onSave={(i, n) => {
+          modalState.update([
+            ...modalState.node.slice(0, i),
+            n as any,
+            ...modalState.node.slice(i + 1),
+          ]); setModalState(null)
+        }}
+        onAdd={n => modalState.update([...modalState.node, n as any])}
+        onRemove={(i) => {
+          modalState.update([
+            ...modalState.node.slice(0, i),
+            ...modalState.node.slice(i + 1),
+          ]);
+        }}
+        allowedTypes={modalState.onlyConditions ? ['condition'] : ['action', 'condition']}
+      />
+    }
+  }
+
   return <>
     <DAGBoard
       zoomLevel={props.zoomLevel}
@@ -25,9 +50,7 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
         props.startPoint,
         props.sequence,
         props.onChange,
-        (node, update, onlyConditions) => setModalState({
-          node, update, onlyConditions,
-        })
+        s => setModalState(s)
       )}
       settings={{
         ...props.dims,
@@ -36,12 +59,7 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
       }}
     />
     <Modal open={!!modalState}>
-      {modalState && <NodeEditor
-        node={modalState.node}
-        onClose={() => setModalState(null)}
-        onSave={n => { modalState.update(n as any); setModalState(null) }}
-        allowedTypes={modalState.onlyConditions ? ['condition'] : ['action', 'condition']}
-      />}
+      {modalBody}
     </Modal>
   </>
 }

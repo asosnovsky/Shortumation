@@ -4,11 +4,11 @@ import { Point } from "types/graphs";
 import { makeUpdater, Updater } from './updater';
 import { ChooseAction } from 'types/automations/actions';
 import { AutomationCondition } from "types/automations/conditions";
+import { ModalState } from "./types";
+import { AutomationNode } from '../../types/automations/index';
 
-export type UpdateNode = (
-  node: AutomationSequenceNode,
-  updateNode: (n: AutomationSequenceNode) => void,
-  onlyConditions: boolean,
+export type UpdateModalState = (
+  s: ModalState
 ) => void;
 
 const offsetPoint = (
@@ -44,8 +44,8 @@ function* dealWithNested(
   innerStartLoc: Point,
   updater: Updater,
   sequence: AutomationSequenceNode[],
-  openModal: UpdateNode,
-  onEdit: () => void,
+  openModal: UpdateModalState,
+  onEdit?: () => void,
 ): Generator<DAGElement>  {
   const np = offsetPoint(innerStartLoc, [0.5, 0]);
   yield {
@@ -57,7 +57,7 @@ function* dealWithNested(
   yield {
     type: 'circle',
     loc: innerStartLoc,
-    onClick: ['edit', onEdit],
+    onClick: onEdit ? ['edit', onEdit]: undefined,
   }
   yield {
     type: 'edge',
@@ -82,7 +82,7 @@ function* dealWithChoose(
   nodeLoc: Point,
   makeUpdater: (j: number | null) => Updater,
   updateData: (data: ChooseAction['action_data']) => void,
-  openModal: UpdateNode,
+  openModal: UpdateModalState,
   offset: ReturnType<typeof makeOffsetMaintainer>,
 ): Generator<DAGElement> {
   offset.resetY()
@@ -96,23 +96,10 @@ function* dealWithChoose(
       updater,
       node.action_data.choose[j].sequence,
       openModal,
-      () => openModal(
-        node.action_data.choose[j].conditions[0] ?? {
-          '$smType': 'condition', 'condition': 'and', 'condition_data': {
-          'conditions': []
-        }},
-        (n) => updateData({
-          ...node.action_data,
-          choose: [
-            ...node.action_data.choose.slice(0, j),
-            {
-              sequence: node.action_data.choose[j].sequence,
-              conditions: [n] as AutomationCondition[],
-            },
-            ...node.action_data.choose.slice(j+1),
-          ]
-        }),
-        true,
+      onModalOpenForConditions(
+        openModal, j,
+        node.action_data,
+        updateData,
       ),
     )) {
       yield elm
@@ -134,8 +121,7 @@ function* dealWithChoose(
     innerStartLoc,
     makeUpdater(null),
     node.action_data.default,
-    openModal,
-    () => {}
+    openModal
   )) {
     yield elm
     if (elm.type === 'node') {
@@ -168,7 +154,7 @@ export function* computeNodesEdgesPos(
   startPoint: Point,
   sequence: AutomationSequenceNode[],
   onChange: (s: AutomationSequenceNode[]) => void,
-  openModal: UpdateNode,
+  openModal: UpdateModalState,
 ): Generator<DAGElement> {
   const rootUpdater = makeUpdater(sequence, onChange);
   const offset = makeOffsetMaintainer(startPoint)
@@ -181,7 +167,7 @@ export function* computeNodesEdgesPos(
       type: 'node',
       loc: nodeLoc,
       node,
-      onOpen: () => openModal(node, n => rootUpdater.updateNode(i, n), false),
+      onOpen: onModalOpenForNode(openModal, i, node, rootUpdater),
       onRemove: () => rootUpdater.removeNode(i),
       onAdd: i === sequence.length - 1 ? rootUpdater.addNode : undefined,
     }
@@ -208,3 +194,38 @@ export function* computeNodesEdgesPos(
     }
   }
 }
+
+
+export const onModalOpenForNode = (
+  openModal: UpdateModalState,
+  i: number,
+  node: AutomationSequenceNode,
+  rootUpdater: Updater,
+) => () => openModal({
+  single: true,
+  node,
+  onlyConditions: false,
+  update: n => rootUpdater.updateNode(i, n),
+})
+
+export const onModalOpenForConditions = (
+  openModal: UpdateModalState,
+  j: number,
+  data: ChooseAction['action_data'],
+  updateData: (data: ChooseAction['action_data']) => void,
+) => () => openModal({
+  single: false,
+  node: data.choose[j].conditions,
+  onlyConditions: true,
+  update: conditions => updateData({
+    ...data,
+    choose: [
+      ...data.choose.slice(0, j),
+      {
+        sequence: data.choose[j].sequence,
+        conditions: conditions as AutomationCondition[],
+      },
+      ...data.choose.slice(j+1),
+    ]
+  }),
+})
