@@ -1,6 +1,5 @@
 import "./Board.css";
-import { FC, useState } from 'react';
-import { Point } from 'types/graphs';
+import { FC } from 'react';
 import useWindowSize from "utils/useWindowSize";
 import { useBoardStyles } from "./styles";
 import { NODE_HEIGHT, NODE_WIDTH } from './constants';

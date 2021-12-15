@@ -21,6 +21,7 @@ export interface DAGNodeElm {
   node: AutomationNode;
   onRemove: () => void;
   onAdd?: () => void;
+  onOpen?: () => void;
 }
 export interface DAGEdgeElm {
   type: 'edge';
@@ -91,6 +92,7 @@ export function* mapDataToElements({
           text={getDescriptionFromAutomationNode(elm.node)}
           color={elm.node.$smType === 'action' ? 'green' : 'blue'}
           onXClick={elm.onRemove}
+          onOpenClick={elm.onOpen}
         />
         if (elm.onAdd) {
           yield <DAGEdge
