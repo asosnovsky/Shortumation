@@ -1,4 +1,5 @@
 import { AutomationSequenceNode } from "types/automations";
+import { ChooseAction } from "types/automations/actions";
 
 export type Updater = ReturnType<typeof makeUpdater>;
 
@@ -33,6 +34,13 @@ export const makeUpdater = (
       node,
       ...sequence.slice(i+1),
     ])
+  },
+  updateChooseActionData(i: number, data: ChooseAction['action_data']) {
+    const node = sequence[i] as ChooseAction;
+    return this.updateNode(i, {
+      ...node,
+      action_data: data,
+    })
   },
   makeChildUpdaterForChooseAction(i: number, j:number | null) {
     const node = sequence[i];

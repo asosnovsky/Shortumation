@@ -2,7 +2,14 @@ import { DAGElement } from "components/DAGSvgs/DAGBoard";
 import { AutomationSequenceNode } from "types/automations";
 import { Point } from "types/graphs";
 import { makeUpdater, Updater } from './updater';
-import { ChooseAction } from '../../types/automations/actions';
+import { ChooseAction } from 'types/automations/actions';
+import { AutomationCondition } from "types/automations/conditions";
+
+export type UpdateNode = (
+  node: AutomationSequenceNode,
+  updateNode: (n: AutomationSequenceNode) => void,
+  onlyConditions: boolean,
+) => void;
 
 const offsetPoint = (
   [x, y]: Point,
@@ -37,7 +44,8 @@ function* dealWithNested(
   innerStartLoc: Point,
   updater: Updater,
   sequence: AutomationSequenceNode[],
-  onEdit?: () => void,
+  openModal: UpdateNode,
+  onEdit: () => void,
 ): Generator<DAGElement>  {
   const np = offsetPoint(innerStartLoc, [0.5, 0]);
   yield {
@@ -63,6 +71,7 @@ function* dealWithNested(
     np,
     sequence,
     updater.onChange,
+    openModal,
   )) {
     yield childNode
   }
@@ -72,19 +81,39 @@ function* dealWithChoose(
   node: ChooseAction,
   nodeLoc: Point,
   makeUpdater: (j: number | null) => Updater,
-  onAdd: () => void,
+  updateData: (data: ChooseAction['action_data']) => void,
+  openModal: UpdateNode,
   offset: ReturnType<typeof makeOffsetMaintainer>,
 ): Generator<DAGElement> {
   offset.resetY()
   // conditions
   for (let j = 0; j < node.action_data.choose.length; j++) {
     const innerStartLoc = offsetPoint(nodeLoc, [1, j + 1 + offset.y]);
+    const updater = makeUpdater(j);
     for (let elm of dealWithNested(
       nodeLoc,
       innerStartLoc ,
-      makeUpdater(j),
+      updater,
       node.action_data.choose[j].sequence,
-      () => {},
+      openModal,
+      () => openModal(
+        node.action_data.choose[j].conditions[0] ?? {
+          '$smType': 'condition', 'condition': 'and', 'condition_data': {
+          'conditions': []
+        }},
+        (n) => updateData({
+          ...node.action_data,
+          choose: [
+            ...node.action_data.choose.slice(0, j),
+            {
+              sequence: node.action_data.choose[j].sequence,
+              conditions: [n] as AutomationCondition[],
+            },
+            ...node.action_data.choose.slice(j+1),
+          ]
+        }),
+        true,
+      ),
     )) {
       yield elm
       if (elm.type === 'node') {
@@ -105,6 +134,8 @@ function* dealWithChoose(
     innerStartLoc,
     makeUpdater(null),
     node.action_data.default,
+    openModal,
+    () => {}
   )) {
     yield elm
     if (elm.type === 'node') {
@@ -119,7 +150,16 @@ function* dealWithChoose(
   yield {
     type: 'circle',
     loc: newCondLoc,
-    onClick: ['add', onAdd],
+    onClick: ['add', () => updateData({
+      ...node.action_data,
+      choose: [
+        ...node.action_data.choose,
+        {
+          conditions: [],
+          sequence: [],
+        }
+      ]
+    })],
   }
 }
 
@@ -128,6 +168,7 @@ export function* computeNodesEdgesPos(
   startPoint: Point,
   sequence: AutomationSequenceNode[],
   onChange: (s: AutomationSequenceNode[]) => void,
+  openModal: UpdateNode,
 ): Generator<DAGElement> {
   const rootUpdater = makeUpdater(sequence, onChange);
   const offset = makeOffsetMaintainer(startPoint)
@@ -140,6 +181,7 @@ export function* computeNodesEdgesPos(
       type: 'node',
       loc: nodeLoc,
       node,
+      onOpen: () => openModal(node, n => rootUpdater.updateNode(i, n), false),
       onRemove: () => rootUpdater.removeNode(i),
       onAdd: i === sequence.length - 1 ? rootUpdater.addNode : undefined,
     }
@@ -159,19 +201,8 @@ export function* computeNodesEdgesPos(
         node,
         nodeLoc,
         j => rootUpdater.makeChildUpdaterForChooseAction(i, j),
-        () => rootUpdater.updateNode(i, {
-          ...node,
-          action_data: {
-            ...node.action_data,
-            choose: [
-              ...node.action_data.choose,
-              {
-                conditions: [],
-                sequence: [],
-              }
-            ]
-          }
-        }),
+        actionData => rootUpdater.updateChooseActionData(i, actionData),
+        openModal,
         offset,
       )
     }
