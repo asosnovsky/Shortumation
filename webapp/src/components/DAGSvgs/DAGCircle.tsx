@@ -21,7 +21,6 @@ export const DAGCircle = ({
     size: size * 0.9,
     hasOnFunction: !!onEdit || !!onAdd
   });
-  console.log({ onEdit })
   return <>
     <foreignObject x={x} y={y} width={size} height={size}>
       <div className={classes.root}>
