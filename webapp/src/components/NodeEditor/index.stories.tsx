@@ -3,13 +3,26 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { NodeEditor } from ".";
 import { usePageTheme } from "styles/page";
 import { AutomationCondition } from "types/automations/conditions";
+import { Button } from "components/Inputs/Button";
+import { useState } from 'react';
+import { Modal } from "components/Modal";
 
 
 export default {
   title: 'NodeEditor',
   component: NodeEditor,
   parameters: { actions: { argTypesRegex: '^on.*' } },
-  args: {}
+  args: {
+    node: {
+      $smType: 'action',
+      action: 'service',
+      action_data: {
+        'data': {},
+        'service': '',
+        'target': '',
+      }
+    }
+  }
 } as ComponentMeta<typeof NodeEditor>
 
 const Base: ComponentStory<typeof NodeEditor> = props => {
@@ -19,21 +32,9 @@ const Base: ComponentStory<typeof NodeEditor> = props => {
   </div>
 };
 export const Action = Base.bind({})
-Action.args = {
-  ...Action.args,
-  node: {
-    $smType: 'action',
-    action: 'service',
-    action_data: {
-      'data': {},
-      'service': '',
-      'target': '',
-    }
-  }
-}
 export const SingleOption = Action.bind({})
 SingleOption.args = {
-  ...Action.args,
+  ...SingleOption.args,
   allowedTypes: ['action'],
 }
 export const Condition = Action.bind({})
@@ -66,3 +67,15 @@ Condition.args = {
     }
   } as AutomationCondition,
 }
+
+
+export const InAModal: ComponentStory<typeof NodeEditor> = props => {
+  const { classes } = usePageTheme({});
+  const [open, setOpen] = useState(false);
+  return <div className={classes.page}>
+    <Button onClick={() => setOpen(!open)}>Open Editor</Button>
+    <Modal open={open}>
+      <NodeEditor {...props} onClose={() => setOpen(!open)} />
+    </Modal>
+  </div>
+};

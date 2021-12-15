@@ -13,11 +13,9 @@ export const ConditionLogicState: OptionManager<AutomationCondition> = {
     }
   }),
   isReady: _ => true,
-  renderOptionList: (state, setState) => <div className="state-manager-options">
-    <ConditionEditor
-      condition={state}
-      onUpdate={setState}
-      onDelete={() => { }}
-    />
-  </div>
+  renderOptionList: (state, setState) => <ConditionEditor
+    condition={state}
+    onUpdate={setState}
+    onDelete={() => { }}
+  />
 }

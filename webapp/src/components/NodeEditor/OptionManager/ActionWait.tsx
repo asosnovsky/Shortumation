@@ -23,10 +23,10 @@ export const ActionWaitState: OptionManager<WaitAction> = {
   ),
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
-    return <div className="state-manager-options">
+    return <>
       <InputText
         label="Description"
-        value={state.action_data.alias}
+        value={state.action_data.alias ?? ""}
         onChange={alias => update({ alias })}
       />
       <InputText
@@ -45,6 +45,6 @@ export const ActionWaitState: OptionManager<WaitAction> = {
         value={state.action_data.continue_on_timeout ?? false}
         onChange={continue_on_timeout => update({ continue_on_timeout })}
       />
-    </div>
+    </>
   }
 }

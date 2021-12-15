@@ -32,7 +32,7 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
   ),
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
-    return <div className="state-manager-options">
+    return <>
       <InputText
         label="Description"
         value={state.action_data.alias ?? ""}
@@ -56,6 +56,6 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
         value={state.action_data.entity_id ?? ""}
         onChange={entity_id => update({ entity_id, domain: entity_id.split('.')[0] })}
       />
-    </div>
+    </>
   }
 }

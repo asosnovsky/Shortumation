@@ -23,7 +23,7 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
   renderOptionList: (state, setState) => {
     const { service, alias = "", target } = state.action_data;
     const update = updateActionData(state, setState);
-    return <div className="state-manager-options">
+    return <>
       <InputText
         label="Description"
         value={alias}
@@ -40,6 +40,6 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
         value={target}
         onChange={target => update({ target })}
       />
-    </div>
+    </>
   }
 }

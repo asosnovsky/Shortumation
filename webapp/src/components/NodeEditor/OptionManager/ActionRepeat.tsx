@@ -26,7 +26,7 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
   ),
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
-    return <div className="state-manager-options">
+    return <>
       <InputText
         label="Description"
         value={state.action_data.alias ?? ""}
@@ -42,6 +42,6 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
         value={state.action_data.repeat.sequence ?? []}
         onChange={sequence => update({ repeat: { ...state.action_data.repeat, sequence } })}
       />
-    </div>
+    </>
   }
 }

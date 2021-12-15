@@ -17,6 +17,9 @@ export const useEditorNodeState = (node: AutomationNode) => {
     nodeType,
     subType,
     subTypes,
+    get data() {
+      return state
+    },
     renderOptionList() {
       return optionManager.renderOptionList(state, setState);
     },

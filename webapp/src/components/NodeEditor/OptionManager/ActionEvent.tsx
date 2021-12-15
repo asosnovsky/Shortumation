@@ -20,7 +20,7 @@ export const ActionEventState: OptionManager<FireEventAction> = {
   ),
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
-    return <div className="state-manager-options">
+    return <>
       <InputText
         label="Description"
         value={state.action_data.alias ?? ""}
@@ -37,6 +37,6 @@ export const ActionEventState: OptionManager<FireEventAction> = {
         value={state.action_data.event_data}
         onChange={event_data => update({ event_data })}
       />
-    </div>
+    </>
   }
 }

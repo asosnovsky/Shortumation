@@ -19,7 +19,7 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
   },
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
-    return <div className="state-manager-options">
+    return <>
       <InputText
         label="Description"
         value={state.action_data.alias ?? ""}
@@ -35,6 +35,6 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
         value={state.action_data.default}
         onChange={d => update({ default: d })}
       />
-    </div>
+    </>
   }
 }
