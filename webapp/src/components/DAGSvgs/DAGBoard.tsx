@@ -6,15 +6,28 @@ import { DAGNode } from "./DAGNode";
 import { DAGEdge } from "./DAGEdge";
 import { AddButton } from "./AddButton";
 import { IteratorWrap } from "utils/iter";
-import { DAGCircle } from "./DAGCircle";
+import { DAGCircle, AddProps } from "./DAGCircle";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 
 
-export interface DAGCircleElm {
+export type DAGCircleElm = {
   type: 'circle';
   loc: Point;
-  onClick?: ['add', () => void] | ['edit', () => void];
-}
+} & (
+    {
+      icon: 'add',
+      onAdd: () => void;
+    } |
+    {
+      icon: 'edit',
+      onEdit: () => void;
+      onRemove?: () => void;
+    } |
+    {
+      icon: 'blank',
+      onRemove?: () => void;
+    }
+  )
 export interface DAGNodeElm {
   type: 'node';
   loc: Point;
@@ -138,11 +151,15 @@ export function* mapDataToElements({
         break
       case 'circle':
         const loc = mapWithNode(elm.loc, [0, st.nodeHeight / 2 - st.circleSize / 2]);
-        const clickProps = elm.onClick ? (
-          elm.onClick[0] === 'add' ?
-            { onAdd: elm.onClick[1] } :
-            { onEdit: elm.onClick[1] }
-        ) : {}
+        const clickProps: Partial<AddProps> = {}
+        if (elm.icon === 'add') {
+          clickProps.onAdd = elm.onAdd;
+        } else if (elm.icon === 'edit') {
+          clickProps.onEdit = elm.onEdit
+          clickProps.onRemove = elm.onRemove
+        } else {
+          clickProps.onRemove = elm.onRemove
+        }
         yield <DAGCircle
           key={`(${elm.loc})-o`}
           loc={loc}

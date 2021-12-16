@@ -53,10 +53,19 @@ function* dealWithNested(
     p2: innerStartLoc,
     direction: '1->2',
   }
-  yield {
-    type: 'circle',
-    loc: innerStartLoc,
-    onClick: onEdit ? ['edit', onEdit]: undefined,
+  if (onEdit) {
+    yield {
+      type: 'circle',
+      loc: innerStartLoc,
+      icon: 'edit',
+      onEdit,
+    }
+  } else {
+    yield {
+      type: 'circle',
+      loc: innerStartLoc,
+      icon: 'blank',
+    }
   }
   yield {
     type: 'edge',
@@ -130,12 +139,13 @@ function* dealWithChoose(
   // add new conditions
   const newCondLoc = offsetPoint(
     nodeLoc,
-    [1, node.action_data.choose.length + 3 + offset.y],
+    [1, node.action_data.choose.length + 2.5 + offset.y],
   );
   yield {
     type: 'circle',
     loc: newCondLoc,
-    onClick: ['add', () => updateData({
+    icon: 'add',
+    onAdd: () => updateData({
       ...node.action_data,
       choose: [
         ...node.action_data.choose,
@@ -144,7 +154,7 @@ function* dealWithChoose(
           sequence: [],
         }
       ]
-    })],
+    }),
   }
 }
 

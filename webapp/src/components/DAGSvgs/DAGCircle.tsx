@@ -1,6 +1,6 @@
 // import "./DAGCircle.css";
 import { Point } from "types/graphs";
-import { AddIcon, PencilIcon } from '../Icons/index';
+import { AddIcon, PencilIcon, TrashIcon } from '../Icons/index';
 import { useCircleStyles } from './styles';
 
 
@@ -8,6 +8,7 @@ import { useCircleStyles } from './styles';
 export interface AddProps {
   onEdit?: () => void;
   onAdd?: () => void;
+  onRemove?: () => void;
   loc: Point,
   size: number,
 }
@@ -16,6 +17,7 @@ export const DAGCircle = ({
   size,
   onEdit,
   onAdd,
+  onRemove,
 }: AddProps) => {
   const { classes } = useCircleStyles({
     size: size * 0.9,
@@ -36,6 +38,7 @@ export const DAGCircle = ({
               onClick={onAdd}
             />
             : "else"}
+        {onRemove ? <TrashIcon className={classes.trashIcon} /> : <></>}
       </div>
     </foreignObject>
   </>

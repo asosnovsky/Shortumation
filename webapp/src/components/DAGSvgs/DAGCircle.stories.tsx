@@ -30,6 +30,17 @@ export const Basic: ComponentStory<typeof DAGCircle> = args => {
       loc={[args.loc[0] + 2 * args.size, args.loc[1]]}
       onEdit={args.onEdit}
     />
+    <DAGCircle
+      size={args.size}
+      loc={[args.loc[0] + 3 * args.size, args.loc[1]]}
+      onEdit={args.onEdit}
+      onRemove={args.onRemove}
+    />
+    <DAGCircle
+      size={args.size}
+      loc={[args.loc[0] + 4 * args.size, args.loc[1]]}
+      onRemove={args.onRemove}
+    />
   </SVGBoard>
 }
 

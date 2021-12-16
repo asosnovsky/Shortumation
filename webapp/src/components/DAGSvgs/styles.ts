@@ -171,5 +171,14 @@ export const useCircleStyles = createAppUseStyles<{
   }),
   icon: {
     padding: "15%",
+  },
+  trashIcon: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    "&:hover": {
+      fill: theme.secondary,
+      cursor: 'pointer',
+    }
   }
 }))
