@@ -22,9 +22,6 @@ export const AutomationEditor: FC<Props> = ({
   const { classes } = useEditorStyles({});
 
   // alias
-  // const nHDF = 1.5 // node horizontal distance factor (aspect ratio)
-  // const graphHeight = 300;
-  // const graphWidth = Math.round(graphHeight * ratioWbh);
   const updateSequence = (sequence: AutomationSequenceNode[]) => onUpdate({
     ...automation,
     sequence,
