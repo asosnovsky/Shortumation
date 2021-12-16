@@ -21,7 +21,8 @@ export const DAGCircle = ({
 }: AddProps) => {
   const { classes } = useCircleStyles({
     size: size * 0.9,
-    hasOnFunction: !!onEdit || !!onAdd
+    hasOnFunction: !!onEdit || !!onAdd,
+    hasRemoveFunction: !!onRemove,
   });
   return <>
     <foreignObject x={x} y={y} width={size} height={size}>
@@ -38,7 +39,7 @@ export const DAGCircle = ({
               onClick={onAdd}
             />
             : "else"}
-        {onRemove ? <TrashIcon className={classes.trashIcon} /> : <></>}
+        {onRemove ? <TrashIcon className={classes.trashIcon} onClick={onRemove} /> : <></>}
       </div>
     </foreignObject>
   </>

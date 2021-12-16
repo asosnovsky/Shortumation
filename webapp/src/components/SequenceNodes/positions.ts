@@ -45,6 +45,7 @@ function* dealWithNested(
   sequence: AutomationSequenceNode[],
   openModal: UpdateModalState,
   onEdit?: () => void,
+  onRemove?: () => void,
 ): Generator<DAGElement>  {
   const np = offsetPoint(innerStartLoc, [0.5, 0]);
   yield {
@@ -53,18 +54,21 @@ function* dealWithNested(
     p2: innerStartLoc,
     direction: '1->2',
   }
+  console.log(onRemove)
   if (onEdit) {
     yield {
       type: 'circle',
       loc: innerStartLoc,
       icon: 'edit',
       onEdit,
+      onRemove,
     }
   } else {
     yield {
       type: 'circle',
       loc: innerStartLoc,
       icon: 'blank',
+      onRemove,
     }
   }
   yield {
@@ -109,6 +113,7 @@ function* dealWithChoose(
         node.action_data,
         updateData,
       ),
+      createOnRemoveForChooseNode(node.action_data, updateData, j)
     )) {
       yield elm
       if (elm.type === 'node') {
@@ -237,4 +242,16 @@ export const onModalOpenForConditions = (
       ...data.choose.slice(j+1),
     ]
   }),
+})
+
+const createOnRemoveForChooseNode = (
+  data: ChooseAction['action_data'],
+  updateData: (data: ChooseAction['action_data']) => void,
+  j: number
+) => () => updateData({
+  ...data,
+  choose: [
+    ...data.choose.slice(0, j),
+    ...data.choose.slice(j+1),
+  ]
 })
