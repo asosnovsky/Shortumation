@@ -2,7 +2,9 @@ import { FC } from "react";
 import { IconBase, IconBaseProps } from "./base";
 
 
-export const PencilIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox="0 0 512 512">
+export const PencilIcon: FC<IconBaseProps> = props => <IconBase {...props}
+  svgProps={{ viewBox: "0 0 512 512" }}
+>
   <path d="M358.752,51.159L70.113,339.798l102.063,102.064L455.088,158.95L512,0.282L358.752,51.159z M172.176,419.287
         l-79.488-79.489L349.536,82.949l0.069,11.622l22.52-0.089l0.089,22.667l22.625,0.048l-0.048,22.691l22.467-0.271l0.27,22.847
         l11.538-0.068L172.176,419.287z M442.648,146.351l-9.345,0.055l-0.27-22.946l-22.244,0.269l0.048-22.464l-22.721-0.048
@@ -16,12 +18,16 @@ export const PencilIcon: FC<IconBaseProps> = props => <IconBase {...props} viewB
         l25.785-25.785l79.215,79.216L100.891,490.025z"/>
 </IconBase>;
 
-export const CheckMarkIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox="0 0 24 24">
+export const CheckMarkIcon: FC<IconBaseProps> = props => <IconBase {...props}
+  svgProps={{ viewBox: "0 0 24 24" }}
+>
   <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
 </IconBase>;
 
 
-export const AddIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox="20 20 297 297">
+export const AddIcon: FC<IconBaseProps> = props => <IconBase {...props}
+  svgProps={{ viewBox: "0 0 297 297" }}
+>
   <path d="M242.158,110.922l-56.096,0.008l0.009-56.121c0-2.775-1.101-5.436-3.063-7.398c-1.962-1.961-4.623-3.063-7.397-3.063
 			l-54.193,0.008c-5.774,0.001-10.454,4.682-10.456,10.456l-0.009,56.129l-56.104,0.007c-5.774,0.001-10.455,4.682-10.456,10.456
 			l-0.01,54.215c0,2.775,1.102,5.435,3.063,7.396c1.961,1.961,4.622,3.063,7.396,3.063l56.099-0.007l-0.008,56.119
@@ -31,5 +37,13 @@ export const AddIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox=
 </IconBase>
 
 
-export const TrashIcon: FC<IconBaseProps> = props => <IconBase {...props} viewBox="0 0 24 24"><path d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z" />
+export const TrashIcon: FC<IconBaseProps> = props => <IconBase {...props}
+  svgProps={{ viewBox: "0 0 24 24" }}
+><path d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z" />
+</IconBase>
+
+export const InfoIcon: FC<IconBaseProps> = props => <IconBase {...props}
+  svgProps={{ viewBox: "0 0 24 24", fillRule: 'evenodd', clipRule: 'evenodd' }}
+>
+  <path xmlns="http://www.w3.org/2000/svg" d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm.5 17h-1v-9h1v9zm-.5-12c.466 0 .845.378.845.845 0 .466-.379.844-.845.844-.466 0-.845-.378-.845-.844 0-.467.379-.845.845-.845z" />
 </IconBase>
