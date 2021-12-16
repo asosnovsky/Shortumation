@@ -31,12 +31,16 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
             ...modalState.node.slice(i + 1),
           ]); setModalState(null)
         }}
-        onAdd={n => modalState.update([...modalState.node, n as any])}
-        onRemove={(i) => {
+        onAdd={(n, slide) => {
+          modalState.update([...modalState.node, n as any]);
+          slide(modalState.node.length)
+        }}
+        onRemove={(i, slide) => {
           modalState.update([
             ...modalState.node.slice(0, i),
             ...modalState.node.slice(i + 1),
           ]);
+          slide(modalState.node.length - 2);
         }}
         allowedTypes={modalState.onlyConditions ? ['condition'] : ['action', 'condition']}
       />

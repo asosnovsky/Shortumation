@@ -251,3 +251,50 @@ SubsequentIssue.args = {
   ...SubsequentIssue.args,
   sequence: [{ "$smType": "condition", "condition": "and", "condition_data": { "conditions": [{ "$smType": "condition", "condition": "numeric_state", "condition_data": { "entity_id": "sensor.temperature_kitchen", "below": "15" } }, { "$smType": "condition", "condition": "template", "condition_data": { "value_template": "states(switch.kitchen_light) == \"on\"" } }] } }, { "$smType": "action", "action": "service", "action_data": { "alias": "Start Music In Kitchen", "service": "media_player.play_media", "target": { "entity_id": "media_player.kitchen_dot" }, "data": { "media_content_id": "Good Morning", "media_content_type": "SPOTIFY" } } }, { "$smType": "action", "action": "choose", "action_data": { "choose": [], "default": [{ "$smType": "action", "action": "choose", "action_data": { "choose": [], "default": [] } }] } }, { "$smType": "action", "action": "choose", "action_data": { "choose": [], "default": [] } }, { "$smType": "action", "action": "choose", "action_data": { "choose": [], "default": [] } }]
 }
+
+export const ChooseNestingIssue = Template.bind({})
+ChooseNestingIssue.args = {
+  ...ChooseNestingIssue.args,
+  sequence: [
+    {
+      "$smType": "condition",
+      "condition": "and",
+      "condition_data": {
+        "conditions": [
+          {
+            "$smType": "condition",
+            "condition": "numeric_state",
+            "condition_data": {
+              "entity_id": "sensor.temperature_kitchen",
+              "below": "15"
+            }
+          },
+          {
+            "$smType": "condition",
+            "condition": "template",
+            "condition_data": {
+              "value_template": "states(switch.kitchen_light) == \"on\""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$smType": "action",
+      "action": "choose",
+      "action_data": {
+        "choose": [],
+        "default": [
+          {
+            "$smType": "action",
+            "action": "choose",
+            "action_data": {
+              "choose": [],
+              "default": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

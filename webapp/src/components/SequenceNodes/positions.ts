@@ -5,7 +5,6 @@ import { makeUpdater, Updater } from './updater';
 import { ChooseAction } from 'types/automations/actions';
 import { AutomationCondition } from "types/automations/conditions";
 import { ModalState } from "./types";
-import { AutomationNode } from '../../types/automations/index';
 
 export type UpdateModalState = (
   s: ModalState
@@ -131,7 +130,7 @@ function* dealWithChoose(
   // add new conditions
   const newCondLoc = offsetPoint(
     nodeLoc,
-    [1, node.action_data.choose.length + 1 + offset.y],
+    [1, node.action_data.choose.length + 3 + offset.y],
   );
   yield {
     type: 'circle',
