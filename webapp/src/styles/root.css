@@ -1,0 +1,45 @@
+
+:root {
+    --primary: #111111;
+    --secondary: #1c1c1c;
+    --primaryAccent: #bbbbbb;
+    --secondaryAccent: #929191;
+    touch-action: pan-x pan-y;
+    height: 100%;
+}
+
+
+html,
+body,
+#root {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden !important;
+  font-family: Tahoma, Geneva, sans-serif;
+  display: flex !important;
+  align-items: center;
+  justify-items: center;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--secondary);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--secondary-accent);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-accent);
+  }
+  

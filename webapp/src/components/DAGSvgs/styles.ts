@@ -8,18 +8,12 @@ export const useBoardStyles = createAppUseStyles<{
   boardHeight: number,
   boardWidth: number,
 }>(theme => ({
-  root: {
-    height: '99%',
-    width: '99%',
-    color: theme.primaryAccent,
-    background: theme.primary,
-    display: 'flex',
-    flexDirection: 'row',
-  },
   dag: {
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: theme.secondaryAccent,
+    color: theme.primaryAccent,
+    background: theme.primary,
     width: '100%',
     height: '100%',
     overflow: 'scroll'

@@ -1,8 +1,9 @@
+import "styles/root.css";
+
 import { Classes } from "jss";
 import { Context, createContext } from "react"
 import { createUseStyles, Styles } from "react-jss";
 import { createTheming } from "theming"
-// import Color from 'color';
 
 export const {
     context: ThemeContext,

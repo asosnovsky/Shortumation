@@ -9,8 +9,11 @@ import { NodeEditor } from 'components/NodeEditor';
 import { MultiNodeEditor } from "components/MultiNodeEditors";
 
 export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (props) => {
+  // state
   const theme = useTheme();
   const [modalState, setModalState] = useState<ModalState | null>(null);
+
+  // modal
   let modalBody = <></>
   if (modalState) {
     if (modalState.single) {
@@ -47,6 +50,7 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
     }
   }
 
+  // render
   return <>
     <DAGBoard
       zoomLevel={props.zoomLevel}
@@ -61,6 +65,7 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
         edgeNextColor: theme.secondaryAccent,
         edgeChildColor: Color(theme.secondaryAccent).set('rgb.b', 200).hex(),
       }}
+      children={props.children}
     />
     <Modal open={!!modalState}>
       {modalBody}
