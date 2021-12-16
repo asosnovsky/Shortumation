@@ -86,9 +86,7 @@ export const useStyles = createAppUseStyles<{
                 transform: "rotate(90deg)"
             }
         }),
-        icon: {
-            transition: "200ms ease-out"
-        },
+        icon: {},
         deleteBtn,
         children: ({hasChildren}) => ({
             flex: 1,

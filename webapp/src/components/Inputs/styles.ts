@@ -53,7 +53,6 @@ export const useInputWrapperStyles = createAppUseStyles<{
       left: labelSize === 'normal' ? '0.75em' : '1em',
       top: labelSize === 'normal' ? '0.5em' : '0.25em',
       fontWeight: 'bold',
-      transition: 'all 200ms',
       color: theme.primaryAccent,
     })
   }
@@ -177,7 +176,6 @@ export const useInputBubblesStyles = createAppUseStyles<{}>(theme => ({
     backgroundColor: theme.secondary,
     color: theme.secondaryAccent,
     padding: "3px 7px",
-    transition: "200ms ease-out",
     "&:hover": {
       borderRadius: 100,
       backgroundColor: Color(theme.primary).set('rgb.g', 150).alpha(0.35).hex(),

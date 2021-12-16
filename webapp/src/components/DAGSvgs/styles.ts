@@ -66,7 +66,6 @@ export const useNodeStyles = createAppUseStyles<{
     height: '15px',
     width: '15px',
     cursor: 'pointer',
-    transition: "500ms east-out",
   }
   return {
     root: {

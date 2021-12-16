@@ -1,6 +1,8 @@
 import { DAGBoardElmDims } from "components/DAGSvgs/DAGBoard";
+import { InfoIcon } from "components/Icons";
+import { Button } from "components/Inputs/Button";
 import { SequenceNodes } from "components/SequenceNodes";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { AutomationData, AutomationSequenceNode } from "types/automations";
 import useWindowSize from "utils/useWindowSize";
 import { AutoInfoBox } from "./AutoInfoBox";
@@ -19,7 +21,11 @@ export const AutomationEditor: FC<Props> = ({
 }) => {
   // state
   const { ratioWbh } = useWindowSize();
-  const { classes } = useEditorStyles({});
+  const [closeInfo, setCloseInfo] = useState(false);
+  const { classes } = useEditorStyles({
+    closeInfo,
+    horizontalMode: ratioWbh < 0.75
+  });
 
   // alias
   const updateSequence = (sequence: AutomationSequenceNode[]) => onUpdate({
@@ -28,14 +34,18 @@ export const AutomationEditor: FC<Props> = ({
   });
 
   // render
-  return <div className={classes.root} style={{
-    flexDirection: ratioWbh >= 0.75 ? 'row' : 'column'
-  }}>
+  return <div className={classes.root}>
     <AutoInfoBox
       className={classes.infoBox}
       metadata={automation.metadata}
       onUpdate={metadata => onUpdate({ ...automation, metadata })}
     />
+    <InfoIcon
+      className={classes.infoIcon}
+      onClick={() => setCloseInfo(!closeInfo)}
+      title={closeInfo ? "Show Metadata" : "Hide Metadata"}
+    />
+
     <SequenceNodes
       zoomLevel={1.5}
       startPoint={[0.5, 0.5]}

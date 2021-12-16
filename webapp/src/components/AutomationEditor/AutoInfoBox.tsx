@@ -2,17 +2,19 @@ import { AutomationMetadata } from "types/automations";
 import InputList from "components/Inputs/InputList";
 import InputText from "components/Inputs/InputText";
 import InputTextArea from "components/Inputs/InputTextArea";
+import { FC } from "react";
 
 interface Props {
   className: string;
   metadata: AutomationMetadata;
   onUpdate: (m: AutomationMetadata) => void;
 }
-export function AutoInfoBox({
+export const AutoInfoBox: FC<Props> = ({
   metadata,
   onUpdate,
   className,
-}: Props) {
+  children,
+}) => {
 
   // aliases
   const onUpdateMetadata = <K extends keyof AutomationMetadata>(k: K) => (update: AutomationMetadata[K]) => onUpdate({
@@ -36,5 +38,6 @@ export function AutoInfoBox({
         'restart'
       ]}
     />
+    {children}
   </div>
 }
