@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { SVGBoard } from "./Board";
 import { AutomationNode } from '../../types/automations/index';
 import { Point, EdgeDirection, BBox } from 'types/graphs';
@@ -8,6 +8,8 @@ import { AddButton } from "./AddButton";
 import { IteratorWrap } from "utils/iter";
 import { DAGCircle, AddProps } from "./DAGCircle";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
+import { minPoints } from "utils/graph";
+import { maxPoints } from '../../utils/graph';
 
 
 export type DAGCircleElm = {
@@ -182,9 +184,14 @@ export function* mapDataToElements({
 
 
 export const DAGBoard: FC<Props & { zoomLevel: number }> = props => {
+  const graphDims = useRef<BBox>([[0, 0], [0, 0]]);
   const it = new IteratorWrap(mapDataToElements(props));
   const el = it.toArray();
-  const [[x0, y0], [x1, y1]] = it.returnValue as BBox;
+  const [p0, p1] = it.returnValue as BBox;
+  const [[x0, y0], [x1, y1]] = graphDims.current = [
+    minPoints(p0, graphDims.current[0]),
+    maxPoints(p1, graphDims.current[1])
+  ];
   return <SVGBoard
     graphHeight={y1 - y0}
     minGraphWidth={Math.max(x1 - x0, props.settings.nodeWidth * 15)}
