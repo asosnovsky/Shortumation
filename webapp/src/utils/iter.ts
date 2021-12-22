@@ -17,3 +17,9 @@ export class IteratorWrap<T, TReturn, TNext> {
     return Array.from(this.iter())
   }
 }
+
+export function* chain<T>(genArray: Generator<T>[]): Generator<T> {
+  for (const gen of genArray) {
+    yield * gen
+  }
+} 

@@ -3,6 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SequenceNodes } from './index';
 import { NODE_HEIGHT, NODE_WIDTH, DISTANCE_FACTOR, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE } from '../DAGSvgs/constants';
 import { useState } from 'react';
+import { DAGElement } from "components/DAGSvgs/DAGBoard";
 
 
 export default {
@@ -76,6 +77,26 @@ Simple.args = {
     }
   ]
 }
+
+export const AdditionalElemets = Template.bind({})
+
+AdditionalElemets.args = {
+  ...Simple.args,
+  additionalElements: (function* (): Generator<DAGElement> {
+    yield {
+      type: 'circle',
+      loc: [1, 0],
+      icon: "blank"
+    }
+    yield {
+      type: 'edge',
+      p1: [0, 0],
+      p2: [1, 0],
+      direction: '1->2'
+    }
+  }()),
+}
+
 
 export const Multinode = Template.bind({})
 Multinode.args = {

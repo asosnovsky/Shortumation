@@ -7,6 +7,7 @@ import { computeNodesEdgesPos } from './positions';
 import { Modal } from 'components/Modal';
 import { NodeEditor } from 'components/NodeEditor';
 import { MultiNodeEditor } from "components/MultiNodeEditors";
+import { chain } from "utils/iter";
 
 export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (props) => {
   // state
@@ -50,16 +51,22 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
     }
   }
 
+  // compute elemets
+  let elmIter = computeNodesEdgesPos(
+    props.startPoint,
+    props.sequence,
+    props.onChange,
+    s => setModalState(s)
+  );
+  if (props.additionalElements) {
+    elmIter = chain([elmIter, props.additionalElements]);
+  }
+
   // render
   return <>
     <DAGBoard
       zoomLevel={props.zoomLevel}
-      elements={computeNodesEdgesPos(
-        props.startPoint,
-        props.sequence,
-        props.onChange,
-        s => setModalState(s)
-      )}
+      elements={elmIter}
       settings={{
         ...props.dims,
         edgeNextColor: theme.secondaryAccent,

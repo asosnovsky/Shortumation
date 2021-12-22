@@ -1,4 +1,4 @@
-import { DAGBoardElmDims } from "components/DAGSvgs/DAGBoard";
+import { DAGBoardElmDims, DAGElement } from "components/DAGSvgs/DAGBoard";
 import { AutomationSequenceNode } from "types/automations";
 import { Point } from "types/graphs";
 
@@ -7,6 +7,7 @@ export interface SequenceNodeProps {
   dims: DAGBoardElmDims;
   sequence: AutomationSequenceNode[],
   onChange: (s: AutomationSequenceNode[]) => void;
+  additionalElements?: Generator<DAGElement>;
 }
 
 export type ModalState = {

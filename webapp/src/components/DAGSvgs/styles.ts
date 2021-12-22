@@ -146,23 +146,26 @@ export const useCircleStyles = createAppUseStyles<{
   size: number,
   hasOnFunction: boolean,
   hasRemoveFunction: boolean,
+  backgroundColor?: string,
  }>(theme => ({
-  root: ({size, hasOnFunction, hasRemoveFunction}) => ({
-    backgroundColor: Color(theme.primary).set('rgb.g', 100).hex(),
-    borderRadius: hasRemoveFunction ? 10 : 500,
-    height: size,
-    width: size,
-    cursor: hasOnFunction ? "pointer" : 'default',
-    "&:hover": {
-      backgroundColor: (hasOnFunction && !hasRemoveFunction) ?
-        Color(theme.primary).set('rgb.g', 150).hex() :
-        Color(theme.primary).set('rgb.g', 100).hex(),
-    },
-    fontSize: `${size * 0.4}px`,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }),
+   root: ({ size, hasOnFunction, hasRemoveFunction, backgroundColor }) => {
+     const baseColor = backgroundColor ? backgroundColor : Color(theme.primary).set('rgb.g', 100).hex();
+     const hoverColor = (hasOnFunction && !hasRemoveFunction) ? Color(theme.primary).set('rgb.g', 150).hex() : baseColor
+     return {
+      backgroundColor: baseColor,
+      borderRadius: hasRemoveFunction ? 10 : 500,
+      height: size,
+      width: size,
+      cursor: hasOnFunction ? "pointer" : 'default',
+      "&:hover": {
+        backgroundColor: hoverColor,
+      },
+      fontSize: `${size * 0.4}px`,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
+  },
   icon: {
     "&:hover": {
       borderRadius: 500,

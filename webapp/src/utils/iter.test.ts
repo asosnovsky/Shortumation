@@ -1,4 +1,4 @@
-import { IteratorWrap } from "./iter"
+import { chain, IteratorWrap } from "./iter"
 
 
 test('it wraps a simple iter', () => {
@@ -22,4 +22,15 @@ test('it wraps a simple iter while being nested', () => {
   const data = Array.from(makeIter(wit));
   expect(data).toEqual(['2'])
   expect(wit.returnValue).toEqual(true)
+})
+
+test('chain multiple iterators', () => {
+  function* makeIt1() {
+    yield "one"
+  }
+  function* makeIt2() {
+    yield "two"
+  }
+  const data = Array.from(chain([makeIt1(), makeIt2()]));
+  expect(data).toEqual(['one', 'two']);
 })

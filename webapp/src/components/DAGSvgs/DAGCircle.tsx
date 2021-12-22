@@ -11,6 +11,7 @@ export interface AddProps {
   onRemove?: () => void;
   loc: Point,
   size: number,
+  backgroundColor?: string;
 }
 export const DAGCircle = ({
   loc: [x, y],
@@ -18,27 +19,31 @@ export const DAGCircle = ({
   onEdit,
   onAdd,
   onRemove,
+  backgroundColor,
 }: AddProps) => {
   const { classes } = useCircleStyles({
     size: size * 0.9,
     hasOnFunction: !!onEdit || !!onAdd,
     hasRemoveFunction: !!onRemove,
+    backgroundColor,
   });
   return <>
     <foreignObject x={x} y={y} width={size} height={size}>
       <div className={classes.root}>
-        {onEdit ?
-          <PencilIcon
-            size={70} units="%"
-            className={classes.icon}
-            onClick={onEdit}
-          /> : onAdd ?
-            <AddIcon
+        {
+          onEdit ?
+            <PencilIcon
               size={70} units="%"
               className={classes.icon}
-              onClick={onAdd}
-            />
-            : "else"}
+              onClick={onEdit}
+            /> : onAdd ?
+              <AddIcon
+                size={70} units="%"
+                className={classes.icon}
+                onClick={onAdd}
+              />
+              : backgroundColor ? "" : "else"
+        }
         {onRemove ? <TrashIcon className={classes.trashIcon} onClick={onRemove} /> : <></>}
       </div>
     </foreignObject>

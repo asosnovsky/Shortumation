@@ -48,7 +48,16 @@ Simple.args = {
       mode: 'single',
     },
     trigger: [
-
+      {
+        "$smType": undefined,
+        "platform": "numeric_state",
+        "entity_id": "test",
+      },
+      {
+        "$smType": undefined,
+        "platform": "homeassistant",
+        "event": "start",
+      }
     ],
     sequence: [
       {

@@ -26,6 +26,10 @@ export type DAGCircleElm = {
     {
       icon: 'blank',
       onRemove?: () => void;
+    } |
+    {
+      icon: 'color',
+      color: string,
     }
   )
 export interface DAGNodeElm {
@@ -157,8 +161,10 @@ export function* mapDataToElements({
         } else if (elm.icon === 'edit') {
           clickProps.onEdit = elm.onEdit
           clickProps.onRemove = elm.onRemove
-        } else {
+        } else if (elm.icon === 'blank') {
           clickProps.onRemove = elm.onRemove
+        } else {
+          clickProps.backgroundColor = elm.color
         }
         yield <DAGCircle
           key={`(${elm.loc})-o`}
@@ -187,5 +193,6 @@ export const DAGBoard: FC<Props & { zoomLevel: number }> = props => {
     zoomLevel={props.zoomLevel}
   >
     {el}
+    {props.children}
   </SVGBoard>
 }
