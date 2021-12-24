@@ -1,5 +1,6 @@
+import "./index.css";
 import { DAGBoardElmDims } from "components/DAGSvgs/DAGBoard";
-import { InfoIcon } from "components/Icons";
+import { ArrowIcon } from "components/Icons";
 import { SequenceNodes } from "components/SequenceNodes";
 import { FC, useState } from "react";
 import { AutomationData, AutomationSequenceNode } from "types/automations";
@@ -11,6 +12,7 @@ import { chain } from "utils/iter";
 import { AutomationTrigger } from 'types/automations/triggers';
 import { Modal } from "components/Modal";
 import { NodeEditor } from "components/NodeEditor";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 interface TriggerEditorModalState {
   trigger: AutomationTrigger;
@@ -56,15 +58,16 @@ export const AutomationEditor: FC<Props> = ({
       />}
     </Modal>
     <AutoInfoBox
-      className={classes.infoBox}
+      className={closeInfo ? "hide" : "show"}
       metadata={automation.metadata}
       onUpdate={metadata => onUpdate({ ...automation, metadata })}
-    />
-    <InfoIcon
-      className={classes.infoIcon}
-      onClick={() => setCloseInfo(!closeInfo)}
-      title={closeInfo ? "Show Metadata" : "Hide Metadata"}
-    />
+    >
+      <ButtonIcon
+        className={`${classes.infoIcon} automation-editor--info-icon`}
+        onClick={() => setCloseInfo(!closeInfo)}
+        title={closeInfo ? "Show Metadata" : "Hide Metadata"}
+      >{ArrowIcon}</ButtonIcon>
+    </AutoInfoBox>
 
     <SequenceNodes
       zoomLevel={1.5}

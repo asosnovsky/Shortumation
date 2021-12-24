@@ -1,3 +1,4 @@
+import "./AutoInfoBox.css";
 import { AutomationMetadata } from "types/automations";
 import InputList from "components/Inputs/InputList";
 import InputText from "components/Inputs/InputText";
@@ -23,21 +24,23 @@ export const AutoInfoBox: FC<Props> = ({
   })
 
   // render
-  return <div className={className}>
-    <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
-    <InputText label="Name" value={metadata.alias} onChange={onUpdateMetadata('alias')} />
-    <InputTextArea label="Description" value={metadata.description} onChange={onUpdateMetadata('description')} />
-    <InputList
-      label="Mode"
-      current={metadata.mode}
-      onChange={onUpdateMetadata('mode')}
-      options={[
-        'parallel',
-        'single',
-        'queued',
-        'restart'
-      ]}
-    />
+  return <div className={`automation-editor--info-box ${className}`}>
+    <div className="automation-editor--info-box-inner">
+      <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
+      <InputText label="Name" value={metadata.alias} onChange={onUpdateMetadata('alias')} />
+      <InputTextArea label="Description" value={metadata.description} onChange={onUpdateMetadata('description')} />
+      <InputList
+        label="Mode"
+        current={metadata.mode}
+        onChange={onUpdateMetadata('mode')}
+        options={[
+          'parallel',
+          'single',
+          'queued',
+          'restart'
+        ]}
+      />
+    </div>
     {children}
   </div>
 }

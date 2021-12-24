@@ -23,6 +23,10 @@ const useButtonIconStyles = createAppUseStyles(theme => ({
 }))
 
 
-export const ButtonIcon: FC<ButtonIconProps> = props => <props.children
-  className={useButtonIconStyles({}).classes.buttonIcon}
-/>
+export const ButtonIcon: FC<ButtonIconProps> = ({
+  children: Child,
+  className,
+  ...props
+}) => <Child
+    className={`${useButtonIconStyles({}).classes.buttonIcon} ${className}`} {...props}
+  />

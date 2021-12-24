@@ -1,0 +1,18 @@
+.automation-editor--info-box {
+    min-width      : 25px;
+    padding-left   : 10px;
+    padding-right  : 10px;
+    display        : flex;
+    flex-direction : column;
+    justify-content: flex-start;
+    overflow       : auto;
+    padding-top    : 5;
+    padding-bottom : 10;
+    position       : relative;
+}
+
+/* .automation-editor--info-box.hide {} */
+
+.automation-editor--info-box.hide>.automation-editor--info-box-inner {
+    display: none;
+}

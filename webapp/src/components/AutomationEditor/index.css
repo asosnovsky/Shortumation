@@ -1,0 +1,9 @@
+.automation-editor--info-icon {
+    position: absolute;
+    right   : 10px;
+    z-index : 10;
+}
+
+.automation-editor--info-box.hide>.automation-editor--info-icon {
+    transform: rotate(180deg);
+}
