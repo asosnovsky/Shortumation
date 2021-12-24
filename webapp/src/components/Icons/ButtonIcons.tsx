@@ -10,13 +10,11 @@ export interface ButtonIconProps extends IconBaseProps, ButtonIconStyleProps {
 const useButtonIconStyles = createAppUseStyles(theme => ({
   buttonIcon: {
     borderRadius: "100%",
-    backgroundColor: theme.primary,
-    borderColor: theme.primaryAccent,
     borderWidth: 1,
     borderStyle: "groove",
     padding: "0.25em",
     "&:hover": {
-      backgroundColor: theme.primaryAccent,
+      backgroundColor: theme.secondaryAccent,
       cursor: 'pointer',
     }
   }
