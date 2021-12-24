@@ -1,4 +1,5 @@
 import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition, TriggerCondition, ZoneCondition } from "types/automations/conditions";
+import { AutomationData } from 'types/automations';
 
 
 export const getConditionDefaultValues = (condition: AutomationCondition['condition']): AutomationCondition['condition_data'] => {
@@ -39,3 +40,14 @@ export const getConditionDefaultValues = (condition: AutomationCondition['condit
     }
     throw new Error("NOT IMPLEMENTED!")
 }
+
+export const defaultAutomation = (id: string): AutomationData => ({
+  metadata: {
+    id,
+    alias: "New Automation",
+    description: "",
+    mode: "single",
+  },
+  trigger: [],
+  sequence: [],
+})
