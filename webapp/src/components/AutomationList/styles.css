@@ -1,0 +1,87 @@
+/* root elements */
+.automation-list--root {
+    width         : 100%;
+    height        : 100%;
+    display       : flex;
+    flex-direction: row;
+    overflow      : hidden;
+}
+
+.automation-list--list {
+    flex     : 1;
+    min-width: 200px;
+    max-width: 200px;
+    position : relative;
+}
+
+.automation-list--viewer {
+    flex: 6;
+}
+
+/* list children: on hide */
+.automation-list--list.hide>.automation-list--list-box {
+    display: none;
+}
+
+.automation-list--list.hide {
+    min-width: 35px;
+    max-width: 35px;
+}
+
+.automation-list--list.hide>.automation-list--list-hide {
+    transform: rotate(180deg);
+}
+
+/* list children: normal */
+.automation-list--list {
+    border-right: solid;
+    border-width: 1px;
+}
+
+.automation-list--list-hide {
+    position: absolute;
+    top     : 0;
+    right   : 5px;
+}
+
+
+.automation-list--list-box {
+    overflow       : auto;
+    height         : 100%;
+    display        : flex;
+    flex-direction : column;
+    justify-content: flex-start;
+    align-items    : center;
+    padding-top    : 10px;
+    margin-bottom  : 10px;
+}
+
+.automation-list--list-box>* {
+    margin-bottom: 10px;
+}
+
+.automation-list--list-box>:last-child {
+    background-color: #070;
+    color           : white;
+}
+
+.automation-list--elm {
+    position: relative;
+}
+
+.automation-list--elm>button {
+    padding-left : 5px;
+    padding-right: 5px;
+}
+
+.automation-list--elm>button>span {
+    font-size: 0.75em;
+}
+
+.automation-list--elm>.automation-list--elm-remove {
+    position: absolute;
+    left    : -10px;
+    top     : 10%;
+    padding : 0;
+    margin  : 0;
+}
