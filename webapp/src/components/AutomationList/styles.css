@@ -40,7 +40,7 @@
 
 .automation-list--list-hide {
     position: absolute;
-    top     : 0;
+    bottom  : 10px;
     right   : 5px;
 }
 

@@ -82,6 +82,19 @@ export const AutomationEditor: FC<Props> = ({
           automation.trigger,
           [1.5, 0.5],
           updateTriggers,
+          () => {
+            setModalState({
+              trigger: {
+                $smType: "trigger",
+                platform: "device",
+                device_id: "",
+                domain: "",
+                type: "",
+                subtype: ""
+              },
+              onSave: (t) => updateTriggers([...automation.trigger, t])
+            });
+          },
           (trigger, onSave) => setModalState({
             trigger,
             onSave,

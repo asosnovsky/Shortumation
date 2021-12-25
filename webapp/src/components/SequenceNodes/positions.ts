@@ -4,12 +4,9 @@ import { Point } from "types/graphs";
 import { makeUpdater, Updater } from './updater';
 import { ChooseAction } from 'types/automations/actions';
 import { AutomationCondition } from "types/automations/conditions";
-import { ModalState } from "./types";
+import { UpdateModalState } from "./types";
 import { offsetPoint, makeOffsetMaintainer} from "utils/graph";
 
-export type UpdateModalState = (
-  s: ModalState
-) => void;
 
 
 
@@ -146,8 +143,19 @@ export function* computeNodesEdgesPos(
   onChange: (s: AutomationSequenceNode[]) => void,
   openModal: UpdateModalState,
 ): Generator<DAGElement> {
-  const rootUpdater = makeUpdater(sequence, onChange);
-  const offset = makeOffsetMaintainer(startPoint)
+  const rootUpdater = makeUpdater(sequence, onChange, openModal);
+  const offset = makeOffsetMaintainer(startPoint); 
+
+  if (sequence.length === 0) {
+    yield {
+      type: "circle",
+      icon: 'add',
+      loc: offsetPoint(startPoint, [offset.x, 0]),
+      onAdd: rootUpdater.addNode,
+    }
+    return
+  }
+
   let lastNodeLoc: Point | null = null;
   for (let i = 0; i < sequence.length; i++) {
     offset.setI(i)

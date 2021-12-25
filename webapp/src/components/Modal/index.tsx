@@ -31,9 +31,9 @@ const useModalStyle = createAppUseStyles<ModalStyleProps>(theme => ({
   inner: {
     zIndex: 10,
     maxWidth: '80%',
-    maxHeight: '60%',
-    minHeight: '200px',
-    minWidth: '200px',
+    maxHeight: '90%',
+    minHeight: 'fit-content',
+    minWidth: 'fit-content',
     padding: '15px',
     display: 'flex',
     flexDirection: 'column',
@@ -43,6 +43,8 @@ const useModalStyle = createAppUseStyles<ModalStyleProps>(theme => ({
     borderColor: theme.primaryAccent,
     borderRadius: '10px',
     color: theme.primaryAccent,
+    overflow: "auto",
+    resize: "auto",
   }
 }));
 export const Modal: FC<Props> = ({

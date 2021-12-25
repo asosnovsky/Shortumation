@@ -23,6 +23,7 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
         onClose={() => setModalState(null)}
         onSave={n => { modalState.update(n as any); setModalState(null) }}
         allowedTypes={modalState.onlyConditions ? ['condition'] : ['action', 'condition']}
+        saveBtnCreateText={modalState.saveBtnCreateText}
       />
     } else {
       modalBody = <MultiNodeEditor

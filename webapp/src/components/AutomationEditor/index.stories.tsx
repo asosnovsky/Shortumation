@@ -101,3 +101,23 @@ Simple.args = {
     ]
   }
 }
+
+
+export const EmptyStart = Template.bind({})
+EmptyStart.args = {
+  ...EmptyStart.args,
+  automation: {
+    metadata: {
+      id: "random",
+      alias: "Random",
+      description: "Example Metadata",
+      trigger_variables: {
+        'wowo': '!'
+      },
+      mode: 'single',
+    },
+    trigger: [
+    ],
+    sequence: []
+  }
+}

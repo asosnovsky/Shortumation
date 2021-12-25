@@ -78,6 +78,13 @@ Simple.args = {
   ]
 }
 
+export const EmptyStart = Template.bind({})
+EmptyStart.args = {
+  ...EmptyStart.args,
+  sequence: [
+  ]
+}
+
 export const AdditionalElemets = Template.bind({})
 
 AdditionalElemets.args = {

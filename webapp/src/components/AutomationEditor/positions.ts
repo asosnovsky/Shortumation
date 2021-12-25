@@ -9,6 +9,7 @@ export function* computeTriggerPos(
   triggers: AutomationTrigger[],
   toPath: Point,
   onUpdate: (ts: AutomationTrigger[]) => void,
+  onAdd: () => void,
   onEdit: (nt: AutomationTrigger, onSave: (ts: AutomationTrigger) => void) => void,
 ): Generator<DAGElement> {  
   // functions
@@ -40,15 +41,21 @@ export function* computeTriggerPos(
       direction: "1->2",
     }
   }
+  // if we had nothing to loop on
+  if (triggers.length === 0) {
+    yield {
+      type: "edge",
+      p1: [startPoint[0] - 0.25, startPoint[1] + triggers.length],
+      p2: toPath,
+      direction: "1->2",
+    }
+  }
+  // add circle
   yield {
     type: 'circle',
     icon: 'add',
     loc: [startPoint[0] + 0.25, startPoint[1] + triggers.length],
-    onAdd: () => onUpdate(triggers.concat({
-      $smType: 'trigger',
-      platform: 'state',
-      entity_id: "",
-    }))
+    onAdd
   }
 }
 

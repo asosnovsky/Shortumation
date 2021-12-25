@@ -1,11 +1,13 @@
 import { AutomationSequenceNode } from "types/automations";
 import { ChooseAction } from "types/automations/actions";
+import { UpdateModalState } from "./types";
 
 export type Updater = ReturnType<typeof makeUpdater>;
 
 export const makeUpdater = (
   sequence: AutomationSequenceNode[],
-  onChange: (s: AutomationSequenceNode[]) => void
+  onChange: (s: AutomationSequenceNode[]) => void,
+  openModal: UpdateModalState,
 ) => ({
   sequence,
   onChange,
@@ -16,17 +18,23 @@ export const makeUpdater = (
     ])
   },
   addNode() {
-    return onChange([
-      ...sequence,
-      {
+    return openModal({
+      single: true,
+      saveBtnCreateText: true,
+      node: {
         $smType: 'action',
         action: 'choose',
         action_data: {
           choose: [],
           default: [],
         }
-      }
-    ])
+      },
+      update: n => onChange([
+        ...sequence,
+        n,
+      ]),
+      onlyConditions: false,
+    })
   },
   updateNode(i: number, node: AutomationSequenceNode) {
     return onChange([
@@ -61,7 +69,8 @@ export const makeUpdater = (
                 ...node.action_data.choose.slice(j+1),
               ]
             }
-          })
+          }),
+          openModal,
         )
       } else {
         return makeUpdater(
@@ -72,7 +81,8 @@ export const makeUpdater = (
               ...node.action_data,
               default: seq
             }
-          })
+          }),
+          openModal,
         )
       }
     }
