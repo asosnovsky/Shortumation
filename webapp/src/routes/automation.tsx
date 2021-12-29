@@ -1,7 +1,6 @@
 import { AutomationList } from "components/AutomationList";
 import { DEFAULT_DIMS } from "components/DAGSvgs/constants";
 import { FC, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { usePageTheme } from "styles/page";
 import { AutomationData } from "types/automations";
 
@@ -9,8 +8,6 @@ import { AutomationData } from "types/automations";
 
 export const AutomationRoute: FC = () => {
   const { classes } = usePageTheme({});
-  const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams);
   const [automations, setAutos] = useState<AutomationData[]>([]);
 
   return <div className={classes.page}>
