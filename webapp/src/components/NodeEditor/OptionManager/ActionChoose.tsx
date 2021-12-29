@@ -1,4 +1,3 @@
-import InputYaml from "components/Inputs/InputYaml";
 import InputText from "components/Inputs/InputText";
 import { ChooseAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from './OptionManager';

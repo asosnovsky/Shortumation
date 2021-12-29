@@ -22,7 +22,7 @@ export const {
 }));
 
 export type GetThemeType<C extends Context<any>> = C extends Context<infer T> ? T : unknown; 
-export type ClassNamesOfStyle<F extends Function> = Record<keyof ReturnType<F>, string>;
+export type ClassNamesOfStyle<F extends (...args: any) => any> = Record<keyof ReturnType<F>, string>;
 export type AppTheme = GetThemeType<typeof ThemeContext>;
 export const createAppUseStyles = <
     Props extends {} = {},
@@ -32,7 +32,7 @@ export const createAppUseStyles = <
     theme: AppTheme,
 } => {
     const theme = useTheme();
-    const useStyles = createUseStyles<C,Props,AppTheme>(f)
+    const useStyles = createUseStyles<C,Props,AppTheme>(f as any)
     const classes = useStyles({...props, theme}) as Classes<keyof  Styles<C, Props, AppTheme>>;
     return {classes, theme};
 }

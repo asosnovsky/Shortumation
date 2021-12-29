@@ -1,8 +1,6 @@
 import { FC, useState } from "react";
-import { useToolTip } from "tooltip/context";
 import InputText from "./InputText";
-import InputWrapper from "./InputWrapper";
-import { useInputBubblesStyles, useInputTextStyles } from "./styles";
+import { useInputBubblesStyles } from "./styles";
 
 export interface Props {
   label: string;

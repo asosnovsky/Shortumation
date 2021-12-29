@@ -2,6 +2,8 @@ import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DAGBoard, DAGElement, DAGNodeElm } from "./DAGBoard";
 import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, DISTANCE_FACTOR, CIRCLE_SIZE } from './constants';
+import { AutomationAction } from 'types/automations/actions';
+import { arrayToIter } from "utils/iter";
 
 
 export default {
@@ -26,124 +28,126 @@ export default {
 
 const nodeFromPoint = ([x, y, add = true]: any): DAGNodeElm => ({
   type: 'node',
-  key: `${x},${y}`,
   loc: [x, y],
   onRemove() { },
   onAdd: add ? () => { } : undefined,
-  node: {
-    $smType: 'action',
+  node: ({
     alias: `${x},${y}`,
-    action: 'template',
-    action_data: {
-      value_template: ""
+    "$smType": "action",
+    "action": "wait",
+    "action_data": {
+      "wait_template": "",
     }
+  } as AutomationAction)
+});
+
+function* makeDummyData(pts: Array<any>, extras: DAGElement[]): Generator<DAGElement> {
+  for (const p of pts) {
+    yield nodeFromPoint(p);
+  };
+  for (const e of extras) {
+    yield e;
   }
-})
+}
+
 
 export const Simple: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
 Simple.args = {
   ...Simple.args,
-  elements: [
-    [0, 0, false],
-    [1, 0, false],
-    [2, 1, false],
-  ].map<DAGElement>(nodeFromPoint).concat([
-    {
-      type: 'edge',
-      key: 'e1',
-      p1: [0, 0],
-      p2: [1, 0],
-      direction: '1->2'
-    },
-    {
-      type: 'edge',
-      key: 'e2',
-      p1: [2, 1],
-      p2: [2, 3],
-      direction: '1->2'
-    },
-    {
-      type: 'circle',
-      key: 'c1',
-      loc: [2, 3]
-    },
-    {
-      type: 'edge',
-      key: 'e2',
-      p1: [2, 1],
-      p2: [2, 2],
-      direction: '1->2'
-    },
-    {
-      type: 'circle',
-      key: 'c1',
-      loc: [2, 2],
-      onClick: () => { }
-    }
-  ])
+  elements: makeDummyData(
+    [
+      [0, 0, false],
+      [1, 0, false],
+      [2, 1, false],
+    ],
+    [
+      {
+        type: 'edge',
+        p1: [0, 0],
+        p2: [1, 0],
+        direction: '1->2'
+      },
+      {
+        type: 'edge',
+        p1: [2, 1],
+        p2: [2, 3],
+        direction: '1->2'
+      },
+      {
+        type: 'circle',
+        icon: 'blank',
+        loc: [2, 3]
+      },
+      {
+        type: 'edge',
+        p1: [2, 1],
+        p2: [2, 2],
+        direction: '1->2'
+      },
+      {
+        type: 'circle',
+        loc: [2, 2],
+        icon: 'color',
+        color: 'red',
+      }
+    ])
 }
 
 
 export const Complex: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
 Complex.args = {
   ...Complex.args,
-  elements: [
-    [0, 0, false],
-    [1, 0, false],
-    [2, 1, false],
-    [4, 1],
-    [3, 2],
-    [2, 3],
-    [5, 0, false],
-    [6, 0],
-    [0, 6],
-  ].map<DAGElement>(nodeFromPoint).concat([
-    {
-      type: 'edge',
-      key: 'e1',
-      p1: [0, 0],
-      p2: [1, 0],
-      direction: '1->2'
-    },
-    {
-      type: 'edge',
-      key: 'e2',
-      p1: [2, 1],
-      p2: [4, 1],
-      direction: '1->2',
-    },
-    {
-      type: 'edge',
-      key: 'e3',
-      p1: [1, 0],
-      p2: [2, 1],
-      direction: '1->2',
-      toChild: true,
-    },
-    {
-      type: 'edge',
-      key: 'e4',
-      p1: [2, 1],
-      p2: [3, 2],
-      direction: '1->2',
-      toChild: true,
-    },
-    {
-      type: 'edge',
-      key: 'e5',
-      p1: [1, 0],
-      p2: [2, 3],
-      direction: '1->2',
-      toChild: true,
-    },
-    {
-      type: 'edge',
-      key: 'e6',
-      p1: [1, 0],
-      p2: [5, 0],
-      direction: '1->2'
-    },
-  ])
+  elements: makeDummyData(
+    [
+      [0, 0, false],
+      [1, 0, false],
+      [2, 1, false],
+      [4, 1],
+      [3, 2],
+      [2, 3],
+      [5, 0, false],
+      [6, 0],
+      [0, 6],
+    ],
+    [
+      {
+        type: 'edge',
+        p1: [0, 0],
+        p2: [1, 0],
+        direction: '1->2'
+      },
+      {
+        type: 'edge',
+        p1: [2, 1],
+        p2: [4, 1],
+        direction: '1->2',
+      },
+      {
+        type: 'edge',
+        p1: [1, 0],
+        p2: [2, 1],
+        direction: '1->2',
+      },
+      {
+        type: 'edge',
+        p1: [2, 1],
+        p2: [3, 2],
+        direction: '1->2',
+      },
+      {
+        type: 'edge',
+        p1: [1, 0],
+        p2: [2, 3],
+        direction: '1->2',
+      },
+      {
+        type: 'edge',
+        p1: [1, 0],
+        p2: [5, 0],
+        direction: '1->2'
+      },
+    ]
+  )
 }
 
 

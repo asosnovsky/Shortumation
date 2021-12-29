@@ -7,6 +7,7 @@ import { DAGBoardElmDims } from 'components/DAGSvgs/DAGBoard';
 import { defaultAutomation } from '../../utils/defaults';
 import { ArrowIcon, TrashIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { useSearchParams } from "react-router-dom";
 
 
 interface Props {
@@ -25,9 +26,12 @@ export const AutomationList: FC<Props> = ({
   dims,
 }) => {
   // state
-  const [current, setCurrent] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  // const [current, setCurrent] = useState(0);
   const [hideList, setHideList] = useState(false);
   // alias
+  const current = Number(searchParams.get("current") ?? "0");
+  const setCurrent = (i: number) => setSearchParams({ current: String(i) });
   const currentAuto = automations.length > 0 ? automations[current] : null;
   const automationListListCls = "automation-list--list" + (hideList ? " hide" : " show")
   // render

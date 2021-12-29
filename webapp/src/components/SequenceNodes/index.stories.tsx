@@ -206,7 +206,7 @@ Multinode.args = {
           entity_id: "light.kitchen"
         }
       }
-    }
+    } as any
   ]
 }
 

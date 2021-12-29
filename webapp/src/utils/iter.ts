@@ -23,3 +23,9 @@ export function* chain<T>(genArray: Generator<T>[]): Generator<T> {
     yield * gen
   }
 } 
+
+export function* arrayToIter<T>(arr: T[]): Generator<T> {
+  for (const e of arr) {
+    yield e
+  }
+}

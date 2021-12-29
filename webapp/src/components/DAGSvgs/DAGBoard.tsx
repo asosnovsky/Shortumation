@@ -65,7 +65,7 @@ export interface DAGBoardElmDims {
 }
 
 export interface Props {
-  elements: Generator<DAGElement>;
+  elements: Generator<DAGElement> | Array<DAGElement>;
   settings: DAGBoardSettings;
 }
 

@@ -32,5 +32,5 @@ export type AutomationNodeSubtype<T extends AutomationNodeTypes = any> =
   T extends undefined ? TriggerType :
   T extends 'trigger' ? TriggerType :
   T extends 'action' ? ActionType :
-  T extends 'condtion' ? ConditionType :
+  T extends 'condition' ? ConditionType :
   never;
