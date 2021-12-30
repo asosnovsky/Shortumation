@@ -1,29 +1,20 @@
-import { AutomationList } from "components/AutomationList";
+import { ApiService } from 'apiService/core';
+import { ConnectedAutmationList } from "components/AutomationList";
 import { DEFAULT_DIMS } from "components/DAGSvgs/constants";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { usePageTheme } from "styles/page";
-import { AutomationData } from "types/automations";
 
 
 
-export const AutomationRoute: FC = () => {
+export const AutomationRoute: FC<{ api: ApiService }> = ({
+  api
+}) => {
   const { classes } = usePageTheme({});
-  const [automations, setAutos] = useState<AutomationData[]>([]);
 
   return <div className={classes.page}>
-    <AutomationList
+    <ConnectedAutmationList
       dims={DEFAULT_DIMS}
-      automations={automations}
-      onUpdate={(i, auto) => setAutos([
-        ...automations.slice(0, i),
-        auto,
-        ...automations.slice(i + 1)
-      ])}
-      onAdd={auto => setAutos([...automations, auto])}
-      onRemove={i => setAutos([
-        ...automations.slice(0, i),
-        ...automations.slice(i + 1)
-      ])}
+      api={api}
     />
   </div>
 }

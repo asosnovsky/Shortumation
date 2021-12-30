@@ -19,7 +19,11 @@
             "env": {
                 "CI": "true"
             },
-            "disableOptimisticBPs": true
+            "disableOptimisticBPs": true,
+            "jasmineExplorer.nodeArgv": [
+                "-r",
+                "ts-node/register"
+            ]
         }
     ]
 }

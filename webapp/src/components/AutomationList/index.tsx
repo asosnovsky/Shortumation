@@ -8,9 +8,10 @@ import { defaultAutomation } from '../../utils/defaults';
 import { ArrowIcon, TrashIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { useSearchParams } from "react-router-dom";
+import { ApiService } from "apiService/core";
 
 
-interface Props {
+interface AutomationListParams {
   automations: AutomationData[];
   onUpdate: (i: number, auto: AutomationData) => void;
   onAdd: (auto: AutomationData) => void;
@@ -18,20 +19,21 @@ interface Props {
   dims: DAGBoardElmDims;
 }
 
-export const AutomationList: FC<Props> = ({
+export const AutomationList: FC<AutomationListParams> = ({
   automations,
   onUpdate,
   onAdd,
   onRemove,
   dims,
+  children,
 }) => {
   // state
-  const [searchParams, setSearchParams] = useSearchParams();
-  // const [current, setCurrent] = useState(0);
+  // const [searchParams, setSearchParams] = useSearchParams();
   const [hideList, setHideList] = useState(false);
+  const [current, setCurrent] = useState(0);
   // alias
-  const current = Number(searchParams.get("current") ?? "0");
-  const setCurrent = (i: number) => setSearchParams({ current: String(i) });
+  // const current = Number(searchParams.get("current") ?? "0");
+  // const setCurrent = (i: number) => setSearchParams({ current: String(i) });
   const currentAuto = automations.length > 0 ? automations[current] : null;
   const automationListListCls = "automation-list--list" + (hideList ? " hide" : " show")
   // render
@@ -47,7 +49,10 @@ export const AutomationList: FC<Props> = ({
             </Button>
           </div>
         )}
-        <Button onClick={() => onAdd(defaultAutomation(`shortu-${automations.length}`))}>Add</Button>
+        <Button onClick={() => {
+          onAdd(defaultAutomation(`shortu-${automations.length}`));
+          setCurrent(automations.length)
+        }}>Add</Button>
       </div>
       <ButtonIcon
         onClick={() => setHideList(!hideList)}
@@ -63,5 +68,35 @@ export const AutomationList: FC<Props> = ({
         dims={dims}
       /> : <></>}
     </div>
+    {children}
   </div>
+}
+
+interface ConnectedAutmationListParams {
+  dims: DAGBoardElmDims;
+  api: ApiService;
+}
+export const ConnectedAutmationList: FC<ConnectedAutmationListParams> = ({
+  api: {
+    state: {
+      automations,
+    },
+    removeAutomation,
+    updateAutomation,
+  },
+  dims
+}) => {
+  if (!automations.ready) {
+    return <span>Loading...</span>
+  }
+  if (!automations.ok) {
+    return <span>Error {automations.error}</span>
+  }
+  return <AutomationList
+    dims={dims}
+    automations={automations.data.data}
+    onAdd={auto => updateAutomation({ auto, index: automations.data.totalItems + 1 })}
+    onRemove={index => removeAutomation({ index })}
+    onUpdate={(index, auto) => updateAutomation({ index, auto })}
+  />
 }
