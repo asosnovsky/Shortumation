@@ -1,0 +1,2 @@
+class AutomationLoaderException(Exception):
+    pass

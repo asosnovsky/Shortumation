@@ -1,9 +1,9 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException
 
-from src.config.AutomationLoader import AutomationData, AutomationLoaderException
+# from src.automations.AutomationLoader import AutomationData, AutomationLoaderException
 
-from ..config import automation_loader
+# from ..config import automation_loader
 
 router = APIRouter()
 

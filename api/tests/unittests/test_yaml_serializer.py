@@ -3,10 +3,12 @@ from pathlib import Path
 from unittest import TestCase
 from src.yaml_serializer import (
     dump_yaml,
+    load_yaml,
+)
+from src.yaml_serializer.types import (
     IncludedYaml,
     SecretValue,
     IncludedYamlDir,
-    simple_load_yaml,
 )
 
 
@@ -15,15 +17,11 @@ class dumping_yamls_tests(TestCase):
         yaml = dump_yaml(
             {
                 "automations": IncludedYaml(
-                    "automations.yaml",
-                    Path("/config/automations.yaml"),
-                    [
-                        {"id": "wow", "alias": "NO!"},
-                    ],
+                    Path("automations.yaml"),
                 )
             }
         )
-        self.assertEqual(yaml, "automations: !include automations.yaml\n")
+        self.assertEqual(yaml, f"automations: !include {Path('automations.yaml').absolute()}\n")
 
     def test_dumping_secrets(self):
         yaml = dump_yaml({"google_password": SecretValue("gpass", "supersec")})
@@ -34,7 +32,7 @@ class dumping_yamls_tests(TestCase):
         self.assertEqual(yaml, "sensor: !include_dir_list sensors/*yaml\n")
 
     def test_load_stub(self):
-        yaml_obj = simple_load_yaml(
+        yaml_obj = load_yaml(
             io.StringIO(
                 """
         name: cool
@@ -50,7 +48,7 @@ class dumping_yamls_tests(TestCase):
                 "name": "cool",
                 "google_password": SecretValue("gpass", "n/a"),
                 "sensor": IncludedYamlDir("include_dir_list", "sensors/*yaml"),
-                "automations": IncludedYaml("automations.yaml", Path("/"), "n/a"),
+                "automations": IncludedYaml(Path("automations.yaml").absolute()),
             },
         )
         self.assertEqual(
@@ -58,5 +56,5 @@ class dumping_yamls_tests(TestCase):
             "name: cool\n"
             "google_password: !secret gpass\n"
             "sensor: !include_dir_list sensors/*yaml\n"
-            "automations: !include automations.yaml\n",
+            f"automations: !include {Path('automations.yaml').absolute()}\n",
         )

@@ -1,6 +1,6 @@
 import json
 from unittest import TestCase
-from src.yaml_serializer import SecretValue
+from src.yaml_serializer.types import SecretValue
 from src.json_serializer import json_dumps, NOT_IMPLEMENTED_SV_MSG
 
 

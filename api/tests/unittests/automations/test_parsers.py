@@ -1,46 +1,19 @@
-from pathlib import Path
-from tempfile import mkdtemp
 from unittest import TestCase
-from src.config.AutomationLoader import (
+from src.automations.types import (
     AutomationActionNode,
     AutomationConditionNode,
-    AutomationData,
-    AutomationLoader,
-    AutomationLoaderException,
-    AutomationMetdata,
-    load_automation,
+)
+from src.automations.parsers import (
     _parse_conditions,
     _parse_actions,
 )
 from src.json_serializer import NOT_IMPLEMENTED_SV_MSG
-from src.yaml_serializer import (
+from src.yaml_serializer.types import (
     SecretValue,
-    load_hass_config,
-    IncludedYaml,
 )
-from tests.utils import SAMPLE_HA_PATH, create_dummy_config_folder
-from src.yaml_serializer.types import HassConfig
 
 
-class config_finder_tests(TestCase):
-    def test_simple_made_up_config(self):
-        pass
-
-    def test_find_sample_config(self):
-        secrets, config, file_path = load_hass_config(SAMPLE_HA_PATH)
-        self.assertIsInstance(config["template"], IncludedYaml)
-        self.assertIsInstance(config["binary_sensor"], IncludedYaml)
-        self.assertIsInstance(config["group"], IncludedYaml)
-        self.assertIsInstance(config["switch"], IncludedYaml)
-        self.assertEqual(secrets["myamazingpassword"], "holymoly")
-        self.assertEqual(
-            config["automation"].data[32]["trigger"][0]["device_id"],
-            SecretValue("baby_btn_device_id", "347492ffc6b909a55ebe08745fca1bf6"),
-        )
-        self.assertEqual(file_path, SAMPLE_HA_PATH / "configuration.yaml")
-
-
-class AutomationLoader_tests(TestCase):
+class parser_tests(TestCase):
     def test_various_condition_types(self):
         raw_conditions = [
             {"condition": "template", "value_template": "silly logic here"},
@@ -248,170 +221,115 @@ class AutomationLoader_tests(TestCase):
         for expected, parsed in zip(expected_process, _parse_actions(raw_conditions)):
             self.assertEqual(parsed, expected)
 
-    def test_load_automation_runs(self):
-        auto = list(
-            load_automation(
-                [
-                    {
-                        "id": "1616887975473",
-                        "alias": "Home Assistant Off",
-                        "description": "",
-                        "trigger": [{"platform": "homeassistant", "event": "shutdown"}],
-                        "condition": ["states(time.time) >= '10:00:00'"],
-                        "action": [
-                            {
-                                "device_id": SecretValue("my_mobile_phone", "..."),
-                                "domain": "mobile_app",
-                                "type": "notify",
-                                "title": "Hassio Status",
-                                "message": "Hassio Is turning off...",
-                            }
-                        ],
-                        "mode": "single",
-                    }
-                ]
-            )
-        )
-        self.assertEqual(
-            auto[0],
-            AutomationData(
-                metadata=AutomationMetdata(
-                    id="1616887975473",
-                    alias="Home Assistant Off",
-                    description="",
-                    mode="single",
-                ),
-                trigger=[{"platform": "homeassistant", "event": "shutdown"}],
-                condition=[
-                    AutomationConditionNode(
-                        condition="template",
-                        condition_data={"value_template": "states(time.time) >= '10:00:00'"},
-                    )
-                ],
-                action=[
-                    AutomationActionNode(
-                        action="device",
-                        action_data={
-                            "device_id": NOT_IMPLEMENTED_SV_MSG,
-                            "domain": "mobile_app",
-                            "type": "notify",
-                            "title": "Hassio Status",
-                            "message": "Hassio Is turning off...",
-                        },
-                    )
-                ],
-            ),
-        )
+    # def test_finding_with_AutomationLoader(self):
+    #     automation_loader = AutomationLoader(load_hass_config(SAMPLE_HA_PATH))
 
-    def test_finding_with_AutomationLoader(self):
-        automation_loader = AutomationLoader(load_hass_config(SAMPLE_HA_PATH))
+    #     first_auto_with_find = list(automation_loader.find(limit=1))
+    #     first_auto_with_get = automation_loader.get(0)
+    #     self.assertEqual(first_auto_with_find[0], first_auto_with_get)
 
-        first_auto_with_find = list(automation_loader.find(limit=1))
-        first_auto_with_get = automation_loader.get(0)
-        self.assertEqual(first_auto_with_find[0], first_auto_with_get)
+    #     kitchen_autos = list(automation_loader.find(alias="kitchen"))
+    #     self.assertTrue(len(kitchen_autos), 3)
 
-        kitchen_autos = list(automation_loader.find(alias="kitchen"))
-        self.assertTrue(len(kitchen_autos), 3)
+    #     self.assertIsNone(automation_loader.get(-1))
+    #     self.assertIsNone(automation_loader.get(1_000))
+    #     self.assertIsNone(automation_loader.get(31))
+    #     self.assertEqual(len(automation_loader), 31)
 
-        self.assertIsNone(automation_loader.get(-1))
-        self.assertIsNone(automation_loader.get(1_000))
-        self.assertIsNone(automation_loader.get(35))
-        self.assertEqual(len(automation_loader), 34)
+    # def test_invalid_automations(self):
+    #     with self.assertRaises(AutomationLoaderException):
+    #         AutomationLoader(
+    #             HassConfig(
+    #                 secrets={},
+    #                 config={
+    #                     "automation": "bob",
+    #                 },
+    #                 root_config_path=Path("."),
+    #             )
+    #         )
 
-    def test_invalid_automations(self):
-        with self.assertRaises(AutomationLoaderException):
-            AutomationLoader(
-                HassConfig(
-                    secrets={},
-                    config={
-                        "automation": "bob",
-                    },
-                    root_config_path=Path("."),
-                )
-            )
+    #     with self.assertRaises(AutomationLoaderException):
+    #         AutomationLoader(
+    #             HassConfig(
+    #                 secrets={},
+    #                 config={},
+    #                 root_config_path=Path("."),
+    #             )
+    #         )
 
-        with self.assertRaises(AutomationLoaderException):
-            AutomationLoader(
-                HassConfig(
-                    secrets={},
-                    config={},
-                    root_config_path=Path("."),
-                )
-            )
+    # def test_overwriting_one_auto_in_separate_file(self):
+    #     # create dummy data
+    #     config_path = create_dummy_config_folder(
+    #         auto=[
+    #             AutomationData(
+    #                 metadata=AutomationMetdata(
+    #                     id="01",
+    #                 )
+    #             ),
+    #             AutomationData(
+    #                 metadata=AutomationMetdata(
+    #                     id="02",
+    #                 )
+    #             ),
+    #             AutomationData(
+    #                 metadata=AutomationMetdata(
+    #                     id="03",
+    #                 )
+    #             ),
+    #         ]
+    #     )
+    #     # check the data is loaded well
+    #     automation_loader = AutomationLoader(load_hass_config(config_path))
+    #     self.assertEqual(automation_loader.get(0).metadata.id, "01")
+    #     self.assertEqual(automation_loader.get(1).metadata.id, "02")
+    #     self.assertEqual(automation_loader.get(2).metadata.id, "03")
+    #     self.assertIsNone(automation_loader.get(3))
+    #     self.assertEqual(len(automation_loader), 3)
+    #     # update auto #1
+    #     automation_loader.save(
+    #         1,
+    #         AutomationData(
+    #             metadata=AutomationMetdata(id="02", alias="flush toilet!"),
+    #             trigger=[{"event": "toilet.flushed"}],
+    #         ),
+    #     )
+    #     # check that in-memory data is correctly updated
+    #     self.assertEqual(automation_loader.get(1).metadata.id, "02")
+    #     self.assertEqual(automation_loader.get(1).metadata.alias, "flush toilet!")
+    #     self.assertListEqual(automation_loader.get(1).trigger, [{"event": "toilet.flushed"}])
 
-    def test_overwriting_one_auto_in_separate_file(self):
-        # create dummy data
-        config_path = create_dummy_config_folder(
-            auto=[
-                AutomationData(
-                    metadata=AutomationMetdata(
-                        id="01",
-                    )
-                ),
-                AutomationData(
-                    metadata=AutomationMetdata(
-                        id="02",
-                    )
-                ),
-                AutomationData(
-                    metadata=AutomationMetdata(
-                        id="03",
-                    )
-                ),
-            ]
-        )
-        # check the data is loaded well
-        automation_loader = AutomationLoader(load_hass_config(config_path))
-        self.assertEqual(automation_loader.get(0).metadata.id, "01")
-        self.assertEqual(automation_loader.get(1).metadata.id, "02")
-        self.assertEqual(automation_loader.get(2).metadata.id, "03")
-        self.assertIsNone(automation_loader.get(3))
-        self.assertEqual(len(automation_loader), 3)
-        # update auto #1
-        automation_loader.save(
-            1,
-            AutomationData(
-                metadata=AutomationMetdata(id="02", alias="flush toilet!"),
-                trigger=[{"event": "toilet.flushed"}],
-            ),
-        )
-        # check that in-memory data is correctly updated
-        self.assertEqual(automation_loader.get(1).metadata.id, "02")
-        self.assertEqual(automation_loader.get(1).metadata.alias, "flush toilet!")
-        self.assertListEqual(automation_loader.get(1).trigger, [{"event": "toilet.flushed"}])
-
-        # check that disk data is correctly updated
-        reloaded_automation_loader = AutomationLoader(load_hass_config(config_path))
-        self.assertEqual(len(automation_loader), 3)
-        self.assertEqual(reloaded_automation_loader.get(1).metadata.id, "02")
-        self.assertEqual(reloaded_automation_loader.get(1).metadata.alias, "flush toilet!")
-        self.assertListEqual(
-            reloaded_automation_loader.get(1).trigger, [{"event": "toilet.flushed"}]
-        )
-        # add new auto
-        automation_loader.save(
-            3,
-            AutomationData(
-                metadata=AutomationMetdata(id="newest", alias="testing autos"),
-                condition=[
-                    AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})
-                ],
-            ),
-        )
-        # check that in-memory data is correctly updated
-        self.assertEqual(len(automation_loader), 4)
-        self.assertEqual(automation_loader.get(3).metadata.id, "newest")
-        self.assertEqual(automation_loader.get(3).metadata.alias, "testing autos")
-        self.assertListEqual(
-            automation_loader.get(3).condition,
-            [AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})],
-        )
-        # check that disk data is correctly updated
-        reloaded_automation_loader = AutomationLoader(load_hass_config(config_path))
-        self.assertEqual(len(reloaded_automation_loader), 4)
-        self.assertEqual(reloaded_automation_loader.get(3).metadata.id, "newest")
-        self.assertEqual(reloaded_automation_loader.get(3).metadata.alias, "testing autos")
-        self.assertListEqual(
-            reloaded_automation_loader.get(3).condition,
-            [AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})],
-        )
+    #     # check that disk data is correctly updated
+    #     reloaded_automation_loader = AutomationLoader(load_hass_config(config_path))
+    #     self.assertEqual(len(automation_loader), 3)
+    #     self.assertEqual(reloaded_automation_loader.get(1).metadata.id, "02")
+    #     self.assertEqual(reloaded_automation_loader.get(1).metadata.alias, "flush toilet!")
+    #     self.assertListEqual(
+    #         reloaded_automation_loader.get(1).trigger, [{"event": "toilet.flushed"}]
+    #     )
+    #     # add new auto
+    #     automation_loader.save(
+    #         3,
+    #         AutomationData(
+    #             metadata=AutomationMetdata(id="newest", alias="testing autos"),
+    #             sequence=[
+    #                 AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})
+    #             ],
+    #         ),
+    #     )
+    #     # check that in-memory data is correctly updated
+    #     self.assertEqual(len(automation_loader), 4)
+    #     self.assertEqual(automation_loader.get(3).metadata.id, "newest")
+    #     self.assertEqual(automation_loader.get(3).metadata.alias, "testing autos")
+    #     self.assertListEqual(
+    #         automation_loader.get(3).sequence,
+    #         [AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})],
+    #     )
+    #     # check that disk data is correctly updated
+    #     reloaded_automation_loader = AutomationLoader(load_hass_config(config_path))
+    #     self.assertEqual(len(reloaded_automation_loader), 4)
+    #     self.assertEqual(reloaded_automation_loader.get(3).metadata.id, "newest")
+    #     self.assertEqual(reloaded_automation_loader.get(3).metadata.alias, "testing autos")
+    #     self.assertListEqual(
+    #         reloaded_automation_loader.get(3).sequence,
+    #         [AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})],
+    #     )

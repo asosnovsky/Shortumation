@@ -1,9 +1,0 @@
-web/node_modules
-web/.parcel-cache
-web/dist
-api/venv
-**__pycache__**
-*.db*
-.coverage
-api/tests/samples/
-.tmp**

@@ -9,17 +9,15 @@ class IncludedYaml(NamedTuple):
     this data type will represent it.
     """
 
-    name: str  # original node name
-    original_path: Path  # path to location of original file
-    data: Any  # the parsed data
+    path: Path  # original node path
 
     @classmethod
     def to_yaml(cls, representer: BaseRepresenter, node: "IncludedYaml"):
-        return representer.represent_scalar("!include", node.name)
+        return representer.represent_scalar("!include", str(node.path.absolute()))
 
     @classmethod
     def from_yaml(cls, _constructor, node: Node):
-        return cls(node.value, Path("/"), "n/a")
+        return cls(Path(node.value).absolute())
 
 
 class SecretValue(NamedTuple):
@@ -27,7 +25,7 @@ class SecretValue(NamedTuple):
     value: str
 
     @classmethod
-    def to_yaml(cls, representer: BaseRepresenter, node: Node):
+    def to_yaml(cls, representer: BaseRepresenter, node: "SecretValue"):
         return representer.represent_scalar("!secret", node.name)
 
     @classmethod
@@ -48,17 +46,9 @@ class IncludedYamlDir(NamedTuple):
     name: str  # original node name
 
     @classmethod
-    def to_yaml(cls, representer: BaseRepresenter, node: "IncludedYaml"):
+    def to_yaml(cls, representer: BaseRepresenter, node: "IncludedYamlDir"):
         return representer.represent_scalar(f"!{node.original_tag}", node.name)
 
     @classmethod
     def from_yaml(cls, _constructor, node: Node):
         return cls(node.tag[1:], node.value)
-
-
-class HassConfig(NamedTuple):
-    """The final output for load_hass_config"""
-
-    secrets: dict  # the secrets file content
-    config: dict  # the complete configration.yaml tree
-    root_config_path: Path  # where the root 'configuration.yaml' lives

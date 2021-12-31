@@ -1,21 +1,21 @@
 from tempfile import mkdtemp
 from pathlib import Path
-from typing import List, Optional
-from src.config.AutomationLoader import AutomationData
+from typing import List, Literal, Optional
+from src.automations.types import AutomationData
 
 from src.yaml_serializer import dump_yaml
 from src.yaml_serializer.types import IncludedYaml
 
 THIS_FOLDER = Path(__file__).parent
-SAMPLE_HA_PATH = THIS_FOLDER / "samples"
-SAMPLE_DB_PATH = SAMPLE_HA_PATH / "home-assistant_v2.db"
+SAMPLES_FOLDER = THIS_FOLDER / "samples"
+HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "example_config_folder"
 
 
 def create_dummy_config_folder(
     auto: List[AutomationData],
     secrets: Optional[dict] = None,
     other_config: Optional[dict] = None,
-    include_auto_in_configuration: bool = False,
+    automation_in_conifguration_mode: Literal["include", "inline", "none"] = "include",
 ) -> Path:
     """Creates a dummy /config structure for testing
 
@@ -23,7 +23,7 @@ def create_dummy_config_folder(
         auto (List[AutomationData]): automations
         secrets (Optional[dict], optional): dictionary of secrets
         other_config (Optional[dict], optional): some config stuff to place into configuration.yaml. Defaults to None.
-        include_auto_in_configuration (bool, optional): whether to !include automation as a separete file or in the configuration yaml. Defaults to False.
+        automation_in_conifguration_mode (Literal['include', 'inline', 'none'], optional): whether to !include automation as a separete file or in the configuration yaml. Defaults to inline.
 
     Returns:
         Path: [description]
@@ -31,12 +31,13 @@ def create_dummy_config_folder(
     root_folder = Path(mkdtemp())
     auto_prims = [a.to_primitive() for a in auto]
     configuration_yaml = {**other_config} if other_config is not None else {}
-    if include_auto_in_configuration:
+    if automation_in_conifguration_mode == "inline":
         configuration_yaml["automation"] = auto_prims
-    else:
+    elif automation_in_conifguration_mode == "include":
         configuration_yaml["automation"] = IncludedYaml(
-            "automations.yaml", root_folder / "automations.yaml", auto
+            Path(root_folder / "automations.yaml"),
         )
+    if automation_in_conifguration_mode != "inline":
         (root_folder / "automations.yaml").write_text(dump_yaml(auto_prims))
     if secrets is not None:
         (root_folder / "secrets.yaml").write_text(dump_yaml(secrets))

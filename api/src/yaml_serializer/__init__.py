@@ -1,25 +1,6 @@
 import io
-from pathlib import Path
-from typing import Any, Union
+from typing import Any, Union, TextIO
 from src.yaml_serializer.base_yaml import yaml
-from src.yaml_serializer.HassYaml import HassYaml
-from src.yaml_serializer.types import HassConfig, SecretValue, IncludedYaml, IncludedYamlDir
-
-
-## TODO: consider deprecating this and using 'simple_load_yaml' for consistency
-def load_hass_config(file_path: Path) -> HassConfig:
-    """Load all Hass configrations from the root config folder
-    **highly opinionated**
-
-    Args:
-        file_path (Path)
-
-    Returns:
-        HassConfig
-    """
-    HAY = HassYaml()
-    data = HAY.load(file_path / "configuration.yaml")
-    return HassConfig(HAY.secrets, data, file_path / "configuration.yaml")
 
 
 def dump_yaml(obj: Any) -> str:
@@ -37,7 +18,7 @@ def dump_yaml(obj: Any) -> str:
     return stream.read()
 
 
-def simple_load_yaml(yaml_stream: io.StringIO) -> Union[dict, list]:
+def load_yaml(yaml_stream: TextIO) -> Union[dict, list]:
     """Load yaml from string using some hass-compliant yaml strings
 
     Args:

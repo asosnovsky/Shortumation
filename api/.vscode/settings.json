@@ -1,14 +1,5 @@
 {
     "python.formatting.provider": "black",
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "ha",
-            "sqltools.useNodeRuntime": true,
-            "database": "./tests/samples/home-assistant_v2.db"
-        }
-    ],
     "python.testing.unittestArgs": [
         "-v",
         "-s",

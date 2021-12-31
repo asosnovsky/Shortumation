@@ -1,6 +1,6 @@
 import orjson
 from typing import Any, Union
-from src.yaml_serializer import SecretValue
+from src.yaml_serializer.types import SecretValue
 
 # TODO: add support for these
 NOT_IMPLEMENTED_SV_MSG = "SECRET VALUE NOT IMPLEMENTED"
