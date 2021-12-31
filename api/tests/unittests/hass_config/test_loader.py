@@ -1,9 +1,7 @@
 from unittest import TestCase
 from src.automations.types import AutomationData, AutomationMetdata
 from src.hass_config.loader import HassConfig
-from tests.utils import HA_CONFIG_EXAMPLE, create_dummy_config_folder
-
-example_hass_config = HassConfig(HA_CONFIG_EXAMPLE)
+from tests.utils import create_dummy_config_folder
 
 
 class loader_tests(TestCase):
@@ -17,7 +15,7 @@ class loader_tests(TestCase):
         self.assertTrue("automation" in hass_config.configurations)
         self.assertEqual(hass_config.automations[0]["id"], "test")
 
-    def test_load_automation_from_config_yaml_inclue(self):
+    def test_load_automation_from_config_yaml_include(self):
         folder = create_dummy_config_folder(
             [AutomationData(metadata=AutomationMetdata(id="test"))],
             automation_in_conifguration_mode="include",

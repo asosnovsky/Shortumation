@@ -17,11 +17,11 @@ class dumping_yamls_tests(TestCase):
         yaml = dump_yaml(
             {
                 "automations": IncludedYaml(
-                    Path("automations.yaml"),
+                    "automations.yaml",
                 )
             }
         )
-        self.assertEqual(yaml, f"automations: !include {Path('automations.yaml').absolute()}\n")
+        self.assertEqual(yaml, "automations: !include automations.yaml\n")
 
     def test_dumping_secrets(self):
         yaml = dump_yaml({"google_password": SecretValue("gpass", "supersec")})
@@ -48,7 +48,7 @@ class dumping_yamls_tests(TestCase):
                 "name": "cool",
                 "google_password": SecretValue("gpass", "n/a"),
                 "sensor": IncludedYamlDir("include_dir_list", "sensors/*yaml"),
-                "automations": IncludedYaml(Path("automations.yaml").absolute()),
+                "automations": IncludedYaml("automations.yaml"),
             },
         )
         self.assertEqual(
@@ -56,5 +56,5 @@ class dumping_yamls_tests(TestCase):
             "name: cool\n"
             "google_password: !secret gpass\n"
             "sensor: !include_dir_list sensors/*yaml\n"
-            f"automations: !include {Path('automations.yaml').absolute()}\n",
+            f"automations: !include automations.yaml\n",
         )

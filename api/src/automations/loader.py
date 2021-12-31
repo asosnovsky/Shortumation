@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Iterable
+from typing import Iterable, Iterator
 from src.json_serializer import normalize_obj
 from .types import AutomationData, AutomationMetdata
 from .parsers import _parse_actions
@@ -7,7 +7,7 @@ from .parsers import _parse_actions
 # Single loader
 def load_automation(
     automations_raw_data: Iterable[dict],
-) -> Iterable[AutomationData]:
+) -> Iterator[AutomationData]:
     """Converts an automation dictionary loaded directly from the config into
     several python typed objects
 
@@ -15,7 +15,7 @@ def load_automation(
         automations_raw_data (Iterable[dict])
 
     Returns:
-        Iterable[AutomationData]
+        Iterator[AutomationData]
 
     """
     for auto_raw in automations_raw_data:

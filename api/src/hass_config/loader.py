@@ -21,8 +21,8 @@ class HassConfig:
         if "automation" in config:
             automation_ref = config["automation"]
             if isinstance(automation_ref, IncludedYaml):
-                automation_path = automation_ref.path
+                automation_path = self.root_path / automation_ref.path_str
             else:
-                return list(config["automation"])
+                return config["automation"]
         with automation_path.open("r") as f:
-            return list(load_yaml(f))  # type: ignore
+            return load_yaml(f)  # type: ignore

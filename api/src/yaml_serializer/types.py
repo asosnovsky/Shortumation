@@ -9,15 +9,15 @@ class IncludedYaml(NamedTuple):
     this data type will represent it.
     """
 
-    path: Path  # original node path
+    path_str: str  # original node path
 
     @classmethod
     def to_yaml(cls, representer: BaseRepresenter, node: "IncludedYaml"):
-        return representer.represent_scalar("!include", str(node.path.absolute()))
+        return representer.represent_scalar("!include", node.path_str)
 
     @classmethod
     def from_yaml(cls, _constructor, node: Node):
-        return cls(Path(node.value).absolute())
+        return cls(node.value)
 
 
 class SecretValue(NamedTuple):

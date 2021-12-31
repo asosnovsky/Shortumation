@@ -35,7 +35,7 @@ def create_dummy_config_folder(
         configuration_yaml["automation"] = auto_prims
     elif automation_in_conifguration_mode == "include":
         configuration_yaml["automation"] = IncludedYaml(
-            Path(root_folder / "automations.yaml"),
+            "automations.yaml",
         )
     if automation_in_conifguration_mode != "inline":
         (root_folder / "automations.yaml").write_text(dump_yaml(auto_prims))
