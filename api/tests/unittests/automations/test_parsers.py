@@ -221,27 +221,6 @@ class parser_tests(TestCase):
         for expected, parsed in zip(expected_process, _parse_actions(raw_conditions)):
             self.assertEqual(parsed, expected)
 
-    # def test_invalid_automations(self):
-    #     with self.assertRaises(AutomationLoaderException):
-    #         AutomationLoader(
-    #             HassConfig(
-    #                 secrets={},
-    #                 config={
-    #                     "automation": "bob",
-    #                 },
-    #                 root_config_path=Path("."),
-    #             )
-    #         )
-
-    #     with self.assertRaises(AutomationLoaderException):
-    #         AutomationLoader(
-    #             HassConfig(
-    #                 secrets={},
-    #                 config={},
-    #                 root_config_path=Path("."),
-    #             )
-    #         )
-
     # def test_overwriting_one_auto_in_separate_file(self):
     #     # create dummy data
     #     config_path = create_dummy_config_folder(

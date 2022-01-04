@@ -1,7 +1,10 @@
+from shutil import copytree
 from tempfile import mkdtemp
 from pathlib import Path
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Tuple
+from src.automations.manager import AutomationManager
 from src.automations.types import AutomationData
+from src.hass_config.loader import HassConfig
 
 from src.yaml_serializer import dump_yaml
 from src.yaml_serializer.types import IncludedYaml
@@ -9,6 +12,58 @@ from src.yaml_serializer.types import IncludedYaml
 THIS_FOLDER = Path(__file__).parent
 SAMPLES_FOLDER = THIS_FOLDER / "samples"
 HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "example_config_folder"
+
+
+def get_example_automation_loader() -> Tuple[Path, HassConfig, AutomationManager]:
+    """Creates an example automation loader from the samples folder
+
+    Returns:
+        Tuple[Path, HassConfig, AutomationManager]
+    """
+    root_folder = create_copy_of_example_config()
+    hass_config = HassConfig(root_folder)
+    automation_loader = AutomationManager(hass_config)
+    return root_folder, hass_config, automation_loader
+
+
+def create_copy_of_example_config() -> Path:
+    """Creates a copy of the example config folder
+
+    Returns:
+        Path
+    """
+    root_folder = Path(mkdtemp())
+    root_folder.rmdir()
+    copytree(HA_CONFIG_EXAMPLE, root_folder)
+    return root_folder
+
+
+def get_dummy_automation_loader(
+    auto: List[AutomationData],
+    secrets: Optional[dict] = None,
+    other_config: Optional[dict] = None,
+    automation_in_conifguration_mode: Literal["include", "inline", "none"] = "include",
+) -> Tuple[Path, HassConfig, AutomationManager]:
+    """Creates a dummy /config structure for testing and return the loader and config
+
+    Args:
+        auto (List[AutomationData]): automations
+        secrets (Optional[dict], optional): dictionary of secrets
+        other_config (Optional[dict], optional): some config stuff to place into configuration.yaml. Defaults to None.
+        automation_in_conifguration_mode (Literal['include', 'inline', 'none'], optional): whether to !include automation as a separete file or in the configuration yaml. Defaults to inline.
+
+    Returns:
+        Path: [description]
+    """
+    root_folder = create_dummy_config_folder(
+        auto,
+        secrets,
+        other_config,
+        automation_in_conifguration_mode,
+    )
+    hass_config = HassConfig(root_folder)
+    automation_loader = AutomationManager(hass_config)
+    return root_folder, hass_config, automation_loader
 
 
 def create_dummy_config_folder(

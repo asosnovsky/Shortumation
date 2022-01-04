@@ -1,4 +1,5 @@
-from typing import Iterator, Optional
+from typing import Iterator, List, Optional
+from src.automations.errors import FailedDeletion
 from src.automations.types import AutomationData
 from src.hass_config.loader import HassConfig
 from .loader import load_automation
@@ -26,3 +27,35 @@ class AutomationManager:
                 if i == index:
                     return next(load_automation(([auto])))
         return None
+
+    def update(self, index: int, automation: AutomationData):
+        automations: List[dict] = []
+        updated = False
+        for i, orig_auto in enumerate(self.hass_config.automations):
+            if i == index:
+                automations.append(automation.to_primitive())
+                updated = True
+            else:
+                automations.append(orig_auto)
+        if not updated:
+            automations.append(automation.to_primitive())
+        self.hass_config.save_automations(automations)
+
+    def delete(self, index: int):
+        automations: List[dict] = []
+        deleted = False
+        for i, orig_auto in enumerate(self.hass_config.automations):
+            if i == index:
+                deleted = True
+            else:
+                automations.append(orig_auto)
+        if not deleted:
+            raise FailedDeletion("No such automation found")
+        self.hass_config.save_automations(automations)
+
+    # TODO: improve on this without keeping things in memory
+    def get_total_items(self) -> int:
+        count = 0
+        for i, _ in enumerate(self.hass_config.automations):
+            count = i
+        return count + 1
