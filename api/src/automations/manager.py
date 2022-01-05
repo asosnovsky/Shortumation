@@ -17,7 +17,7 @@ class AutomationManager:
         for i, auto in enumerate(self.hass_config.automations):
             if i < offset:
                 continue
-            if i > offset + limit:
+            if i >= offset + limit:
                 break
             yield from load_automation([auto])
 

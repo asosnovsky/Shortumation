@@ -1,53 +1,41 @@
-from typing import Optional
 from fastapi import APIRouter, HTTPException
-
-# from src.automations.AutomationLoader import AutomationData, AutomationLoaderException
-
-# from ..config import automation_loader
-
-router = APIRouter()
-
-
-@router.get("/list")
-def list_autos(
-    offset: int = 0,
-    limit: int = 10,
-    alias: Optional[str] = None,
-    description: Optional[str] = None,
-    mode: Optional[str] = None,
-):
-    return list(
-        automation_loader.find(
-            offset=offset,
-            limit=limit,
-            alias=alias,
-            description=description,
-            mode=mode,
-        )
-    )
+from src.automations.manager import AutomationManager
+from src.api.types import (
+    DeleteAutoRequest,
+    ListData,
+    ListParams,
+    UpdateAutoRequest,
+)
+from src.automations.errors import FailedDeletion
+from src.automations.types import AutomationData
 
 
-@router.get("/{index}")
-def get_auto(index: int):
-    if auto := automation_loader.get(index):
-        return auto
-    else:
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "index": "out of bounds",
-                "must_be": f">= 0 or < {len(automation_loader)}",
-                "specified": index,
-            },
+def make_automation_router(automations: AutomationManager) -> APIRouter:
+    router = APIRouter()
+
+    @router.post("/list")
+    def list_autos(body: ListParams) -> ListData[AutomationData]:
+        return ListData(
+            params=body,
+            totalItems=automations.get_total_items(),
+            data=automations.find(
+                offset=body.offset,
+                limit=body.limit,
+            ),
         )
 
+    @router.post("/")
+    def upsert_auto(body: UpdateAutoRequest):
+        automations.update(body.index, body.data)
 
-@router.post("/{index}")
-def upsert_auto(index: int, auto: AutomationData):
-    try:
-        automation_loader.save(index, auto)
-    except AutomationLoaderException as err:
-        return HTTPException(
-            status_code=500,
-            detail=err.args,
-        )
+    @router.delete("/")
+    def delete_auto(body: DeleteAutoRequest):
+        try:
+            automations.delete(body.index)
+        except FailedDeletion as err:
+            return HTTPException(
+                status_code=400,
+                detail=err.args,
+            )
+
+    return router
