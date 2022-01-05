@@ -1,7 +1,7 @@
 version: '3'
 services:
   addon:
-    image: "shortumation:${BUILD_TAG:-latest}"
+    image: "local/shortumation:${BUILD_TAG:-latest}"
     build:
       context: "./"
       dockerfile: "./Dockerfile"
