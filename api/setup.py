@@ -5,7 +5,6 @@ setuptools.setup(
     python_requires=">=3.9",
     install_requires=[
         "ruamel.yaml==0.17.17",
-        "SQLAlchemy==1.4.26",
         "fastapi==0.70.0",
         "pydantic==1.8.2",
         "uvicorn[standard]==0.15.0",

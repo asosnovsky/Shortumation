@@ -1,4 +1,5 @@
 import os
+from typing import cast
 from decouple import config
 from pathlib import Path
 from .loader import HassConfig
@@ -6,6 +7,10 @@ from .loader import HassConfig
 
 def find_hass_config() -> HassConfig:
     """Try to find HASS config."""
+    if config("USE_EXAMPLE_REPO", False, cast=bool):
+        from tests.utils import create_copy_of_example_config
+        return HassConfig(create_copy_of_example_config())
+
     if "HASSIO_TOKEN" in os.environ:
         return HassConfig(Path("/config"))
 
