@@ -48,6 +48,15 @@ class manager_tests(TestCase):
         self.assertIsNotNone(auto)
         self.assertEqual(auto.metadata.id, "test1")  # type: ignore
 
+    def test_create_automation_with_example_folder(self):
+        _, _, manager = get_example_automation_loader()
+        self.assertEqual(manager.get_total_items(), 31)
+        manager.update(32, AutomationData(metadata=AutomationMetdata(id="test1")))
+        auto = manager.get(31)
+        self.assertIsNotNone(auto)
+        self.assertEqual(manager.get_total_items(), 32)
+        self.assertEqual(auto.metadata.id, "test1")  # type: ignore
+
     def test_update_automation(self):
         _, _, manager = get_dummy_automation_loader(
             [
