@@ -1,27 +1,46 @@
-- id: "1616887975473"
+- id: '1616887975473'
   alias: Home Assistant Off
-  description: ""
-  trigger:
-    - platform: homeassistant
-      event: shutdown
-  condition: []
-  action:
-    - device_id: 2a98db84af7526c7ec3cc7aebd1a9e1c
-      domain: mobile_app
-      type: notify
-      title: Hassio Status
-      message: Hassio Is turning off...
+  description: ''
+  trigger_variables:
   mode: single
-- id: "1616888026264"
-  alias: Home Assistant On
-  description: ""
   trigger:
-    - platform: homeassistant
-      event: start
+  - platform: homeassistant
+    event: shutdown
   condition: []
   action:
-    - device_id: 2a98db84af7526c7ec3cc7aebd1a9e1c
-      domain: mobile_app
-      type: notify
-      title: Hassio Status
-      message: Home assistant is up!
+  - device_id: 2a98db84af7526c7ec3cc7aebd1a9e1c
+    domain: mobile_app
+    type: notify
+    title: Hassio Status
+    message: Hassio Is turning off...
+  - choose: []
+    default: []
+    alias: choose better days
+- id: '1616888026264'
+  alias: Home Assistant On
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - device_id: 2a98db84af7526c7ec3cc7aebd1a9e1c
+    domain: mobile_app
+    type: notify
+    title: Hassio Status
+    message: Home assistant is up!
+- id: shortu-2
+  alias: Neat trick
+  description: ''
+  trigger_variables:
+  mode: queued
+  trigger: []
+  condition: []
+  action:
+  - alias: Choose
+    default: []
+    choose: []
+  - service: lights.turn_on
+    target:
+      entity: bear
+    data: {}
