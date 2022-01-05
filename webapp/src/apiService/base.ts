@@ -1,4 +1,4 @@
-import { APIRequest, APIResponse } from "./types";
+import { APIRequest, APIResponse } from './types';
 
 export interface API {
   makeCall: <Res = any, Req = any>(req: APIRequest<Req>) => Promise<APIResponse<Res>>; 
@@ -9,19 +9,26 @@ export const makeRemoteAPI = (baseURL: string): API => ({
       method = "POST",
       data={}
     }) {
-      const reply = await fetch(baseURL + "/" + path, {
+      const reply = await fetch(baseURL + path, {
         method,
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(data),
       });
+      let response: APIResponse<any>;
       if (reply.status === 200) {
-        return {
+        response = {
           ok: true,
           data: await reply.json(),
         }
+      } else {
+        response = {
+          ok: false,
+          error: await reply.text(),
+        }
+        console.error(response)
       }
-      return {
-        ok: false,
-        error: await reply.text(),
-      }
+      return response
     }
 })

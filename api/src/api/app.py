@@ -7,14 +7,17 @@ from .routes import ping, automations
 
 def make_app(automation_mgr: AutomationManager) -> FastAPI:
     app = FastAPI()
-    # app.mount(
-    #     "/web",
-    #     StaticFiles(
-    #         directory=ROOT_FOLDER / "web",
-    #         html=True,
-    #     ),
-    #     name="web",
-    # )
+    if (ROOT_FOLDER / "web").exists():
+        app.mount(
+            "/web",
+            StaticFiles(
+                directory=ROOT_FOLDER / "web",
+                html=True,
+            ),
+            name="web",
+        )
+    else:
+        print("WARN: could not find web folder")
     app.include_router(ping.router, prefix="/ping")
     app.include_router(automations.make_automation_router(automation_mgr), prefix="/automations")
 

@@ -5,7 +5,7 @@ import { useAPIService } from './core';
 import {useMockAPI} from "./mock";
 
 export const useConnectedApiService = () => useAPIService(
-  makeAutomationAPI(makeRemoteAPI("/api/v1"))
+  makeAutomationAPI(makeRemoteAPI("/automations"))
 );
 export const useMockApiService = (initialAutos: AutomationData[]) => useAPIService(
   makeAutomationAPI(useMockAPI(initialAutos))

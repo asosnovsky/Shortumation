@@ -12,7 +12,6 @@ export const makeAutomationAPI = (api: API) => ({
         offset, limit,
       }
     });
-    console.log({ list: data });
     return data;
   },
   async update({index, auto}: {index: number, auto: AutomationData}) {

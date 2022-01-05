@@ -43,5 +43,5 @@ clean:
 
 run-local:
 	rm -f web
-	ln -s ../web/dist web
+	ln -s ../webapp/build web
 	USE_EXAMPLE_REPO=1 uvicorn src.app:app

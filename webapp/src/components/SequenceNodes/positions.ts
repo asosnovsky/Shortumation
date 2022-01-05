@@ -27,7 +27,6 @@ function* dealWithNested(
     p2: innerStartLoc,
     direction: '1->2',
   }
-  console.log(onRemove)
   if (onEdit) {
     yield {
       type: 'circle',
