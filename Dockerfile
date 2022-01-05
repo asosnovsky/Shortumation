@@ -36,7 +36,7 @@ COPY --from=pybuilder /python/venv /data/venv
 COPY --from=webbuilder /web/build /data/web
 
 COPY api/src /data/src
-
+COPY run.sh run.sh
 
 ENV HASSIO_TOKEN ""
 ENV BUILD_VERSION $BUILD_VERSION
@@ -48,5 +48,5 @@ LABEL \
   io.hass.type="addon" \
   io.hass.arch="armhf|aarch64|i386|amd64"
 
-CMD [ "/data/venv/bin/python", "-m", "uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8000" ]
+CMD [ "/run.sh" ]
 
