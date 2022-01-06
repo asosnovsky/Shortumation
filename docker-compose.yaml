@@ -1,12 +1,7 @@
 version: '3'
 services:
   addon:
-    image: "local/shortumation:${BUILD_TAG:-latest}"
-    build:
-      context: "./"
-      dockerfile: "./Dockerfile"
-      args:
-        - BUILD_FROM=homeassistant/amd64-base:latest
+    image: "asosnovsky/shortumation:${ARCH:-amd64}-${BUILD_TAG:-latest}"
     volumes:
       - "./sample_config:/config"
     ports:

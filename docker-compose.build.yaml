@@ -1,0 +1,9 @@
+version: '3'
+services:
+  addon:
+    image: "asosnovsky/shortumation:${ARCH:-amd64}-${BUILD_TAG:-latest}"
+    build:
+      context: "./"
+      dockerfile: "./Dockerfile"
+      args:
+        - BUILD_FROM=homeassistant/${ARCH:-amd64}-base:latest
