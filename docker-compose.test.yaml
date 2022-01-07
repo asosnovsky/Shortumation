@@ -1,7 +1,6 @@
 version: '3'
 services:
   addon:
-    image: "asosnovsky/shortumation:${ARCH:-amd64}-${BUILD_TAG:-latest}"
     volumes:
       - "./sample_config:/config"
     ports:
