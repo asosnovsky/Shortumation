@@ -13,8 +13,9 @@ RUN apk add --no-cache \
     rust \
     gcompat \
     nodejs \
+    npm \
     build-base \
-    python3-dev   
+    python3-dev  
 RUN pip install -U wheel setuptools pip
 
 # <--- Python Dependencies --> 
