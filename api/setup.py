@@ -9,7 +9,6 @@ setuptools.setup(
         "pydantic==1.8.2",
         "uvicorn[standard]==0.15.0",
         "python-decouple==3.5",
-        "orjson==3.6.4",
     ],
     extras_require={
         "dev": [

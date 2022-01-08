@@ -1,5 +1,4 @@
 import io
-from pathlib import Path
 from unittest import TestCase
 from src.yaml_serializer import (
     dump_yaml,

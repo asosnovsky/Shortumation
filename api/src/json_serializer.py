@@ -1,28 +1,5 @@
-import orjson
-from typing import Any, Union
-from ruamel.yaml.scalarstring import ScalarString
-from ruamel.yaml.scalarint import ScalarInt
-from ruamel.yaml.scalarbool import ScalarBoolean
-from ruamel.yaml.scalarfloat import ScalarFloat
-from src.yaml_serializer.types import SecretValue
-from src.yaml_serializer.types import SecretValue
-
-# TODO: add support for these
-NOT_IMPLEMENTED_SV_MSG = "SECRET VALUE NOT IMPLEMENTED"
-
-
-def __default(obj: Any) -> str:
-    if isinstance(obj, SecretValue):
-        return NOT_IMPLEMENTED_SV_MSG
-    if isinstance(obj, ScalarString):
-        return str(obj)
-    if isinstance(obj, ScalarBoolean):
-        return bool(obj)
-    if isinstance(obj, ScalarFloat):
-        return float(obj)
-    if isinstance(obj, ScalarInt):
-        return int(obj)
-    raise TypeError
+import json
+from typing import Any
 
 
 def json_dumps(obj: Any) -> str:
@@ -34,16 +11,30 @@ def json_dumps(obj: Any) -> str:
     Returns:
         str
     """
-    return orjson.dumps(obj, default=__default).decode("utf-8")
+    return json.dumps(normalize_obj(obj))
 
 
-def normalize_obj(obj: Any) -> Union[list, dict]:
+def normalize_obj(obj: Any) -> Any:
     """Converts any python object to primitive python types
 
     Args:
         obj (Any)
 
     Returns:
-        Union[list, dict]
+        Any
     """
-    return orjson.loads(json_dumps(obj))
+    if hasattr(obj, "to_normalized_json"):
+        return obj.to_normalized_json()
+    elif isinstance(obj, dict):
+        return {normalize_obj(k): normalize_obj(v) for k, v in obj.items()}
+    elif isinstance(obj, list) or isinstance(obj, tuple):
+        return list(map(normalize_obj, obj))
+    elif (
+        isinstance(obj, str)
+        or isinstance(obj, int)
+        or isinstance(obj, float)
+        or isinstance(obj, bool)
+    ):
+        return obj
+    else:
+        raise TypeError(f"Cannot normalized obj {obj}")

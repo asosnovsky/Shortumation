@@ -9,9 +9,6 @@ WORKDIR /data
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
 RUN apk add --no-cache \
-    cargo \ 
-    rust \
-    gcompat \
     nodejs \
     npm \
     build-base \
@@ -24,8 +21,9 @@ RUN pip install . /data
 
 # <--- Webapp Build --> 
 COPY webapp/ /data/web-builder
-RUN cd /data/web-builder && npm install 
 RUN cd /data/web-builder && \
+    npm i -g yarn \
+    npm install && \
     yarn build && \
     cp -r /data/web-builder/build /data/web && \
     rm -rf /data/web-builder

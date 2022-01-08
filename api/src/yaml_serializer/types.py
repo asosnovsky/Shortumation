@@ -19,6 +19,10 @@ class IncludedYaml(NamedTuple):
         return cls(node.value)
 
 
+# TODO: add support for these
+NOT_IMPLEMENTED_SV_MSG = "SECRET VALUE NOT IMPLEMENTED"
+
+
 class SecretValue(NamedTuple):
     name: str
     value: str
@@ -30,6 +34,9 @@ class SecretValue(NamedTuple):
     @classmethod
     def from_yaml(cls, _constructor, node: Node):
         return cls(node.value, "n/a")
+
+    def to_normalized_json(self):
+        return NOT_IMPLEMENTED_SV_MSG
 
 
 class IncludedYamlDir(NamedTuple):

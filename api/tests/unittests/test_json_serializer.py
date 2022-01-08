@@ -4,8 +4,8 @@ from ruamel.yaml.scalarstring import ScalarString
 from ruamel.yaml.scalarint import ScalarInt
 from ruamel.yaml.scalarbool import ScalarBoolean
 from ruamel.yaml.scalarfloat import ScalarFloat
-from src.yaml_serializer.types import SecretValue
-from src.json_serializer import json_dumps, NOT_IMPLEMENTED_SV_MSG
+from src.yaml_serializer.types import SecretValue, NOT_IMPLEMENTED_SV_MSG
+from src.json_serializer import json_dumps
 
 
 class json_serializer_tests(TestCase):
@@ -30,7 +30,6 @@ class json_serializer_tests(TestCase):
                     "tup": (1, "w"),
                     "some": {"deep": {"obj": NOT_IMPLEMENTED_SV_MSG}},
                 },
-                separators=(",", ":"),
             ),
         )
 
@@ -53,6 +52,5 @@ class json_serializer_tests(TestCase):
                     "list": [1, "w"],
                     "tup": (1, "w"),
                 },
-                separators=(",", ":"),
             ),
         )

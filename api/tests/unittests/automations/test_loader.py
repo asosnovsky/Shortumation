@@ -6,9 +6,9 @@ from src.automations.types import (
     AutomationMetdata,
 )
 from src.automations.loader import load_automation
-from src.json_serializer import NOT_IMPLEMENTED_SV_MSG
 from src.yaml_serializer.types import (
     SecretValue,
+    NOT_IMPLEMENTED_SV_MSG,
 )
 
 

@@ -7,9 +7,9 @@ from src.automations.parsers import (
     _parse_conditions,
     _parse_actions,
 )
-from src.json_serializer import NOT_IMPLEMENTED_SV_MSG
 from src.yaml_serializer.types import (
     SecretValue,
+    NOT_IMPLEMENTED_SV_MSG,
 )
 
 
@@ -220,80 +220,3 @@ class parser_tests(TestCase):
 
         for expected, parsed in zip(expected_process, _parse_actions(raw_conditions)):
             self.assertEqual(parsed, expected)
-
-    # def test_overwriting_one_auto_in_separate_file(self):
-    #     # create dummy data
-    #     config_path = create_dummy_config_folder(
-    #         auto=[
-    #             AutomationData(
-    #                 metadata=AutomationMetdata(
-    #                     id="01",
-    #                 )
-    #             ),
-    #             AutomationData(
-    #                 metadata=AutomationMetdata(
-    #                     id="02",
-    #                 )
-    #             ),
-    #             AutomationData(
-    #                 metadata=AutomationMetdata(
-    #                     id="03",
-    #                 )
-    #             ),
-    #         ]
-    #     )
-    #     # check the data is loaded well
-    #     automation_loader = AutomationLoader(load_hass_config(config_path))
-    #     self.assertEqual(automation_loader.get(0).metadata.id, "01")
-    #     self.assertEqual(automation_loader.get(1).metadata.id, "02")
-    #     self.assertEqual(automation_loader.get(2).metadata.id, "03")
-    #     self.assertIsNone(automation_loader.get(3))
-    #     self.assertEqual(len(automation_loader), 3)
-    #     # update auto #1
-    #     automation_loader.save(
-    #         1,
-    #         AutomationData(
-    #             metadata=AutomationMetdata(id="02", alias="flush toilet!"),
-    #             trigger=[{"event": "toilet.flushed"}],
-    #         ),
-    #     )
-    #     # check that in-memory data is correctly updated
-    #     self.assertEqual(automation_loader.get(1).metadata.id, "02")
-    #     self.assertEqual(automation_loader.get(1).metadata.alias, "flush toilet!")
-    #     self.assertListEqual(automation_loader.get(1).trigger, [{"event": "toilet.flushed"}])
-
-    #     # check that disk data is correctly updated
-    #     reloaded_automation_loader = AutomationLoader(load_hass_config(config_path))
-    #     self.assertEqual(len(automation_loader), 3)
-    #     self.assertEqual(reloaded_automation_loader.get(1).metadata.id, "02")
-    #     self.assertEqual(reloaded_automation_loader.get(1).metadata.alias, "flush toilet!")
-    #     self.assertListEqual(
-    #         reloaded_automation_loader.get(1).trigger, [{"event": "toilet.flushed"}]
-    #     )
-    #     # add new auto
-    #     automation_loader.save(
-    #         3,
-    #         AutomationData(
-    #             metadata=AutomationMetdata(id="newest", alias="testing autos"),
-    #             sequence=[
-    #                 AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})
-    #             ],
-    #         ),
-    #     )
-    #     # check that in-memory data is correctly updated
-    #     self.assertEqual(len(automation_loader), 4)
-    #     self.assertEqual(automation_loader.get(3).metadata.id, "newest")
-    #     self.assertEqual(automation_loader.get(3).metadata.alias, "testing autos")
-    #     self.assertListEqual(
-    #         automation_loader.get(3).sequence,
-    #         [AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})],
-    #     )
-    #     # check that disk data is correctly updated
-    #     reloaded_automation_loader = AutomationLoader(load_hass_config(config_path))
-    #     self.assertEqual(len(reloaded_automation_loader), 4)
-    #     self.assertEqual(reloaded_automation_loader.get(3).metadata.id, "newest")
-    #     self.assertEqual(reloaded_automation_loader.get(3).metadata.alias, "testing autos")
-    #     self.assertListEqual(
-    #         reloaded_automation_loader.get(3).sequence,
-    #         [AutomationConditionNode(condition="time", condition_data={"at": "10:00:00"})],
-    #     )
