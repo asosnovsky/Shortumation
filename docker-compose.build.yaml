@@ -6,4 +6,4 @@ services:
       context: "./"
       dockerfile: "./Dockerfile"
       args:
-        - BUILD_FROM=homeassistant/${ARCH:-amd64}-base:latest
+        - BUILD_ARCH=${ARCH:-amd64}

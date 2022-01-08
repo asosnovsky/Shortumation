@@ -1,27 +1,21 @@
 # <--- Build Args --> 
-ARG BUILD_FROM
+ARG BUILD_ARCH
 ARG BUILD_VERSION
 
 # <--- Image Setup --> 
-FROM $BUILD_FROM
+FROM homeassistant/${BUILD_ARCH}-base-python:3.9-alpine3.14
 WORKDIR /data
 
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
-RUN echo "https://dl-3.alpinelinux.org/alpine/v3.10/main" >> /etc/apk/repositories
-RUN echo "https://dl-3.alpinelinux.org/alpine/v3.10/community" >> /etc/apk/repositories
 RUN apk add --no-cache \
     cargo \ 
+    rust \
     gcompat \
     nodejs \
-    python3 \
-    python3-dev \  
-    py3-pip \
-    patchelf \
-    rust 
-RUN patchelf --add-needed libgcompat.so.0 /usr/bin/python3.9
-RUN echo 'manylinux1_compatible = True' > /usr/lib/python3.9/_manylinux.py
-RUN pip install -U wheel pip
+    build-base \
+    python3-dev   
+RUN pip install -U wheel setuptools pip
 
 # <--- Python Dependencies --> 
 COPY api/setup.py /data/setup.py
