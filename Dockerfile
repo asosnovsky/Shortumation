@@ -22,7 +22,7 @@ RUN pip install . /data
 # <--- Webapp Build --> 
 COPY webapp/ /data/web-builder
 RUN cd /data/web-builder && \
-    npm i -g yarn \
+    npm i -g yarn react-scripts \
     npm install && \
     yarn build && \
     cp -r /data/web-builder/build /data/web && \
