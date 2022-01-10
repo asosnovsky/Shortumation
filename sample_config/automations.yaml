@@ -6,6 +6,12 @@
   trigger:
   - platform: homeassistant
     event: shutdown
+  - $smType: trigger
+    platform: device
+    device_id: ''
+    domain: ''
+    type: ''
+    subtype: ''
   condition: []
   action:
   - device_id: 2a98db84af7526c7ec3cc7aebd1a9e1c
