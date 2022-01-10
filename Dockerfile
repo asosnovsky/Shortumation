@@ -4,7 +4,7 @@ ARG BUILD_VERSION
 
 # <--- Image Setup --> 
 FROM homeassistant/${BUILD_ARCH}-base-python:3.9-alpine3.14
-WORKDIR /data
+WORKDIR /app
 
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
@@ -16,20 +16,21 @@ RUN apk add --no-cache \
 RUN pip install -U wheel setuptools pip
 
 # <--- Python Dependencies --> 
-COPY api/setup.py /data/setup.py
-RUN pip install . /data
+COPY api/setup.py /app/setup.py
+RUN pip install . /app
 
 # <--- Webapp Build --> 
-COPY webapp/ /data/web-builder
-RUN cd /data/web-builder && \
+COPY webapp/ /app/web-builder
+RUN cd /app/web-builder && \
     npm install && \
     npm run build && \
-    cp -r /data/web-builder/build /data/web && \
-    rm -rf /data/web-builder
+    cp -r /app/web-builder/build /app/web && \
+    rm -rf /app/web-builder
 
 # <--- Api Code --> 
-COPY api/src /data/src
-COPY run.sh run.sh
+COPY api/src /app/src
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
 
 # <--- Environment Variables --> 
 ENV HASSIO_TOKEN ""
@@ -42,5 +43,6 @@ EXPOSE 8000
 LABEL \
     io.hass.type="addon" \
     io.hass.arch="armhf|aarch64|i386|amd64"
-CMD [ "/data/run.sh" ]
+
+CMD [ "/app/run.sh" ]
 
