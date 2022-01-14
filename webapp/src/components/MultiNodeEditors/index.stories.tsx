@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { MultiNodeEditor } from ".";
-import { usePageTheme } from 'styles/page';
 import { Button } from "components/Inputs/Button";
 import { Modal } from "components/Modal";
 
@@ -35,16 +34,16 @@ export default {
 } as ComponentMeta<typeof MultiNodeEditor>
 
 export const Simple: ComponentStory<typeof MultiNodeEditor> = args => {
-  const { classes } = usePageTheme({});
-  return <div className={classes.page}>
+
+  return <div className="page">
     <MultiNodeEditor {...args} />
   </div>
 }
 export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
-  const { classes } = usePageTheme({});
+
   const [open, setOpen] = useState(false);
   const [state, setState] = useState(props.sequence);
-  return <div className={classes.page}>
+  return <div className="page">
     <Button onClick={() => setOpen(!open)}>Open Editor</Button>
     <Modal open={open}>
       <MultiNodeEditor

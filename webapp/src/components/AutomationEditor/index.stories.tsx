@@ -3,7 +3,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AutomationEditor } from './index';
 import { NODE_HEIGHT, NODE_WIDTH, DISTANCE_FACTOR, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE } from '../DAGSvgs/constants';
 import { useState } from 'react';
-import { usePageTheme } from "styles/page";
 
 
 export default {
@@ -24,8 +23,7 @@ export default {
 
 const Template: ComponentStory<typeof AutomationEditor> = args => {
   const [state, setState] = useState(args.automation)
-  const { classes } = usePageTheme({});
-  return <div className={classes.page}>
+  return <div className="page">
     <AutomationEditor
       {...args}
       automation={state}

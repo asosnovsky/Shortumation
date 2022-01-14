@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { AutomationCondition } from "types/automations/conditions";
-import { usePageTheme } from "styles/page";
+
 import { ConditionEditor } from ".";
 
 export default {
@@ -12,9 +12,9 @@ export default {
 
 
 const Template: ComponentStory<typeof ConditionEditor> = ({ condition, ...args }) => {
-  const { classes } = usePageTheme({});
+
   const [data, setData] = useState(condition);
-  return <div className={classes.page}>
+  return <div className="page">
     <ConditionEditor {...args}
       condition={data}
       onUpdate={data => {

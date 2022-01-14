@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { usePageTheme } from "styles/page";
 import { ConnectedAutmationList } from ".";
 import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE, DISTANCE_FACTOR } from 'components/DAGSvgs/constants';
 import { createMockAuto } from "utils/mocks";
@@ -24,9 +23,8 @@ export default {
 
 
 const Template: ComponentStory<any> = args => {
-  const { classes } = usePageTheme({});
   const api = useMockApiService(args.initialAutomations);
-  return <div className={classes.page}>
+  return <div className="page">
     <ConnectedAutmationList
       {...args}
       api={api}

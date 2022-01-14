@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
-import { usePageTheme } from "styles/page";
 import { AutoInfoBox } from "./AutoInfoBox";
 
 export default {
@@ -11,10 +10,9 @@ export default {
 
 
 export const Basic: ComponentStory<typeof AutoInfoBox> = args => {
-  const { classes } = usePageTheme({});
   const [state, setState] = useState(args.metadata)
   return (
-    <div className={classes.page}>
+    <div className="page">
       <AutoInfoBox
         className=""
         metadata={state}

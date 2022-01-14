@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
-import { usePageTheme } from "styles/page";
 import { ConditionEditor } from ".";
 import { AutomationCondition } from 'types/automations/conditions';
 
@@ -12,7 +11,6 @@ export default {
 
 
 export const Basic: ComponentStory<typeof ConditionEditor> = args => {
-  const { classes } = usePageTheme({});
   const [state, setState] = useState<AutomationCondition>({
     "$smType": "condition",
     "condition": "or",
@@ -58,7 +56,7 @@ export const Basic: ComponentStory<typeof ConditionEditor> = args => {
     }
   })
   return (
-    <div className={classes.page}>
+    <div className="page">
       <ConditionEditor
         onUpdate={setState}
         onDelete={() => { }}

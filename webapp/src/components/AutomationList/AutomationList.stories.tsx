@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
-import { usePageTheme } from "styles/page";
 import { AutomationList } from ".";
 import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE, DISTANCE_FACTOR } from 'components/DAGSvgs/constants';
 import { createMockAuto } from "utils/mocks";
@@ -23,9 +22,8 @@ export default {
 
 
 const Template: ComponentStory<typeof AutomationList> = args => {
-  const { classes } = usePageTheme({});
   const [autos, setAutos] = useState(args.automations)
-  return <div className={classes.page}>
+  return <div className="page">
     <AutomationList {...args} automations={autos}
       onAdd={a => {
         args.onAdd(a);

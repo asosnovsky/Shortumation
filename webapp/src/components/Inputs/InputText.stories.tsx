@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
-import { usePageTheme } from "styles/page";
+
 import InputText from "./InputText";
 
 export default {
@@ -11,9 +11,9 @@ export default {
 
 
 const Template: ComponentStory<typeof InputText> = args => {
-  const { classes } = usePageTheme({});
+
   const [value, setValue] = useState('')
-  return <div className={classes.page}>
+  return <div className="page">
     <InputText {...args} value={value} onChange={setValue} />
   </div>
 }

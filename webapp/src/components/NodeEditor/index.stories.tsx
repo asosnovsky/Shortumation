@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { NodeEditor } from ".";
-import { usePageTheme } from "styles/page";
+
 import { AutomationCondition } from "types/automations/conditions";
 import { Button } from "components/Inputs/Button";
 import { useState } from 'react';
@@ -26,8 +26,8 @@ export default {
 } as ComponentMeta<typeof NodeEditor>
 
 const Base: ComponentStory<typeof NodeEditor> = props => {
-  const { classes } = usePageTheme({});
-  return <div className={classes.page}>
+
+  return <div className="page">
     <NodeEditor {...props} />
   </div>
 };
@@ -70,9 +70,9 @@ Condition.args = {
 
 
 export const InAModal: ComponentStory<typeof NodeEditor> = props => {
-  const { classes } = usePageTheme({});
+
   const [open, setOpen] = useState(false);
-  return <div className={classes.page}>
+  return <div className="page">
     <Button onClick={() => setOpen(!open)}>Open Editor</Button>
     <Modal open={open}>
       <NodeEditor {...props} onClose={() => setOpen(!open)} />

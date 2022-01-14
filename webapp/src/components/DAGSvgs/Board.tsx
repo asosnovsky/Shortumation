@@ -1,4 +1,3 @@
-import "./Board.css";
 import { FC } from 'react';
 import useWindowSize from "utils/useWindowSize";
 import { useBoardStyles } from "./styles";
@@ -29,12 +28,10 @@ export const SVGBoard: FC<{
     );
     const { classes, theme } = useBoardStyles({
       boardHeight: Math.max(nodeHeight, graphHeight) * zoomLevel,
-      boardWidth: Math.max(5 * nodeWidth, graphWidth) * zoomLevel,
+      boardWidth: Math.max(4 * nodeWidth, graphWidth) * zoomLevel,
     });
-
-
     // render
-    return <div className={classes.dag}>
+    return <div className={classes.dag} >
       <svg
         className={classes.svg}
         viewBox={[0, 0, graphWidth, graphHeight].join(" ")}

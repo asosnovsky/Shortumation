@@ -1,5 +1,5 @@
 import { ComponentStory } from "@storybook/react";
-import { usePageTheme } from "styles/page";
+
 import { IconBase } from "./base";
 import { PencilIcon, CheckMarkIcon, TrashIcon, InfoIcon, ArrowIcon } from ".";
 import { AddIcon } from './index';
@@ -12,8 +12,8 @@ export default {
 
 
 export const IconList: ComponentStory<typeof IconBase> = (args) => {
-  const { classes } = usePageTheme({});
-  return <div className={classes.page}>
+
+  return <div className="page">
     <PencilIcon {...args} />
     <CheckMarkIcon {...args} />
     <AddIcon {...args} />
@@ -28,8 +28,8 @@ IconList.args = {
 
 
 export const ButtonIconExample: ComponentStory<typeof IconBase> = (args) => {
-  const { classes } = usePageTheme({});
-  return <div className={classes.page}>
+
+  return <div className="page">
     <ButtonIcon {...args}>{ArrowIcon}</ButtonIcon>
   </div>
 }

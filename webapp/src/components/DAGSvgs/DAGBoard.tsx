@@ -194,7 +194,7 @@ export const DAGBoard: FC<Props & { zoomLevel: number }> = props => {
   ];
   return <SVGBoard
     graphHeight={y1 - y0}
-    minGraphWidth={Math.max(x1 - x0, props.settings.nodeWidth * 15)}
+    minGraphWidth={Math.max(x1 - x0, props.settings.nodeWidth * 8)}
     nodeHeight={props.settings.nodeHeight}
     nodeWidth={props.settings.nodeWidth}
     zoomLevel={props.zoomLevel}

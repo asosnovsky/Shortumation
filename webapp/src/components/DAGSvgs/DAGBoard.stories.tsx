@@ -3,7 +3,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DAGBoard, DAGElement, DAGNodeElm } from "./DAGBoard";
 import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, DISTANCE_FACTOR, CIRCLE_SIZE } from './constants';
 import { AutomationAction } from 'types/automations/actions';
-import { arrayToIter } from "utils/iter";
 
 
 export default {
@@ -51,7 +50,12 @@ function* makeDummyData(pts: Array<any>, extras: DAGElement[]): Generator<DAGEle
 }
 
 
-export const Simple: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
+export const Simple: ComponentStory<typeof DAGBoard> = args => {
+
+  return <div className="page">
+    <DAGBoard {...args} />
+  </div>
+}
 Simple.args = {
   ...Simple.args,
   elements: makeDummyData(
@@ -94,7 +98,12 @@ Simple.args = {
 }
 
 
-export const Complex: ComponentStory<typeof DAGBoard> = args => <DAGBoard {...args} />
+export const Complex: ComponentStory<typeof DAGBoard> = args => {
+
+  return <div className="page">
+    <DAGBoard {...args} />
+  </div>
+}
 Complex.args = {
   ...Complex.args,
   elements: makeDummyData(

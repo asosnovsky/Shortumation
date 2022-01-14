@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
-import { usePageTheme } from "styles/page";
+
 import InputYaml from "./InputYaml";
 
 export default {
@@ -11,11 +11,11 @@ export default {
 
 
 const Template: ComponentStory<typeof InputYaml> = args => {
-  const { classes } = usePageTheme({});
+
   const [value, setValue] = useState({
     "test": "data"
   })
-  return <div className={classes.page}>
+  return <div className="page">
     <InputYaml {...args} value={value} onChange={setValue} />
   </div>
 }

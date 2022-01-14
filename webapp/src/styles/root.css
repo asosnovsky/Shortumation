@@ -1,10 +1,10 @@
 :root {
-    --primary        : #111111;
-    --secondary      : #1c1c1c;
-    --primaryAccent  : #bbbbbb;
-    --secondaryAccent: #929191;
-    touch-action     : pan-x pan-y;
-    height           : 100%;
+    --primary         : #111111;
+    --secondary       : #1c1c1c;
+    --primary-accent  : #bbbbbb;
+    --secondary-accent: #929191;
+    touch-action      : pan-x pan-y;
+    height            : 100%;
 }
 
 

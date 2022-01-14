@@ -7,7 +7,6 @@ import { DAGBoardElmDims } from 'components/DAGSvgs/DAGBoard';
 import { defaultAutomation } from '../../utils/defaults';
 import { ArrowIcon, TrashIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { useSearchParams } from "react-router-dom";
 import { ApiService } from "apiService/core";
 
 
