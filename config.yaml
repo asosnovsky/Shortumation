@@ -13,8 +13,7 @@ startup: application
 boot: auto
 ingress: true
 ingress_port: 8000
-ingress_entry: "/web"
-webgui: "http://[HOST]:[PORT:2839]/web"
+ingress_entry: "web"
 panel_icon: mdi:home-automation
 hassio_role: manager
 auth_api: true
