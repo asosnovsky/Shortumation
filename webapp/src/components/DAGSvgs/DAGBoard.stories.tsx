@@ -51,14 +51,13 @@ function* makeDummyData(pts: Array<any>, extras: DAGElement[]): Generator<DAGEle
 
 
 export const Simple: ComponentStory<typeof DAGBoard> = args => {
-
   return <div className="page">
     <DAGBoard {...args} />
   </div>
 }
 Simple.args = {
   ...Simple.args,
-  elements: makeDummyData(
+  elements: Array.from(makeDummyData(
     [
       [0, 0, false],
       [1, 0, false],
@@ -94,19 +93,18 @@ Simple.args = {
         icon: 'color',
         color: 'red',
       }
-    ])
+    ]))
 }
 
 
 export const Complex: ComponentStory<typeof DAGBoard> = args => {
-
   return <div className="page">
     <DAGBoard {...args} />
   </div>
 }
 Complex.args = {
   ...Complex.args,
-  elements: makeDummyData(
+  elements: Array.from(makeDummyData(
     [
       [0, 0, false],
       [1, 0, false],
@@ -156,7 +154,7 @@ Complex.args = {
         direction: '1->2'
       },
     ]
-  )
+  ))
 }
 
 
