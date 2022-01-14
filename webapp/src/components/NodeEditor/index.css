@@ -10,19 +10,20 @@
     display        : flex;
     flex-direction : row;
     justify-content: space-between;
+    margin-bottom  : 6px;
+}
+
+.node-editor--body-title>* {
+    flex: 1;
 }
 
 .node-editor--body {
-    flex         : 1;
     overflow     : overlay;
-    width        : 100%;
-    min-width    : fit-content;
     padding-left : 1%;
     padding-right: 1%;
-    /* resize    : auto;
-    min-width    : fit-content;
-    max-height   : 100%;
-    min-height   : fit-content; */
+
+    min-width : 100%;
+    min-height: fit-content;
 }
 
 .node-editor--footer {

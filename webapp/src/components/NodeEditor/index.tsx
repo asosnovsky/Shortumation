@@ -31,7 +31,7 @@ export const NodeEditor: FC<Props> = ({
           current={state.nodeType}
           options={allowedTypes}
           onChange={state.setNodeType}
-        /> : <span>{state.nodeType}</span>}
+        /> : <></>}
         {state.nodeType !== 'condition' ? <InputList
           label={`${state.nodeType} type`}
           current={state.subType as any}
