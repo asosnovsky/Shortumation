@@ -24,18 +24,6 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
         value={state.action_data.alias ?? ""}
         onChange={alias => update({ alias })}
       />
-      {/* <InputYaml
-        label="Choose Sequence"
-        value={state.action_data.choose}
-        onChange={choose => update({ choose })}
-        resizable
-      />
-      <InputYaml
-        label="Default Sequence"
-        value={state.action_data.default}
-        onChange={d => update({ default: d })}
-        resizable
-      /> */}
     </>
   }
 }
