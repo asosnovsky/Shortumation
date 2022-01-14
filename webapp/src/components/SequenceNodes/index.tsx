@@ -60,7 +60,7 @@ export const SequenceNodes: FC<SequenceNodeProps & { zoomLevel: number }> = (pro
     s => setModalState(s)
   );
   if (props.additionalElements) {
-    elmIter = chain([elmIter, props.additionalElements]);
+    elmIter = chain([elmIter, props.additionalElements()]);
   }
 
   // render

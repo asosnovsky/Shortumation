@@ -27,12 +27,9 @@ export const AutomationList: FC<AutomationListParams> = ({
   children,
 }) => {
   // state
-  // const [searchParams, setSearchParams] = useSearchParams();
   const [hideList, setHideList] = useState(false);
   const [current, setCurrent] = useState(0);
   // alias
-  // const current = Number(searchParams.get("current") ?? "0");
-  // const setCurrent = (i: number) => setSearchParams({ current: String(i) });
   const currentAuto = automations.length > 0 ? automations[current] : null;
   const automationListListCls = "automation-list--list" + (hideList ? " hide" : " show")
   // render

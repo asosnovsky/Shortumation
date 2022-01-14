@@ -75,7 +75,7 @@ export const AutomationEditor: FC<Props> = ({
       dims={dims}
       sequence={automation.sequence}
       onChange={updateSequence}
-      additionalElements={chain([
+      additionalElements={() => chain([
         computeExtraField([1, 0.5], [2, 0.5]),
         computeTriggerPos(
           [0.5, 0.5],

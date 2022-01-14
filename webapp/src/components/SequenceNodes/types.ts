@@ -11,7 +11,7 @@ export interface SequenceNodeProps {
   dims: DAGBoardElmDims;
   sequence: AutomationSequenceNode[],
   onChange: (s: AutomationSequenceNode[]) => void;
-  additionalElements?: Generator<DAGElement>;
+  additionalElements?: () => Generator<DAGElement>;
 }
 
 export type ModalState = {
