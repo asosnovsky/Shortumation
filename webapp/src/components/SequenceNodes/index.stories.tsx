@@ -89,7 +89,7 @@ export const AdditionalElemets = Template.bind({})
 
 AdditionalElemets.args = {
   ...Simple.args,
-  additionalElements: (function* (): Generator<DAGElement> {
+  additionalElements: function* (): Generator<DAGElement> {
     yield {
       type: 'circle',
       loc: [1, 0],
@@ -101,7 +101,7 @@ AdditionalElemets.args = {
       p2: [1, 0],
       direction: '1->2'
     }
-  }()),
+  },
 }
 
 
