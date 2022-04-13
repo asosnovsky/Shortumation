@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { AutomationCondition, LogicCondition, NumericCondition, TemplateCondition } from "types/automations/conditions";
+import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition } from "types/automations/conditions";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
@@ -7,6 +7,7 @@ import InputTextArea from "components/Inputs/InputTextArea";
 import { InputEntity } from "components/Inputs/InputTextBubble";
 import { ConditionNode } from "./ConditionNode";
 import { genUpdateMethods } from "./nestedUpdater";
+import InputTime from "components/Inputs/InputTime";
 
 
 interface Editor<C extends AutomationCondition> extends FC<{
@@ -27,6 +28,10 @@ export const getEditor = (condition: AutomationCondition): Editor<any> => {
       return LogicViewer;
     case 'numeric_state':
       return NumericStateEditor;
+    case 'state':
+      return StateEditor;
+    case 'time':
+      return TimeEditor;
     default:
       return () => <div>Not Ready</div>
   }
@@ -133,4 +138,98 @@ export const LogicViewer: Editor<LogicCondition> = ({
       />
     })}
   </>
+}
+
+
+
+export const StateEditor: Editor<StateCondition> = ({
+  onChange,
+  condition,
+}) => {
+  return <div>
+    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        alias
+      }
+    })} />
+    <InputEntity
+      value={condition.condition_data.entity_id}
+      onChange={entity_id => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          entity_id
+        }
+      })}
+    />
+    <InputText label="Attribute" value={condition.condition_data.attribute ?? ""} onChange={attribute => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        attribute
+      }
+    })} />
+    <InputText
+      label="State"
+      value={String(condition.condition_data.state)}
+      onChange={state => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          state,
+        }
+      })}
+    />
+    <InputTime
+      label="For"
+      value={condition.condition_data.for}
+      onChange={_for => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          for: _for,
+        }
+      })}
+    />
+  </div>
+}
+
+export const TimeEditor: Editor<TimeCondition> = ({
+  onChange,
+  condition,
+}) => {
+  return <div>
+    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        alias
+      }
+    })} />
+    <InputTime
+      label="After"
+      value={condition.condition_data.after}
+      onChange={after => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          after,
+        }
+      })}
+    />
+    <InputTime
+      label="Before"
+      value={condition.condition_data.before}
+      onChange={before => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          before,
+        }
+      })}
+    />
+    <b>Weekday not support for no, use yaml for now</b> {condition.condition_data.weekday}
+  </div>
 }

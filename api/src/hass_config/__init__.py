@@ -8,7 +8,9 @@ from .loader import HassConfig
 def find_hass_config() -> HassConfig:
     """Try to find HASS config."""
     if config("USE_EXAMPLE_REPO", False, cast=bool):
+        print("using USE_EXAMPLE_REPO")
         from tests.utils import create_copy_of_example_config
+
         return HassConfig(create_copy_of_example_config())
 
     if "HASSIO_TOKEN" in os.environ:
