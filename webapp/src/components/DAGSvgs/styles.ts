@@ -18,7 +18,7 @@ export const useBoardStyles = createAppUseStyles<{
     height: '100%',
     overflow: 'scroll'
   },
-  svg: ({boardHeight, boardWidth}) => ({
+  svg: ({ boardHeight, boardWidth }) => ({
     minHeight: `${boardHeight}px`,
     minWidth: `${boardWidth}px`,
     padding: 0,
@@ -112,7 +112,7 @@ export const useNodeStyles = createAppUseStyles<{
     text: {
       textOverflow: 'ellipsis',
       overflow: "hidden",
-      whiteSpace: "nowrap",
+      whiteSpace: "break-spaces",
       cursor: 'default',
     },
     buttonDelete: {
@@ -142,16 +142,16 @@ export const useNodeStyles = createAppUseStyles<{
   }
 })
 
-export const useCircleStyles = createAppUseStyles<{ 
+export const useCircleStyles = createAppUseStyles<{
   size: number,
   hasOnFunction: boolean,
   hasRemoveFunction: boolean,
   backgroundColor?: string,
- }>(theme => ({
-   root: ({ size, hasOnFunction, hasRemoveFunction, backgroundColor }) => {
-     const baseColor = backgroundColor ? backgroundColor : Color(theme.primary).set('rgb.g', 100).hex();
-     const hoverColor = (hasOnFunction && !hasRemoveFunction) ? Color(theme.primary).set('rgb.g', 150).hex() : baseColor
-     return {
+}>(theme => ({
+  root: ({ size, hasOnFunction, hasRemoveFunction, backgroundColor }) => {
+    const baseColor = backgroundColor ? backgroundColor : Color(theme.primary).set('rgb.g', 100).hex();
+    const hoverColor = (hasOnFunction && !hasRemoveFunction) ? Color(theme.primary).set('rgb.g', 150).hex() : baseColor
+    return {
       backgroundColor: baseColor,
       borderRadius: hasRemoveFunction ? 10 : 500,
       height: size,
