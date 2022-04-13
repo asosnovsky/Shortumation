@@ -12,3 +12,7 @@ local_logs:
 local_ps:
 	$(DC) ps
 
+
+local_stop:
+	$(DC) stop
+

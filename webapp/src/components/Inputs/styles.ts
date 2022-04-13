@@ -62,6 +62,32 @@ export const useInputTextStyles = createAppUseStyles<{}>(theme => ({
   ...commonInputStyle(theme),
 }));
 
+
+export const useInputTimeStyles = createAppUseStyles<{}>(theme => ({
+  input: {
+    ...commonInputStyle(theme).input,
+    flex: 1,
+  },
+  wrapper: {
+    flexDirection: 'row !important',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cancel: {
+    cursor: 'pointer',
+    maxWidth: "2em",
+    maxHeight: "2em",
+    fontSize: '1em',
+    padding: "0.25em 0.5em",
+    borderRadius: '20px',
+    background: theme.primary,
+    color: theme.primaryAccent,
+    borderColor: theme.primaryAccent,
+    borderStyle: "solid",
+    borderWidth: '1.5px',
+  },
+}));
+
 export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
   const styles = commonInputStyle(theme);
   return {
