@@ -1,5 +1,5 @@
 name: Shortumation
-version: 0.0.7
+version: 0.0.7g2
 slug: shortumation
 url: "https://github.com/asosnovsky/Shortumation"
 description: "A homeassitant addon which provides better UI for automations & scripts."
@@ -16,7 +16,6 @@ ingress_port: 8000
 ingress_entry: "web/"
 panel_icon: mdi:home-automation
 hassio_role: manager
-auth_api: true
 privileged:
   - SYS_RAWIO
 host_network: true
