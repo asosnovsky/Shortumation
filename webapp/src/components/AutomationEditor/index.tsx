@@ -13,6 +13,7 @@ import { AutomationTrigger } from 'types/automations/triggers';
 import { Modal } from "components/Modal";
 import { NodeEditor } from "components/NodeEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import InputNumber from "components/Inputs/InputNumber";
 
 interface TriggerEditorModalState {
   trigger: AutomationTrigger;
@@ -29,6 +30,7 @@ export const AutomationEditor: FC<Props> = ({
   onUpdate,
 }) => {
   // state
+  const [zoomLevel, setZoomLevel] = useState(40);
   const { ratioWbh } = useWindowSize();
   const [closeInfo, setCloseInfo] = useState(false);
   const [modalState, setModalState] = useState<null | TriggerEditorModalState>(null);
@@ -49,6 +51,13 @@ export const AutomationEditor: FC<Props> = ({
 
   // render
   return <div className={classes.root}>
+    <InputNumber
+      label="Zoom"
+      min={1} max={100} step={1}
+      className={classes.zoom}
+      value={zoomLevel}
+      onChange={z => setZoomLevel(z ?? 40)}
+    />
     <Modal open={!!modalState}>
       {!!modalState && <NodeEditor
         node={modalState.trigger}
@@ -73,7 +82,7 @@ export const AutomationEditor: FC<Props> = ({
     </AutoInfoBox>
 
     <SequenceNodes
-      zoomLevel={1.5}
+      zoomLevel={zoomLevel * 200 / 100 + 50}
       startPoint={[2, 0.5]}
       dims={dims}
       sequence={automation.sequence}

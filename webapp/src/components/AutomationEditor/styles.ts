@@ -5,7 +5,7 @@ export const useEditorStyles = createAppUseStyles<{
   closeInfo: boolean;
   horizontalMode: boolean;
 }>(theme => ({
-  root: ({horizontalMode}) => ({
+  root: ({ horizontalMode }) => ({
     height: '100%',
     width: '100%',
     color: theme.primaryAccent,
@@ -18,7 +18,14 @@ export const useEditorStyles = createAppUseStyles<{
     borderColor: theme.secondaryAccent,
     width: '100%',
   },
-  infoIcon: ({horizontalMode}) => ({
+  infoIcon: ({ horizontalMode }) => ({
     bottom: horizontalMode ? '90%' : 10
-  })
+  }),
+  zoom: {
+    position: 'absolute !important',
+    right: 0,
+    bottom: 0,
+    width: "100%",
+    // maxWidth: "10em",
+  }
 }))

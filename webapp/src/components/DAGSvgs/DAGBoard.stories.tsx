@@ -10,7 +10,7 @@ export default {
   component: DAGBoard,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
-    zoomLevel: 1,
+    zoomLevel: 100,
     settings: {
       nodeHeight: NODE_HEIGHT,
       nodeWidth: NODE_WIDTH,

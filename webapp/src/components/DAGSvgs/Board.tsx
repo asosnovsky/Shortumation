@@ -16,25 +16,26 @@ export const SVGBoard: FC<{
   minGraphWidth = 300,
   nodeHeight = NODE_HEIGHT,
   nodeWidth = NODE_WIDTH,
-  zoomLevel = 1,
+  zoomLevel = 100,
 }) => {
 
     // state
     const { ratioWbh } = useWindowSize();
     // alias
+    const paddedZoomLevel = zoomLevel / 100;
     const graphWidth = Math.max(
       Math.round(graphHeight * ratioWbh),
       minGraphWidth
     );
     const { classes, theme } = useBoardStyles({
-      boardHeight: Math.max(nodeHeight, graphHeight) * zoomLevel,
-      boardWidth: Math.max(4 * nodeWidth, graphWidth) * zoomLevel,
+      boardHeight: Math.max(nodeHeight, graphHeight) * paddedZoomLevel,
+      boardWidth: Math.max(4 * nodeWidth, graphWidth) * paddedZoomLevel,
     });
     // render
     return <div className={classes.dag} >
       <svg
         className={classes.svg}
-        viewBox={[0, 0, graphWidth, graphHeight].join(" ")}
+        viewBox={[0, 0, graphWidth / paddedZoomLevel, graphHeight / paddedZoomLevel].join(" ")}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
