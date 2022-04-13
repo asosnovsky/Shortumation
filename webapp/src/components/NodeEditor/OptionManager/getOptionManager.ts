@@ -11,41 +11,44 @@ import { ActionEventState } from "./ActionEvent";
 import { TriggerEventState } from "./TriggerEvent";
 import { TriggerHAState } from "./TriggerHA";
 import { TriggerMQTTState } from "./TriggerMQTT";
+import { TriggerNumericState } from "./TriggerNumericState";
 
 
 
 export const getOptionManager = <T extends AutomationNodeTypes>(
-    nodeType: T, 
-    nodeSubtype: AutomationNodeSubtype<T>,
-) :  OptionManager<any> => {
-    if ( nodeType === 'action') {
-        switch (nodeSubtype) {
-          case "choose":
-              return ActionChooseState;
-          case "device":
-              return ActionDeviceState;
-          case 'event':
-            return ActionEventState;
-          case "repeat":
-            return ActionRepeatState;
-          case 'service':
-            return ActionCallServiceState;
-          case "wait":
-            return ActionWaitState;
-        }
+  nodeType: T,
+  nodeSubtype: AutomationNodeSubtype<T>,
+): OptionManager<any> => {
+  if (nodeType === 'action') {
+    switch (nodeSubtype) {
+      case "choose":
+        return ActionChooseState;
+      case "device":
+        return ActionDeviceState;
+      case 'event':
+        return ActionEventState;
+      case "repeat":
+        return ActionRepeatState;
+      case 'service':
+        return ActionCallServiceState;
+      case "wait":
+        return ActionWaitState;
     }
-    if (nodeType === 'condition') {
-      return ConditionLogicState
-    }
+  }
+  if (nodeType === 'condition') {
+    return ConditionLogicState
+  }
   if (nodeType === "trigger") {
-      switch (nodeSubtype) {
-        case "event":
-          return TriggerEventState
-        case "homeassistant":
-          return TriggerHAState
-        case "mqtt":
-          return TriggerMQTTState
-      }
+    switch (nodeSubtype) {
+      case "event":
+        return TriggerEventState
+      case "homeassistant":
+        return TriggerHAState
+      case "mqtt":
+        return TriggerMQTTState
+      case "numeric_state":
+        return TriggerNumericState
     }
+  }
   return Generic
 }

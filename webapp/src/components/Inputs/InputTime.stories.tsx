@@ -13,9 +13,7 @@ export default {
 
 const Template: ComponentStory<typeof InputTime> = args => {
 
-  const [value, setValue] = useState<AutomationTime>({
-
-  })
+  const [value, setValue] = useState<AutomationTime | undefined>(undefined);
   return <div className="page">
     <InputTime {...args} value={value} onChange={setValue} />
   </div>

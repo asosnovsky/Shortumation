@@ -1,8 +1,8 @@
 import { AutomationTime } from "./common";
 
 interface AutomationTriggerBase {
-  alias?: string;
-  $smType: undefined | 'trigger';
+    alias?: string;
+    $smType: undefined | 'trigger';
 }
 
 export interface AutomationTriggerEvent extends AutomationTriggerBase {
@@ -75,7 +75,7 @@ export interface AutomationTriggerDevice extends AutomationTriggerBase {
     type: string;
     subtype: string;
 }
-export type AutomationTrigger = 
+export type AutomationTrigger =
     | AutomationTriggerEvent
     | AutomationTriggerHA
     | AutomationTriggerMQTT
@@ -88,5 +88,5 @@ export type AutomationTrigger =
     | AutomationTriggerWebhook
     | AutomationTriggerZone
     | AutomationTriggerDevice
-;
+    ;
 export type TriggerType = AutomationTrigger['platform'];
