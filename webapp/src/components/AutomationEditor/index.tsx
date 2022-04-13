@@ -1,6 +1,6 @@
 import "./index.css";
 import { DAGBoardElmDims } from "components/DAGSvgs/DAGBoard";
-import { ArrowIcon } from "components/Icons";
+import { ArrowIcon, ZoomIcon } from "components/Icons";
 import { SequenceNodes } from "components/SequenceNodes";
 import { FC, useState } from "react";
 import { AutomationData, AutomationSequenceNode } from "types/automations";
@@ -13,7 +13,6 @@ import { AutomationTrigger } from 'types/automations/triggers';
 import { Modal } from "components/Modal";
 import { NodeEditor } from "components/NodeEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import InputNumber from "components/Inputs/InputNumber";
 
 interface TriggerEditorModalState {
   trigger: AutomationTrigger;
@@ -51,13 +50,6 @@ export const AutomationEditor: FC<Props> = ({
 
   // render
   return <div className={classes.root}>
-    <InputNumber
-      label="Zoom"
-      min={1} max={100} step={1}
-      className={classes.zoom}
-      value={zoomLevel}
-      onChange={z => setZoomLevel(z ?? 40)}
-    />
     <Modal open={!!modalState}>
       {!!modalState && <NodeEditor
         node={modalState.trigger}
@@ -81,38 +73,50 @@ export const AutomationEditor: FC<Props> = ({
       >{ArrowIcon}</ButtonIcon>
     </AutoInfoBox>
 
-    <SequenceNodes
-      zoomLevel={zoomLevel * 200 / 100 + 50}
-      startPoint={[2, 0.5]}
-      dims={dims}
-      sequence={automation.sequence}
-      onChange={updateSequence}
-      additionalElements={() => chain([
-        computeExtraField([1, 0.5], [2, 0.5]),
-        computeTriggerPos(
-          [0.5, 0.5],
-          automation.trigger,
-          [1.5, 0.5],
-          updateTriggers,
-          () => {
-            setModalState({
-              trigger: {
-                $smType: "trigger",
-                platform: "device",
-                device_id: "",
-                domain: "",
-                type: "",
-                subtype: ""
-              },
-              onSave: (t) => updateTriggers([...automation.trigger, t])
-            });
-          },
-          (trigger, onSave) => setModalState({
-            trigger,
-            onSave,
-          })
-        ),
-      ])}
-    />
+    <div className={classes.wrapper}>
+      <div className={classes.toolbar}>
+        <ZoomIcon className={classes.zoomImg} size={1} color="white" />
+        <input
+          type="number"
+          min={1} max={100} step={1}
+          className={classes.zoom}
+          value={zoomLevel}
+          onChange={z => setZoomLevel(z.target.valueAsNumber ?? 40)}
+        />
+      </div>
+      <SequenceNodes
+        zoomLevel={zoomLevel * 200 / 100 + 50}
+        startPoint={[2, 0.5]}
+        dims={dims}
+        sequence={automation.sequence}
+        onChange={updateSequence}
+        additionalElements={() => chain([
+          computeExtraField([1, 0.5], [2, 0.5]),
+          computeTriggerPos(
+            [0.5, 0.5],
+            automation.trigger,
+            [1.5, 0.5],
+            updateTriggers,
+            () => {
+              setModalState({
+                trigger: {
+                  $smType: "trigger",
+                  platform: "device",
+                  device_id: "",
+                  domain: "",
+                  type: "",
+                  subtype: ""
+                },
+                onSave: (t) => updateTriggers([...automation.trigger, t])
+              });
+            },
+            (trigger, onSave) => setModalState({
+              trigger,
+              onSave,
+            })
+          ),
+        ])}
+      />
+    </div>
   </div>
 }

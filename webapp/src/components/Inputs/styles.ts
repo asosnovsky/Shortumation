@@ -97,8 +97,8 @@ export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
     },
     deleteIcon: {
       position: "absolute",
-      left: 30,
-      top: 17,
+      left: "1em",
+      top: "1.5em",
       color: theme.secondaryAccent,
       backgroundColor: theme.secondary,
       borderWidth: 1,
