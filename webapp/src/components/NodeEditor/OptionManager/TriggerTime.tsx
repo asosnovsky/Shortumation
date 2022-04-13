@@ -20,7 +20,7 @@ export const TriggerTime: OptionManager<AutomationTriggerTime> = {
         value={state.at}
         onChange={_at => setState({
           ...state,
-          at: _at,
+          at: _at ?? {},
         })}
       />
     </>

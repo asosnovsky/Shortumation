@@ -6,7 +6,7 @@ export const getConditionDefaultValues = (condition: AutomationCondition['condit
     if (
         (condition === 'or') ||
         (condition === 'and') ||
-        (condition === 'not') 
+        (condition === 'not')
     ) {
         return {
             conditions: []
@@ -29,7 +29,7 @@ export const getConditionDefaultValues = (condition: AutomationCondition['condit
         } as TimeCondition['condition_data']
     } else if (condition === 'trigger') {
         return {
-            id: []
+            id: ""
         } as TriggerCondition['condition_data']
     } else if (condition === 'zone') {
         return {
@@ -42,12 +42,12 @@ export const getConditionDefaultValues = (condition: AutomationCondition['condit
 }
 
 export const defaultAutomation = (id: string): AutomationData => ({
-  metadata: {
-    id,
-    alias: "New Automation",
-    description: "",
-    mode: "single",
-  },
-  trigger: [],
-  sequence: [],
+    metadata: {
+        id,
+        alias: "New Automation",
+        description: "",
+        mode: "single",
+    },
+    trigger: [],
+    sequence: [],
 })

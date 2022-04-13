@@ -50,7 +50,7 @@ export interface AutomationTriggerTemplate extends AutomationTriggerBase {
 }
 export interface AutomationTriggerTime extends AutomationTriggerBase {
     platform: 'time';
-    at: string | string[];
+    at: AutomationTime;
 }
 export interface AutomationTriggerTimePattern extends AutomationTriggerBase {
     platform: 'time_pattern';
@@ -64,7 +64,7 @@ export interface AutomationTriggerWebhook extends AutomationTriggerBase {
 }
 export interface AutomationTriggerZone extends AutomationTriggerBase {
     platform: 'zone';
-    entity_id: string;
+    entity_id: string | string[];
     zone: string;
     event: 'enter' | 'leave';
 }
