@@ -53,7 +53,10 @@ export const AutomationEditor: FC<Props> = ({
       {!!modalState && <NodeEditor
         node={modalState.trigger}
         onClose={() => setModalState(null)}
-        onSave={modalState.onSave as any}
+        onSave={(n) => {
+          modalState.onSave(n as any);
+          setModalState(null);
+        }}
         allowedTypes={['trigger']}
       />}
     </Modal>
