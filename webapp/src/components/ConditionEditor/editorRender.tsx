@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition } from "types/automations/conditions";
+import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition, TriggerCondition, ZoneCondition } from 'types/automations/conditions';
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
@@ -32,6 +32,10 @@ export const getEditor = (condition: AutomationCondition): Editor<any> => {
       return StateEditor;
     case 'time':
       return TimeEditor;
+    case 'trigger':
+      return TriggerEditor;
+    case 'zone':
+      return ZoneEditor;
     default:
       return () => <div>Not Ready</div>
   }
@@ -231,5 +235,70 @@ export const TimeEditor: Editor<TimeCondition> = ({
       })}
     />
     <b>Weekday not support for no, use yaml for now</b> {condition.condition_data.weekday}
+  </div>
+}
+
+export const TriggerEditor: Editor<TriggerCondition> = ({
+  onChange,
+  condition,
+}) => {
+  return <div>
+    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        alias
+      }
+    })} />
+    <InputText label="Trigger ID" value={condition.condition_data.id} onChange={id => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        id
+      }
+    })} />
+  </div>
+}
+
+export const ZoneEditor: Editor<ZoneCondition> = ({
+  onChange,
+  condition,
+}) => {
+  return <div>
+    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        alias
+      }
+    })} />
+    <InputText label="Zone" value={condition.condition_data.zone} onChange={zone => onChange({
+      ...condition,
+      condition_data: {
+        ...condition.condition_data,
+        zone
+      }
+    })} />
+    <InputEntity
+      value={condition.condition_data.entity_id}
+      onChange={entity_id => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          entity_id
+        }
+      })}
+    />
+    <InputText
+      label="State"
+      value={String(condition.condition_data.state)}
+      onChange={state => onChange({
+        ...condition,
+        condition_data: {
+          ...condition.condition_data,
+          state,
+        }
+      })}
+    />
   </div>
 }
