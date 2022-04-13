@@ -12,6 +12,13 @@ import { TriggerEventState } from "./TriggerEvent";
 import { TriggerHAState } from "./TriggerHA";
 import { TriggerMQTTState } from "./TriggerMQTT";
 import { TriggerNumericState } from "./TriggerNumericState";
+import { TriggerState } from "./TriggerState";
+import { TriggerTemplate } from "./TriggerTemplate";
+import { TriggerTime } from "./TriggerTime";
+import { TriggerTimePattern } from "./TriggerTimePattern";
+import { TriggerWebhook } from "./TriggerWebhook";
+import { TriggerZone } from "./TriggerZone";
+import { TriggerDevice } from "./TriggerDevice";
 
 
 
@@ -48,6 +55,20 @@ export const getOptionManager = <T extends AutomationNodeTypes>(
         return TriggerMQTTState
       case "numeric_state":
         return TriggerNumericState
+      case "state":
+        return TriggerState
+      case "template":
+        return TriggerTemplate
+      case 'time':
+        return TriggerTime
+      case 'time_pattern':
+        return TriggerTimePattern
+      case 'webhook':
+        return TriggerWebhook
+      case "zone":
+        return TriggerZone
+      case "device":
+        return TriggerDevice
     }
   }
   return Generic

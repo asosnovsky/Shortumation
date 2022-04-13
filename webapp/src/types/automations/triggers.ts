@@ -34,13 +34,13 @@ export interface AutomationTriggerState extends AutomationTriggerBase {
     platform: 'state';
     entity_id: string | string[];
     attribute?: string;
-    from?: string | string[];
-    to?: string | string[];
+    from?: string;
+    to?: string;
     for?: AutomationTime;
 }
 export interface AutomationTriggerTag extends AutomationTriggerBase {
     platform: 'tag';
-    tag_id: string | string[];
+    tag_id: string;
     device_id: string | string[];
 }
 export interface AutomationTriggerTemplate extends AutomationTriggerBase {
