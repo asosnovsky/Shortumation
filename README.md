@@ -13,3 +13,4 @@ A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI 
 - [ ] Autocomplete fields for template editor 
 - [ ] Autocomplete fields for referencing scripts 
 
+See roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1).
