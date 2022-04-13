@@ -1,5 +1,7 @@
 # Shortumation
 
+![image](https://user-images.githubusercontent.com/7451445/163254230-412eb427-c0f9-4ffa-91e2-9d276db82205.png)
+
 A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
 
 ## Features
@@ -14,3 +16,5 @@ A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI 
 - [ ] Autocomplete fields for referencing scripts 
 
 See roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1).
+
+
