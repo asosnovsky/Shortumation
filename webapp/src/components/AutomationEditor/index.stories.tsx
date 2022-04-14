@@ -27,7 +27,9 @@ const Template: ComponentStory<typeof AutomationEditor> = args => {
     <AutomationEditor
       {...args}
       automation={state}
-      onUpdate={setState}
+      onUpdate={s => {
+        window.setTimeout(() => setState(s), 3000)
+      }}
     />
   </div>
 }

@@ -1,8 +1,8 @@
 import "./index.css";
 import { DAGBoardElmDims } from "components/DAGSvgs/DAGBoard";
-import { ArrowIcon, ZoomIcon } from "components/Icons";
+import { ArrowIcon, CheckMarkIcon, ZoomIcon } from "components/Icons";
 import { SequenceNodes } from "components/SequenceNodes";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AutomationData, AutomationSequenceNode } from "types/automations";
 import useWindowSize from "utils/useWindowSize";
 import { AutoInfoBox } from "./AutoInfoBox";
@@ -13,6 +13,7 @@ import { AutomationTrigger } from 'types/automations/triggers';
 import { Modal } from "components/Modal";
 import { NodeEditor } from "components/NodeEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { Button } from "components/Inputs/Button";
 
 interface TriggerEditorModalState {
   trigger: AutomationTrigger;
@@ -25,10 +26,13 @@ interface Props {
 }
 export const AutomationEditor: FC<Props> = ({
   dims,
-  automation,
-  onUpdate,
+  automation: propsAutos,
+  onUpdate: propsOnUpdate,
 }) => {
   // state
+  const [[autoChanged, automation], setAutomation] = useState<[
+    'unchanged' | 'changed' | 'loading', AutomationData]
+  >(['unchanged', propsAutos]);
   const [zoomLevel, setZoomLevel] = useState(40);
   const { ratioWbh } = useWindowSize();
   const [closeInfo, setCloseInfo] = useState(false);
@@ -47,6 +51,12 @@ export const AutomationEditor: FC<Props> = ({
     ...automation,
     trigger,
   });
+  const onUpdate = (a: AutomationData) => setAutomation(['changed', a]);
+
+  // effects
+  useEffect(() => {
+    setAutomation(['unchanged', propsAutos]);
+  }, [propsAutos])
 
   // render
   return <div className={classes.root}>
@@ -75,14 +85,28 @@ export const AutomationEditor: FC<Props> = ({
 
     <div className={classes.wrapper}>
       <div className={classes.toolbar}>
-        <ZoomIcon className={classes.zoomImg} size={1} color="white" />
-        <input
-          type="number"
-          min={1} max={100} step={1}
-          className={classes.zoom}
-          value={zoomLevel}
-          onChange={z => setZoomLevel(z.target.valueAsNumber ?? 40)}
-        />
+        <div style={{ display: 'flex' }}>
+          <ZoomIcon className={classes.zoomImg} size={1} color="white" />
+          <input
+            type="number"
+            min={1} max={100} step={1}
+            className={classes.zoom}
+            value={zoomLevel}
+            onChange={z => setZoomLevel(z.target.valueAsNumber ?? 40)}
+          />
+        </div>
+        {autoChanged !== 'unchanged' && <Button
+          className={classes.saveBtn}
+          onClick={() => {
+            if (autoChanged === 'changed') {
+              setAutomation(['loading', automation]);
+              propsOnUpdate(automation);
+            }
+          }}
+          disabled={autoChanged !== 'changed'}
+        >
+          Save <CheckMarkIcon />
+        </Button>}
       </div>
       <SequenceNodes
         zoomLevel={zoomLevel * 200 / 100 + 50}

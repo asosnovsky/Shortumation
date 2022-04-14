@@ -36,14 +36,20 @@ export const useEditorStyles = createAppUseStyles<{
     maxWidth: "3em",
   },
   zoomImg: {
-    // width: "1em",
 
   },
   toolbar: {
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: 'start',
+    justifyContent: 'space-between',
     alignItems: "center",
+  },
+  saveBtn: {
+    display: "flex",
+    gap: '0.5em',
+    maxHeight: '1em',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 }))

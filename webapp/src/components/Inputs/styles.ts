@@ -29,8 +29,8 @@ const commonInputStyle = (theme: AppTheme) => ({
 export const useButtonStyles = createAppUseStyles<{}>(theme => ({
   input: {
     ...commonInputStyle(theme).input,
-    paddingTop: '2%',
-    paddingBottom: '2%',
+    paddingTop: '1em',
+    paddingBottom: '1em',
     cursor: 'pointer',
   },
 }));
