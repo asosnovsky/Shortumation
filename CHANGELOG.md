@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.11] - Zoom
+
+- Added lazy saving
+
 ## [0.0.10] - Zoom
 
 - Introducing Zoom!
