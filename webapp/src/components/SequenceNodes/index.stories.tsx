@@ -11,7 +11,7 @@ export default {
   component: SequenceNodes,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
-    zoomLevel: 1.5,
+    zoomLevel: 100,
     startPoint: [0.5, 0.5],
     dims: {
       nodeHeight: NODE_HEIGHT,

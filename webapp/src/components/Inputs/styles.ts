@@ -29,8 +29,8 @@ const commonInputStyle = (theme: AppTheme) => ({
 export const useButtonStyles = createAppUseStyles<{}>(theme => ({
   input: {
     ...commonInputStyle(theme).input,
-    paddingTop: '2%',
-    paddingBottom: '2%',
+    paddingTop: '1em',
+    paddingBottom: '1em',
     cursor: 'pointer',
   },
 }));
@@ -97,8 +97,8 @@ export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
     },
     deleteIcon: {
       position: "absolute",
-      left: 30,
-      top: 17,
+      left: "1em",
+      top: "1.5em",
       color: theme.secondaryAccent,
       backgroundColor: theme.secondary,
       borderWidth: 1,

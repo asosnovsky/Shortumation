@@ -15,9 +15,7 @@
 }
 
 .automation-list--viewer {
-    /* flex: 6; */
-    min-width: 100%;
-    max-width: 100%;
+    overflow: hidden;
 }
 
 /* list children: on hide */

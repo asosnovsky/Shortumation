@@ -5,7 +5,15 @@ export const useEditorStyles = createAppUseStyles<{
   closeInfo: boolean;
   horizontalMode: boolean;
 }>(theme => ({
-  root: ({horizontalMode}) => ({
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: "flex-end",
+    height: '100%',
+    width: '100%',
+    overflow: 'hidden',
+  },
+  root: ({ horizontalMode }) => ({
     height: '100%',
     width: '100%',
     color: theme.primaryAccent,
@@ -18,7 +26,30 @@ export const useEditorStyles = createAppUseStyles<{
     borderColor: theme.secondaryAccent,
     width: '100%',
   },
-  infoIcon: ({horizontalMode}) => ({
+  infoIcon: ({ horizontalMode }) => ({
     bottom: horizontalMode ? '90%' : 10
-  })
+  }),
+  zoom: {
+    backgroundColor: theme.secondary,
+    color: theme.secondaryAccent,
+    textAlign: 'center',
+    maxWidth: "3em",
+  },
+  zoomImg: {
+
+  },
+  toolbar: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: "center",
+  },
+  saveBtn: {
+    display: "flex",
+    gap: '0.5em',
+    maxHeight: '1em',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 }))

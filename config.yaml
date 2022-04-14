@@ -1,5 +1,5 @@
 name: Shortumation
-version: 0.0.9
+version: 0.0.11
 slug: shortumation
 url: "https://github.com/asosnovsky/Shortumation"
 description: "A homeassitant addon which provides better UI for automations & scripts."
