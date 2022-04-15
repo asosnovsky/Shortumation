@@ -8,17 +8,18 @@ export const useAPIService = (
 ) => {
   // state
   const [state, setState] = useDefaultApiState();
-  const {reload, wrapCall} = makeReloadAutomations(automationAPI, state, setState);
-  
+  const { reload, wrapCall } = makeReloadAutomations(automationAPI, state, setState);
+
 
   // initial load of autos
   useEffect(() => {
     reload();
+    // eslint-disable-next-line
   }, []);
 
   return {
     state,
-    removeAutomation:  wrapCall(automationAPI.remove),
-    updateAutomation:  wrapCall(automationAPI.update),
+    removeAutomation: wrapCall(automationAPI.remove),
+    updateAutomation: wrapCall(automationAPI.update),
   }
 }

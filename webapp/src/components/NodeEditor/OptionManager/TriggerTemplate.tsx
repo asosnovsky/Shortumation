@@ -1,9 +1,6 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerTemplate } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
-import { InputEntity } from 'components/Inputs/InputTextBubble';
-import InputNumber from 'components/Inputs/InputNumber';
-import InputTextArea from 'components/Inputs/InputTextArea';
 import InputTime from 'components/Inputs/InputTime';
 
 
