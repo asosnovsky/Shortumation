@@ -11,7 +11,7 @@ from src.yaml_serializer.types import IncludedYaml
 
 THIS_FOLDER = Path(__file__).parent
 SAMPLES_FOLDER = THIS_FOLDER / "samples"
-HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "example_config_folder"
+HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "config"
 
 
 def get_example_automation_loader() -> Tuple[Path, HassConfig, AutomationManager]:
