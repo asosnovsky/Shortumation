@@ -1,0 +1,813 @@
+- id: '1616887975473'
+  alias: Home Assistant Off
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: shutdown
+  condition: []
+  action:
+  - device_id: das2qdasdasdasadaasd
+    domain: mobile_app
+    type: notify
+    title: Hassio Status
+    message: Hassio Is turning off...
+  mode: single
+- id: '1616888026264'
+  alias: Home Assistant On
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - device_id: das2qdasdasdasadaasd
+    domain: mobile_app
+    type: notify
+    title: Hassio Status
+    message: Home assistant is up!
+  mode: single
+- id: '1619371298367'
+  alias: Living Room Button - Single Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      area_id: dining_table
+  mode: single
+- id: '1620239986670'
+  alias: Kitchen Button - Short Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.switch_kitchen
+  mode: single
+- id: '1620324780561'
+  alias: Kitchen Island Button - Single Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+  condition: []
+  action:
+  - type: toggle
+    device_id: das2qdasdasdasadaasd
+    entity_id: light.switch_island
+    domain: light
+  mode: single
+- id: '1621352850204'
+  alias: Kitchen Button - Double Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+  condition: []
+  action:
+  - type: toggle
+    device_id: das2qdasdasdasadaasd
+    entity_id: light.switch_island
+    domain: light
+  mode: single
+- id: '1622210698281'
+  alias: Kitchen Button - Long Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: remote_button_long_press
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: light.switch_kitchen
+        attribute: brightness
+        above: '200'
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness: 50
+        target:
+          entity_id: light.switch_kitchen
+    default:
+    - service: light.turn_on
+      data:
+        brightness: 255
+      target:
+        entity_id: light.switch_kitchen
+  mode: single
+- id: '1622769811245'
+  alias: Living Room Button - Double Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      brightness: 255
+    target:
+      entity_id: light.switch_living
+  mode: single
+- id: '1623430479201'
+  alias: Bedroom Button - Single Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+  condition: []
+  action:
+  - type: toggle
+    device_id: das2qdasdasdasadaasd
+    entity_id: light.bulb_ari_lamp
+    domain: light
+  mode: single
+- id: '1623642118976'
+  alias: Bedroom Button - Double Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+  condition: []
+  action:
+  - service: script.turn_all_lights_off
+  mode: single
+- id: '1624640900951'
+  alias: Baby Button - Double Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+  condition: []
+  action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.baby_bedroom_dot
+    data:
+      media_content_id: Baby Sleep Music
+      media_content_type: SPOTIFY
+  mode: single
+- id: '1628024070687'
+  alias: Baby Light Setting - Night
+  description: ''
+  trigger:
+  - platform: time
+    at: '20:35:00'
+  condition: []
+  action:
+  - service: zwave_js.set_config_parameter
+    data:
+      parameter: '5'
+      value: '15'
+    target:
+      area_id: bedroom
+  - condition: state
+    entity_id: light.switch_baby
+    state: 'on'
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 15
+    target:
+      area_id: bedroom
+  - service: light.turn_on
+    target:
+      area_id: bedroom
+    data:
+      brightness_pct: 25
+  mode: single
+- id: '1628024123214'
+  alias: Baby Light Setting - Day
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00:00
+  condition: []
+  action:
+  - service: zwave_js.set_config_parameter
+    data:
+      value: '100'
+      parameter: '5'
+    target:
+      area_id: bedroom
+  - condition: state
+    entity_id: light.switch_baby
+    state: 'on'
+  - service: light.turn_on
+    data:
+      transition: 5
+      brightness_pct: 50
+    target:
+      area_id: bedroom
+  mode: single
+- id: '1628444671951'
+  alias: Office Window Opened
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: das2qdasdasdasadaasd
+    entity_id: binary_sensor.window_office
+    domain: binary_sensor
+  condition:
+  - condition: time
+    after: '21:00'
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+  action:
+  - service: notify.mobile_app_levas_phone
+    data:
+      message: Window is opened in office
+  mode: single
+- id: '1629309267204'
+  alias: On Balcony Door Open
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: das2qdasdasdasadaasd
+    entity_id: binary_sensor.door_balcony
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      area_id: balcony
+    data: {}
+  - service: light.turn_on
+    target:
+      area_id: balcony
+    data: {}
+  - repeat:
+      until:
+      - type: is_not_open
+        condition: device
+        device_id: das2qdasdasdasadaasd
+        entity_id: binary_sensor.door_balcony
+        domain: binary_sensor
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 5
+          seconds: 0
+          milliseconds: 0
+  - service: switch.turn_off
+    target:
+      device_id:
+      - das2qdasdasdasadaasd
+      - sad2q3qdewqdasdadasdas
+      area_id: balcony
+    data: {}
+  mode: single
+- id: '1629422438707'
+  alias: Vita Night Light
+  description: ''
+  trigger:
+  - platform: time
+    at: input_datetime.vita_night_pump_time
+  condition:
+  - condition: and
+    conditions:
+    - condition: time
+      after: input_datetime.vita_night_pump_time
+      before: 00:00:00
+    - condition: time
+      after: 00:00:00
+      before: 06:00:00
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.bulb_staircase
+      area_id: living_room
+    data:
+      brightness_pct: 40
+      transition: 15
+  mode: single
+- id: '1634497376234'
+  alias: Baby Button - Long Press
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: remote_button_long_press
+  condition: []
+  action:
+  - service: media_player.media_pause
+    target:
+      device_id: das2qdasdasdasadaasd
+  - type: turn_off
+    device_id: das2qdasdasdasadaasd
+    entity_id: light.switch_baby
+    domain: light
+  mode: single
+- id: '1635539262562'
+  alias: On Home Enter
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.ari
+    zone: zone.home_2
+    event: enter
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: disarmed
+  action:
+  - service: alarm_control_panel.alarm_disarm
+    target:
+      entity_id: alarm_control_panel.home_alarm
+    data:
+      code: '8012'
+  - condition: state
+    entity_id: light.switch_living
+    state: 'off'
+  - wait_template: '{{ states("binary_sensor.door_main") == "on" }}'
+    timeout: 00:10:00
+  - service: light.turn_on
+    target:
+      area_id: living_room
+    data:
+      transition: 5
+      brightness: 255
+  mode: single
+- id: '1636428429596'
+  alias: Night - On TV off
+  description: Auto runs things when we go to sleep
+  trigger:
+  - platform: time
+    at: '22:30:00'
+  - platform: device
+    device_id: das2qdasdasdasadaasd
+    domain: media_player
+    entity_id: media_player.ari_s_fire_tv
+    type: turned_off
+  - platform: device
+    device_id: das2qdasdasdasadaasd
+    domain: media_player
+    entity_id: media_player.living_room_firetv
+    type: turned_off
+  - platform: numeric_state
+    entity_id: sensor.analog_input_living_room_tv
+    below: '1'
+  condition:
+  - condition: time
+    before: 07:00:00
+    after: '21:00:00'
+  - condition: numeric_state
+    entity_id: sensor.analog_input_living_room_tv
+    below: '1'
+  - condition: state
+    entity_id: input_boolean.night_automation_ran
+    state: 'off'
+  action:
+  - service: switch.turn_off
+    data: {}
+    target:
+      area_id:
+      - dining_table
+      - office
+      - living_room
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.switch_kitchen
+      - light.switch_island
+      - light.switch_dining_chandelier
+      - light.switch_office_hallway
+      - switch.light_office
+      area_id:
+      - dining_table
+      - kitchen
+    data:
+      transition: 5
+  - service: light.turn_on
+    data:
+      transition: 10
+      brightness_pct: 50
+    target:
+      entity_id: light.switch_living
+  - service: light.turn_on
+    data:
+      brightness_pct: 47
+      kelvin: 4600
+    target:
+      entity_id:
+      - light.bulb_ari_lamp
+      - light.bulb_ari_lamp_philip
+      device_id: das2qdasdasdasadaasd
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.night_automation_ran
+  - wait_template: '{{ states("light.bulb_ari_lamp") == "off" }}'
+  - service: script.turn_all_lights_off
+    data: {}
+  mode: single
+- id: '1639500650865'
+  alias: Main Bedroom - Closet Door - Toggle
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.door_main_bedroom_closet
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.to_state.attributes.contact }}'
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id:
+          - light.bulb_closet
+    default:
+    - service: light.turn_on
+      target:
+        entity_id:
+        - light.bulb_closet
+      data:
+        transition: 3
+  mode: single
+- id: '1641617168123'
+  alias: Ensure On
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: das2qdasdasdasadaasd
+    entity_id: switch.power_washer
+    domain: switch
+  - platform: device
+    type: turned_off
+    device_id: das2qdasdasdasadaasd
+    entity_id: switch.plug_living_room_tv
+    domain: switch
+  condition: []
+  action:
+  - type: turn_on
+    device_id: das2qdasdasdasadaasd
+    entity_id: switch.power_washer
+    domain: switch
+  - type: turn_on
+    device_id: das2qdasdasdasadaasd
+    entity_id: switch.plug_living_room_tv
+    domain: switch
+  mode: single
+- id: '1648071019802'
+  alias: 'Keep Bug Light On '
+  description: Keeps living room bug lamp on
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: das2qdasdasdasadaasd
+    entity_id: switch.plug_buglamp_indoor
+    domain: switch
+  condition: []
+  action:
+  - type: turn_on
+    device_id: das2qdasdasdasadaasd
+    entity_id: switch.plug_buglamp_indoor
+    domain: switch
+  mode: single
+- id: '1649426399020'
+  alias: Office Motion
+  description: Turn lights on or off when motion is detected
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_office_inv
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition:
+  - condition: time
+    before: '18:00:00'
+    after: 06:00:00
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.motion_office_inv
+        state: 'on'
+      sequence:
+      - type: turn_on
+        device_id: das2qdasdasdasadaasd
+        entity_id: switch.light_office
+        domain: switch
+    default:
+    - type: turn_off
+      device_id: das2qdasdasdasadaasd
+      entity_id: switch.light_office
+      domain: switch
+  mode: single
+- id: '1649432254675'
+  alias: Baby Light Setting
+  description: Controls max brightness on the baby light
+  trigger:
+  - platform: time
+    at: 07:00:00
+  - platform: time
+    at: '20:30:00'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: time
+        before: 07:00:00
+        after: '20:30:00'
+      sequence:
+      - service: zwave_js.set_config_parameter
+        data:
+          parameter: '5'
+          value: '15'
+        target:
+          area_id: bedroom
+      - condition: state
+        entity_id: light.switch_baby
+        state: 'on'
+      - service: light.turn_on
+        data:
+          transition: 5
+          brightness_pct: 15
+        target:
+          area_id: bedroom
+      - service: light.turn_on
+        target:
+          area_id: bedroom
+        data:
+          brightness_pct: 25
+    default:
+    - service: zwave_js.set_config_parameter
+      data:
+        value: '100'
+        parameter: '5'
+      target:
+        area_id: bedroom
+    - condition: state
+      entity_id: light.switch_baby
+      state: 'on'
+    - service: light.turn_on
+      data:
+        transition: 5
+        brightness_pct: 50
+      target:
+        area_id: bedroom
+  mode: single
+- id: '1649726828269'
+  alias: Climate Heat Mode Settings
+  description: Ensures that the climate is always in sync with the house settings
+  trigger:
+  - platform: state
+    entity_id: climate.main_floor
+    id: main
+  - platform: state
+    entity_id: climate.second_floor
+    id: second
+  - platform: state
+    entity_id: input_boolean.thermostats_house_is_heating
+    id: setting
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == "setting" }}'
+      sequence:
+      - service: climate.turn_off
+        data: {}
+        target:
+          device_id:
+          - das2qdasdasdasadaasd
+          - 32424rsafdsafsasq2341
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.thermostats_house_is_heating
+        state: 'on'
+      sequence:
+      - choose:
+        - conditions:
+          - condition: and
+            conditions:
+            - condition: template
+              value_template: '{{ trigger.to_state.state != ''heat'' }}'
+            - condition: template
+              value_template: '{{ trigger.to_state.state != ''off'' }}'
+          sequence:
+          - service: climate.set_hvac_mode
+            data:
+              hvac_mode: heat
+            target:
+              entity_id: '{{ trigger.entity_id }}'
+    default:
+    - choose:
+      - conditions:
+        - condition: and
+          conditions:
+          - condition: template
+            value_template: '{{ trigger.to_state.state != ''cool'' }}'
+          - condition: template
+            value_template: '{{ trigger.to_state.state != ''off'' }}'
+        sequence:
+        - service: climate.set_hvac_mode
+          data:
+            hvac_mode: cool
+          target:
+            entity_id: '{{ trigger.entity_id }}'
+  mode: single
+- id: '1649727810678'
+  alias: Climate Timing
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00:00
+    id: night
+  - platform: time
+    at: 06:00:00
+    id: day
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == "night" }}'
+      sequence:
+      - service: climate.turn_off
+        data: {}
+        target:
+          area_id:
+          - living_room
+          - main_bedroom
+    default:
+    - choose:
+      - conditions:
+        - condition: state
+          entity_id: input_boolean.thermostats_house_is_heating
+          state: 'on'
+        sequence:
+        - service: climate.set_hvac_mode
+          data:
+            hvac_mode: heat
+          target:
+            area_id:
+            - living_room
+            - main_bedroom
+      default:
+      - service: climate.set_hvac_mode
+        data:
+          hvac_mode: cool
+        target:
+          area_id:
+          - living_room
+          - main_bedroom
+    - service: climate.set_temperature
+      data:
+        temperature: 23.5
+      target:
+        area_id:
+        - living_room
+        - main_bedroom
+  mode: single
+- id: '1649820885714'
+  alias: Turn off Night Auto Ran
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00:00
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.night_automation_ran
+  mode: single
+- id: '1649947692702'
+  alias: Bed Remote
+  description: ''
+  trigger:
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+    id: turn_on
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+    id: turn_off
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_up
+    id: dim_up
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_down
+    id: dim_down
+  - device_id: das2qdasdasdasadaasd
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: turn_on
+    id: up_dbclk
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: turn_off
+      sequence:
+      - type: turn_off
+        device_id: das2qdasdasdasadaasd
+        entity_id: light.bulb_ari_lamp
+        domain: light
+    - conditions:
+      - condition: trigger
+        id: turn_on
+      sequence:
+      - service: light.turn_on
+        data:
+          color_temp: 153
+          brightness_pct: 100
+        target:
+          device_id: das2qdasdasdasadaasd
+    - conditions:
+      - condition: trigger
+        id: dim_up
+      sequence:
+      - device_id: das2qdasdasdasadaasd
+        domain: light
+        entity_id: light.bulb_ari_lamp
+        type: brightness_increase
+    - conditions:
+      - condition: trigger
+        id: dim_down
+      sequence:
+      - device_id: das2qdasdasdasadaasd
+        domain: light
+        entity_id: light.bulb_ari_lamp
+        type: brightness_decrease
+    - conditions:
+      - condition: trigger
+        id: up_dbclk
+      sequence:
+      - service: light.turn_on
+        data:
+          color_temp: 500
+          brightness_pct: 100
+        target:
+          device_id: das2qdasdasdasadaasd
+    default: []
+  mode: single
