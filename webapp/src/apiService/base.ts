@@ -1,14 +1,15 @@
 import { APIRequest, APIResponse } from './types';
 
 export interface API {
-  makeCall: <Res = any, Req = any>(req: APIRequest<Req>) => Promise<APIResponse<Res>>; 
+  makeCall: <Res = any, Req = any>(req: APIRequest<Req>) => Promise<APIResponse<Res>>;
 }
 export const makeRemoteAPI = (baseURL: string): API => ({
   async makeCall({
-      path,
-      method = "POST",
-      data={}
-    }) {
+    path,
+    method = "POST",
+    data = {}
+  }) {
+    try {
       const reply = await fetch(baseURL + path, {
         method,
         headers: {
@@ -30,5 +31,12 @@ export const makeRemoteAPI = (baseURL: string): API => ({
         console.error(response)
       }
       return response
+    } catch (err) {
+      console.error(err)
+      return {
+        ok: false,
+        error: `${err} ${err?.stack}`,
+      }
     }
+  }
 })
