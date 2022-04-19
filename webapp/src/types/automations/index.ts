@@ -4,22 +4,23 @@ import { AutomationTrigger, TriggerType } from "./triggers";
 
 
 export interface AutomationMetadata {
-    id: string;
-    alias: string;
-    description: string;
-    trigger_variables?: Record<string, string>;
-    mode: "single" | "restart" | "queued" | "parallel";
+  id: string;
+  alias: string;
+  description: string;
+  trigger_variables?: Record<string, string>;
+  mode: "single" | "restart" | "queued" | "parallel";
+  tags: Record<string, string>;
 }
 export interface AutomationData {
-    metadata: AutomationMetadata;
-    trigger: AutomationTrigger[];
-    sequence: AutomationSequenceNode[];
+  metadata: AutomationMetadata;
+  trigger: AutomationTrigger[];
+  sequence: AutomationSequenceNode[];
 }
 export type AutomationSequenceNode = AutomationAction | AutomationCondition;
 export type AutomationNodeMapping = {
-    "trigger": AutomationTrigger;
-    "action": AutomationAction;
-    "condition": AutomationCondition;
+  "trigger": AutomationTrigger;
+  "action": AutomationAction;
+  "condition": AutomationCondition;
 }
 export type AutomationNodeTypes = keyof AutomationNodeMapping | undefined;
 export type AutomationNode<N extends AutomationNodeTypes = any> =

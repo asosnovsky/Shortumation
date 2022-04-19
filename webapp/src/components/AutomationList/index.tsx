@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./index.css";
 import { AutomationEditor } from "components/AutomationEditor";
 import { Button } from "components/Inputs/Button";
 import { FC, useState } from "react";
