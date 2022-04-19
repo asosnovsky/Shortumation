@@ -124,6 +124,87 @@ export const useInputListStyles = createAppUseStyles<{}>(theme => {
   }
 });
 
+export const useInputMultiSelectStyles = createAppUseStyles<{
+  open: boolean;
+  selected: number[];
+  maxedOut: boolean;
+}>(theme => {
+  const styles = commonInputStyle(theme);
+  return {
+    input: {
+      ...styles.input,
+      cursor: 'pointer',
+      position: 'relative',
+      display: 'flex',
+      gap: '1em',
+
+      "&> label": {
+        cursor: 'pointer',
+        userSelect: 'none',
+      },
+      "&:hover": {
+        color: theme.primaryAccent,
+      }
+    },
+    numberSelected: (({ selected }) => ({
+      display: selected.length > 0 ? 'block' : 'none',
+      background: theme.primary,
+      borderColor: theme.primaryAccent,
+      borderStyle: 'solid',
+      borderWidth: '1px',
+      borderRadius: '60%',
+      padding: '0em 0.4em'
+    })),
+    optionsWrapper: (({ open }) => ({
+      position: 'absolute',
+      display: open ? 'flex' : 'none',
+      flexDirection: 'column',
+      gap: '0.25em',
+      left: '1em',
+      top: '4em',
+      height: '100%',
+      userSelect: 'none',
+    })),
+    arrow: (({ open }) => ({
+      position: 'absolute',
+      right: '1em',
+      top: '1em',
+      transform: open ? 'rotate(90deg)' : 'rotate(270deg)',
+    })),
+    option: (({ maxedOut }) => ({
+      display: 'flex',
+      flexDirection: 'row',
+      gap: '0.25em',
+      width: '100%',
+      padding: '0.25em 0.5em',
+
+      '&.unselected span:nth-child(2)': {
+        display: 'none'
+      },
+      '&.selected span:nth-child(2)': {
+        background: theme.primary,
+        borderColor: theme.primaryAccent,
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        borderRadius: '40%',
+        padding: '0em 0.4em'
+      },
+
+      '&.unselected': {
+        cursor: maxedOut ? 'not-allowed' : 'pointer',
+      },
+      '&.selected': {
+        cursor: 'pointer',
+      },
+
+      "&:hover": {
+        color: theme.secondary,
+        backgroundColor: theme.secondaryAccent,
+      }
+    })),
+  }
+});
+
 export const useInputTextAreaStyles = createAppUseStyles<{ resizable: boolean }>(theme => {
   const styles = commonInputStyle(theme);
   return {
