@@ -1,3 +1,56 @@
 .automation-list-box {
-    
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.automation-list-box--body {
+    overflow: scroll;
+    height: 100%;
+    flex: 1;
+}
+.automation-list-box--body--group {
+    padding-left: 1em;
+    border-radius: 10px;
+    padding-bottom: 0.5em;
+    border-width: 1px;
+    border-bottom-style: solid ;
+    border-color: white;
+    user-select: none;
+}
+.automation-list-box--body--group > .automation-list-box--body--group {
+    border-left-style: solid ;
+    border-top-left-radius: 0;
+    margin-left: 0.75em;
+    padding-left: 0.5em;
+}
+
+.automation-list-box--body--group > b {
+    cursor: pointer;
+    padding: 0.1em;
+}
+.automation-list-box--body--group > b:hover {
+    background-color: var(--secondary-accent);
+}
+
+.automation-list-box--body--item:hover {
+    background-color: var(--primary-accent);
+}
+.automation-list-box--body--item {
+    padding-left: 1em;
+    cursor: pointer;
+}
+.automation-list-box--body--item::before {
+    content: "⊚ ";
+}
+.automation-list-box--bottom {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.automation-list-box--bottom > button {
+    padding: 0.5em 2em;
 }

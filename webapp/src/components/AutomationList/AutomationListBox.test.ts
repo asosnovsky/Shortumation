@@ -1,7 +1,8 @@
-import { groupAutomations } from './AutomationListBox';
+import { groupAutomations, getTagList } from './AutomationListBox';
 import { AutomationData } from 'types/automations/index';
+import { createMockAuto } from 'utils/mocks';
 
-test('converting time to a string', () => {
+test('group automations', () => {
     const automations: AutomationData[] = [
         {
             metadata: {
@@ -46,30 +47,52 @@ test('converting time to a string', () => {
             trigger: [],
         },
     ];
-    expect(groupAutomations(automations, [0, 1], ['Room', "Type"])).toBe({
+    expect(groupAutomations(automations, [0, 1], ['Room', "Type"])).toStrictEqual({
         "Living Room": {
-            "Lights": ["1"],
-            "Climate": ["2"],
+            "Lights": [0],
+            "Climate": [1],
         },
         "Kitchen": {
-            "Climate": ["3"],
+            "Climate": [2],
         }
     })
-    expect(groupAutomations(automations, [1, 0], ['Room', "Type"])).toBe({
+    expect(groupAutomations(automations, [1, 0], ['Room', "Type"])).toStrictEqual({
         "Lights": {
-            "Living Room": ['1'],
+            "Living Room": [0],
         },
         "Climate": {
-            "Living Room": ['2'],
-            "Kitchen": ['3']
+            "Living Room": [1],
+            "Kitchen": [2]
         }
     })
-    expect(groupAutomations(automations, [1], ['Room', "Type"])).toBe({
-        "Lights": ['1'],
-        "Climate": ['2', '3']
+    expect(groupAutomations(automations, [1], ['Room', "Type"])).toStrictEqual({
+        "Lights": [0],
+        "Climate": [1, 2]
     })
-    expect(groupAutomations(automations, [0], ['Room', "Type"])).toBe({
-        "Living Room": ['1', '2'],
-        "Kitchen": ['3']
+    expect(groupAutomations(automations, [0], ['Room', "Type"])).toStrictEqual({
+        "Living Room": [0, 1],
+        "Kitchen": [2]
     })
+
+
+    expect(groupAutomations(automations, [], ['Room', "Type"])).toStrictEqual([
+        0, 1, 2
+    ])
 });
+
+
+test('getTagList', () => {
+    expect(getTagList([
+        createMockAuto(),
+        createMockAuto(),
+        createMockAuto(),
+        createMockAuto(),
+    ])).toStrictEqual([])
+
+    expect(getTagList([
+        createMockAuto({ "Room": "Kitchen", "Area": "Oven" }),
+        createMockAuto({ "Room": "Attic" }),
+        createMockAuto({ "Room": "Office" }),
+        createMockAuto({ "Area": "Balcony" }),
+    ])).toStrictEqual(["Room", "Area"])
+})

@@ -1,3 +1,4 @@
+import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { AutomationList } from ".";

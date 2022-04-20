@@ -1,15 +1,16 @@
 import { AutomationData } from 'types/automations';
 
 
-export const createMockAuto = (): AutomationData => ({
+export const createMockAuto = (tags: Record<string, string> = {}): AutomationData => ({
   metadata: {
-    id: "random",
+    id: Math.random().toString(36).slice(2, 5),
     alias: "Random",
     description: "Example Metadata",
     trigger_variables: {
       'wowo': '!'
     },
     mode: 'single',
+    tags
   },
   trigger: [
     {
