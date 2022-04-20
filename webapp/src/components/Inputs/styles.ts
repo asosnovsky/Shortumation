@@ -131,10 +131,12 @@ export const useInputMultiSelectStyles = createAppUseStyles<{
 }>(theme => {
   const styles = commonInputStyle(theme);
   return {
+    root: {
+    },
     input: {
       ...styles.input,
-      cursor: 'pointer',
       position: 'relative',
+      cursor: 'pointer',
       display: 'flex',
       gap: '1em',
 
@@ -156,14 +158,19 @@ export const useInputMultiSelectStyles = createAppUseStyles<{
       padding: '0em 0.4em'
     })),
     optionsWrapper: (({ open }) => ({
+      background: theme.primary,
+      borderColor: theme.primaryAccent,
+      borderStyle: "solid",
+      borderWidth: 1,
       position: 'absolute',
       display: open ? 'flex' : 'none',
       flexDirection: 'column',
       gap: '0.25em',
-      left: '1em',
-      top: '4em',
-      height: '100%',
+      left: '0',
+      top: 'calc(100% + 0.25em)',
       userSelect: 'none',
+      overflow: 'hidden',
+      width: "100%",
     })),
     arrow: (({ open }) => ({
       position: 'absolute',

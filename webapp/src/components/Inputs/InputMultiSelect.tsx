@@ -32,35 +32,35 @@ export default function InputMultiSelect<T extends string>({
   });
 
 
-  return <div>
+  return <div className={classes.root}>
     <div className={classes.input} onClick={toggle}>
       <label>{label}</label>
       <span className={classes.numberSelected}>{selected.length}</span>
       <ArrowIcon color="white" className={classes.arrow} />
-    </div>
-    <div className={classes.optionsWrapper}>
-      {options.map((v, i) => {
-        const selectedCount = selected.indexOf(i);
-        const isSelected = selectedCount > -1;
-        return <div
-          key={i}
-          className={[classes.option, isSelected ? 'selected' : 'unselected'].join(' ')}
-          onClick={() => {
-            if (!isSelected) {
-              if (!maxedOut) {
-                onChange([...selected, i])
+      <div className={classes.optionsWrapper}>
+        {options.map((v, i) => {
+          const selectedCount = selected.indexOf(i);
+          const isSelected = selectedCount > -1;
+          return <div
+            key={i}
+            className={[classes.option, isSelected ? 'selected' : 'unselected'].join(' ')}
+            onClick={() => {
+              if (!isSelected) {
+                if (!maxedOut) {
+                  onChange([...selected, i])
+                }
+              } else {
+                onChange(
+                  selected.slice(0, selectedCount).concat(selected.slice(selectedCount + 1))
+                )
               }
-            } else {
-              onChange(
-                selected.slice(0, selectedCount).concat(selected.slice(selectedCount + 1))
-              )
-            }
-          }}
-        >
-          <span>{v}</span>
-          <span>{selectedCount}</span>
-        </div>
-      })}
+            }}
+          >
+            <span>{v}</span>
+            <span>{selectedCount}</span>
+          </div>
+        })}
+      </div>
     </div>
   </div>
 }
