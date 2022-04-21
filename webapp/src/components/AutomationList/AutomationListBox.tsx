@@ -10,8 +10,8 @@ import { TrashIcon } from "components/Icons";
 export type Props = {
     automations: AutomationData[];
     onSelectAutomation: (i: number) => void;
+    onRemove: (i: number) => void;
     onAdd: () => void;
-    onRemove: () => void;
 }
 
 export const AutomationListBox: FC<Props> = ({
@@ -39,6 +39,7 @@ export const AutomationListBox: FC<Props> = ({
                 selected={selected}
                 onChange={setSelected}
                 options={tags}
+                max={3}
             />
         </div>
         <div className="automation-list-box--body">
@@ -129,7 +130,7 @@ const convertGroupsToItems = (
             return <div
                 key={i}
                 className="automation-list-box--body--item"
-                title={`${auto.metadata.alias}\n ID=${auto.metadata.id}\n${auto.metadata.description}`}
+                title={`Name = ${auto.metadata.alias}\nID = ${auto.metadata.id}\nDescription = ${auto.metadata.description}`}
             >
                 <div
                     className="automation-list-box--body--item--title"
@@ -137,14 +138,13 @@ const convertGroupsToItems = (
                 >
                     <b>{auto.metadata.alias.slice(0, 15)} <span>({auto.metadata.id.slice(0, 5)})</span></b>
                     <span>{auto.metadata.description.slice(0, 25)}</span>
-                </div>
-                <div
-                    className="automation-list-box--body--item--tags"
-                    onClick={() => onSelectAutomation(autoIndex)}
-                >
-                    {Object.keys(auto.metadata.tags).map(tagName => <span key={tagName}>
-                        <b>{tagName}:</b> {auto.metadata.tags[tagName]}
-                    </span>)}
+                    <div
+                        className="automation-list-box--body--item--tags"
+                    >
+                        {Object.keys(auto.metadata.tags).map(tagName => <span key={tagName}>
+                            <b>{tagName}:</b> {auto.metadata.tags[tagName]}
+                        </span>)}
+                    </div>
                 </div>
                 <Button onClick={() => onRemove(autoIndex)}><TrashIcon /></Button>
             </div>

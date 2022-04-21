@@ -43,6 +43,7 @@ export default function InputMultiSelect<T extends string>({
           const isSelected = selectedCount > -1;
           return <div
             key={i}
+            title={(maxedOut && !isSelected) ? `Maximum allowed to select is ${max}.` : isSelected ? `Unselect ${v}` : `Select ${v}`}
             className={[classes.option, isSelected ? 'selected' : 'unselected'].join(' ')}
             onClick={() => {
               if (!isSelected) {

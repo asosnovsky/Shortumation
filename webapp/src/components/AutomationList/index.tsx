@@ -8,6 +8,7 @@ import { defaultAutomation } from '../../utils/defaults';
 import { ArrowIcon, TrashIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
+import { AutomationListBox } from "./AutomationListBox";
 
 
 interface AutomationListParams {
@@ -35,21 +36,15 @@ export const AutomationList: FC<AutomationListParams> = ({
   // render
   return <div className="automation-list--root">
     <div className={automationListListCls}>
-      <div className="automation-list--list-box">
-        {automations.map((auto, i) =>
-          <div key={i} className="automation-list--elm">
-            <Button onClick={() => onRemove(i)} className="automation-list--elm-remove"><TrashIcon /></Button>
-            <Button onClick={() => setCurrent(i)}>
-              {auto.metadata.alias.slice(0, 15)} <br />
-              <span>{auto.metadata.description.slice(0, 25)}</span>
-            </Button>
-          </div>
-        )}
-        <Button onClick={() => {
+      <AutomationListBox
+        automations={automations}
+        onAdd={() => {
           onAdd(defaultAutomation(`shortu-${automations.length}`));
           setCurrent(automations.length)
-        }}>Add</Button>
-      </div>
+        }}
+        onSelectAutomation={setCurrent}
+        onRemove={onRemove}
+      />
       <ButtonIcon
         onClick={() => setHideList(!hideList)}
         className="automation-list--list-hide"
