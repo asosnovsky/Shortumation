@@ -31,7 +31,7 @@ export const FewAutos = Template.bind({})
 FewAutos.args = {
   ...FewAutos.args,
   automations: [
-    createMockAuto({ "Room": "Bathroom", "Type": "Lights" }),
+    createMockAuto({ "Room": "Bathroom", "Type": "Lights", "NewDevice": "Yes", "Remote": "No", "Floor": "1" }),
     createMockAuto({ "Room": "Bathroom", "Type": "Climate" }),
     createMockAuto({ "Room": "Living Room", "Type": "Climate" }),
     createMockAuto({ "Type": "Climate" }),

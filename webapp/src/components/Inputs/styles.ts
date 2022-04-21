@@ -171,6 +171,7 @@ export const useInputMultiSelectStyles = createAppUseStyles<{
       userSelect: 'none',
       overflow: 'hidden',
       width: "100%",
+      zIndex: 10,
     })),
     arrow: (({ open }) => ({
       position: 'absolute',

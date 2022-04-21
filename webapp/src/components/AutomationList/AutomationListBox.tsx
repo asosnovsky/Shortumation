@@ -4,18 +4,21 @@ import { AutomationData } from "types/automations";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 import InputText from "components/Inputs/InputText";
 import { Button } from "components/Inputs/Button";
+import { TrashIcon } from "components/Icons";
 
 
 export type Props = {
     automations: AutomationData[];
     onSelectAutomation: (i: number) => void;
     onAdd: () => void;
+    onRemove: () => void;
 }
 
 export const AutomationListBox: FC<Props> = ({
     automations,
     onSelectAutomation,
     onAdd,
+    onRemove,
 }) => {
 
     const tags = getTagList(automations);
@@ -39,7 +42,7 @@ export const AutomationListBox: FC<Props> = ({
             />
         </div>
         <div className="automation-list-box--body">
-            {convertGroupsToItems(groups, filteredAutomations, onSelectAutomation)}
+            {convertGroupsToItems(groups, filteredAutomations, onSelectAutomation, onRemove)}
         </div>
         <div className="automation-list-box--bottom">
             <Button onClick={onAdd}>Add</Button>
@@ -118,11 +121,34 @@ const convertGroupsToItems = (
     groups: any,
     autos: Array<[AutomationData, number]>,
     onSelectAutomation: (i: number) => void,
+    onRemove: (i: number) => void,
 ) => {
     if (Array.isArray(groups)) {
-        return groups.map(i => <div key={i} className="automation-list-box--body--item" onClick={() => onSelectAutomation(autos[i][1])}>
-            {autos[i][0].metadata.id} {autos[i][0].metadata.alias}
-        </div>)
+        return groups.map(i => {
+            const [auto, autoIndex] = autos[i];
+            return <div
+                key={i}
+                className="automation-list-box--body--item"
+                title={`${auto.metadata.alias}\n ID=${auto.metadata.id}\n${auto.metadata.description}`}
+            >
+                <div
+                    className="automation-list-box--body--item--title"
+                    onClick={() => onSelectAutomation(autoIndex)}
+                >
+                    <b>{auto.metadata.alias.slice(0, 15)} <span>({auto.metadata.id.slice(0, 5)})</span></b>
+                    <span>{auto.metadata.description.slice(0, 25)}</span>
+                </div>
+                <div
+                    className="automation-list-box--body--item--tags"
+                    onClick={() => onSelectAutomation(autoIndex)}
+                >
+                    {Object.keys(auto.metadata.tags).map(tagName => <span key={tagName}>
+                        <b>{tagName}:</b> {auto.metadata.tags[tagName]}
+                    </span>)}
+                </div>
+                <Button onClick={() => onRemove(autoIndex)}><TrashIcon /></Button>
+            </div>
+        })
     } else {
         return Object.keys(groups).map(groupName => {
             return <AutomationListBoxGroup
@@ -131,6 +157,7 @@ const convertGroupsToItems = (
                 groups={groups[groupName]}
                 autos={autos}
                 onSelectAutomation={onSelectAutomation}
+                onRemove={onRemove}
             />
         })
     }
@@ -142,15 +169,17 @@ const AutomationListBoxGroup: FC<{
     groups: any,
     autos: Array<[AutomationData, number]>,
     onSelectAutomation: (i: number) => void,
+    onRemove: (i: number) => void;
 }> = ({
     groupName,
     groups,
     autos,
     onSelectAutomation,
+    onRemove,
 }) => {
         const [open, setOpen] = useState(false);
         return <div className="automation-list-box--body--group">
             <b onClick={() => setOpen(!open)}>{groupName} {!open ? "⊕" : "⊖"}</b>
-            {open && convertGroupsToItems(groups, autos, onSelectAutomation)}
+            {open && convertGroupsToItems(groups, autos, onSelectAutomation, onRemove)}
         </div>
     }

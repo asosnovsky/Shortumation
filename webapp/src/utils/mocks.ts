@@ -3,7 +3,7 @@ import { AutomationData } from 'types/automations';
 
 export const createMockAuto = (tags: Record<string, string> = {}): AutomationData => ({
   metadata: {
-    id: Math.random().toString(36).slice(2, 5),
+    id: Math.random().toString(36).slice(2, 15),
     alias: "Random",
     description: "Example Metadata",
     trigger_variables: {

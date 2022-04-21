@@ -5,18 +5,24 @@
 }
 
 .automation-list-box--body {
-    overflow: scroll;
+    overflow: auto;
     height: 100%;
     flex: 1;
+    user-select: none;
+}
+.automation-list-box--body > * {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 .automation-list-box--body--group {
+    display: flex;
+    flex-direction: column;
     padding-left: 1em;
     border-radius: 10px;
     padding-bottom: 0.5em;
     border-width: 1px;
     border-bottom-style: solid ;
     border-color: white;
-    user-select: none;
 }
 .automation-list-box--body--group > .automation-list-box--body--group {
     border-left-style: solid ;
@@ -26,22 +32,66 @@
 }
 
 .automation-list-box--body--group > b {
+    width: 100%;
     cursor: pointer;
     padding: 0.1em;
 }
 .automation-list-box--body--group > b:hover {
     background-color: var(--secondary-accent);
+    color: var(--secondary);
 }
 
 .automation-list-box--body--item:hover {
     background-color: var(--primary-accent);
+    color: var(--primary);
+}
+.automation-list-box--body--item:hover > .automation-list-box--body--item--tags > span {
+    border-color: var(--primary);
 }
 .automation-list-box--body--item {
     padding-left: 1em;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1em;
+    /* position: relative; */
 }
 .automation-list-box--body--item::before {
     content: "⊚ ";
+}
+.automation-list-box--body--item--title {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.25em;
+}
+.automation-list-box--body--item--title > b {
+    font-size: 1em;
+}
+.automation-list-box--body--item--title > span, .automation-list-box--body--item--title > b > span {
+    font-size: 0.75em;
+}
+.automation-list-box--body--item > button {
+    padding: 0.25em !important;
+    margin: 0.5em !important;
+}
+.automation-list-box--body--item--tags {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.75em;
+    justify-content: left;
+    align-items: flex-start;
+    overflow: auto;
+    max-height: 100%;
+    gap: 0.25em;
+}
+.automation-list-box--body--item--tags > span {
+    border-color: var(--primary-accent);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.5em;
+    padding: 0.1em 0.5em;
 }
 .automation-list-box--bottom {
     margin-top: 0.5em;
@@ -52,5 +102,7 @@
     align-items: center;
 }
 .automation-list-box--bottom > button {
+    background-color: #070;
+    color: var(--primary-accent);
     padding: 0.5em 2em;
 }
