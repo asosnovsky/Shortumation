@@ -1,7 +1,7 @@
 from unittest import TestCase
 from fastapi.testclient import TestClient
 from src.api.app import make_app
-from src.automations.types import AutomationData, AutomationMetdata
+from src.automations.types import AutomationData, AutomationMetdata, ExtenededAutomationData
 from tests.utils import get_example_automation_loader
 
 
@@ -108,7 +108,7 @@ class automation_update_tests(BaseTestCase):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 20})
         new_auto = resp.json()["data"][0]
         self.assertNotEqual(original_auto, new_auto)
-        self.assertEqual(AutomationData(metadata=AutomationMetdata(id="testme")).dict(), new_auto)
+        self.assertEqual(ExtenededAutomationData(metadata=AutomationMetdata(id="testme")).dict(), new_auto)
 
 
 class automation_delete_tests(BaseTestCase):

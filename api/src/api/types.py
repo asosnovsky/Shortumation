@@ -2,7 +2,7 @@ from typing import Generic, List, TypeVar
 from pydantic import BaseModel
 from pydantic.fields import Field
 from pydantic.generics import GenericModel
-from src.automations.types import AutomationData
+from src.automations.types import ExtenededAutomationData
 
 DataT = TypeVar("DataT")
 
@@ -20,7 +20,7 @@ class ListData(GenericModel, Generic[DataT]):
 
 class UpdateAutoRequest(BaseModel):
     index: int = Field(description="Index of the automation to update")
-    data: AutomationData
+    data: ExtenededAutomationData
 
 
 class DeleteAutoRequest(BaseModel):

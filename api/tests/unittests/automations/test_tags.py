@@ -1,17 +1,17 @@
 
 
 from pathlib import Path
-from tempfile import mkdtemp
+from tempfile import mktemp
 from unittest import TestCase
 from src.automations.tags import TagManager
 
 class tag_tests(TestCase):
 
     def test_load_and_save(self):
-        tmp_file = Path(mkdtemp())
+        tmp_file = Path(mktemp()).with_suffix('.yml')
         tags = TagManager()
-        tags['id#1'] = ['home things', 'barns', 'kitchen']
-        tags['id#2'] = ['kitchen']
+        tags[0] = {'Room': "Kitchen", "Type": 'Lights'}
+        tags[1] = {}
 
         tags.save(tmp_file)
         loaded_tags = TagManager.load(tmp_file)

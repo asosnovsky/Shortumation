@@ -44,3 +44,6 @@ class AutomationData(BaseModel):
             "condition": [],
             "action": [action.to_primitive() for action in self.sequence],
         }
+
+class ExtenededAutomationData(AutomationData):
+    tags: Dict[str, str] = Field(default_factory=dict)

@@ -1,6 +1,6 @@
 from unittest import TestCase
 from src.automations.errors import FailedDeletion, InvalidAutomationFile
-from src.automations.types import AutomationData, AutomationMetdata
+from src.automations.types import AutomationMetdata, ExtenededAutomationData
 from tests.utils import (
     get_dummy_automation_loader,
     get_example_automation_loader,
@@ -43,7 +43,7 @@ class manager_tests(TestCase):
             [],
             automation_in_conifguration_mode="none",
         )
-        manager.update(1, AutomationData(metadata=AutomationMetdata(id="test1")))
+        manager.update(1, ExtenededAutomationData(metadata=AutomationMetdata(id="test1")))
         auto = manager.get(0)
         self.assertIsNotNone(auto)
         self.assertEqual(auto.metadata.id, "test1")  # type: ignore
@@ -51,7 +51,7 @@ class manager_tests(TestCase):
     def test_create_automation_with_example_folder(self):
         _, _, manager = get_example_automation_loader()
         self.assertEqual(manager.get_total_items(), 28)
-        manager.update(32, AutomationData(metadata=AutomationMetdata(id="test1")))
+        manager.update(32, ExtenededAutomationData(metadata=AutomationMetdata(id="test1")))
         auto = manager.get(28)
         self.assertIsNotNone(auto)
         self.assertEqual(manager.get_total_items(), 29)
@@ -60,24 +60,24 @@ class manager_tests(TestCase):
     def test_update_automation(self):
         _, _, manager = get_dummy_automation_loader(
             [
-                AutomationData(metadata=AutomationMetdata(id="test1")),
-                AutomationData(metadata=AutomationMetdata(id="test2")),
-                AutomationData(metadata=AutomationMetdata(id="test3")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
             ],
             automation_in_conifguration_mode="none",
         )
         auto = manager.get(0)
         self.assertEqual(auto.metadata.id, "test1")  # type: ignore
-        manager.update(0, AutomationData(metadata=AutomationMetdata(id="toaster-7")))
+        manager.update(0, ExtenededAutomationData(metadata=AutomationMetdata(id="toaster-7")))
         auto = manager.get(0)
         self.assertEqual(auto.metadata.id, "toaster-7")  # type: ignore
 
     def test_delete_automation(self):
         _, _, manager = get_dummy_automation_loader(
             [
-                AutomationData(metadata=AutomationMetdata(id="test1")),
-                AutomationData(metadata=AutomationMetdata(id="test2")),
-                AutomationData(metadata=AutomationMetdata(id="test3")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
             ],
             automation_in_conifguration_mode="none",
         )
@@ -90,9 +90,9 @@ class manager_tests(TestCase):
     def test_failed_deletion_automation(self):
         _, _, manager = get_dummy_automation_loader(
             [
-                AutomationData(metadata=AutomationMetdata(id="test1")),
-                AutomationData(metadata=AutomationMetdata(id="test2")),
-                AutomationData(metadata=AutomationMetdata(id="test3")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
             ],
             automation_in_conifguration_mode="none",
         )

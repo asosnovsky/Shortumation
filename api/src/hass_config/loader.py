@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List, Optional
+from src.automations.tags import TagManager
 
 from src.yaml_serializer import load_yaml, dump_yaml
 from src.yaml_serializer.types import IncludedYaml
@@ -24,6 +25,18 @@ class HassConfig:
             except FileNotFoundError as err:
                 raise MissingFile("automations.yaml") from err
         return self.configurations["automation"]
+    
+    @property
+    def automation_tags(self) -> TagManager:
+        tag_path = self.get_automation_tags_path()
+        if not tag_path.exists():
+            return TagManager()
+        else:
+            return TagManager.load(tag_path)
+
+    
+    def get_automation_tags_path(self) -> Path:
+        return self.root_path / "_shortu_automation_tags.yaml"
 
     def get_configuration_path(self) -> Path:
         return self.root_path / "configuration.yaml"
@@ -50,3 +63,6 @@ class HassConfig:
             self.get_configuration_path().write_text(
                 dump_yaml({**self.configurations, "automation": automations})
             )
+
+    def save_tags(self, tags: TagManager):
+        tags.save(self.get_automation_tags_path())
