@@ -33,9 +33,15 @@ export const makeRemoteAPI = (baseURL: string): API => ({
       return response
     } catch (err) {
       console.error(err)
+      let error = String(err)
+
+      if (err instanceof Error) {
+        error += ` ${err.stack}`
+      }
+
       return {
         ok: false,
-        error: `${err} ${err?.stack}`,
+        error,
       }
     }
   }

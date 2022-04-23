@@ -46,6 +46,7 @@ Simple.args = {
         'wowo': '!'
       },
       mode: 'single',
+      tags: {},
     },
     trigger: [
       {
@@ -115,6 +116,7 @@ EmptyStart.args = {
         'wowo': '!'
       },
       mode: 'single',
+      tags: {},
     },
     trigger: [
     ],

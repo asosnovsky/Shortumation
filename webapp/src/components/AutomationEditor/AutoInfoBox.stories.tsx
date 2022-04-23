@@ -34,5 +34,6 @@ Basic.args = {
       'wowo': '!'
     },
     mode: 'single',
-  }
+    tags: {},
+  },
 }

@@ -1,11 +1,10 @@
 import "./index.css";
 import { AutomationEditor } from "components/AutomationEditor";
-import { Button } from "components/Inputs/Button";
 import { FC, useState } from "react";
 import { AutomationData } from "types/automations";
 import { DAGBoardElmDims } from 'components/DAGSvgs/DAGBoard';
 import { defaultAutomation } from '../../utils/defaults';
-import { ArrowIcon, TrashIcon } from "components/Icons";
+import { ArrowIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";

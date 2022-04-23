@@ -1,5 +1,4 @@
 import { ArrowIcon } from "components/Icons";
-import InputWrapper from "./InputWrapper";
 import { useInputMultiSelectStyles } from "./styles";
 import { useState } from 'react';
 
@@ -15,7 +14,6 @@ export interface Props<T extends string> {
 }
 export default function InputMultiSelect<T extends string>({
   selected = [], options, onChange, label, max,
-  ...selattr
 }: Props<T>) {
   // state
   const [open, setOpen] = useState(false);
