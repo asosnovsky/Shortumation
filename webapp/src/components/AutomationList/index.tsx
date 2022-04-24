@@ -62,11 +62,11 @@ export const AutomationList: FC<AutomationListParams> = ({
   </div>
 }
 
-interface ConnectedAutmationListParams {
+interface ConnectedAutomationListParams {
   dims: DAGBoardElmDims;
   api: ApiService;
 }
-export const ConnectedAutmationList: FC<ConnectedAutmationListParams> = ({
+export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
   api: {
     state: {
       automations,

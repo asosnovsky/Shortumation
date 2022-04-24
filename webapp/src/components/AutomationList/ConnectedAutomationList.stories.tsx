@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { ConnectedAutmationList } from ".";
+import { ConnectedAutomationList } from ".";
 import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE, DISTANCE_FACTOR } from 'components/DAGSvgs/constants';
 import { createMockAuto } from "utils/mocks";
 import { useMockApiService } from "apiService";
 
 export default {
-  title: 'App/ConnectedAutmationList',
-  component: ConnectedAutmationList,
+  title: 'App/AutomationList/Connected',
+  component: ConnectedAutomationList,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
     dims: {
@@ -19,13 +19,13 @@ export default {
     },
     initialAutomations: [],
   }
-} as ComponentMeta<typeof ConnectedAutmationList>;
+} as ComponentMeta<typeof ConnectedAutomationList>;
 
 
 const Template: ComponentStory<any> = args => {
   const api = useMockApiService(args.initialAutomations);
   return <div className="page">
-    <ConnectedAutmationList
+    <ConnectedAutomationList
       {...args}
       api={api}
     />

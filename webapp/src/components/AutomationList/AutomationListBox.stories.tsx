@@ -4,7 +4,7 @@ import { AutomationListBox } from "./AutomationListBox";
 import { createMockAuto } from "utils/mocks";
 
 export default {
-  title: 'App/AutomationListBox',
+  title: 'App/AutomationList/Box',
   component: AutomationListBox,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {

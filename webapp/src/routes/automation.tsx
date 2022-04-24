@@ -1,5 +1,5 @@
 import { ApiService } from 'apiService/core';
-import { ConnectedAutmationList } from "components/AutomationList";
+import { ConnectedAutomationList } from "components/AutomationList";
 import { DEFAULT_DIMS } from "components/DAGSvgs/constants";
 import { FC } from "react";
 
@@ -12,7 +12,7 @@ export const AutomationRoute: FC<{ api: ApiService }> = ({
 
 
   return <div className="page">
-    <ConnectedAutmationList
+    <ConnectedAutomationList
       dims={DEFAULT_DIMS}
       api={api}
     />
