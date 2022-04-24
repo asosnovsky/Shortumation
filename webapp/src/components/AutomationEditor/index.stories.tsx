@@ -38,6 +38,7 @@ export const Simple = Template.bind({})
 Simple.args = {
   ...Simple.args,
   automation: {
+    tags: {},
     metadata: {
       id: "random",
       alias: "Random",
@@ -46,7 +47,6 @@ Simple.args = {
         'wowo': '!'
       },
       mode: 'single',
-      tags: {},
     },
     trigger: [
       {
@@ -108,6 +108,7 @@ export const EmptyStart = Template.bind({})
 EmptyStart.args = {
   ...EmptyStart.args,
   automation: {
+    tags: {},
     metadata: {
       id: "random",
       alias: "Random",
@@ -116,7 +117,6 @@ EmptyStart.args = {
         'wowo': '!'
       },
       mode: 'single',
-      tags: {},
     },
     trigger: [
     ],

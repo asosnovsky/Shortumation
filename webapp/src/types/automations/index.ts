@@ -9,12 +9,12 @@ export interface AutomationMetadata {
   description: string;
   trigger_variables?: Record<string, string>;
   mode: "single" | "restart" | "queued" | "parallel";
-  tags: Record<string, string>;
 }
 export interface AutomationData {
   metadata: AutomationMetadata;
   trigger: AutomationTrigger[];
   sequence: AutomationSequenceNode[];
+  tags: Record<string, string>;
 }
 export type AutomationSequenceNode = AutomationAction | AutomationCondition;
 export type AutomationNodeMapping = {

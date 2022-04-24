@@ -54,7 +54,7 @@ export const AutomationListBox: FC<Props> = ({
 
 
 export const getTagList = (autos: AutomationData[]): string[] => Object.keys(autos
-    .map(a => Object.keys(a.metadata.tags))
+    .map(a => Object.keys(a.tags))
     .reduce((all: any, keys) => {
         for (const k of keys) {
             all[k] = 1
@@ -75,7 +75,7 @@ const filterAutomations = (autos: AutomationData[], searchText: string, selected
     }
     if (selected.length > 0) {
         for (const i of selected) {
-            if (!a.metadata.tags[tags[i]]) {
+            if (!a.tags[tags[i]]) {
                 return false
             }
         }
@@ -103,10 +103,10 @@ export const groupAutomations = (
             if (lastKey !== null) {
                 where = where[lastKey]
             }
-            if (!where[a.metadata.tags[tag]]) {
-                where[a.metadata.tags[tag]] = {}
+            if (!where[a.tags[tag]]) {
+                where[a.tags[tag]] = {}
             }
-            lastKey = a.metadata.tags[tag]
+            lastKey = a.tags[tag]
         }
         if (lastKey !== null) {
             if (!where[lastKey] || !Array.isArray(where[lastKey])) {
@@ -141,8 +141,8 @@ const convertGroupsToItems = (
                     <div
                         className="automation-list-box--body--item--tags"
                     >
-                        {Object.keys(auto.metadata.tags).map(tagName => <span key={tagName}>
-                            <b>{tagName}:</b> {auto.metadata.tags[tagName]}
+                        {Object.keys(auto.tags).map(tagName => <span key={tagName}>
+                            <b>{tagName}:</b> {auto.tags[tagName]}
                         </span>)}
                     </div>
                 </div>

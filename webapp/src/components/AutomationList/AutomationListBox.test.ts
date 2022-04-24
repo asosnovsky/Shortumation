@@ -10,10 +10,10 @@ test('group automations', () => {
                 alias: '',
                 description: '',
                 mode: 'single',
-                tags: {
-                    "Room": 'Living Room',
-                    "Type": 'Lights'
-                }
+            },
+            tags: {
+                "Room": 'Living Room',
+                "Type": 'Lights'
             },
             sequence: [],
             trigger: [],
@@ -24,10 +24,10 @@ test('group automations', () => {
                 alias: '',
                 description: '',
                 mode: 'single',
-                tags: {
-                    "Room": 'Living Room',
-                    "Type": 'Climate'
-                }
+            },
+            tags: {
+                "Room": 'Living Room',
+                "Type": 'Climate'
             },
             sequence: [],
             trigger: [],
@@ -38,10 +38,10 @@ test('group automations', () => {
                 alias: '',
                 description: '',
                 mode: 'single',
-                tags: {
-                    "Room": 'Kitchen',
-                    "Type": 'Climate'
-                }
+            },
+            tags: {
+                "Room": 'Kitchen',
+                "Type": 'Climate'
             },
             sequence: [],
             trigger: [],

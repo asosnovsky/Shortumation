@@ -10,8 +10,8 @@ export const createMockAuto = (tags: Record<string, string> = {}): AutomationDat
       'wowo': '!'
     },
     mode: 'single',
-    tags
   },
+  tags,
   trigger: [
     {
       "$smType": undefined,

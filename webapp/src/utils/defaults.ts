@@ -47,8 +47,8 @@ export const defaultAutomation = (id: string): AutomationData => ({
         alias: "New Automation",
         description: "",
         mode: "single",
-        tags: {},
     },
+    tags: {},
     trigger: [],
     sequence: [],
 })
