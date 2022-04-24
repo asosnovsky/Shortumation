@@ -8,7 +8,6 @@ setup:
 	python3 -m venv $(VENV_FOLDER)
 	$(PIP) install wheel==0.35.1
 	$(PIP) install .[dev]
-	$(VENV_BIN)/pre-commit install
 
 lint:
 	$(VENV_BIN)/vulture --exclude src
@@ -44,4 +43,4 @@ clean:
 run-local:
 	rm -f web
 	ln -s ../webapp/build web
-	USE_EXAMPLE_REPO=1 uvicorn src.app:app --reload
+	USE_EXAMPLE_REPO=1 $(VENV_BIN)/uvicorn src.app:app --reload
