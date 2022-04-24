@@ -39,7 +39,8 @@ export const AutomationEditor: FC<Props> = ({
   const [modalState, setModalState] = useState<null | TriggerEditorModalState>(null);
   const { classes } = useEditorStyles({
     closeInfo,
-    horizontalMode: ratioWbh < 0.75
+    horizontalMode: ratioWbh < 0.75,
+    autoChanged,
   });
 
   // alias
@@ -95,7 +96,7 @@ export const AutomationEditor: FC<Props> = ({
             onChange={z => setZoomLevel(z.target.valueAsNumber ?? 40)}
           />
         </div>
-        {autoChanged !== 'unchanged' && <Button
+        <Button
           className={classes.saveBtn}
           onClick={() => {
             if (autoChanged === 'changed') {
@@ -105,8 +106,8 @@ export const AutomationEditor: FC<Props> = ({
           }}
           disabled={autoChanged !== 'changed'}
         >
-          Save <CheckMarkIcon />
-        </Button>}
+          Save <CheckMarkIcon color="#bf4" />
+        </Button>
       </div>
       <SequenceNodes
         zoomLevel={zoomLevel * 200 / 100 + 50}

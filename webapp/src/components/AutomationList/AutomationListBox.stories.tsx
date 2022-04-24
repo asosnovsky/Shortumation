@@ -1,7 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { AutomationListBox } from "./AutomationListBox";
-import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE, DISTANCE_FACTOR } from 'components/DAGSvgs/constants';
 import { createMockAuto } from "utils/mocks";
 
 export default {

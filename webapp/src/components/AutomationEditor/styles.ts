@@ -4,6 +4,7 @@ import { createAppUseStyles } from "styles/theme";
 export const useEditorStyles = createAppUseStyles<{
   closeInfo: boolean;
   horizontalMode: boolean;
+  autoChanged: string;
 }>(theme => ({
   wrapper: {
     display: 'flex',
@@ -44,12 +45,18 @@ export const useEditorStyles = createAppUseStyles<{
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: "center",
+    padding: "0.5em",
   },
-  saveBtn: {
+  saveBtn: ({ autoChanged }) => ({
     display: "flex",
+    opacity: autoChanged === "changed" ? 1 : 0,
+    height: autoChanged === "changed" ? undefined : 0,
+    fontSize: autoChanged === "changed" ? undefined : 0,
     gap: '0.5em',
     maxHeight: '1em',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+    borderColor: "#bf4 !important",
+    color: "#bf4 !important"
+  }),
 }))
