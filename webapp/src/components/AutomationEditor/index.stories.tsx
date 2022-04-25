@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 
 export default {
-  title: 'AutomationEditor/AutomationEditor',
+  title: 'App/AutomationList/Editor',
   component: AutomationEditor,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {

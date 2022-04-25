@@ -44,8 +44,8 @@ export const useInputWrapperStyles = createAppUseStyles<{
       position: 'relative',
       display: 'flex',
       flexDirection: 'column',
-      marginTop: noMargin ? 0 : 10,
-      marginBottom: noMargin ? 0 : '0.25em',
+      marginTop: noMargin ? 0 : '0.5em',
+      marginBottom: noMargin ? 0 : '0.5em',
     }),
     label: ({ labelSize }) => ({
       fontSize: labelSize === 'normal' ? 16 : 10,

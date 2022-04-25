@@ -1,24 +1,25 @@
 :root {
-    --primary         : #111111;
-    --secondary       : #1c1c1c;
-    --primary-accent  : #bbbbbb;
+    --primary: #111111;
+    --secondary: #1c1c1c;
+    --primary-accent: #bbbbbb;
     --secondary-accent: #929191;
-    touch-action      : pan-x pan-y;
-    height            : 100%;
+    --error: #c55;
+    touch-action: pan-x pan-y;
+    height: 100%;
 }
 
 
 html,
 body,
 #root {
-    margin       : 0 !important;
-    padding      : 0 !important;
-    height       : 100vh;
-    width        : 100vw;
-    overflow     : hidden !important;
-    font-family  : Tahoma, Geneva, sans-serif;
-    display      : flex !important;
-    align-items  : center;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden !important;
+    font-family: Tahoma, Geneva, sans-serif;
+    display: flex !important;
+    align-items: center;
     justify-items: center;
 }
 
