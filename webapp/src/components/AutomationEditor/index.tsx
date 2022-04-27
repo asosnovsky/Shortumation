@@ -124,7 +124,7 @@ export const AutomationEditor: FC<Props> = ({
                   type: "",
                   subtype: ""
                 },
-                onSave: (t) => updateTrigger([...automation.trigger, t])
+                onSave: (t) => updateTrigger([...state.data.trigger, t])
               });
             },
             (trigger, onSave) => setModalState({

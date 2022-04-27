@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     npm \
     build-base \
     python3-dev  
-RUN pip install -U wheel setuptools pip
+RUN pip install -U wheel setuptools pip && \ 
+    npm i -g yarn
 
 # <--- Python Dependencies --> 
 COPY api/setup.py /app/setup.py
@@ -22,8 +23,8 @@ RUN pip install . /app
 # <--- Webapp Build --> 
 COPY webapp/ /app/web-builder
 RUN cd /app/web-builder && \
-    npm install && \
-    npm run build && \
+    yarn && \
+    yarn build && \
     cp -r /app/web-builder/build /app/web && \
     rm -rf /app/web-builder
 

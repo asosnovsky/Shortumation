@@ -9,7 +9,7 @@ export type EditorState = {
 } | {
     status: 'loading'
 }
-export type EditorStatus = EditorState[0];
+export type EditorStatus = EditorState['status'];
 
 export const useAutomatioEditorState = (
     automation: AutomationData,
