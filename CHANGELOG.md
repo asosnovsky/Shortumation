@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.12] - Tags
+
+- Added tag management system for automations
+
 ## [0.0.11] - Zoom
 
 - Added lazy saving

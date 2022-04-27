@@ -9,6 +9,7 @@ A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI 
 - [X] View your automations & scripts in a visual graph
 - [X] See all automations in one common view
 - [X] Automation Manager
+- [X] Tags for automation organization
 - [ ] Script Manager
 - [ ] Use secrets and global parameters
 - [ ] Autocomplete fields for entities/devices
