@@ -1,6 +1,6 @@
 # Shortumation
 
-![image](https://user-images.githubusercontent.com/7451445/163254230-412eb427-c0f9-4ffa-91e2-9d276db82205.png)
+![image](https://user-images.githubusercontent.com/7451445/165433007-371cc1f1-39cf-4857-8bba-331d4048750e.png)
 
 A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
 
