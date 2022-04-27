@@ -131,10 +131,10 @@ const convertGroupsToItems = (
                 key={i}
                 className="automation-list-box--body--item"
                 title={`Name = ${auto.metadata.alias}\nID = ${auto.metadata.id}\nDescription = ${auto.metadata.description}`}
+                onClick={() => onSelectAutomation(autoIndex)}
             >
                 <div
                     className="automation-list-box--body--item--title"
-                    onClick={() => onSelectAutomation(autoIndex)}
                 >
                     <b>{auto.metadata.alias.slice(0, 15)} <span>({auto.metadata.id.slice(0, 5)})</span></b>
                     <span>{auto.metadata.description.slice(0, 25)}</span>
