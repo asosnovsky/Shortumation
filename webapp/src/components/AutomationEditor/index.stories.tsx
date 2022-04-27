@@ -38,7 +38,12 @@ export const Simple = Template.bind({})
 Simple.args = {
   ...Simple.args,
   automation: {
-    tags: {},
+    tags: {
+      "Room": "Bathroom",
+      "For": "Toliet",
+      "Type": "Smell",
+      "Use": "Flushing"
+    },
     metadata: {
       id: "random",
       alias: "Random",

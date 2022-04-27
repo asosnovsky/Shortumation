@@ -1,13 +1,25 @@
 .automation-editor--info-box {
-    min-width: 25px;
     height: 100%;
     padding-left: 10px;
     padding-right: 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: auto;
+    overflow: hidden;
     position: relative;
+}
+
+.automation-editor--info-box-inner {
+    height: 100%;
+    overflow: auto;
+}
+
+.automation-editor--info-box.show {
+    min-width: 25em;
+}
+
+.automation-editor--info-box.hide {
+    min-width: 1em;
 }
 
 .automation-editor--info-box.hide>.automation-editor--info-box-inner {
@@ -15,7 +27,6 @@
 }
 
 .automation-editor--info-box--tags {
-    margin: 1em;
     padding: 0.25em 0.75em 1em 0.75em;
     border-color: var(--primary-accent);
     border-width: 1px;
@@ -32,6 +43,17 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.automation-editor--info-box--tag>div {
+    margin: 0;
+}
+
+.automation-editor--info-box--tag>div>input {
+    max-width: 5em;
+    padding: 1em 0.25em 0.2em 0.25em;
 }
 
 .automation-editor--info-box--tag>button {
@@ -47,13 +69,13 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 0.5em 0;
-    margin: 0 30%;
+    padding: 0;
 }
 
 .automation-editor--info-box--tag--error.hide {
     height: 0;
     opacity: 0;
+    display: none;
 }
 
 .automation-editor--info-box--tag--error.show {

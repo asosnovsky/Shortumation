@@ -14,6 +14,7 @@ import { Modal } from "components/Modal";
 import { NodeEditor } from "components/NodeEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { Button } from "components/Inputs/Button";
+import { useAutomatioEditorState } from "./state";
 
 interface TriggerEditorModalState {
   trigger: AutomationTrigger;
@@ -30,9 +31,14 @@ export const AutomationEditor: FC<Props> = ({
   onUpdate: propsOnUpdate,
 }) => {
   // state
-  const [[autoChanged, automation], setAutomation] = useState<[
-    'unchanged' | 'changed' | 'loading', AutomationData]
-  >(['unchanged', propsAutos]);
+  const {
+    state,
+    updateSequence,
+    updateTrigger,
+    updateMetadata,
+    save,
+  } = useAutomatioEditorState(propsAutos, propsOnUpdate);
+
   const [zoomLevel, setZoomLevel] = useState(40);
   const { ratioWbh } = useWindowSize();
   const [closeInfo, setCloseInfo] = useState(false);
@@ -40,26 +46,16 @@ export const AutomationEditor: FC<Props> = ({
   const { classes } = useEditorStyles({
     closeInfo,
     horizontalMode: ratioWbh < 0.75,
-    autoChanged,
+    autoChanged: state.status,
   });
 
-  // alias
-  const updateSequence = (sequence: AutomationSequenceNode[]) => onUpdate({
-    ...automation,
-    sequence,
-  });
-  const updateTriggers = (trigger: AutomationTrigger[]) => onUpdate({
-    ...automation,
-    trigger,
-  });
-  const onUpdate = (a: AutomationData) => setAutomation(['changed', a]);
-
-  // effects
-  useEffect(() => {
-    setAutomation(['unchanged', propsAutos]);
-  }, [propsAutos])
 
   // render
+  if (state.status === 'loading') {
+    return <div className={classes.root}>
+      Loading...
+    </div>
+  }
   return <div className={classes.root}>
     <Modal open={!!modalState}>
       {!!modalState && <NodeEditor
@@ -74,8 +70,9 @@ export const AutomationEditor: FC<Props> = ({
     </Modal>
     <AutoInfoBox
       className={closeInfo ? "hide" : "show"}
-      metadata={automation.metadata}
-      onUpdate={metadata => onUpdate({ ...automation, metadata })}
+      metadata={state.data.metadata}
+      tags={state.data.tags}
+      onUpdate={updateMetadata}
     >
       <ButtonIcon
         className={`${classes.infoIcon} automation-editor--info-icon`}
@@ -98,13 +95,8 @@ export const AutomationEditor: FC<Props> = ({
         </div>
         <Button
           className={classes.saveBtn}
-          onClick={() => {
-            if (autoChanged === 'changed') {
-              setAutomation(['loading', automation]);
-              propsOnUpdate(automation);
-            }
-          }}
-          disabled={autoChanged !== 'changed'}
+          onClick={save}
+          disabled={state.status !== 'changed'}
         >
           Save <CheckMarkIcon color="#bf4" />
         </Button>
@@ -113,15 +105,15 @@ export const AutomationEditor: FC<Props> = ({
         zoomLevel={zoomLevel * 200 / 100 + 50}
         startPoint={[2, 0.5]}
         dims={dims}
-        sequence={automation.sequence}
+        sequence={state.data.sequence}
         onChange={updateSequence}
         additionalElements={() => chain([
           computeExtraField([1, 0.5], [2, 0.5]),
           computeTriggerPos(
             [0.5, 0.5],
-            automation.trigger,
+            state.data.trigger,
             [1.5, 0.5],
-            updateTriggers,
+            updateTrigger,
             () => {
               setModalState({
                 trigger: {
@@ -132,7 +124,7 @@ export const AutomationEditor: FC<Props> = ({
                   type: "",
                   subtype: ""
                 },
-                onSave: (t) => updateTriggers([...automation.trigger, t])
+                onSave: (t) => updateTrigger([...automation.trigger, t])
               });
             },
             (trigger, onSave) => setModalState({

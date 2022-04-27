@@ -39,7 +39,7 @@ export const AutoInfoBox: FC<Props> = ({
   }, tags);
   const validTagName = (newName: string): string | undefined => {
     if (newName.length <= 0) {
-      return "Must be at least 1 character long"
+      return "Name must be at least 1 character long"
     }
     for (const [name, _] of tags) {
       if (name.trim() === newName.trim()) {

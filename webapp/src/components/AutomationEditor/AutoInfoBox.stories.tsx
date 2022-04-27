@@ -27,9 +27,7 @@ export const NoTags: ComponentStory<typeof AutoInfoBox> = args => {
 }
 NoTags.args = {
   ...NoTags.args,
-  tags: {
-
-  },
+  tags: [],
   metadata: {
     id: "random",
     alias: "Random",

@@ -1,7 +1,8 @@
 .automation-editor--info-icon {
     position: absolute;
-    right   : 10px;
-    z-index : 10;
+    right: 1.5em;
+    bottom: 0.5em;
+    z-index: 10;
 }
 
 .automation-editor--info-box.hide>.automation-editor--info-icon {

@@ -9,9 +9,7 @@ const commonInputStyle = (theme: AppTheme) => ({
     borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 5,
-    padding: 15,
-    marginLeft: 5,
-    marginRight: 5,
+    padding: '1em',
     fontSize: 16,
 
     "&:hover": {
