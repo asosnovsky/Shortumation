@@ -25,6 +25,8 @@
 - id: '1616888026264'
   alias: Home Assistant On
   description: ''
+  trigger_variables:
+  mode: single
   trigger:
   - platform: homeassistant
     event: start
@@ -50,3 +52,11 @@
     target:
       entity: bear
     data: {}
+- id: shortu-3
+  alias: Bathroom Vent
+  description: Turn the vent on when the humidity is high or it's smelly
+  trigger_variables:
+  mode: single
+  trigger: []
+  condition: []
+  action: []

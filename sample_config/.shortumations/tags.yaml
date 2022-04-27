@@ -1,0 +1,12 @@
+0:
+  Type: Generic
+1:
+  Type: Generic
+2:
+  Type: Climate
+  Room: House
+4: {}
+3:
+  Type: Vent
+  Room: Bathroom
+  Floor: First
