@@ -30,13 +30,14 @@ class HassConfig:
     def automation_tags(self) -> TagManager:
         tag_path = self.get_automation_tags_path()
         if not tag_path.exists():
+            tag_path.parent.mkdir(parents=True, exist_ok=True)
             return TagManager()
         else:
             return TagManager.load(tag_path)
 
     
     def get_automation_tags_path(self) -> Path:
-        return self.root_path / "_shortu_automation_tags.yaml"
+        return self.root_path / ".shortumations" / "tags.yaml"
 
     def get_configuration_path(self) -> Path:
         return self.root_path / "configuration.yaml"
