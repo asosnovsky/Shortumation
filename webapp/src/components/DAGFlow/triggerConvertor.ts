@@ -1,19 +1,11 @@
-import { Edge, Node } from "react-flow-renderer";
 import { AutomationTrigger } from 'types/automations/triggers';
-import { DAGFlowDims, FlowData, TriggerMakerOptions, DAGFlowNode } from './types';
+import { DAGFlowDims, FlowData, TriggerMakerOptions } from './types';
 
-// export const makeTriggerMakerOptions = (
-//     triggers: AutomationTrigger[],
-//     onUpdate: (t: AutomationTrigger[]) => void,
-// ): TriggerMakerOptions => ({
-//     onAdd: () => onUpdate([...triggers, {
-//         alias: "",
-
-//     }])
-// })
 
 export const triggerToFlow = (
+    flowData: FlowData,
     trigger: AutomationTrigger[],
+    toPoint: string,
     {
         distanceFactor,
         nodeHeight,
@@ -22,27 +14,11 @@ export const triggerToFlow = (
         padding,
     }: DAGFlowDims,
     opts: TriggerMakerOptions,
-): FlowData => {
-    // outputs
-    const nodes: DAGFlowNode[] = [],
-        edges: Edge[] = [];
-
-    // target node
-    const condPos = { x: padding + nodeWidth * 2, y: padding + nodeHeight * 0.25 };
-    nodes.push({
-        id: `c`,
-        type: 'dagcircle',
-        position: condPos,
-        data: {
-            size: circleSize,
-            backgroundColor: 'blue',
-        }
-    })
-
+) => {
     // convert all triggers to dag nodes
     trigger.forEach((t, i) => {
         const flowId = `t-${i}`;
-        nodes.push({
+        flowData.nodes.push({
             id: flowId,
             type: 'dagnode',
             data: {
@@ -51,24 +27,24 @@ export const triggerToFlow = (
                 width: nodeWidth,
                 color: 'red',
                 onEdit: () => opts.onEdit(i),
-                onXClick: () => opts.onDelete(i, flowId),
+                onXClick: () => opts.onDelete(i),
             },
-            position: { x: padding, y: padding + nodeHeight * distanceFactor * i }
+            position: { x: padding.x, y: padding.y + nodeHeight * distanceFactor * i }
         })
-        edges.push({
-            id: `e(${flowId})-(c)`,
+        flowData.edges.push({
+            id: `e(${flowId})-(${toPoint})`,
             source: flowId,
-            target: 'c',
+            target: toPoint,
         })
     });
 
     // create a 'add button'
-    nodes.push({
+    flowData.nodes.push({
         id: `trigger-add`,
         type: 'dagcircle',
         position: {
-            x: padding + nodeWidth * 0.4,
-            y: padding + nodeHeight * distanceFactor * (nodes.length - 1),
+            x: padding.x + nodeWidth * 0.4,
+            y: padding.y + nodeHeight * distanceFactor * trigger.length,
         },
         data: {
             size: circleSize,
@@ -78,10 +54,4 @@ export const triggerToFlow = (
             disableTarget: true,
         }
     })
-
-
-    return {
-        nodes,
-        edges
-    }
 } 

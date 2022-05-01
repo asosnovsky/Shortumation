@@ -1,11 +1,10 @@
-import { Edge, Node } from 'react-flow-renderer';
-import { AutomationTrigger } from 'types/automations/triggers';
+import { Edge, Node, XYPosition } from 'react-flow-renderer';
 import { DAGCircleProps } from './DAGCircle';
 import { DAGNodeProps } from './DAGNode';
 
 
 export type DAGFlowDims = {
-    padding: number;
+    padding: XYPosition;
     nodeHeight: number;
     nodeWidth: number;
     // addHeight: number;
@@ -14,8 +13,9 @@ export type DAGFlowDims = {
     distanceFactor: number;
 }
 
+export type DAGFlowNode = Node<DAGNodeProps | DAGCircleProps | any>;
 export type FlowData = {
-    nodes: Node[],
+    nodes: DAGFlowNode[],
     edges: Edge[],
 }
 
@@ -24,4 +24,3 @@ export type TriggerMakerOptions = {
     onEdit: (i: number) => void,
     onDelete: (i: number) => void,
 }
-export type DAGFlowNode = Node<DAGNodeProps | DAGCircleProps>;
