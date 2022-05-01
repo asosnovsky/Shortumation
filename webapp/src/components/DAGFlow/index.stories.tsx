@@ -307,6 +307,13 @@ Complex.args = {
                         }
                     ]
                 }
+            },
+            {
+                "$smType": "condition",
+                "condition": "and",
+                "condition_data": {
+                    "conditions": []
+                }
             }
         ]
     }
