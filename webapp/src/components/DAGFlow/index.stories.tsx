@@ -147,13 +147,11 @@ Complex.args = {
                 "$smType": undefined,
                 "platform": "numeric_state",
                 "entity_id": "test",
-                "alias": "1",
             },
             {
                 "$smType": undefined,
                 "platform": "homeassistant",
                 "event": "start",
-                "alias": "2",
             }
         ],
         sequence: [
