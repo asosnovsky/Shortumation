@@ -44,6 +44,16 @@ export const sequenceToFlow = (
         lastPointId = nodeId;
         lasPos = position;
     }
+    const addCircle = makeFlowCircle(
+        `${prefix}-+`,
+        {
+            x: (lasPos === null ? dims.padding.x + dims.nodeWidth * dims.distanceFactor * (sequence.length + 1) : lasPos.x) + dims.nodeWidth * dims.distanceFactor,
+            y: dims.padding.y + dims.circleSize / 2
+        },
+        { onAdd: () => { }, size: dims.circleSize, disableSource: true, }
+    )
+    flowData.nodes.push(addCircle)
+    addEdge(flowData, lastPointId, addCircle.id, false)
     return {
         position: lasPos,
         pointId: lastPointId,
@@ -119,17 +129,17 @@ const addChooseNode = (
         }
     })
     const totalChildren = node.action_data.choose.length;
+
     // add button
     const addCirlce = makeFlowCircle(
         `${nodeId}>add`, {
         x: position.x + dims.nodeWidth * dims.distanceFactor,
-        y: lastPos.y + dims.nodeHeight * (totalChildren + 0.25) * dims.distanceFactor,
+        y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
     },
         {
             size: dims.circleSize * dims.distanceFactor,
             onAdd: () => { },
             disableSource: true,
-            disableTarget: true,
         }
     );
     flowData.nodes.push(addCirlce)
@@ -138,7 +148,7 @@ const addChooseNode = (
     // default
     const elseCircle = makeFlowCircle(`${nodeId}>else`, {
         x: position.x + dims.nodeWidth * dims.distanceFactor,
-        y: lastPos.y + dims.nodeHeight * (totalChildren + 0.25 + 1) * dims.distanceFactor,
+        y: lastPos.y + dims.nodeHeight * dims.distanceFactor * 2,
     }, { size: dims.circleSize * dims.distanceFactor })
     flowData.nodes.push(elseCircle)
     addEdge(flowData, nodeId, elseCircle.id, true)
@@ -151,6 +161,8 @@ const addChooseNode = (
     }, `${nodeId}.${totalChildren}.`)
     if (lastPoint.position) {
         lastPos = xyApply(lastPos, lastPoint.position, Math.max)
+    } else {
+        lastPos = xyApply(lastPos, elseCircle.position, Math.max)
     }
     return lastPos
 }
