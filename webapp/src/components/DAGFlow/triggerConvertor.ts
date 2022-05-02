@@ -1,5 +1,6 @@
 import { AutomationTrigger } from 'types/automations/triggers';
 import { DAGFlowDims, FlowData, TriggerMakerOptions } from './types';
+import { makeFlowCircle } from './DAGCircle';
 
 
 export const triggerToFlow = (
@@ -39,19 +40,19 @@ export const triggerToFlow = (
     });
 
     // create a 'add button'
-    flowData.nodes.push({
-        id: `trigger-add`,
-        type: 'dagcircle',
-        position: {
+    flowData.nodes.push(makeFlowCircle(
+        'trigger-add',
+        {
             x: padding.x + nodeWidth * 0.4,
             y: padding.y + nodeHeight * distanceFactor * trigger.length,
         },
-        data: {
+        {
             size: circleSize,
             backgroundColor: 'green',
             onAdd: opts.onAdd,
             disableSource: true,
             disableTarget: true,
         }
-    })
+
+    ))
 } 

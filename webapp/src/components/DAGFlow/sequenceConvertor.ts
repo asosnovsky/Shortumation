@@ -3,6 +3,7 @@ import { DAGFlowDims, FlowData } from './types';
 import { getDescriptionFromAutomationNode } from 'utils/formatting';
 import { XYPosition } from 'react-flow-renderer';
 import { ChooseAction } from 'types/automations/actions';
+import { DAGCircleProps, makeFlowCircle } from './DAGCircle';
 
 
 export const sequenceToFlow = (
@@ -19,13 +20,19 @@ export const sequenceToFlow = (
         const nodeId = `${prefix}n-${i}`;
         let position: XYPosition;
         if (lasPos) {
-            position = { x: lasPos.x + dims.nodeWidth * dims.distanceFactor, y: dims.padding.y }
+            position = {
+                x: lasPos.x + dims.nodeWidth * dims.distanceFactor,
+                y: dims.padding.y
+            }
         } else {
-            position = computeNodePos(i, dims);
+            position = {
+                x: dims.padding.x + dims.nodeWidth * dims.distanceFactor * (i + 2),
+                y: dims.padding.y
+            };
         }
         if (node.$smType === 'action') {
             if (node.action === 'choose') {
-                position = addChooseNode(flowData, node, position, nodeId, lastPointId, dims)
+                position = addChooseNode(flowData, node, position, nodeId, dims)
             } else {
                 addSingleNode(flowData, node, position, nodeId, dims);
             }
@@ -33,11 +40,7 @@ export const sequenceToFlow = (
             addSingleNode(flowData, node, position, nodeId, dims);
 
         }
-        flowData.edges.push({
-            id: `${lastPointId}-${nodeId}`,
-            source: lastPointId,
-            target: nodeId,
-        });
+        addEdge(flowData, lastPointId, nodeId, false)
         lastPointId = nodeId;
         lasPos = position;
     }
@@ -47,9 +50,15 @@ export const sequenceToFlow = (
     };
 }
 
-const computeNodePos = (i: number, { padding, distanceFactor, nodeWidth }: DAGFlowDims): XYPosition => ({
-    x: padding.x + nodeWidth * distanceFactor * (i + 2),
-    y: padding.y
+const xyApply = (p1: XYPosition, p2: XYPosition, fcn: (a: number, b: number) => number): XYPosition => ({
+    x: fcn(p1.x, p2.x), y: fcn(p1.y, p2.y)
+})
+
+const addEdge = (flowData: FlowData, source: string, target: string, animated: boolean = false) => flowData.edges.push({
+    id: `${source}-${target}`,
+    source,
+    target,
+    animated,
 })
 
 const addSingleNode = (
@@ -79,36 +88,69 @@ const addSingleNode = (
 });
 
 
+
 const addChooseNode = (
     flowData: FlowData,
     node: ChooseAction,
     position: XYPosition,
     nodeId: string,
-    lastPointId: string,
     dims: DAGFlowDims,
 ) => {
     addSingleNode(flowData, node, position, nodeId, dims);
     let lastPos: XYPosition = position;
+    // conditions
     node.action_data.choose.forEach(({ sequence, conditions }, j) => {
-        const { y } = lastPos;
-        const lastPoint = sequenceToFlow(flowData, sequence, nodeId, {
+        const sequenceId = `${nodeId}.${j}`;
+        const circle = makeFlowCircle(`${sequenceId}>cond`, {
+            x: position.x + dims.nodeWidth * dims.distanceFactor,
+            y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
+        }, { size: dims.circleSize * dims.distanceFactor, onEdit: () => { }, onRemove: () => { } })
+        flowData.nodes.push(circle)
+        addEdge(flowData, nodeId, circle.id, true)
+        const lastPoint = sequenceToFlow(flowData, sequence, circle.id, {
             ...dims,
             padding: {
                 x: position.x - dims.nodeWidth,
-                y: y + dims.nodeHeight * dims.distanceFactor,
+                y: circle.position.y,
             },
-        }, `${nodeId}.${j}.`);
+        }, `${sequenceId}.`);
         if (lastPoint.position) {
-            lastPos = lastPoint.position;
+            lastPos = xyApply(lastPos, lastPoint.position, Math.max)
         }
     })
     const totalChildren = node.action_data.choose.length;
-    sequenceToFlow(flowData, node.action_data.default, nodeId, {
+    // add button
+    const addCirlce = makeFlowCircle(
+        `${nodeId}>add`, {
+        x: position.x + dims.nodeWidth * dims.distanceFactor,
+        y: lastPos.y + dims.nodeHeight * (totalChildren + 0.25) * dims.distanceFactor,
+    },
+        {
+            size: dims.circleSize * dims.distanceFactor,
+            onAdd: () => { },
+            disableSource: true,
+            disableTarget: true,
+        }
+    );
+    flowData.nodes.push(addCirlce)
+    addEdge(flowData, nodeId, addCirlce.id, true)
+
+    // default
+    const elseCircle = makeFlowCircle(`${nodeId}>else`, {
+        x: position.x + dims.nodeWidth * dims.distanceFactor,
+        y: lastPos.y + dims.nodeHeight * (totalChildren + 0.25 + 1) * dims.distanceFactor,
+    }, { size: dims.circleSize * dims.distanceFactor })
+    flowData.nodes.push(elseCircle)
+    addEdge(flowData, nodeId, elseCircle.id, true)
+    const lastPoint = sequenceToFlow(flowData, node.action_data.default, elseCircle.id, {
         ...dims,
         padding: {
             x: position.x - dims.nodeWidth,
-            y: lastPos.y + dims.nodeHeight * (totalChildren + 0.25) * dims.distanceFactor,
+            y: elseCircle.position.y,
         },
     }, `${nodeId}.${totalChildren}.`)
+    if (lastPoint.position) {
+        lastPos = xyApply(lastPos, lastPoint.position, Math.max)
+    }
     return lastPos
 }

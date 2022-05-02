@@ -1,7 +1,8 @@
 import { FC } from "react";
 import { AddIcon, PencilIcon, TrashIcon } from '../Icons/index';
 import { useCircleStyles } from './styles';
-import { Handle, Position } from 'react-flow-renderer';
+import { Handle, Position, XYPosition } from 'react-flow-renderer';
+import { FlowData } from "./types";
 
 
 
@@ -14,6 +15,17 @@ export interface DAGCircleProps {
   disableSource?: boolean;
   disableTarget?: boolean;
 }
+export const makeFlowCircle = (
+  circleId: string,
+  position: XYPosition,
+  data: DAGCircleProps,
+) => ({
+  id: circleId,
+  type: 'dagcircle',
+  position,
+  data
+})
+
 export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
   data: {
     size,
@@ -26,7 +38,7 @@ export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
   }
 }) => {
   const { classes } = useCircleStyles({
-    size: size * 0.9,
+    size,
     hasOnFunction: !!onEdit || !!onAdd,
     hasRemoveFunction: !!onRemove,
     backgroundColor,
