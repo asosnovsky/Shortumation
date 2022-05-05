@@ -2,8 +2,8 @@ import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { AutomationList } from ".";
-import { NODE_HEIGHT, NODE_WIDTH, ADD_HEIGHT, ADD_WIDTH, CIRCLE_SIZE, DISTANCE_FACTOR } from 'components/DAGSvgs/constants';
 import { createMockAuto } from "utils/mocks";
+import * as dgconst from 'components/DAGSvgs/constants';
 
 export default {
   title: 'App/AutomationList',
@@ -11,12 +11,14 @@ export default {
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
     dims: {
-      nodeHeight: NODE_HEIGHT,
-      nodeWidth: NODE_WIDTH,
-      addHeight: ADD_HEIGHT,
-      addWidth: ADD_WIDTH,
-      circleSize: CIRCLE_SIZE,
-      distanceFactor: DISTANCE_FACTOR,
+      nodeHeight: dgconst.NODE_HEIGHT,
+      nodeWidth: dgconst.NODE_WIDTH,
+      distanceFactor: dgconst.DISTANCE_FACTOR,
+      circleSize: dgconst.CIRCLE_SIZE,
+      padding: {
+        x: dgconst.PADDING,
+        y: dgconst.PADDING,
+      },
     }
   }
 } as ComponentMeta<typeof AutomationList>;

@@ -12,7 +12,7 @@ import { DAGAutomationFlow } from "components/DAGFlow";
 import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 
 interface Props {
-  automation: AutomationData;
+  automation?: AutomationData;
   dims: DAGAutomationFlowDims;
   onUpdate: (auto: AutomationData) => void;
 }
@@ -30,22 +30,15 @@ export const AutomationEditor: FC<Props> = ({
     save,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
 
-  const { ratioWbh } = useWindowSize();
   const [closeInfo, setCloseInfo] = useState(false);
-  const { classes } = useEditorStyles({
-    closeInfo,
-    horizontalMode: ratioWbh < 0.75,
-    autoChanged: state.status,
-  });
-
 
   // render
   if (state.status === 'loading') {
-    return <div className={classes.root}>
+    return <div className="automation-editor loading">
       Loading...
     </div>
   }
-  return <div className={classes.root}>
+  return <div className="automation-editor">
     <AutoInfoBox
       className={closeInfo ? "hide" : "show"}
       metadata={state.data.metadata}
@@ -53,17 +46,16 @@ export const AutomationEditor: FC<Props> = ({
       onUpdate={updateMetadata}
     >
       <ButtonIcon
-        className={`${classes.infoIcon} automation-editor--info-icon`}
+        className="automation-editor--info-box--icon"
         onClick={() => setCloseInfo(!closeInfo)}
         title={closeInfo ? "Show Metadata" : "Hide Metadata"}
       >{ArrowIcon}</ButtonIcon>
     </AutoInfoBox>
 
-    <div className={classes.wrapper}>
-      <div className={classes.toolbar}>
-        <span></span>
+    <div className={["automation-editor--flow-wrapper", state.status].join(" ")}>
+      <div className="automation-editor--flow-wrapper--toolbar">
         <Button
-          className={classes.saveBtn}
+          className={"automation-editor--flow-wrapper--toolbar--save-btn"}
           onClick={save}
           disabled={state.status !== 'changed'}
         >
@@ -71,6 +63,7 @@ export const AutomationEditor: FC<Props> = ({
         </Button>
       </div>
       <DAGAutomationFlow
+        className="automation-editor--flow-wrapper--flow"
         sequence={state.data.sequence}
         trigger={state.data.trigger}
         onSequenceUpdate={updateSequence}

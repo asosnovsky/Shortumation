@@ -19,6 +19,7 @@ const nodeTypes = {
 }
 
 interface Props {
+    className?: string;
     sequence: AutomationSequenceNode[];
     trigger: AutomationTrigger[];
     dims: DAGAutomationFlowDims;
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export const DAGAutomationFlow: FC<Props> = ({
+    className,
     sequence,
     trigger,
     onTriggerUpdate,
@@ -103,6 +105,7 @@ export const DAGAutomationFlow: FC<Props> = ({
             {modalBody}
         </Modal>
         <ReactFlow
+            className={className}
             nodeTypes={nodeTypes}
             snapToGrid
             onlyRenderVisibleElements

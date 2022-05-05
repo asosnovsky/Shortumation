@@ -1,10 +1,69 @@
-.automation-editor--info-icon {
+.automation-editor {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.automation-editor--flow-wrapper {
+    flex: 1;
+    padding: 0 0.5em 0 0.5em;
+    max-height: 100%;
+    max-width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.automation-editor--flow-wrapper--toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.automation-editor--flow-wrapper.unchanged>.automation-editor--flow-wrapper--toolbar {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar * {
+    border-color: var(--change);
+    color: var(--change)
+}
+
+
+.automation-editor--flow-wrapper--toolbar--save-btn {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    padding: 0.25em;
+}
+
+.automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--flow {
+    border-color: var(--change);
+}
+
+.automation-editor--flow-wrapper--flow {
+    flex: 1;
+    border: 1px solid var(--secondary-accent);
+    margin: 0 0 0.5em 0;
+    z-index: 1;
+}
+
+.automation-editor--info-box {
+    position: relative;
+}
+
+.automation-editor--info-box--icon {
     position: absolute;
-    right: 1.5em;
+    right: 0em;
     bottom: 0.5em;
     z-index: 10;
 }
 
-.automation-editor--info-box.hide>.automation-editor--info-icon {
+.automation-editor--info-box.hide>.automation-editor--info-box--icon {
     transform: rotate(180deg);
+    z-index: 2;
 }

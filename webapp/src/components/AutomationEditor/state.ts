@@ -12,7 +12,7 @@ export type EditorState = {
 export type EditorStatus = EditorState['status'];
 
 export const useAutomatioEditorState = (
-    automation: AutomationData,
+    automation: AutomationData | undefined,
     onSave: (a: AutomationData) => void,
 ) => {
     const [state, update] = useState<EditorState>({
@@ -30,10 +30,12 @@ export const useAutomatioEditorState = (
     })
 
     useEffect(() => {
-        update({
-            status: 'unchanged',
-            data: genEditorData(automation),
-        })
+        if (automation) {
+            update({
+                status: 'unchanged',
+                data: genEditorData(automation),
+            })
+        }
     }, [automation]);
 
     return {

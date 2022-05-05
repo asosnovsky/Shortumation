@@ -8,6 +8,7 @@ import { ArrowIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
+import { DAGAutomationFlowDims } from 'DAGFlow/types';
 
 
 interface AutomationListParams {
@@ -15,7 +16,7 @@ interface AutomationListParams {
   onUpdate: (i: number, auto: AutomationData) => void;
   onAdd: (auto: AutomationData) => void;
   onRemove: (i: number) => void;
-  dims: DAGBoardElmDims;
+  dims: DAGAutomationFlowDims;
 }
 
 export const AutomationList: FC<AutomationListParams> = ({

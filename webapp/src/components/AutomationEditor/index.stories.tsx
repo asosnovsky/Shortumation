@@ -36,6 +36,9 @@ const Template: ComponentStory<typeof AutomationEditor> = args => {
   </div>
 }
 
+export const Loading = Template.bind({});
+
+
 export const Simple = Template.bind({})
 Simple.args = {
   ...Simple.args,
