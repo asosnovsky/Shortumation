@@ -1,7 +1,3 @@
-import { DAGBoardElmDims } from 'components/DAGSvgs/DAGBoard';
-
-
-
 export const NODE_WIDTH = 150 as const;
 export const NODE_HEIGHT = 60 as const;
 export const ADD_HEIGHT = 10 as const;
@@ -10,11 +6,13 @@ export const CIRCLE_SIZE = 30 as const;
 export const DISTANCE_FACTOR = 1.5 as const;
 export const PADDING = 50 as const;
 
-export const DEFAULT_DIMS: DAGBoardElmDims = {
+export const DEFAULT_DIMS = {
   nodeHeight: NODE_HEIGHT,
   nodeWidth: NODE_WIDTH,
-  addHeight: ADD_HEIGHT,
-  addWidth: ADD_WIDTH,
-  circleSize: CIRCLE_SIZE,
   distanceFactor: DISTANCE_FACTOR,
-};
+  circleSize: CIRCLE_SIZE,
+  padding: {
+    x: PADDING,
+    y: PADDING,
+  },
+}

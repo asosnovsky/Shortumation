@@ -1,10 +1,8 @@
 import "./index.css";
-import { ArrowIcon, CheckMarkIcon, ZoomIcon } from "components/Icons";
+import { ArrowIcon, CheckMarkIcon } from "components/Icons";
 import { FC, useState } from "react";
 import { AutomationData } from "types/automations";
-import useWindowSize from "utils/useWindowSize";
 import { AutoInfoBox } from "./AutoInfoBox";
-import { useEditorStyles } from "./styles";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { Button } from "components/Inputs/Button";
 import { useAutomatioEditorState } from "./state";

@@ -2,13 +2,12 @@ import "./index.css";
 import { AutomationEditor } from "components/AutomationEditor";
 import { FC, useState } from "react";
 import { AutomationData } from "types/automations";
-import { DAGBoardElmDims } from 'components/DAGSvgs/DAGBoard';
-import { defaultAutomation } from '../../utils/defaults';
+import { defaultAutomation } from 'utils/defaults';
 import { ArrowIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
-import { DAGAutomationFlowDims } from 'DAGFlow/types';
+import { DAGAutomationFlowDims } from 'components/DAGFlow/types';
 
 
 interface AutomationListParams {
@@ -64,7 +63,7 @@ export const AutomationList: FC<AutomationListParams> = ({
 }
 
 interface ConnectedAutomationListParams {
-  dims: DAGBoardElmDims;
+  dims: DAGAutomationFlowDims;
   api: ApiService;
 }
 export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({

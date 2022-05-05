@@ -5,7 +5,7 @@ import { AutomationSequenceNode } from "types/automations";
 import { AutomationTrigger } from 'types/automations/triggers';
 import { triggerToFlow } from "./triggerConvertor";
 import { DAGNode } from "./DAGNode";
-import { DAGAutomationFlowDims, TriggerMakerOptions, FlowData, ModalState } from './types';
+import { DAGAutomationFlowDims, FlowData, ModalState } from './types';
 import { DAGCircle } from './DAGCircle';
 import { sequenceToFlow } from "./sequenceConvertor";
 import { makeSequenceUpdater } from "./updater";

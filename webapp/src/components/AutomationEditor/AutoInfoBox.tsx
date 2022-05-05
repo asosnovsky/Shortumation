@@ -1,5 +1,5 @@
 import "./AutoInfoBox.css";
-import { AutomationData, AutomationMetadata } from "types/automations";
+import { AutomationMetadata } from "types/automations";
 import InputList from "components/Inputs/InputList";
 import InputText from "components/Inputs/InputText";
 import InputTextArea from "components/Inputs/InputTextArea";
@@ -41,6 +41,7 @@ export const AutoInfoBox: FC<Props> = ({
     if (newName.length <= 0) {
       return "Name must be at least 1 character long"
     }
+    // eslint-disable-next-line
     for (const [name, _] of tags) {
       if (name.trim() === newName.trim()) {
         return `The tag '${name}' already exists`
