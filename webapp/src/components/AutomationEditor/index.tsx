@@ -1,30 +1,19 @@
 import "./index.css";
-import { DAGBoardElmDims } from "components/DAGSvgs/DAGBoard";
 import { ArrowIcon, CheckMarkIcon, ZoomIcon } from "components/Icons";
-import { SequenceNodes } from "components/SequenceNodes";
-import { FC, useEffect, useState } from "react";
-import { AutomationData, AutomationSequenceNode } from "types/automations";
+import { FC, useState } from "react";
+import { AutomationData } from "types/automations";
 import useWindowSize from "utils/useWindowSize";
 import { AutoInfoBox } from "./AutoInfoBox";
 import { useEditorStyles } from "./styles";
-import { computeTriggerPos, computeExtraField } from './positions';
-import { chain } from "utils/iter";
-import { AutomationTrigger } from 'types/automations/triggers';
-import { Modal } from "components/Modal";
-import { NodeEditor } from "components/NodeEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { Button } from "components/Inputs/Button";
 import { useAutomatioEditorState } from "./state";
 import { DAGAutomationFlow } from "components/DAGFlow";
-import * as dgconst from 'components/DAGSvgs/constants';
+import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 
-interface TriggerEditorModalState {
-  trigger: AutomationTrigger;
-  onSave: (node: AutomationTrigger) => void;
-}
 interface Props {
   automation: AutomationData;
-  dims: DAGBoardElmDims;
+  dims: DAGAutomationFlowDims;
   onUpdate: (auto: AutomationData) => void;
 }
 export const AutomationEditor: FC<Props> = ({
@@ -41,10 +30,8 @@ export const AutomationEditor: FC<Props> = ({
     save,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
 
-  const [zoomLevel, setZoomLevel] = useState(40);
   const { ratioWbh } = useWindowSize();
   const [closeInfo, setCloseInfo] = useState(false);
-  const [modalState, setModalState] = useState<null | TriggerEditorModalState>(null);
   const { classes } = useEditorStyles({
     closeInfo,
     horizontalMode: ratioWbh < 0.75,
@@ -59,17 +46,6 @@ export const AutomationEditor: FC<Props> = ({
     </div>
   }
   return <div className={classes.root}>
-    <Modal open={!!modalState}>
-      {!!modalState && <NodeEditor
-        node={modalState.trigger}
-        onClose={() => setModalState(null)}
-        onSave={(n) => {
-          modalState.onSave(n as any);
-          setModalState(null);
-        }}
-        allowedTypes={['trigger']}
-      />}
-    </Modal>
     <AutoInfoBox
       className={closeInfo ? "hide" : "show"}
       metadata={state.data.metadata}
@@ -85,16 +61,7 @@ export const AutomationEditor: FC<Props> = ({
 
     <div className={classes.wrapper}>
       <div className={classes.toolbar}>
-        <div style={{ display: 'flex' }}>
-          <ZoomIcon className={classes.zoomImg} size={1} color="white" />
-          <input
-            type="number"
-            min={1} max={100} step={1}
-            className={classes.zoom}
-            value={zoomLevel}
-            onChange={z => setZoomLevel(z.target.valueAsNumber ?? 40)}
-          />
-        </div>
+        <span></span>
         <Button
           className={classes.saveBtn}
           onClick={save}
@@ -107,19 +74,8 @@ export const AutomationEditor: FC<Props> = ({
         sequence={state.data.sequence}
         trigger={state.data.trigger}
         onSequenceUpdate={updateSequence}
-        triggersOpts={{
-
-        }}
-        dims={{
-          nodeHeight: dgconst.NODE_HEIGHT,
-          nodeWidth: dgconst.NODE_WIDTH,
-          distanceFactor: dgconst.DISTANCE_FACTOR,
-          circleSize: dgconst.CIRCLE_SIZE,
-          padding: {
-            x: dgconst.PADDING,
-            y: dgconst.PADDING,
-          },
-        }}
+        onTriggerUpdate={updateTrigger}
+        dims={dims}
       />
     </div>
   </div>

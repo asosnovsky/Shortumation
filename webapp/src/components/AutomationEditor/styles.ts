@@ -39,14 +39,17 @@ export const useEditorStyles = createAppUseStyles<{
   zoomImg: {
 
   },
-  toolbar: {
+  toolbar: ({ autoChanged }) => ({
     width: "100%",
+    height: autoChanged === 'changed' ? 'initial' : 0,
     display: "flex",
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: "center",
     padding: "0.5em",
-  },
+    borderBottom: autoChanged === 'changed' ? '1px solid var(--change)' : undefined,
+    borderLeft: autoChanged === 'changed' ? '1px solid var(--change)' : undefined,
+  }),
   saveBtn: ({ autoChanged }) => ({
     display: "flex",
     opacity: autoChanged === "changed" ? 1 : 0,
@@ -56,7 +59,9 @@ export const useEditorStyles = createAppUseStyles<{
     maxHeight: '1em',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: "#bf4 !important",
-    color: "#bf4 !important"
+    borderColor: "var(--change) !important",
+    color: "var(--change) !important",
+    paddingTop: '1em !important',
+    paddingBottom: '1em !important',
   }),
 }))
