@@ -11,6 +11,7 @@ export interface Props {
   allowedTypes?: Array<keyof AutomationNodeMapping>;
   onClose?: () => void;
   onSave?: (n: AutomationNode) => void;
+  onFlags?: (isReady: boolean, isModified: boolean) => void;
   saveBtnCreateText?: boolean;
 }
 
@@ -19,11 +20,22 @@ export const NodeEditor: FC<Props> = ({
   allowedTypes = ["action", "condition", "trigger"],
   onClose = () => { },
   onSave = () => { },
+  onFlags = () => { },
   saveBtnCreateText = false,
+  children
 }) => {
+  // state
   const state = useEditorNodeState(node);
 
-  return <div className="node-editor--root">
+  // state
+  const isModified = state.isModified;
+  const isReady = state.isReady();
+
+  // events
+  onFlags(isReady, isModified);
+
+  // render
+  return <div className={["node-editor--root", isModified ? "modded" : ""].join(" ")}>
     <div className="node-editor--body">
       <div className="node-editor--body-title">
         {allowedTypes.length > 1 ? <InputList
@@ -44,8 +56,9 @@ export const NodeEditor: FC<Props> = ({
     <div className="node-editor--footer">
       <Button onClick={onClose}>Close</Button>
       <Button onClick={() => {
-        state.isReady() && onSave(state.data)
-      }} disabled={!state.isReady()}>{saveBtnCreateText ? "Create" : "Save"}</Button>
+        isReady && onSave(state.data)
+      }} disabled={!isReady}>{saveBtnCreateText ? "Create" : "Save"}</Button>
+      {children}
     </div>
   </div>
 }

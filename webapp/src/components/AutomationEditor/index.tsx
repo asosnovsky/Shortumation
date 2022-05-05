@@ -15,6 +15,8 @@ import { NodeEditor } from "components/NodeEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { Button } from "components/Inputs/Button";
 import { useAutomatioEditorState } from "./state";
+import { DAGAutomationFlow } from "components/DAGFlow";
+import * as dgconst from 'components/DAGSvgs/constants';
 
 interface TriggerEditorModalState {
   trigger: AutomationTrigger;
@@ -101,38 +103,23 @@ export const AutomationEditor: FC<Props> = ({
           Save <CheckMarkIcon color="#bf4" />
         </Button>
       </div>
-      <SequenceNodes
-        zoomLevel={zoomLevel * 200 / 100 + 50}
-        startPoint={[2, 0.5]}
-        dims={dims}
+      <DAGAutomationFlow
         sequence={state.data.sequence}
-        onChange={updateSequence}
-        additionalElements={() => chain([
-          computeExtraField([1, 0.5], [2, 0.5]),
-          computeTriggerPos(
-            [0.5, 0.5],
-            state.data.trigger,
-            [1.5, 0.5],
-            updateTrigger,
-            () => {
-              setModalState({
-                trigger: {
-                  $smType: "trigger",
-                  platform: "device",
-                  device_id: "",
-                  domain: "",
-                  type: "",
-                  subtype: ""
-                },
-                onSave: (t) => updateTrigger([...state.data.trigger, t])
-              });
-            },
-            (trigger, onSave) => setModalState({
-              trigger,
-              onSave,
-            })
-          ),
-        ])}
+        trigger={state.data.trigger}
+        onSequenceUpdate={updateSequence}
+        triggersOpts={{
+
+        }}
+        dims={{
+          nodeHeight: dgconst.NODE_HEIGHT,
+          nodeWidth: dgconst.NODE_WIDTH,
+          distanceFactor: dgconst.DISTANCE_FACTOR,
+          circleSize: dgconst.CIRCLE_SIZE,
+          padding: {
+            x: dgconst.PADDING,
+            y: dgconst.PADDING,
+          },
+        }}
       />
     </div>
   </div>

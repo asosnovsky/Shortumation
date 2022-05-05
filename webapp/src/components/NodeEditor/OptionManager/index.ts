@@ -1,22 +1,32 @@
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
 
 
 export const useEditorNodeState = (node: AutomationNode) => {
-  const [state, setState] = useState(node);
+  const [{ node: state, isModified }, setAllState] = useState({
+    node,
+    isModified: false,
+  });
+  useEffect(() => {
+    setAllState({ node, isModified: false })
+  }, [node])
+  const setState = (node: AutomationNode) => setAllState(({ node, isModified: true }))
   const nodeType: AutomationNodeTypes = state.$smType ?? 'trigger';
   const subType: AutomationNodeSubtype =
     state.$smType === 'action' ? state.action :
       state.$smType === 'condition' ? state.condition :
         state.platform;
-  const subTypes  = getSubTypeList(nodeType)
+  const subTypes = getSubTypeList(nodeType)
   const optionManager = getOptionManager(nodeType, subType as any);
   return {
     nodeType,
     subType,
     subTypes,
+    get isModified() {
+      return isModified
+    },
     get data() {
       return state
     },
@@ -101,7 +111,7 @@ const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): AutomationN
         'time',
         'trigger',
         'zone',
-      ]as any
+      ] as any
     case 'trigger':
       return [
         'event',
@@ -116,7 +126,7 @@ const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): AutomationN
         'webhook',
         'zone',
         'device',
-      ]as any
+      ] as any
     default:
       return [];
   }

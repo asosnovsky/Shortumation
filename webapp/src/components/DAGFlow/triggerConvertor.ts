@@ -1,7 +1,6 @@
 import { AutomationTrigger } from 'types/automations/triggers';
-import { DAGFlowDims, FlowData, TriggerMakerOptions } from './types';
+import { DAGAutomationFlowDims, FlowData, TriggerMakerOptions } from './types';
 import { makeFlowCircle } from './DAGCircle';
-
 
 export const triggerToFlow = (
     flowData: FlowData,
@@ -13,7 +12,7 @@ export const triggerToFlow = (
         nodeWidth,
         circleSize,
         padding,
-    }: DAGFlowDims,
+    }: DAGAutomationFlowDims,
     opts: TriggerMakerOptions,
 ) => {
     // convert all triggers to dag nodes
@@ -27,7 +26,7 @@ export const triggerToFlow = (
                 height: nodeHeight,
                 width: nodeWidth,
                 color: 'red',
-                onEdit: () => opts.onEdit(i),
+                onEditClick: () => opts.onEdit(i),
                 onXClick: () => opts.onDelete(i),
             },
             position: { x: padding.x, y: padding.y + nodeHeight * distanceFactor * i }

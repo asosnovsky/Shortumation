@@ -50,14 +50,7 @@ export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
         {...props}
         sequence={state}
         onClose={() => setOpen(!open)}
-        onAdd={(n, slide) => { setState([...state, n]); slide(state.length) }}
-        onRemove={(n, slide) => {
-          setState([
-            ...state.slice(0, n),
-            ...state.slice(n + 1)
-          ]);
-          slide(state.length - 2)
-        }}
+        onSave={setState}
       />
     </Modal>
   </div>

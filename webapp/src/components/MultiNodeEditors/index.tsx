@@ -36,43 +36,84 @@ const makeDefault = (nodeType: keyof AutomationNodeMapping): AutomationNode => {
   }
 }
 
-export interface Props {
+export interface MultiNodeEditorProps {
   sequence: AutomationNode[];
   allowedTypes?: Array<keyof AutomationNodeMapping>;
-  onAdd?: (n: AutomationNode, slide: (i: number) => void) => void;
   onClose?: () => void;
-  onSave?: (i: number, n: AutomationNode) => void;
-  onRemove?: (i: number, slide: (i: number) => void) => void;
+  onSave?: (n: AutomationNode[]) => void;
 }
 
-export const MultiNodeEditor: FC<Props> = ({
-  sequence,
+export const MultiNodeEditor: FC<MultiNodeEditorProps> = ({
+  sequence: initialState,
   allowedTypes = ['action', 'condition'],
-  onClose,
-  onAdd = () => { },
+  onClose = () => { },
   onSave = () => { },
-  onRemove = () => { },
 }) => {
-  const [slide, setSlide] = useState(0);
+  // state
+  const [{ slide, state, isNodeModified, isModified, isReady }, setState] = useState({
+    slide: 0,
+    state: initialState,
+    isModified: false,
+    isNodeModified: false,
+    isReady: true,
+  })
+  // alias
+  const areYouSureItsModified = () => isNodeModified ?
+    window.confirm("You've made changes, by pressing this you will lose them!") :
+    true
+  const areYouSureItsNotReady = () => !isReady ?
+    window.confirm("The node is not ready, are you sure you want to move?") :
+    true
+  const onAdd = () => setState({
+    slide: state.length,
+    state: [...state, makeDefault(allowedTypes[0])],
+    isNodeModified: false,
+    isReady,
+    isModified: true,
+  });
+  const onRemove = () => setState({
+    slide: slide > 0 ? slide - 1 : 0,
+    state: [...state.slice(0, slide), ...state.slice(slide + 1)],
+    isNodeModified: false,
+    isReady,
+    isModified: true,
+  });
+  const onNodeSave = (n: AutomationNode) => setState({
+    slide,
+    state: [...state.slice(0, slide), n, ...state.slice(slide + 1)],
+    isNodeModified: false,
+    isReady,
+    isModified: true,
+  });
+  const onSaveAll = () => isNodeModified ?
+    window.alert("Please save the node data first!") :
+    onSave(state)
+  const onNextOrAdd = () => {
+    if (!areYouSureItsModified()) {
+      return
+    }
+    if (!areYouSureItsNotReady()) {
+      return
+    }
+    if (slide >= state.length - 1) {
+      onAdd()
+    } else {
+      setState({ slide: slide + 1, state, isNodeModified, isReady, isModified, })
+    }
+  }
+  const onBack = () => areYouSureItsModified() &&
+    areYouSureItsNotReady() &&
+    setState({ slide: slide - 1, state, isNodeModified, isReady, isModified, })
   // components
   const nextOrAddBtn = <Button
-    onClick={() => {
-      if (slide >= sequence.length - 1) {
-        onAdd(makeDefault(allowedTypes[0]), setSlide)
-      } else {
-        setSlide(slide + 1)
-      }
-    }}
+    onClick={onNextOrAdd}
   >
-    {(slide < sequence.length - 1) ? ">>" : "+"}
+    {(slide < state.length - 1) ? ">>" : "+"}
   </Button>;
   // branch
-  if (sequence.length === 0) {
-    return <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      flex: 1,
-      justifyContent: 'center',
+  if (state.length === 0) {
+    return <div className='column center' style={{
+      minWidth: '20vw',
     }}>
       <div style={{
         flex: 1,
@@ -82,20 +123,22 @@ export const MultiNodeEditor: FC<Props> = ({
       }}>
         {nextOrAddBtn}
       </div>
-      <Button onClick={onClose}>Close</Button>
+      <div className='column center' style={{ marginTop: '1em' }}>
+        <Button onClick={() => areYouSureItsModified() && onClose()}>Close</Button>
+      </div>
     </div>
   }
   return <>
     <div style={{
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'center',
+      justifyContent: 'space-evenly',
       alignItems: 'center',
+      minWidth: '20vw',
     }}>
-      <Button onClick={() => setSlide(slide - 1)} disabled={slide === 0}>{"<<"}</Button>
-      <span>{slide + 1}/{sequence.length}</span>
+      <Button onClick={onBack} disabled={slide === 0}>{"<<"}</Button>
       <Button
-        onClick={() => onRemove(slide, setSlide)}
+        onClick={onRemove}
       >
         Delete
       </Button>
@@ -103,10 +146,22 @@ export const MultiNodeEditor: FC<Props> = ({
     </div>
     <NodeEditor
       key={slide}
-      node={sequence[slide]}
+      node={state[slide]}
       allowedTypes={allowedTypes}
       onClose={onClose}
-      onSave={n => onSave(slide, n)}
-    />
+      onSave={onNodeSave}
+      onFlags={
+        (ir, inm) => ((inm !== isNodeModified) || (ir !== isReady)) &&
+          setState({ slide, state, isNodeModified: inm, isReady: ir, isModified })
+      }
+    >
+      <Button onClick={onSaveAll} style={{
+        borderColor: isModified ? "var(--change)" : undefined,
+        color: isModified ? "var(--change)" : undefined,
+      }}>Save All</Button>
+    </NodeEditor>
+    <div className='column center'>
+      <span>{slide + 1}/{state.length}</span>
+    </div>
   </>
 }

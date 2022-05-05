@@ -1,20 +1,23 @@
 import { AutomationSequenceNode } from 'types/automations';
-import { DAGFlowDims, FlowData } from './types';
+import { DAGAutomationFlowDims, FlowData } from './types';
 import { getDescriptionFromAutomationNode } from 'utils/formatting';
 import { XYPosition } from 'react-flow-renderer';
 import { ChooseAction } from 'types/automations/actions';
-import { DAGCircleProps, makeFlowCircle } from './DAGCircle';
+import { makeFlowCircle } from './DAGCircle';
+import { createOnRemoveForChooseNode, SequenceUpdater } from './updater';
 
 
 export const sequenceToFlow = (
     flowData: FlowData,
     sequence: AutomationSequenceNode[],
     fromPoint: string,
-    dims: DAGFlowDims,
+    dims: DAGAutomationFlowDims,
+    updater: SequenceUpdater,
     prefix: string = "",
 ) => {
     let lastPointId = fromPoint;
     let lasPos: XYPosition | null = null;
+    // sequence
     for (let i = 0; i < sequence.length; i++) {
         const node = sequence[i];
         const nodeId = `${prefix}n-${i}`;
@@ -30,27 +33,35 @@ export const sequenceToFlow = (
                 y: dims.padding.y
             };
         }
+        // draw node
         if (node.$smType === 'action') {
             if (node.action === 'choose') {
-                position = addChooseNode(flowData, node, position, nodeId, dims)
+                position = addChooseNode(flowData, node, position, nodeId, dims, updater, i)
             } else {
-                addSingleNode(flowData, node, position, nodeId, dims);
+                addSingleNode(flowData, node, position, nodeId, dims, {
+                    onEditClick: updater.makeOnModalOpenForNode(i, node),
+                    onXClick: () => updater.removeNode(i)
+                });
             }
         } else {
-            addSingleNode(flowData, node, position, nodeId, dims);
+            addSingleNode(flowData, node, position, nodeId, dims, {
+                onEditClick: updater.makeOnModalOpenForNode(i, node),
+                onXClick: () => updater.removeNode(i)
+            });
 
         }
         addEdge(flowData, lastPointId, nodeId, false)
         lastPointId = nodeId;
         lasPos = position;
     }
+    // add button
     const addCircle = makeFlowCircle(
         `${prefix}-+`,
         {
             x: (lasPos === null ? dims.padding.x + dims.nodeWidth * dims.distanceFactor * (sequence.length + 1) : lasPos.x) + dims.nodeWidth * dims.distanceFactor,
             y: dims.padding.y + dims.circleSize / 2
         },
-        { onAdd: () => { }, size: dims.circleSize, disableSource: true, }
+        { onAdd: updater.addNode, size: dims.circleSize, disableSource: true, }
     )
     flowData.nodes.push(addCircle)
     addEdge(flowData, lastPointId, addCircle.id, false)
@@ -79,8 +90,11 @@ const addSingleNode = (
     {
         nodeHeight,
         nodeWidth,
-    }: DAGFlowDims,
-    extra: Record<string, any> = {},
+    }: DAGAutomationFlowDims,
+    opts: {
+        onEditClick: () => void;
+        onXClick: () => void;
+    }
 ) => flowData.nodes.push({
     id: nodeId,
     type: 'dagnode',
@@ -89,12 +103,10 @@ const addSingleNode = (
         height: nodeHeight,
         width: nodeWidth,
         color: node.$smType === 'action' ? 'green' : 'blue',
-        // onEdit: () => opts.onEdit(i),
-        // onXClick: () => opts.onDelete(i, flowId),
         hasInput: true,
+        ...opts,
     },
     position,
-    ...extra
 });
 
 
@@ -104,28 +116,45 @@ const addChooseNode = (
     node: ChooseAction,
     position: XYPosition,
     nodeId: string,
-    dims: DAGFlowDims,
+    dims: DAGAutomationFlowDims,
+    updater: SequenceUpdater,
+    i: number,
 ) => {
-    addSingleNode(flowData, node, position, nodeId, dims);
+    addSingleNode(flowData, node, position, nodeId, dims, {
+        onEditClick: updater.makeOnModalOpenForNode(i, node),
+        onXClick: () => updater.removeNode(i),
+    });
     let lastPos: XYPosition = position;
     // conditions
     node.action_data.choose.forEach(({ sequence, conditions }, j) => {
         const sequenceId = `${nodeId}.${j}`;
+        // edit/delete circle
         const circle = makeFlowCircle(`${sequenceId}>cond`, {
             x: position.x + dims.nodeWidth * dims.distanceFactor,
             y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
-        }, { size: dims.circleSize * dims.distanceFactor, onEdit: () => { }, onRemove: () => { } })
+        }, {
+            size: dims.circleSize * dims.distanceFactor,
+            onEdit: updater.makeOnEditConditionsForChooseNode(i, j),
+            onRemove: createOnRemoveForChooseNode(
+                node,
+                d => updater.updateNode(i, d),
+                j,
+            ),
+        })
         flowData.nodes.push(circle)
         addEdge(flowData, nodeId, circle.id, true)
+        // actual sub sequence
         const lastPoint = sequenceToFlow(flowData, sequence, circle.id, {
             ...dims,
             padding: {
                 x: position.x - dims.nodeWidth,
                 y: circle.position.y,
             },
-        }, `${sequenceId}.`);
+        }, updater.makeChildUpdaterForChooseAction(i, j), `${sequenceId}.`);
         if (lastPoint.position) {
             lastPos = xyApply(lastPos, lastPoint.position, Math.max)
+        } else {
+            lastPos = xyApply(lastPos, { x: lastPos.x, y: lastPos.y + dims.nodeHeight * dims.distanceFactor }, Math.max)
         }
     })
     const totalChildren = node.action_data.choose.length;
@@ -138,7 +167,19 @@ const addChooseNode = (
     },
         {
             size: dims.circleSize * dims.distanceFactor,
-            onAdd: () => { },
+            onAdd: () => updater.updateNode(i, {
+                ...node,
+                action_data: {
+                    ...node.action_data,
+                    choose: [
+                        ...node.action_data.choose,
+                        {
+                            sequence: [],
+                            conditions: [],
+                        }
+                    ]
+                }
+            }),
             disableSource: true,
         }
     );
@@ -158,7 +199,7 @@ const addChooseNode = (
             x: position.x - dims.nodeWidth,
             y: elseCircle.position.y,
         },
-    }, `${nodeId}.${totalChildren}.`)
+    }, updater.makeChildUpdaterForChooseAction(i, null), `${nodeId}.${totalChildren}.`)
     if (lastPoint.position) {
         lastPos = xyApply(lastPos, lastPoint.position, Math.max)
     } else {

@@ -1,16 +1,27 @@
 .node-editor--root {
-    display        : flex;
-    flex-direction : column;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items    : center;
-    height         : 100%;
+    align-items: center;
+    height: 100%;
+    padding: 1em;
+    margin-top: 0.5em;
+}
+
+.node-editor--root.modded {
+    border: 1px solid var(--change);
+    border-radius: 5px;
+}
+
+.node-editor--root.modded * {
+    border-color: var(--change);
 }
 
 .node-editor--body-title {
-    display        : flex;
-    flex-direction : row;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    margin-bottom  : 6px;
+    margin-bottom: 6px;
 }
 
 .node-editor--body-title>* {
@@ -18,21 +29,22 @@
 }
 
 .node-editor--body {
-    overflow     : overlay;
-    padding-left : 1%;
+    overflow: overlay;
+    padding-left: 1%;
     padding-right: 1%;
 
-    min-width : 100%;
+    min-width: 100%;
     min-height: fit-content;
 }
 
 .node-editor--footer {
-    bottom         : 0;
-    left           : 0;
-    display        : flex;
-    flex-direction : row;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    align-items    : center;
-    width          : 100%;
-    min-height     : 50px;
+    align-items: center;
+    width: 100%;
+    min-height: 50px;
+    min-width: 25vw;
 }

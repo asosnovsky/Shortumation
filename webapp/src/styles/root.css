@@ -4,6 +4,7 @@
     --primary-accent: #bbbbbb;
     --secondary-accent: #929191;
     --error: #c55;
+    --change: #0f9;
     touch-action: pan-x pan-y;
     height: 100%;
 }
@@ -45,4 +46,19 @@ body,
 
 * {
     transition: all 200ms ease-out;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
 }

@@ -44,7 +44,9 @@ export const DAGNode: FC<{ data: DAGNodeProps }> = ({
             {label}
           </span>
         </div>
-        <div className={classes.rightEdge} onClick={onEditClick}>
+        <div className={classes.rightEdge} onClick={() => {
+          console.log('editing me', label, onEditClick, onEditClick())
+        }}>
           <button className={classes.buttonEdit}>
             <PencilIcon size={1.1} color={Color(theme.primary).set('rgb.g', 200).hex()} />
           </button>

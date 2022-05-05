@@ -1,10 +1,11 @@
 import { AutomationSequenceNode } from "types/automations";
 import { ChooseAction } from "types/automations/actions";
+import { AutomationCondition } from "types/automations/conditions";
 import { UpdateModalState } from "./types";
 
-export type Updater = ReturnType<typeof makeUpdater>;
+export type SequenceUpdater = ReturnType<typeof makeSequenceUpdater>;
 
-export const makeUpdater = (
+export const makeSequenceUpdater = (
   sequence: AutomationSequenceNode[],
   onChange: (s: AutomationSequenceNode[]) => void,
   openModal: UpdateModalState,
@@ -33,7 +34,7 @@ export const makeUpdater = (
         ...sequence,
         n,
       ]),
-      onlyConditions: false,
+      allowedTypes: ['action', 'condition']
     })
   },
   updateNode(i: number, node: AutomationSequenceNode) {
@@ -54,7 +55,7 @@ export const makeUpdater = (
     const node = sequence[i];
     if ((node.$smType === 'action') && (node.action === 'choose')) {
       if (j !== null) {
-        return makeUpdater(
+        return makeSequenceUpdater(
           node.action_data.choose[j].sequence,
           seq => this.updateNode(i, {
             ...node,
@@ -73,7 +74,7 @@ export const makeUpdater = (
           openModal,
         )
       } else {
-        return makeUpdater(
+        return makeSequenceUpdater(
           node.action_data.default,
           seq => this.updateNode(i, {
             ...node,
@@ -87,5 +88,59 @@ export const makeUpdater = (
       }
     }
     throw new Error(`Cannot create sub-updater for ${node}`)
+  },
+  makeOnModalOpenForNode(
+    i: number,
+    node: AutomationSequenceNode,
+  ) {
+    return () => openModal({
+      single: true,
+      node,
+      allowedTypes: ['action', 'condition'],
+      update: n => this.updateNode(i, n),
+    })
+  },
+  makeOnEditConditionsForChooseNode(
+    i: number,
+    j: number,
+  ) {
+    return () => {
+      const node = sequence[i] as ChooseAction;
+      return openModal({
+        single: false,
+        node: node.action_data.choose[j].conditions,
+        allowedTypes: ['condition'],
+        update: conditions => this.updateNode(i, {
+          ...node,
+          action_data: {
+            ...node.action_data,
+            choose: [
+              ...node.action_data.choose.slice(0, j),
+              {
+                sequence: node.action_data.choose[j].sequence,
+                conditions: conditions as AutomationCondition[],
+              },
+              ...node.action_data.choose.slice(j + 1),
+            ]
+          }
+        }),
+      })
+    }
   }
 });
+
+
+export const createOnRemoveForChooseNode = (
+  action: ChooseAction,
+  update: (data: ChooseAction) => void,
+  j: number
+) => () => update({
+  ...action,
+  action_data: {
+    ...action.action_data,
+    choose: [
+      ...action.action_data.choose.slice(0, j),
+      ...action.action_data.choose.slice(j + 1),
+    ]
+  }
+})

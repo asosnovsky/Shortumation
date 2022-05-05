@@ -1,4 +1,4 @@
-import { AutomationData } from "types/automations";
+import { AutomationData, AutomationSequenceNode } from "types/automations";
 import { AutomationTrigger } from '../types/automations/triggers';
 
 export type AumationStateEditor = ReturnType<typeof makeAumationStateEditor>;
@@ -32,5 +32,9 @@ export const makeAumationStateEditor = (
             trigger: automation.trigger
                 .concat([t])
         }),
-    }
+    },
+    updateSequence: (s: AutomationSequenceNode[]) => onUpdate({
+        ...automation,
+        sequence: s,
+    })
 })
