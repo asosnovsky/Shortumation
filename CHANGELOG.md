@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.13] - Better Styling with react-flow
+
+- Fixed up styling (using react-flow)
+- cleaned up some button styles
+
 ## [0.0.12] - Tags
 
 - Added tag management system for automations
