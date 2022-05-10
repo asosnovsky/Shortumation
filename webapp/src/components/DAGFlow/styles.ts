@@ -1,10 +1,10 @@
 import { Styles } from "jss";
 import Color from 'chroma-js';
 import { createAppUseStyles } from "styles/theme";
-import { Node } from "types/graphs";
+import { NodeColor } from "types/graphs";
 
 export const useNodeStyles = createAppUseStyles<{
-  color: Node['color'],
+  color: NodeColor,
   nodeHeight: number,
   nodeWidth: number,
 }>(theme => {
