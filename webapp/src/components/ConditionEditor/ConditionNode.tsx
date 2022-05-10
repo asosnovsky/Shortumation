@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from 'react';
 import { getConditionDefaultValues } from "utils/defaults";
 import { AutomationCondition } from "types/automations/conditions";
 import { CheckMarkIcon, PencilIcon } from "components/Icons";
-import InputList from "components/Inputs/InputList";
+import { InputList } from "components/Inputs/InputList";
 import InputYaml from "components/Inputs/InputYaml";
 import { getEditor } from "./editorRender";
 import { useStyles } from "./style";
@@ -51,17 +51,10 @@ export const ConditionNode: FC<{
       ) {
         onUpdate({
           ...condition,
-          $smType: 'condition',
-          condition_data: {
-            ...condition.condition_data,
-            conditions: condition.condition_data.conditions.concat({
-              $smType: 'condition',
-              condition: 'or',
-              condition_data: {
-                conditions: []
-              }
-            })
-          }
+          conditions: condition.conditions.concat({
+            condition: 'or',
+            conditions: []
+          })
         })
       }
     }
@@ -69,20 +62,10 @@ export const ConditionNode: FC<{
     let childrenConditions: JSX.Element;
     if (effectiveDM) {
       const Viewer = getViewer(condition);
-      childrenConditions = <Viewer condition={condition} onChange={data => {
-        onUpdate({
-          ...data,
-          $smType: 'condition',
-        })
-      }} />
+      childrenConditions = <Viewer condition={condition} onChange={onUpdate} />
     } else {
       const Editor = getEditor(condition);
-      childrenConditions = <Editor condition={condition} onChange={data => {
-        onUpdate({
-          ...data,
-          $smType: 'condition',
-        })
-      }} />
+      childrenConditions = <Editor condition={condition} onChange={onUpdate} />
     }
     // styles
     let hasChildren = false;
@@ -115,13 +98,10 @@ export const ConditionNode: FC<{
             'trigger',
             'zone',
           ]}
-          onChange={n => onUpdate({
-            $smType: 'condition',
+          onChange={(n: any) => onUpdate({
+            ...getConditionDefaultValues(n),
+            ...condition,
             condition: n,
-            condition_data: {
-              ...getConditionDefaultValues(n),
-              ...condition.condition_data,
-            }
           } as any)}
         />
         {effectiveDM && <button className={classes.yamlBtn} onClick={() => setYamlMode(!yamlMode)}>
@@ -134,11 +114,8 @@ export const ConditionNode: FC<{
       <div className={classes.children}>
         {yamlMode && <InputYaml
           label=""
-          value={condition.condition_data}
-          onChange={update => onUpdate({
-            ...condition,
-            condition_data: update as any
-          })}
+          value={condition}
+          onChange={update => onUpdate(update as any)}
           resizable
         />}
         {!yamlMode && childrenConditions}

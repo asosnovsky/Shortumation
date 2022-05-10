@@ -72,8 +72,7 @@ export const DAGAutomationFlow: FC<Props> = ({
         onAdd: () => onTriggerUpdate([
             ...trigger, {
                 platform: 'event',
-                $smType: 'trigger',
-                event_type: 'test',
+                event_type: '',
             }
         ]),
         onDelete: i => onTriggerUpdate([

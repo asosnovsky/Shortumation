@@ -1,11 +1,11 @@
 
-import {convertTimeToString, getDescriptionFromAutomationNode} from "./formatting";
+import { convertTimeToString, getDescriptionFromAutomationNode } from "./formatting";
 
 test('converting time to a string', () => {
-    expect(convertTimeToString({hours: 1})).toEqual('01:00:00:00')
-    expect(convertTimeToString({hours: 1, minutes:5})).toEqual('01:05:00:00')
-    expect(convertTimeToString({hours: 1, minutes:5, seconds: 24})).toEqual('01:05:24:00')
-    expect(convertTimeToString({hours: 1, milliseconds: 100})).toEqual('01:00:00:100')
+    expect(convertTimeToString({ hours: 1 })).toEqual('01:00:00:00')
+    expect(convertTimeToString({ hours: 1, minutes: 5 })).toEqual('01:05:00:00')
+    expect(convertTimeToString({ hours: 1, minutes: 5, seconds: 24 })).toEqual('01:05:24:00')
+    expect(convertTimeToString({ hours: 1, milliseconds: 100 })).toEqual('01:00:00:100')
 })
 
 test('using alias as description', () => {
@@ -116,100 +116,67 @@ test('get choose action description', () => {
 
 test('get and/or/not condition description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'and',
-        condition_data: {
-            conditions: [],
-        }
+        conditions: [],
     })).toEqual("Logic")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'or',
-        condition_data: {
-            conditions: [],
-        }
+        conditions: [],
     })).toEqual("Logic")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'not',
-        condition_data: {
-            conditions: [],
-        }
+        conditions: [],
     })).toEqual("Logic")
 })
 
 test('get Numeric State condition description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'numeric_state',
-        condition_data: {
-            entity_id: 'sensor.temperature',
-        }
+        entity_id: 'sensor.temperature',
     })).toEqual("sensor.temperature?>?<")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'numeric_state',
-        condition_data: {
-            entity_id: ""
-        }
+        entity_id: ""
     })).toEqual("Numeric State Condition")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: "numeric_state",
-        condition_data: {
-            entity_id: 'sensor.temperature',
-            above: '17',
-        }
+        entity_id: 'sensor.temperature',
+        above: '17',
     })).toEqual("sensor.temperature > 17")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'numeric_state',
-        condition_data: {
-            entity_id: 'sensor.temperature',
-            below: '5',
-        }
+        entity_id: 'sensor.temperature',
+        below: '5',
     })).toEqual("sensor.temperature < 5")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'numeric_state',
-        condition_data: {
-            entity_id: 'sensor.temperature',
-            above: '17',
-            below: '20',
-        }
-    })).toEqual("17 < sensor.temperature < 20")
-    expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
-        condition: 'numeric_state',
-        condition_data: {
         entity_id: 'sensor.temperature',
-            above: '17',
-            below: '20',
-            value_template: "{{ float(state.state) + 2 }}"
-        }
+        above: '17',
+        below: '20',
     })).toEqual("17 < sensor.temperature < 20")
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'numeric_state',
-        condition_data: {
-            entity_id: [
-                "sensor.kitchen_temperature",
-                "sensor.living_room_temperature"
-            ],
-            above: '17',
-            below: '20',
-            value_template: "{{ float(state.state) + 2 }}"
-        }
+        entity_id: 'sensor.temperature',
+        above: '17',
+        below: '20',
+        value_template: "{{ float(state.state) + 2 }}"
+    })).toEqual("17 < sensor.temperature < 20")
+    expect(getDescriptionFromAutomationNode({
+        condition: 'numeric_state',
+        entity_id: [
+            "sensor.kitchen_temperature",
+            "sensor.living_room_temperature"
+        ],
+        above: '17',
+        below: '20',
+        value_template: "{{ float(state.state) + 2 }}"
     })).toEqual("17 < ... < 20")
 })
 
 test('get State condition description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: 'condition',
         condition: 'state',
-        condition_data: {
-            entity_id: 'switch.kitchen_light',
-            state: "on"
-        }
+        entity_id: 'switch.kitchen_light',
+        state: "on"
     })).toEqual("switch.kitchen_light is 'on'")
 })

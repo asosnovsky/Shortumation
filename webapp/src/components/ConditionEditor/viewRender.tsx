@@ -34,7 +34,7 @@ export const LogicViewer: Viewer<LogicCondition> = ({
   onChange,
 }) => {
   return <>
-    {condition.condition_data.conditions.map((c, i) => {
+    {condition.conditions.map((c, i) => {
       return <ConditionNode key={i} condition={c} displayMode
         {...genUpdateMethods(condition, onChange)(i)}
       />

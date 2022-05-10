@@ -53,7 +53,7 @@ export const makeSequenceUpdater = (
   },
   makeChildUpdaterForChooseAction(i: number, j: number | null) {
     const node = sequence[i];
-    if ((node.$smType === 'action') && (node.action === 'choose')) {
+    if (('$smType' in node) && (node.$smType === 'action') && (node.action === 'choose')) {
       if (j !== null) {
         return makeSequenceUpdater(
           node.action_data.choose[j].sequence,

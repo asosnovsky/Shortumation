@@ -7,7 +7,6 @@ import InputTime from 'components/Inputs/InputTime';
 
 export const TriggerState: OptionManager<AutomationTriggerState> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": 'state',
     "entity_id": "",

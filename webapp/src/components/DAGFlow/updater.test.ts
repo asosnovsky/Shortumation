@@ -73,11 +73,8 @@ test('update conditions for node', () => {
     expect((mock.modalStates[0].node as AutomationSequenceNode[]).length).toBe(0)
     mock.modalStates[0].update([
         {
-            "$smType": "condition",
             "condition": "and",
-            "condition_data": {
-                "conditions": [],
-            }
+            "conditions": [],
         }
     ] as any)
     expect((mock.state[0] as ChooseAction).action_data.choose[0].conditions.length).toBe(1)

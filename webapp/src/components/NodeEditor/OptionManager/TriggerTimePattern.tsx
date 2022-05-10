@@ -5,7 +5,6 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerTimePattern: OptionManager<AutomationTriggerTimePattern> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": 'time_pattern',
   }),

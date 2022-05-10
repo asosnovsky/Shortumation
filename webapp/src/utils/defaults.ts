@@ -2,41 +2,48 @@ import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, 
 import { AutomationData } from 'types/automations';
 
 
-export const getConditionDefaultValues = (condition: AutomationCondition['condition']): AutomationCondition['condition_data'] => {
+export const getConditionDefaultValues = (condition: AutomationCondition['condition']): AutomationCondition => {
     if (
         (condition === 'or') ||
         (condition === 'and') ||
         (condition === 'not')
     ) {
         return {
+            condition,
             conditions: []
-        } as LogicCondition['condition_data']
+        } as LogicCondition
     } else if (condition === 'template') {
         return {
+            condition,
             value_template: ""
-        } as TemplateCondition['condition_data']
+        } as TemplateCondition
     } else if (condition === 'numeric_state') {
         return {
+            condition,
             entity_id: []
-        } as NumericCondition['condition_data']
+        } as NumericCondition
     } else if (condition === 'state') {
         return {
+            condition,
             entity_id: [],
             state: [],
-        } as StateCondition['condition_data']
+        } as StateCondition
     } else if (condition === 'time') {
         return {
-        } as TimeCondition['condition_data']
+            condition,
+        } as TimeCondition
     } else if (condition === 'trigger') {
         return {
+            condition,
             id: ""
-        } as TriggerCondition['condition_data']
+        } as TriggerCondition
     } else if (condition === 'zone') {
         return {
+            condition,
             zone: "",
             entity_id: [],
             state: [],
-        } as ZoneCondition['condition_data']
+        } as ZoneCondition
     }
     throw new Error("NOT IMPLEMENTED!")
 }

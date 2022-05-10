@@ -5,7 +5,6 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerWebhook: OptionManager<AutomationTriggerWebhook> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": 'webhook',
     "webhook_id": "",

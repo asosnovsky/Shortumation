@@ -46,19 +46,13 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
   condition,
 }) => {
   return <div>
-    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        alias
-      }
+      alias
     })} />
-    <InputTextArea label="Template" value={condition.condition_data.value_template} onChange={value_template => onChange({
+    <InputTextArea label="Template" value={condition.value_template} onChange={value_template => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        value_template
-      }
+      value_template
     })} resizable />
   </div>
 }
@@ -69,58 +63,40 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
   condition,
 }) => {
   return <div>
-    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        alias
-      }
+      alias
     })} />
     <InputEntity
-      value={condition.condition_data.entity_id}
+      value={condition.entity_id}
       onChange={entity_id => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          entity_id
-        }
+        entity_id
       })}
     />
-    <InputText label="Attribute" value={condition.condition_data.attribute ?? ""} onChange={attribute => onChange({
+    <InputText label="Attribute" value={condition.attribute ?? ""} onChange={attribute => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        attribute
-      }
+      attribute
     })} />
     <InputNumber
       label="Above"
-      value={condition.condition_data.above ? Number(condition.condition_data.above) : undefined}
+      value={condition.above ? Number(condition.above) : undefined}
       onChange={above => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          above: above ? String(above) : undefined,
-        }
+        above: above ? String(above) : undefined,
       })}
     />
     <InputNumber
       label="Below"
-      value={condition.condition_data.below ? Number(condition.condition_data.below) : undefined}
+      value={condition.below ? Number(condition.below) : undefined}
       onChange={below => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          below: below ? String(below) : undefined,
-        }
+        below: below ? String(below) : undefined,
       })}
     />
-    <InputTextArea label="Template" value={condition.condition_data.value_template ?? ""} onChange={value_template => onChange({
+    <InputTextArea label="Template" value={condition.value_template ?? ""} onChange={value_template => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        value_template
-      }
+      value_template
     })} resizable />
   </div>
 }
@@ -132,7 +108,7 @@ export const LogicViewer: Editor<LogicCondition> = ({
 }) => {
 
   return <>
-    {condition.condition_data.conditions.map((c, i) => {
+    {condition.conditions.map((c, i) => {
       return <ConditionNode
         key={i}
         condition={c}
@@ -151,50 +127,35 @@ export const StateEditor: Editor<StateCondition> = ({
   condition,
 }) => {
   return <div>
-    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        alias
-      }
+      alias
     })} />
     <InputEntity
-      value={condition.condition_data.entity_id}
+      value={condition.entity_id}
       onChange={entity_id => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          entity_id
-        }
+        entity_id
       })}
     />
-    <InputText label="Attribute" value={condition.condition_data.attribute ?? ""} onChange={attribute => onChange({
+    <InputText label="Attribute" value={condition.attribute ?? ""} onChange={attribute => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        attribute
-      }
+      attribute
     })} />
     <InputText
       label="State"
-      value={String(condition.condition_data.state)}
+      value={String(condition.state)}
       onChange={state => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          state,
-        }
+        state,
       })}
     />
     <InputTime
       label="For"
-      value={condition.condition_data.for}
+      value={condition.for}
       onChange={_for => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          for: _for,
-        }
+        for: _for,
       })}
     />
   </div>
@@ -205,36 +166,27 @@ export const TimeEditor: Editor<TimeCondition> = ({
   condition,
 }) => {
   return <div>
-    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        alias
-      }
+      alias
     })} />
     <InputTime
       label="After"
-      value={condition.condition_data.after}
+      value={condition.after}
       onChange={after => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          after,
-        }
+        after,
       })}
     />
     <InputTime
       label="Before"
-      value={condition.condition_data.before}
+      value={condition.before}
       onChange={before => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          before,
-        }
+        before,
       })}
     />
-    <b>Weekday not support for no, use yaml for now</b> {condition.condition_data.weekday}
+    <b>Weekday not support for no, use yaml for now</b> {condition.weekday}
   </div>
 }
 
@@ -243,19 +195,13 @@ export const TriggerEditor: Editor<TriggerCondition> = ({
   condition,
 }) => {
   return <div>
-    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        alias
-      }
+      alias
     })} />
-    <InputText label="Trigger ID" value={condition.condition_data.id} onChange={id => onChange({
+    <InputText label="Trigger ID" value={condition.id} onChange={id => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        id
-      }
+      id
     })} />
   </div>
 }
@@ -265,39 +211,27 @@ export const ZoneEditor: Editor<ZoneCondition> = ({
   condition,
 }) => {
   return <div>
-    <InputText label="Alias" value={condition.condition_data.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
+    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        alias
-      }
+      alias
     })} />
-    <InputText label="Zone" value={condition.condition_data.zone} onChange={zone => onChange({
+    <InputText label="Zone" value={condition.zone} onChange={zone => onChange({
       ...condition,
-      condition_data: {
-        ...condition.condition_data,
-        zone
-      }
+      zone
     })} />
     <InputEntity
-      value={condition.condition_data.entity_id}
+      value={condition.entity_id}
       onChange={entity_id => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          entity_id
-        }
+        entity_id
       })}
     />
     <InputText
       label="State"
-      value={String(condition.condition_data.state)}
+      value={String(condition.state)}
       onChange={state => onChange({
         ...condition,
-        condition_data: {
-          ...condition.condition_data,
-          state,
-        }
+        state,
       })}
     />
   </div>

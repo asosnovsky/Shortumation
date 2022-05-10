@@ -41,30 +41,21 @@ export const Condition = Action.bind({})
 Condition.args = {
   ...Condition.args,
   node: {
-    "$smType": "condition",
     "condition": "and",
-    "condition_data": {
-      "conditions": [
-        {
-          "$smType": "condition",
-          "condition": "numeric_state",
-          "condition_data": {
-            "entity_id": [
-              "sensor.kitchen_humidity"
-            ],
-            "conditions": [],
-            "above": "40"
-          }
-        },
-        {
-          "$smType": "condition",
-          "condition": "template",
-          "condition_data": {
-            "value_template": "states('switch.kitchen') == 'on'"
-          }
-        }
-      ]
-    }
+    "conditions": [
+      {
+        "condition": "numeric_state",
+        "entity_id": [
+          "sensor.kitchen_humidity"
+        ],
+        "conditions": [],
+        "above": "40"
+      },
+      {
+        "condition": "template",
+        "value_template": "states('switch.kitchen') == 'on'"
+      }
+    ]
   } as AutomationCondition,
 }
 

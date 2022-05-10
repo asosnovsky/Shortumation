@@ -40,13 +40,13 @@ const triggerTypes = [
 
 export const getSubTypeList = <T extends AutomationNodeTypes>(
   nodeType: T
-): Array<AutomationNodeSubtype<T>| 'condition'> => {
+): Array<AutomationNodeSubtype<T> | 'condition'> => {
   if (nodeType === 'action') {
     return actionTypes as any;
   } else if (nodeType === 'condition') {
     return conditionTypes as any;
   } else if (nodeType === 'trigger') {
-    return triggerTypes  as any;
+    return triggerTypes as any;
   }
   return [];
 }
@@ -54,11 +54,13 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(
 export const getNodeSubType = <T extends AutomationNodeTypes>(
   node: AutomationNode<T>
 ): AutomationNodeSubtype<T> => {
-  if (node.$smType === 'action') {
+  if ('$smType' in node && node.$smType === 'action') {
     return node.action as any;
-  } else if(node.$smType === 'condition') {
+  } else if ('condition' in node) {
     return node.condition as any;
-  } else {
+  } else if ('platform' in node) {
     return node.platform as any;
+  } else {
+    throw new Error("Invalid node type!")
   }
 }

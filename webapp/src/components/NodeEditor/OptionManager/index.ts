@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
+import { getNodeType, getSubTypeList } from 'utils/automations';
+import { AutomationCondition } from 'types/automations/conditions';
+import { AutomationAction } from 'types/automations/actions';
+import { AutomationTrigger } from 'types/automations/triggers';
 
 
 export const useEditorNodeState = (node: AutomationNode) => {
@@ -12,12 +16,13 @@ export const useEditorNodeState = (node: AutomationNode) => {
   useEffect(() => {
     setAllState({ node, isModified: false })
   }, [node])
-  const setState = (node: AutomationNode) => setAllState(({ node, isModified: true }))
-  const nodeType: AutomationNodeTypes = state.$smType ?? 'trigger';
+  const setState = (node: AutomationNode) => setAllState(({ node, isModified: true }));
+  const originalNodeType = getNodeType(node);
+  const nodeType = getNodeType(state);
   const subType: AutomationNodeSubtype =
-    state.$smType === 'action' ? state.action :
-      state.$smType === 'condition' ? state.condition :
-        state.platform;
+    nodeType === 'action' ? (state as AutomationAction).action :
+      nodeType === 'condition' ? (state as AutomationCondition).condition :
+        (state as AutomationTrigger).platform;
   const subTypes = getSubTypeList(nodeType)
   const optionManager = getOptionManager(nodeType, subType as any);
   return {
@@ -37,24 +42,22 @@ export const useEditorNodeState = (node: AutomationNode) => {
       return optionManager.isReady(state);
     },
     setNodeType(newType: AutomationNodeTypes) {
-      if (newType === (node.$smType ?? 'trigger')) {
-        if (node.$smType === 'action') {
+      if (newType === originalNodeType) {
+        if (originalNodeType === 'action') {
           setState({
             ...state,
             $smType: 'action',
-            action: node.action,
+            action: (node as any).action,
           } as any)
-        } else if (node.$smType === 'condition') {
+        } else if (originalNodeType === 'condition') {
           setState({
             ...state,
-            $smType: 'condition',
-            condition: node.condition
+            condition: (node as any).condition
           } as any)
         } else {
           setState({
             ...state,
-            $smType: undefined,
-            platform: node.platform
+            platform: (node as any).platform
           } as any)
         }
       } else {
@@ -66,23 +69,23 @@ export const useEditorNodeState = (node: AutomationNode) => {
       }
     },
     setSubType(newSubType: AutomationNodeSubtype<typeof nodeType>) {
-      if (state.$smType === 'action') {
+      if (nodeType === 'action') {
         setState({
           ...state,
           action: newSubType,
-          ...getOptionManager(state.$smType, newSubType as any).defaultState()
+          ...getOptionManager(nodeType, newSubType as any).defaultState()
         } as any)
-      } else if (state.$smType === 'condition') {
+      } else if (nodeType === 'condition') {
         setState({
           ...state,
           condition: newSubType,
-          ...getOptionManager(state.$smType, newSubType as any).defaultState()
+          ...getOptionManager(nodeType, newSubType as any).defaultState()
         } as any)
       } else {
         setState({
           ...state,
           platform: newSubType,
-          ...getOptionManager(state.$smType, newSubType as any).defaultState()
+          ...getOptionManager(nodeType, newSubType as any).defaultState()
         } as any)
       }
     }
@@ -90,44 +93,3 @@ export const useEditorNodeState = (node: AutomationNode) => {
 }
 
 
-const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): AutomationNodeSubtype<T>[] => {
-  switch (nodeType) {
-    case 'action':
-      return [
-        "service",
-        "repeat",
-        "wait",
-        "device",
-        "choose",
-      ] as any
-    case "condition":
-      return [
-        'or',
-        'and',
-        'not',
-        'numeric_state',
-        'state',
-        'template',
-        'time',
-        'trigger',
-        'zone',
-      ] as any
-    case 'trigger':
-      return [
-        'event',
-        'homeassistant',
-        'mqtt',
-        'numeric_state',
-        'state',
-        'tag',
-        'template',
-        'time',
-        'time_pattern',
-        'webhook',
-        'zone',
-        'device',
-      ] as any
-    default:
-      return [];
-  }
-}
