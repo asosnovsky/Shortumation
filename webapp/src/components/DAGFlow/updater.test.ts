@@ -40,12 +40,9 @@ test("sequence updater updates nodes", () => {
     expect((mock.state[0] as ChooseAction).alias).toBe(undefined)
     mock.updater.updateNode(0, {
         ...mock.state[0],
-        action_data: {
-            ...(mock.state[0] as ChooseAction),
-            alias: "Hello"
-        }
-    } as any)
-    expect((mock.state[0] as ChooseAction).alias).toBe("Hello")
+        alias: "Hello"
+    })
+    expect(mock.state[0].alias).toBe("Hello")
 })
 test('update conditions for node', () => {
     const mock = mockSequenceUpdater([
