@@ -12,22 +12,16 @@ export default {
   args: {
     sequence: [
       {
-        "$smType": "condition",
         "condition": "numeric_state",
-        "condition_data": {
-          "entity_id": [
-            "sensor.kitchen_humidity"
-          ],
-          "conditions": [],
-          "above": "40"
-        }
+        "entity_id": [
+          "sensor.kitchen_humidity"
+        ],
+        "conditions": [],
+        "above": "40"
       },
       {
-        "$smType": "condition",
         "condition": "template",
-        "condition_data": {
-          "value_template": "states('switch.kitchen') == 'on'"
-        }
+        "value_template": "states('switch.kitchen') == 'on'"
       }
     ]
   }

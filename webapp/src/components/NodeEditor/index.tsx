@@ -3,7 +3,7 @@ import "./index.css";
 import { FC } from "react";
 import { AutomationNode, AutomationNodeMapping } from 'types/automations/index';
 import { useEditorNodeState } from "./OptionManager";
-import InputList from "components/Inputs/InputList";
+import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Button";
 
 export interface Props {

@@ -19,11 +19,8 @@ const makeDefault = (nodeType: keyof AutomationNodeMapping): AutomationNode => {
       }
     case 'condition':
       return {
-        $smType: 'condition',
         condition: 'and',
-        condition_data: {
-          conditions: []
-        }
+        conditions: []
       }
     default:
       return {

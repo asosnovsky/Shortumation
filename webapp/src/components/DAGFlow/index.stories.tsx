@@ -49,39 +49,28 @@ Simple.args = {
     ...Simple.args,
     trigger: [
         {
-            "$smType": undefined,
             "platform": "numeric_state",
             "entity_id": "test",
         },
         {
-            "$smType": undefined,
             "platform": "homeassistant",
             "event": "start",
         }
     ],
     sequence: [
         {
-            $smType: "condition",
             condition: 'and',
-            condition_data: {
-                conditions: [
-                    {
-                        $smType: 'condition',
-                        condition: 'numeric_state',
-                        condition_data: {
-                            entity_id: 'sensor.temperature_kitchen',
-                            below: '15',
-                        }
-                    },
-                    {
-                        $smType: "condition",
-                        condition: 'template',
-                        condition_data: {
-                            value_template: 'states(switch.kitchen_light) == "on"'
-                        }
-                    }
-                ]
-            }
+            conditions: [
+                {
+                    condition: 'numeric_state',
+                    entity_id: 'sensor.temperature_kitchen',
+                    below: '15',
+                },
+                {
+                    condition: 'template',
+                    value_template: 'states(switch.kitchen_light) == "on"'
+                }
+            ]
         },
         {
             $smType: "action",
@@ -107,39 +96,28 @@ Complex.args = {
     ...Complex.args,
     trigger: [
         {
-            "$smType": undefined,
             "platform": "numeric_state",
             "entity_id": "test",
         },
         {
-            "$smType": undefined,
             "platform": "homeassistant",
             "event": "start",
         }
     ],
     sequence: [
         {
-            "$smType": "condition",
             "condition": "and",
-            "condition_data": {
-                "conditions": [
-                    {
-                        "$smType": "condition",
-                        "condition": "numeric_state",
-                        "condition_data": {
-                            "entity_id": "sensor.temperature_kitchen",
-                            "below": "15"
-                        }
-                    },
-                    {
-                        "$smType": "condition",
-                        "condition": "template",
-                        "condition_data": {
-                            "value_template": "states(switch.kitchen_light) == \"on\""
-                        }
-                    }
-                ]
-            }
+            "conditions": [
+                {
+                    "condition": "numeric_state",
+                    "entity_id": "sensor.temperature_kitchen",
+                    "below": "15"
+                },
+                {
+                    "condition": "template",
+                    "value_template": "states(switch.kitchen_light) == \"on\""
+                }
+            ]
         },
         {
             "$smType": "action",
@@ -164,12 +142,9 @@ Complex.args = {
                     {
                         "conditions": [
                             {
-                                "$smType": "condition",
                                 "condition": "state",
-                                "condition_data": {
-                                    "entity_id": "lights.bathroom",
-                                    "state": "off",
-                                }
+                                "entity_id": "lights.bathroom",
+                                "state": "off",
                             }
                         ],
                         "sequence": [
@@ -201,12 +176,9 @@ Complex.args = {
                     {
                         "conditions": [
                             {
-                                "$smType": "condition",
                                 "condition": "state",
-                                "condition_data": {
-                                    "entity_id": "lights.bedroom",
-                                    "state": "off",
-                                }
+                                "entity_id": "lights.bedroom",
+                                "state": "off",
                             }
                         ],
                         "sequence": [
@@ -272,11 +244,8 @@ Complex.args = {
             }
         },
         {
-            "$smType": "condition",
             "condition": "and",
-            "condition_data": {
-                "conditions": []
-            }
+            "conditions": []
         }
     ]
 }

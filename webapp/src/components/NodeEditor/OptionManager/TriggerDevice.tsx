@@ -5,7 +5,6 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": 'device',
     "domain": "",

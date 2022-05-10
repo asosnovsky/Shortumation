@@ -2,30 +2,24 @@ import { AutomationCondition, LogicCondition } from "types/automations/condition
 
 
 export const genUpdateMethods = (
-  condition: LogicCondition,
-  onChange: (c: LogicCondition) => void
+    condition: LogicCondition,
+    onChange: (c: LogicCondition) => void
 ) => (i: number) => ({
     onUpdate: (update: AutomationCondition) => onChange({
         ...condition,
-        condition_data: {
-            ...condition.condition_data,
-            conditions: [
-                ...condition.condition_data.conditions.slice(0, i),
-                update,
-                ...condition.condition_data.conditions.slice(i+1)
-            ]
-        }
+        conditions: [
+            ...condition.conditions.slice(0, i),
+            update,
+            ...condition.conditions.slice(i + 1)
+        ]
     }),
     onDelete: (which: 'root' | number) => {
         if (which === 'root') {
             onChange({
                 ...condition,
-                condition_data: {
-                    ...condition.condition_data,
-                    conditions: condition.condition_data.conditions.slice(0, i).concat(
-                        condition.condition_data.conditions.slice(i+1)
-                    )
-                }
+                conditions: condition.conditions.slice(0, i).concat(
+                    condition.conditions.slice(i + 1)
+                )
             })
         } else {
             throw new Error("Not Implemented")

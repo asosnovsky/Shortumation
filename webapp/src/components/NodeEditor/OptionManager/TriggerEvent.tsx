@@ -6,7 +6,6 @@ import InputYaml from "components/Inputs/InputYaml";
 
 export const TriggerEventState: OptionManager<AutomationTriggerEvent> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": "event",
     "event_type": "",

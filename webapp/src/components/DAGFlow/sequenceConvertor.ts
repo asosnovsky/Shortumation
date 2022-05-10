@@ -5,6 +5,7 @@ import { XYPosition } from 'react-flow-renderer';
 import { ChooseAction } from 'types/automations/actions';
 import { makeFlowCircle } from './DAGCircle';
 import { createOnRemoveForChooseNode, SequenceUpdater } from './updater';
+import { getNodeType } from 'utils/automations';
 
 
 export const sequenceToFlow = (
@@ -34,7 +35,7 @@ export const sequenceToFlow = (
             };
         }
         // draw node
-        if (node.$smType === 'action') {
+        if ('$smType' in node && node.$smType === 'action') {
             if (node.action === 'choose') {
                 position = addChooseNode(flowData, node, position, nodeId, dims, updater, i)
             } else {
@@ -102,7 +103,7 @@ const addSingleNode = (
         label: getDescriptionFromAutomationNode(node),
         height: nodeHeight,
         width: nodeWidth,
-        color: node.$smType === 'action' ? 'green' : 'blue',
+        color: getNodeType(node) === 'action' ? 'green' : 'blue',
         hasInput: true,
         ...opts,
     },

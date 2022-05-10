@@ -9,7 +9,6 @@ import InputTime from 'components/Inputs/InputTime';
 
 export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": 'numeric_state',
     "entity_id": "",

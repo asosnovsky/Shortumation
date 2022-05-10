@@ -1,6 +1,6 @@
 import "./AutoInfoBox.css";
 import { AutomationMetadata } from "types/automations";
-import InputList from "components/Inputs/InputList";
+import { InputList } from "components/Inputs/InputList";
 import InputText from "components/Inputs/InputText";
 import InputTextArea from "components/Inputs/InputTextArea";
 import { FC, useRef, useState } from 'react';

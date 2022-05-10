@@ -1,11 +1,10 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerHA } from 'types/automations/triggers';
-import InputList from "components/Inputs/InputList";
+import { InputList } from "components/Inputs/InputList";
 
 
 export const TriggerHAState: OptionManager<AutomationTriggerHA> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "HA Starts",
     "platform": "homeassistant",
     "event": "start",

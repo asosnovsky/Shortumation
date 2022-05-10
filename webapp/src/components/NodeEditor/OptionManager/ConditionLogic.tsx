@@ -5,12 +5,9 @@ import { OptionManager } from "./OptionManager";
 
 export const ConditionLogicState: OptionManager<AutomationCondition> = {
   defaultState: () => ({
-    $smType: 'condition',
     condition: 'and',
-    condition_data: {
-      alias: "",
-      conditions: [],
-    }
+    alias: "",
+    conditions: [],
   }),
   isReady: _ => true,
   renderOptionList: (state, setState) => <ConditionEditor

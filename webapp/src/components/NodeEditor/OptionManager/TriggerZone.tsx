@@ -1,13 +1,12 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerZone } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
-import InputList from 'components/Inputs/InputList';
+import { InputList } from 'components/Inputs/InputList';
 import { InputEntity } from 'components/Inputs/InputTextBubble';
 
 
 export const TriggerZone: OptionManager<AutomationTriggerZone> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": 'zone',
     "zone": "",

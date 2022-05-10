@@ -1,44 +1,41 @@
 import { AutomationTime } from "./common";
 
-interface AutomationConditionNodeBase<Name extends String, Data extends Object> {
-    $smType: 'condition';
+type AutomationConditionNodeBase<Name extends String, Data extends Object> = {
     condition: Name;
-    condition_data: Data & {
-        alias?: string;
-    };
-}
-export interface LogicCondition extends AutomationConditionNodeBase<'and' | 'or' | 'not', {
+    alias?: string;
+} & Data;
+export type LogicCondition = AutomationConditionNodeBase<'and' | 'or' | 'not', {
     conditions: AutomationCondition[];
-}> { }
-export interface NumericCondition extends AutomationConditionNodeBase<'numeric_state', {
+}>;
+export type NumericCondition = AutomationConditionNodeBase<'numeric_state', {
     entity_id: string | string[];
     above?: string;
     below?: string;
     attribute?: string;
     value_template?: string;
-}> { }
-export interface StateCondition extends AutomationConditionNodeBase<'state', {
+}>;
+export type StateCondition = AutomationConditionNodeBase<'state', {
     entity_id: string | string[];
     state: string | string[];
     for?: AutomationTime;
     attribute?: string;
-}> { }
-export interface TemplateCondition extends AutomationConditionNodeBase<'template', {
+}>;
+export type TemplateCondition = AutomationConditionNodeBase<'template', {
     value_template: string;
-}> { }
-export interface TimeCondition extends AutomationConditionNodeBase<'time', {
+}>;
+export type TimeCondition = AutomationConditionNodeBase<'time', {
     after?: AutomationTime;
     before?: AutomationTime;
     weekday?: Array<'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'>;
-}> { }
-export interface TriggerCondition extends AutomationConditionNodeBase<'trigger', {
+}>;
+export type TriggerCondition = AutomationConditionNodeBase<'trigger', {
     id: string;
-}> { }
-export interface ZoneCondition extends AutomationConditionNodeBase<'zone', {
+}>;
+export type ZoneCondition = AutomationConditionNodeBase<'zone', {
     zone: string;
     entity_id: string | string[];
     state: string | string[];
-}> { }
+}>;
 export type AutomationCondition =
     | LogicCondition
     | NumericCondition

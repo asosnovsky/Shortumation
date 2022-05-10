@@ -5,7 +5,6 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerMQTTState: OptionManager<AutomationTriggerMQTT> = {
   defaultState: () => ({
-    $smType: 'trigger',
     "alias": "",
     "platform": "mqtt",
     "payload": "",

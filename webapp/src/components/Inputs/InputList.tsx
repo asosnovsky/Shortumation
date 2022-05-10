@@ -1,3 +1,4 @@
+import { FC } from "react";
 import InputWrapper from "./InputWrapper";
 import { useInputListStyles } from "./styles";
 
@@ -10,10 +11,10 @@ export interface Props<T extends string> {
   className?: string;
   label: string;
 }
-export default function InputList<T extends string>({
+export const InputList: FC<Props<any>> = ({
   current, options, onChange, label,
   ...selattr
-}: Props<T>) {
+}) => {
   const { classes } = useInputListStyles({});
   return <InputWrapper label={label} labelSize={'small'} noMargin>
     <select
