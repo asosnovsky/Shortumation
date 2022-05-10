@@ -5,24 +5,18 @@ import { OptionManager, updateActionData } from './OptionManager';
 
 export const ActionDeviceState: OptionManager<DeviceAction> = {
   defaultState: () => ({
-    $smType: 'action',
-    action: 'device',
-    action_data: {
-      alias: "Device",
-      type: "",
-      entity_id: "",
-      device_id: "",
-      domain: "",
-    }
+    alias: "",
+    type: "",
+    entity_id: "",
+    device_id: "",
+    domain: "",
   }),
   isReady: ({
-    action_data: {
-      alias,
-      type,
-      entity_id,
-      device_id,
-      domain,
-    }
+    alias,
+    type,
+    entity_id,
+    device_id,
+    domain,
   }) => (
     alias !== '' &&
     type !== "" &&
@@ -35,25 +29,25 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
     return <>
       <InputText
         label="Description"
-        value={state.action_data.alias ?? ""}
+        value={state.alias ?? ""}
         onChange={alias => update({ alias })}
       />
       <InputText
         textBoxFor="device_id"
         label="Device"
-        value={state.action_data.device_id}
+        value={state.device_id}
         onChange={device_id => update({ device_id })}
       />
       <InputText
         textBoxFor="type"
         label="Action"
-        value={state.action_data.type}
+        value={state.type}
         onChange={type => update({ type })}
       />
       <InputText
         textBoxFor="entity_id"
         label="Entity ID"
-        value={state.action_data.entity_id ?? ""}
+        value={state.entity_id ?? ""}
         onChange={entity_id => update({ entity_id, domain: entity_id.split('.')[0] })}
       />
     </>

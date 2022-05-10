@@ -9,13 +9,9 @@ const makeDefault = (nodeType: keyof AutomationNodeMapping): AutomationNode => {
   switch (nodeType) {
     case 'action':
       return {
-        $smType: 'action',
-        action: "service",
-        action_data: {
-          'data': {},
-          'service': '',
-          'target': {},
-        }
+        'data': {},
+        'service': '',
+        'target': {},
       }
     case 'condition':
       return {

@@ -1,4 +1,5 @@
 import { AutomationNodeSubtype, AutomationNodeTypes } from "types/automations";
+import { ActionType } from "types/automations/actions";
 import { AutomationNode } from '../../types/automations/index';
 
 
@@ -54,12 +55,22 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(
 export const getNodeSubType = <T extends AutomationNodeTypes>(
   node: AutomationNode<T>
 ): AutomationNodeSubtype<T> => {
-  if ('$smType' in node && node.$smType === 'action') {
-    return node.action as any;
-  } else if ('condition' in node) {
+  if ('condition' in node) {
     return node.condition as any;
   } else if ('platform' in node) {
     return node.platform as any;
+  } else if ('service' in node) {
+    return 'service' as any
+  } else if ('repeat' in node) {
+    return 'repeat' as any
+  } else if ('wait_template' in node) {
+    return 'wait' as any
+  } else if ('event' in node) {
+    return 'event' as any
+  } else if ('device_id' in node) {
+    return 'device' as any
+  } else if ('choose' in node) {
+    return 'choose' as any
   } else {
     throw new Error("Invalid node type!")
   }

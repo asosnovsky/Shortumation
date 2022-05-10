@@ -2,54 +2,57 @@ import { AutomationSequenceNode } from ".";
 import { AutomationTime } from "./common";
 import { AutomationCondition } from "./conditions";
 
-interface AutomationActionNodeBase<Name extends String,Data extends Object> {
-    $smType: 'action';
-    action: Name;
-    action_data: Data & {
-        alias?: string;
-        variables?: Record<string, any>;
-    };
+type AutomationActionNodeBase<Data extends Object> = Data & {
+    alias?: string;
+    variables?: Record<string, any>;
 }
 
-export interface ServiceAction extends AutomationActionNodeBase<"service", {
+export type ServiceAction = AutomationActionNodeBase<{
     service: string;
     target: any;
     data: any;
-}>{}
-export interface RepeatAction extends AutomationActionNodeBase<"repeat", {
+}>
+export type RepeatAction = AutomationActionNodeBase<{
     repeat: {
         count: number;
         sequence: AutomationAction[];
     }
-}>{}
-export interface WaitAction extends AutomationActionNodeBase<"wait", {
+}>
+export type WaitAction = AutomationActionNodeBase<{
     wait_template: string;
     timeout?: AutomationTime;
     continue_on_timeout?: boolean;
-}>{}
-export interface FireEventAction extends AutomationActionNodeBase<"event", {
+}>
+export type FireEventAction = AutomationActionNodeBase<{
     event: string;
     event_data: any;
-}>{}
-export interface DeviceAction extends AutomationActionNodeBase<"device", {
+}>
+export type DeviceAction = AutomationActionNodeBase<{
     type: string;
     device_id: string;
     entity_id?: string;
     domain: string;
-}>{}
-export interface ChooseAction extends AutomationActionNodeBase<"choose", {
+}>
+export type ChooseAction = AutomationActionNodeBase<{
     choose: Array<{
         conditions: AutomationCondition[];
         sequence: AutomationSequenceNode[];
     }>;
     default: AutomationSequenceNode[];
-}>{}
-export type AutomationAction = 
+}>
+export type AutomationAction =
     | ServiceAction
     | RepeatAction
     | WaitAction
     | FireEventAction
     | DeviceAction
     | ChooseAction
-;
-export type ActionType = AutomationAction['action'];
+    ;
+export type ActionType =
+    | 'service'
+    | 'repeat'
+    | 'wait'
+    | 'event'
+    | 'device'
+    | 'choose'
+    ;

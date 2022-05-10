@@ -14,13 +14,9 @@ export default {
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
     node: {
-      $smType: 'action',
-      action: 'service',
-      action_data: {
-        'data': {},
-        'service': '',
-        'target': '',
-      }
+      'data': {},
+      'service': '',
+      'target': '',
     }
   }
 } as ComponentMeta<typeof NodeEditor>

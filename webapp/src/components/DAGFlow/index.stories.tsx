@@ -73,18 +73,14 @@ Simple.args = {
             ]
         },
         {
-            $smType: "action",
-            action: "service",
-            action_data: {
-                alias: "Start Music In Kitchen",
-                service: 'media_player.play_media',
-                target: {
-                    entity_id: "media_player.kitchen_dot"
-                },
-                data: {
-                    media_content_id: "Good Morning",
-                    media_content_type: "SPOTIFY",
-                }
+            alias: "Start Music In Kitchen",
+            service: 'media_player.play_media',
+            target: {
+                entity_id: "media_player.kitchen_dot"
+            },
+            data: {
+                media_content_id: "Good Morning",
+                media_content_type: "SPOTIFY",
             }
         }
     ]
@@ -120,128 +116,92 @@ Complex.args = {
             ]
         },
         {
-            "$smType": "action",
-            "action": "service",
-            "action_data": {
-                "alias": "Start Music In Kitchen",
-                "service": "media_player.play_media",
-                "target": {
-                    "entity_id": "media_player.kitchen_dot"
-                },
-                "data": {
-                    "media_content_id": "Good Morning",
-                    "media_content_type": "SPOTIFY"
-                }
+            "alias": "Start Music In Kitchen",
+            "service": "media_player.play_media",
+            "target": {
+                "entity_id": "media_player.kitchen_dot"
+            },
+            "data": {
+                "media_content_id": "Good Morning",
+                "media_content_type": "SPOTIFY"
             }
         },
         {
-            "$smType": "action",
-            "action": "choose",
-            "action_data": {
-                "choose": [
-                    {
-                        "conditions": [
-                            {
-                                "condition": "state",
-                                "entity_id": "lights.bathroom",
-                                "state": "off",
-                            }
-                        ],
-                        "sequence": [
-                            {
-                                "$smType": "action",
-                                "action": "service",
-                                "action_data": {
-                                    "service": "light.turn_on",
-                                    "target": {
-                                        "entity_id": "lights.bathroom"
-                                    },
-                                    "data": {}
-                                }
-                            },
-                            {
-                                "$smType": "action",
-                                "action": "service",
-                                "action_data": {
-                                    "alias": "Turn off bedroom",
-                                    "service": "light.turn_off",
-                                    "target": {
-                                        "entity_id": "lights.bedroom"
-                                    },
-                                    "data": {}
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "conditions": [
-                            {
-                                "condition": "state",
-                                "entity_id": "lights.bedroom",
-                                "state": "off",
-                            }
-                        ],
-                        "sequence": [
-                            {
-                                "$smType": "action",
-                                "action": "service",
-                                "action_data": {
-                                    "alias": "Turn on bedroom",
-                                    "service": "light.turn_on",
-                                    "target": {
-                                        "entity_id": "lights.bedroom"
-                                    },
-                                    "data": {}
-                                }
-                            },
-                            {
-                                "$smType": "action",
-                                "action": "choose",
-                                "action_data": {
-                                    "choose": [
-                                        {
-                                            "conditions": [],
-                                            "sequence": [
-                                                {
-                                                    "$smType": "action",
-                                                    "action": "choose",
-                                                    "action_data": {
-                                                        "choose": [],
-                                                        "default": [],
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "default": [
-                                        {
-                                            "$smType": "action",
-                                            "action": "choose",
-                                            "action_data": {
-                                                "choose": [],
-                                                "default": [],
-                                            }
-                                        }
-                                    ],
-                                }
-                            }
-                        ]
-                    }
-                ],
-                "default": [
-                    {
-                        "$smType": "action",
-                        "action": "service",
-                        "action_data": {
-                            "service": "light.turn_off",
+            "choose": [
+                {
+                    "conditions": [
+                        {
+                            "condition": "state",
+                            "entity_id": "lights.bathroom",
+                            "state": "off",
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "service": "light.turn_on",
                             "target": {
                                 "entity_id": "lights.bathroom"
                             },
                             "data": {}
+                        },
+                        {
+                            "alias": "Turn off bedroom",
+                            "service": "light.turn_off",
+                            "target": {
+                                "entity_id": "lights.bedroom"
+                            },
+                            "data": {}
                         }
-                    }
-                ]
-            }
+                    ]
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "state",
+                            "entity_id": "lights.bedroom",
+                            "state": "off",
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "alias": "Turn on bedroom",
+                            "service": "light.turn_on",
+                            "target": {
+                                "entity_id": "lights.bedroom"
+                            },
+                            "data": {}
+                        },
+                        {
+                            "choose": [
+                                {
+                                    "conditions": [],
+                                    "sequence": [
+                                        {
+                                            "choose": [],
+                                            "default": [],
+                                        }
+                                    ]
+                                }
+                            ],
+                            "default": [
+                                {
+                                    "choose": [],
+                                    "default": [],
+                                }
+                            ],
+                        }
+                    ]
+                }
+            ],
+            "default": [
+                {
+                    "service": "light.turn_off",
+                    "target": {
+                        "entity_id": "lights.bathroom"
+                    },
+                    "data": {}
+                }
+            ]
         },
         {
             "condition": "and",

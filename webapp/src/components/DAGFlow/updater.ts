@@ -23,12 +23,8 @@ export const makeSequenceUpdater = (
       single: true,
       saveBtnCreateText: true,
       node: {
-        $smType: 'action',
-        action: 'choose',
-        action_data: {
-          choose: [],
-          default: [],
-        }
+        choose: [],
+        default: [],
       },
       update: n => onChange([
         ...sequence,
@@ -44,44 +40,38 @@ export const makeSequenceUpdater = (
       ...sequence.slice(i + 1),
     ])
   },
-  updateChooseActionData(i: number, data: ChooseAction['action_data']) {
+  updateChooseActionData(i: number, data: ChooseAction) {
     const node = sequence[i] as ChooseAction;
     return this.updateNode(i, {
       ...node,
-      action_data: data,
+      ...data,
     })
   },
   makeChildUpdaterForChooseAction(i: number, j: number | null) {
     const node = sequence[i];
-    if (('$smType' in node) && (node.$smType === 'action') && (node.action === 'choose')) {
+    if ('choose' in node) {
       if (j !== null) {
         return makeSequenceUpdater(
-          node.action_data.choose[j].sequence,
+          node.choose[j].sequence,
           seq => this.updateNode(i, {
             ...node,
-            action_data: {
-              ...node.action_data,
-              choose: [
-                ...node.action_data.choose.slice(0, j),
-                {
-                  ...node.action_data.choose[j],
-                  sequence: seq,
-                },
-                ...node.action_data.choose.slice(j + 1),
-              ]
-            }
+            choose: [
+              ...node.choose.slice(0, j),
+              {
+                ...node.choose[j],
+                sequence: seq,
+              },
+              ...node.choose.slice(j + 1),
+            ]
           }),
           openModal,
         )
       } else {
         return makeSequenceUpdater(
-          node.action_data.default,
+          node.default,
           seq => this.updateNode(i, {
             ...node,
-            action_data: {
-              ...node.action_data,
-              default: seq
-            }
+            default: seq
           }),
           openModal,
         )
@@ -108,21 +98,18 @@ export const makeSequenceUpdater = (
       const node = sequence[i] as ChooseAction;
       return openModal({
         single: false,
-        node: node.action_data.choose[j].conditions,
+        node: node.choose[j].conditions,
         allowedTypes: ['condition'],
         update: conditions => this.updateNode(i, {
           ...node,
-          action_data: {
-            ...node.action_data,
-            choose: [
-              ...node.action_data.choose.slice(0, j),
-              {
-                sequence: node.action_data.choose[j].sequence,
-                conditions: conditions as AutomationCondition[],
-              },
-              ...node.action_data.choose.slice(j + 1),
-            ]
-          }
+          choose: [
+            ...node.choose.slice(0, j),
+            {
+              sequence: node.choose[j].sequence,
+              conditions: conditions as AutomationCondition[],
+            },
+            ...node.choose.slice(j + 1),
+          ]
         }),
       })
     }
@@ -136,11 +123,8 @@ export const createOnRemoveForChooseNode = (
   j: number
 ) => () => update({
   ...action,
-  action_data: {
-    ...action.action_data,
-    choose: [
-      ...action.action_data.choose.slice(0, j),
-      ...action.action_data.choose.slice(j + 1),
-    ]
-  }
+  choose: [
+    ...action.choose.slice(0, j),
+    ...action.choose.slice(j + 1),
+  ]
 })

@@ -5,15 +5,11 @@ import { OptionManager, updateActionData } from './OptionManager';
 
 export const ActionChooseState: OptionManager<ChooseAction> = {
   defaultState: () => ({
-    $smType: 'action',
-    action: 'choose',
-    action_data: {
-      alias: "Choose",
-      default: [],
-      choose: [],
-    }
+    alias: "",
+    default: [],
+    choose: [],
   }),
-  isReady: ({ action_data: { alias } }) => {
+  isReady: ({ alias }) => {
     return alias !== ''
   },
   renderOptionList: (state, setState) => {
@@ -21,7 +17,7 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
     return <>
       <InputText
         label="Description"
-        value={state.action_data.alias ?? ""}
+        value={state.alias ?? ""}
         onChange={alias => update({ alias })}
       />
     </>

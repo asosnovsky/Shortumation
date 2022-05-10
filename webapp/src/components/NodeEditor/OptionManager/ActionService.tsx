@@ -6,23 +6,19 @@ import { OptionManager, updateActionData } from './OptionManager';
 
 export const ActionCallServiceState: OptionManager<ServiceAction> = {
   defaultState: () => ({
-    $smType: 'action',
-    action: 'service',
-    action_data: {
-      service: "",
-      target: "",
-      data: {},
-    }
+    service: "",
+    target: "",
+    data: {},
   }),
   isReady: ({
-    action_data: { service, alias, target }
+    service, alias, target
   }) => (
     service !== '' &&
     alias !== '' &&
     target !== ''
   ),
   renderOptionList: (state, setState) => {
-    const { service, alias = "", target } = state.action_data;
+    const { service, alias = "", target } = state;
     const update = updateActionData(state, setState);
     return <>
       <InputText
