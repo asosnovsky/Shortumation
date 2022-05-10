@@ -21,11 +21,8 @@ export const updateActionData = <T extends AutomationAction>(
   state: T,
   setState: (s: T) => void
 ) => (
-  data: Partial<T['action_data']>,
+  data: Partial<T>,
   ) => setState({
     ...state,
-    action_data: {
-      ...state.action_data,
-      ...data,
-    },
+    ...data,
   })

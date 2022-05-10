@@ -10,18 +10,14 @@ test('converting time to a string', () => {
 
 test('using alias as description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: "action",
-        action: "service",
-        action_data: {
-            alias: "Start Music In Kitchen",
-            service: 'media_player.play_media',
-            target: {
-                entity_id: "media_player.kitchen_dot"
-            },
-            data: {
-                media_content_id: "Good Morning",
-                media_content_type: "SPOTIFY",
-            }
+        alias: "Start Music In Kitchen",
+        service: 'media_player.play_media',
+        target: {
+            entity_id: "media_player.kitchen_dot"
+        },
+        data: {
+            media_content_id: "Good Morning",
+            media_content_type: "SPOTIFY",
         }
     })).toEqual("Start Music In Kitchen")
 })
@@ -29,30 +25,22 @@ test('using alias as description', () => {
 
 test('get service action description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: "action",
-        action: "service",
-        action_data: {
-            service: 'media_player.play_media',
-            target: {
-                entity_id: "media_player.kitchen_dot"
-            },
-            data: {
-                media_content_id: "Good Morning",
-                media_content_type: "SPOTIFY",
-            }
+        service: 'media_player.play_media',
+        target: {
+            entity_id: "media_player.kitchen_dot"
+        },
+        data: {
+            media_content_id: "Good Morning",
+            media_content_type: "SPOTIFY",
         }
     })).toEqual("media_player.play_media")
 })
 
 test('get repeat action description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: "action",
-        action: "repeat",
-        action_data: {
-            repeat: {
-                count: 10,
-                sequence: []
-            }
+        repeat: {
+            count: 10,
+            sequence: []
         }
     })).toEqual("Repeat 10")
 })
@@ -60,57 +48,35 @@ test('get repeat action description', () => {
 
 test('get wait action description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: "action",
-        action: "wait",
-        action_data: {
-            wait_template: "states(switch.kitchen_light) == 'on'"
-        }
+        wait_template: "states(switch.kitchen_light) == 'on'"
     })).toEqual("Wait on states(switch.kitchen_light) == 'on'")
     expect(getDescriptionFromAutomationNode({
-        $smType: "action",
-        action: "wait",
-        action_data: {
-            wait_template: "states(switch.kitchen_light) == 'on'",
-            // timeout: '00:01:00',
-            timeout: {
-                'minutes': 1,
-            }
+        wait_template: "states(switch.kitchen_light) == 'on'",
+        timeout: {
+            'minutes': 1,
         }
     })).toEqual("Wait on states(switch.kitchen_light) == 'on' for 00:01:00:00")
 })
 
 test('get fire event action description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: 'action',
-        action: 'event',
-        action_data: {
-            event: 'test_event',
-            event_data: {},
-        }
+        event: 'test_event',
+        event_data: {},
     })).toEqual("Trigger test_event")
 })
 
 test('get device action description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: 'action',
-        action: 'device',
-        action_data: {
-            device_id: "12310das01231",
-            domain: "zwave_js",
-            type: "set_value"
-        }
-
+        device_id: "12310das01231",
+        domain: "zwave_js",
+        type: "set_value"
     })).toEqual("set_value on 12310das01231")
 })
 
 test('get choose action description', () => {
     expect(getDescriptionFromAutomationNode({
-        $smType: 'action',
-        action: 'choose',
-        action_data: {
-            choose: [],
-            default: [],
-        }
+        choose: [],
+        default: [],
     })).toEqual("Choose")
 })
 

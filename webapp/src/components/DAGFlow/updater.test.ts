@@ -27,44 +27,36 @@ const mockSequenceUpdater = (defaultState: AutomationSequenceNode[] = []) => {
 test("sequence updater updates nodes", () => {
     const mock = mockSequenceUpdater([
         {
-            "$smType": "action",
-            "action": "choose",
-            "action_data": {
-                "choose": [
-                    {
-                        "conditions": [],
-                        "sequence": [],
-                    }
-                ],
-                "default": [],
-            }
+            "choose": [
+                {
+                    "conditions": [],
+                    "sequence": [],
+                }
+            ],
+            "default": [],
         }
     ]);
     expect(mock.state.length).toBe(1)
-    expect((mock.state[0] as ChooseAction).action_data.alias).toBe(undefined)
+    expect((mock.state[0] as ChooseAction).alias).toBe(undefined)
     mock.updater.updateNode(0, {
         ...mock.state[0],
         action_data: {
-            ...(mock.state[0] as ChooseAction).action_data,
+            ...(mock.state[0] as ChooseAction),
             alias: "Hello"
         }
     } as any)
-    expect((mock.state[0] as ChooseAction).action_data.alias).toBe("Hello")
+    expect((mock.state[0] as ChooseAction).alias).toBe("Hello")
 })
 test('update conditions for node', () => {
     const mock = mockSequenceUpdater([
         {
-            "$smType": "action",
-            "action": "choose",
-            "action_data": {
-                "choose": [
-                    {
-                        "conditions": [],
-                        "sequence": [],
-                    }
-                ],
-                "default": [],
-            }
+            "choose": [
+                {
+                    "conditions": [],
+                    "sequence": [],
+                }
+            ],
+            "default": [],
         }
     ]);
     mock.updater.makeOnEditConditionsForChooseNode(0, 0)();
@@ -77,6 +69,6 @@ test('update conditions for node', () => {
             "conditions": [],
         }
     ] as any)
-    expect((mock.state[0] as ChooseAction).action_data.choose[0].conditions.length).toBe(1)
-    expect((mock.state[0] as ChooseAction).action_data.choose[0].conditions[0].condition).toBe("and")
+    expect((mock.state[0] as ChooseAction).choose[0].conditions.length).toBe(1)
+    expect((mock.state[0] as ChooseAction).choose[0].conditions[0].condition).toBe("and")
 })

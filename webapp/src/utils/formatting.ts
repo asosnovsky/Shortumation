@@ -10,36 +10,13 @@ export const convertTimeToString = ({
 }: AutomationTime) => [hours, minutes, seconds, milliseconds].map(n => String(n).padStart(2, '0')).join(':')
 
 export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(node: AutomationNode<N>): string => {
-    if ('$smType' in node) {
-        switch (node['$smType']) {
-            case "action":
-                if (node.action_data.alias) {
-                    return node.action_data.alias;
-                }
-                switch (node.action) {
-                    case 'service':
-                        return node.action_data.service
-                    case 'repeat':
-                        return 'Repeat ' + node.action_data.repeat.count;
-                    case 'wait':
-                        let out = 'Wait on ' + node.action_data.wait_template;
-                        if (node.action_data.timeout) {
-                            out += (' for ' + convertTimeToString(node.action_data.timeout))
-                        }
-                        return out;
-                    case 'event':
-                        return `Trigger ${node.action_data.event}`
-                    case 'device':
-                        return `${node.action_data.type} on ${node.action_data.device_id}`
-                    case 'choose':
-                        return "Choose"
-                }
-        }
-        return 'n/a'
-    } else if ('condition' in node) {
-        if (node.alias) {
-            return node.alias;
-        }
+    if (node.alias) {
+        return node.alias;
+    }
+    if ('platform' in node) {
+        return node.platform
+    }
+    if ('condition' in node) {
         if (
             (node.condition === 'and') ||
             (node.condition === 'or') ||
@@ -71,12 +48,30 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
                     return 'n/a'
             }
         }
-    } else {
-        if (node.alias) {
-            return node.alias;
-        }
-        return node.platform
     }
+    if ('service' in node) {
+        return node.service
+    }
+    if ('repeat' in node) {
+        return 'Repeat ' + node.repeat.count
+    }
+    if ('wait_template' in node) {
+        let out = 'Wait on ' + node.wait_template;
+        if (node.timeout) {
+            out += (' for ' + convertTimeToString(node.timeout))
+        }
+        return out;
+    }
+    if ('event' in node) {
+        return `Trigger ${node.event}`
+    }
+    if ('device_id' in node) {
+        return `${node.type} on ${node.device_id}`
+    }
+    if ('choose' in node) {
+        return "Choose"
+    }
+    return 'n/a'
 }
 
 export const prettyEntityId = (entityId: string | string[]) => {

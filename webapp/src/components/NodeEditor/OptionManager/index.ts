@@ -3,9 +3,7 @@ import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
 import { getNodeType, getSubTypeList } from 'utils/automations';
-import { AutomationCondition } from 'types/automations/conditions';
-import { AutomationAction } from 'types/automations/actions';
-import { AutomationTrigger } from 'types/automations/triggers';
+import { getNodeSubType } from '../constants';
 
 
 export const useEditorNodeState = (node: AutomationNode) => {
@@ -18,11 +16,9 @@ export const useEditorNodeState = (node: AutomationNode) => {
   }, [node])
   const setState = (node: AutomationNode) => setAllState(({ node, isModified: true }));
   const originalNodeType = getNodeType(node);
+  const originalNodeSubType = getNodeSubType(node);
   const nodeType = getNodeType(state);
-  const subType: AutomationNodeSubtype =
-    nodeType === 'action' ? (state as AutomationAction).action :
-      nodeType === 'condition' ? (state as AutomationCondition).condition :
-        (state as AutomationTrigger).platform;
+  const subType = getNodeSubType(state);
   const subTypes = getSubTypeList(nodeType)
   const optionManager = getOptionManager(nodeType, subType as any);
   return {
@@ -43,50 +39,16 @@ export const useEditorNodeState = (node: AutomationNode) => {
     },
     setNodeType(newType: AutomationNodeTypes) {
       if (newType === originalNodeType) {
-        if (originalNodeType === 'action') {
-          setState({
-            ...state,
-            $smType: 'action',
-            action: (node as any).action,
-          } as any)
-        } else if (originalNodeType === 'condition') {
-          setState({
-            ...state,
-            condition: (node as any).condition
-          } as any)
-        } else {
-          setState({
-            ...state,
-            platform: (node as any).platform
-          } as any)
-        }
+        setState(node)
       } else {
-        setState({
-          ...state,
-          $smType: newType === 'trigger' ? undefined : newType,
-          ...getOptionManager(newType, getSubTypeList(newType)[0]).defaultState()
-        } as any)
+        setState(getOptionManager(newType, getSubTypeList(newType)[0]).defaultState())
       }
     },
     setSubType(newSubType: AutomationNodeSubtype<typeof nodeType>) {
-      if (nodeType === 'action') {
-        setState({
-          ...state,
-          action: newSubType,
-          ...getOptionManager(nodeType, newSubType as any).defaultState()
-        } as any)
-      } else if (nodeType === 'condition') {
-        setState({
-          ...state,
-          condition: newSubType,
-          ...getOptionManager(nodeType, newSubType as any).defaultState()
-        } as any)
+      if (newSubType === originalNodeSubType) {
+        setState(node)
       } else {
-        setState({
-          ...state,
-          platform: newSubType,
-          ...getOptionManager(nodeType, newSubType as any).defaultState()
-        } as any)
+        setState(getOptionManager(nodeType, newSubType as any).defaultState())
       }
     }
   }

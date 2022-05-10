@@ -38,18 +38,14 @@ export const createMockAuto = (tags: Record<string, string> = {}): AutomationDat
       ]
     },
     {
-      $smType: "action",
-      action: "service",
-      action_data: {
-        alias: "Start Music In Kitchen",
-        service: 'media_player.play_media',
-        target: {
-          entity_id: "media_player.kitchen_dot"
-        },
-        data: {
-          media_content_id: "Good Morning",
-          media_content_type: "SPOTIFY",
-        }
+      alias: "Start Music In Kitchen",
+      service: 'media_player.play_media',
+      target: {
+        entity_id: "media_player.kitchen_dot"
+      },
+      data: {
+        media_content_id: "Good Morning",
+        media_content_type: "SPOTIFY",
       }
     }
   ]

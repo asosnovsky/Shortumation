@@ -6,15 +6,11 @@ import { OptionManager, updateActionData } from "./OptionManager";
 
 export const ActionEventState: OptionManager<FireEventAction> = {
   defaultState: () => ({
-    $smType: "action",
-    action: 'event',
-    action_data: {
-      alias: "Fire Event",
-      event: "",
-      event_data: {},
-    }
+    alias: "Fire Event",
+    event: "",
+    event_data: {},
   }),
-  isReady: ({ action_data: { alias, event } }) => (
+  isReady: ({ alias, event }) => (
     alias !== '' &&
     event !== ""
   ),
@@ -23,18 +19,18 @@ export const ActionEventState: OptionManager<FireEventAction> = {
     return <>
       <InputText
         label="Description"
-        value={state.action_data.alias ?? ""}
+        value={state.alias ?? ""}
         onChange={alias => update({ alias })}
       />
       <InputText
         textBoxFor="event"
         label="Event"
-        value={state.action_data.event}
+        value={state.event}
         onChange={event => update({ event })}
       />
       <InputYaml
         label="Event Data"
-        value={state.action_data.event_data}
+        value={state.event_data}
         onChange={event_data => update({ event_data })}
       />
     </>

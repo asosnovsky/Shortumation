@@ -7,20 +7,16 @@ import { OptionManager, updateActionData } from './OptionManager';
 
 export const ActionRepeatState: OptionManager<RepeatAction> = {
   defaultState: () => ({
-    $smType: 'action',
-    action: 'repeat',
-    action_data: {
-      alias: "Repeat",
-      repeat: {
-        count: 1,
-        sequence: [],
-      }
+    alias: "Repeat",
+    repeat: {
+      count: 1,
+      sequence: [],
     }
   }),
-  isReady: ({ action_data: {
+  isReady: ({
     alias,
     repeat,
-  } }) => (
+  }) => (
     alias !== '' &&
     repeat?.sequence.length > 0
   ),
@@ -29,18 +25,18 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
     return <>
       <InputText
         label="Description"
-        value={state.action_data.alias ?? ""}
+        value={state.alias ?? ""}
         onChange={alias => update({ alias })}
       />
       <InputNumber
         label="How many times?"
-        value={state.action_data.repeat.count}
-        onChange={(count = 1) => update({ repeat: { ...state.action_data.repeat, count } })}
+        value={state.repeat.count}
+        onChange={(count = 1) => update({ repeat: { ...state.repeat, count } })}
       />
       <InputYaml
         label="Sequence"
-        value={state.action_data.repeat.sequence ?? []}
-        onChange={sequence => update({ repeat: { ...state.action_data.repeat, sequence } })}
+        value={state.repeat.sequence ?? []}
+        onChange={sequence => update({ repeat: { ...state.repeat, sequence } })}
       />
     </>
   }
