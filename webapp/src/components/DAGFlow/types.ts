@@ -10,6 +10,8 @@ export type DAGAutomationFlowDims = {
     padding: XYPosition;
     nodeHeight: number;
     nodeWidth: number;
+    conditionWidth: number;
+    conditionHeight: number;
     circleSize: number;
     distanceFactor: number;
 }

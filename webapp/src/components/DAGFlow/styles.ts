@@ -1,5 +1,4 @@
 import { Styles } from "jss";
-import Color from 'chroma-js';
 import { createAppUseStyles } from "styles/theme";
 import { NodeColor } from "types/graphs";
 
@@ -7,6 +6,7 @@ export const useNodeStyles = createAppUseStyles<{
   color: NodeColor,
   nodeHeight: number,
   nodeWidth: number,
+  accentBackground: boolean,
 }>(theme => {
   const edgeStyle: Styles = {
     flex: '1',
@@ -41,11 +41,12 @@ export const useNodeStyles = createAppUseStyles<{
       width: nodeWidth,
       fontSize: 10,
     }),
-    inner: ({ color }) => ({
+    inner: ({ color, accentBackground }) => ({
       position: 'relative',
       display: 'flex',
       flexDirection: 'row',
-      backgroundColor: theme.secondary,
+      backgroundColor: !accentBackground ? theme.secondary :
+        color === 'lblue' ? theme.condition.primaryColorOpaque : 'none',
       borderRadius: '1em',
       flex: 1,
       height: `100%`,
@@ -57,10 +58,11 @@ export const useNodeStyles = createAppUseStyles<{
       borderTopStyle: 'solid',
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px',
-      borderTopColor: color === 'red' ? Color(theme.secondary).set('rgb.r', 125).hex() :
-        color === 'blue' ? Color(theme.secondary).set('rgb.b', 125).hex() :
-          color === 'green' ? Color(theme.secondary).set('rgb.g', 125).hex() :
-            'none'
+      borderTopColor: color === 'red' ? theme.redAccent :
+        color === 'blue' ? theme.condition.primaryColor :
+          color === 'green' ? theme.green :
+            color === 'lblue' ? theme.condition.primaryAccent :
+              'none'
     }),
     textWrap: {
       display: 'flex',
@@ -112,13 +114,14 @@ export const useCircleStyles = createAppUseStyles<{
   backgroundColor?: string,
 }>(theme => ({
   root: ({ size, hasOnFunction, hasRemoveFunction, backgroundColor }) => {
-    const baseColor = backgroundColor ? backgroundColor : Color(theme.primary).set('rgb.g', 100).hex();
-    const hoverColor = (hasOnFunction && !hasRemoveFunction) ? Color(theme.primary).set('rgb.g', 150).hex() : baseColor
+    const baseColor = backgroundColor ? backgroundColor : theme.green;
+    const hoverColor = hasOnFunction ? theme.greenOpaque : baseColor
     return {
       backgroundColor: baseColor,
       borderRadius: hasRemoveFunction ? 10 : 500,
       height: size,
       width: size,
+      color: theme.primary,
       cursor: hasOnFunction ? "pointer" : 'default',
       "&:hover": {
         backgroundColor: hoverColor,
@@ -129,18 +132,7 @@ export const useCircleStyles = createAppUseStyles<{
       alignItems: 'center',
     }
   },
-  icon: {
-    "&:hover": {
-      borderRadius: 500,
-      background: Color(theme.primary).set('rgb.g', 150).hex(),
-    }
-  },
   trashIcon: {
     padding: 1,
-    "&:hover": {
-      borderRadius: 500,
-      background: Color(theme.primary).set('rgb.g', 150).hex(),
-      cursor: 'pointer',
-    }
   }
 }))

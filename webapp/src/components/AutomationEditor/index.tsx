@@ -25,6 +25,7 @@ export const AutomationEditor: FC<Props> = ({
     updateSequence,
     updateTrigger,
     updateMetadata,
+    updateCondition,
     save,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
 
@@ -64,8 +65,10 @@ export const AutomationEditor: FC<Props> = ({
         className="automation-editor--flow-wrapper--flow"
         sequence={state.data.sequence}
         trigger={state.data.trigger}
+        condition={state.data.condition}
         onSequenceUpdate={updateSequence}
         onTriggerUpdate={updateTrigger}
+        onConditionUpdate={updateCondition}
         dims={dims}
       />
     </div>

@@ -6,6 +6,7 @@ import { ChooseAction } from 'types/automations/actions';
 import { makeFlowCircle } from './DAGCircle';
 import { createOnRemoveForChooseNode, SequenceUpdater } from './updater';
 import { getNodeType } from 'utils/automations';
+import { makeAddButton, makeConditionPoint } from './flowDataMods';
 
 
 export const sequenceToFlow = (
@@ -56,13 +57,19 @@ export const sequenceToFlow = (
         lasPos = position;
     }
     // add button
-    const addCircle = makeFlowCircle(
+    const addCircle = makeAddButton(
         `${prefix}-+`,
         {
-            x: (lasPos === null ? dims.padding.x + dims.nodeWidth * dims.distanceFactor * (sequence.length + 1) : lasPos.x) + dims.nodeWidth * dims.distanceFactor,
-            y: dims.padding.y + dims.circleSize / 2
+            x: (
+                lasPos === null ?
+                    dims.padding.x + dims.nodeWidth * dims.distanceFactor * (sequence.length + 1) :
+                    lasPos.x
+            ) + dims.nodeWidth * dims.distanceFactor,
+            y: dims.padding.y + dims.circleSize / 4
         },
-        { onAdd: updater.addNode, size: dims.circleSize, disableSource: true, }
+        dims,
+        updater.addNode,
+        false,
     )
     flowData.nodes.push(addCircle)
     addEdge(flowData, lastPointId, addCircle.id, false)
@@ -130,12 +137,11 @@ const addChooseNode = (
     node.choose.forEach(({ sequence, conditions }, j) => {
         const sequenceId = `${nodeId}.${j}`;
         // edit/delete circle
-        const circle = makeFlowCircle(`${sequenceId}>cond`, {
+        const circle = makeFlowCircle(`${sequenceId}>delete`, {
             x: position.x + dims.nodeWidth * dims.distanceFactor,
             y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
         }, {
-            size: dims.circleSize * dims.distanceFactor,
-            onEdit: updater.makeOnEditConditionsForChooseNode(i, j),
+            size: dims.circleSize,
             onRemove: createOnRemoveForChooseNode(
                 node,
                 d => updater.updateNode(i, d),
@@ -144,12 +150,25 @@ const addChooseNode = (
         })
         flowData.nodes.push(circle)
         addEdge(flowData, nodeId, circle.id, true)
+        const condNode = makeConditionPoint(
+            `${sequenceId}>cond`,
+            {
+                x: circle.position.x + dims.circleSize * dims.distanceFactor,
+                y: circle.position.y + dims.circleSize / 8,
+            },
+            dims,
+            conditions.length,
+            updater.makeOnEditConditionsForChooseNode(i, j)
+        );
+        flowData.nodes.push(condNode)
+        addEdge(flowData, circle.id, condNode.id, true)
+
         // actual sub sequence
-        const lastPoint = sequenceToFlow(flowData, sequence, circle.id, {
+        const lastPoint = sequenceToFlow(flowData, sequence, condNode.id, {
             ...dims,
             padding: {
-                x: position.x - dims.nodeWidth,
-                y: circle.position.y,
+                x: condNode.position.x - (dims.nodeWidth + dims.conditionWidth),
+                y: condNode.position.y - dims.conditionHeight / 2,
             },
         }, updater.makeChildUpdaterForChooseAction(i, j), `${sequenceId}.`);
         if (lastPoint.position) {
@@ -161,41 +180,40 @@ const addChooseNode = (
     const totalChildren = node.choose.length;
 
     // add button
-    const addCirlce = makeFlowCircle(
-        `${nodeId}>add`, {
-        x: position.x + dims.nodeWidth * dims.distanceFactor,
-        y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
-    },
+    const addCirlce = makeAddButton(
+        `${nodeId}>add`,
         {
-            size: dims.circleSize * dims.distanceFactor,
-            onAdd: () => updater.updateNode(i, {
-                ...node,
-                choose: [
-                    ...node.choose,
-                    {
-                        sequence: [],
-                        conditions: [],
-                    }
-                ]
-            }),
-            disableSource: true,
-        }
+            x: position.x + dims.nodeWidth * dims.distanceFactor,
+            y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
+        },
+        dims,
+        () => updater.updateNode(i, {
+            ...node,
+            choose: [
+                ...node.choose,
+                {
+                    sequence: [],
+                    conditions: [],
+                }
+            ]
+        }),
+        false,
     );
     flowData.nodes.push(addCirlce)
     addEdge(flowData, nodeId, addCirlce.id, true)
 
-    // default
+    // else
     const elseCircle = makeFlowCircle(`${nodeId}>else`, {
         x: position.x + dims.nodeWidth * dims.distanceFactor,
         y: lastPos.y + dims.nodeHeight * dims.distanceFactor * 2,
-    }, { size: dims.circleSize * dims.distanceFactor })
+    }, { size: dims.circleSize })
     flowData.nodes.push(elseCircle)
     addEdge(flowData, nodeId, elseCircle.id, true)
     const lastPoint = sequenceToFlow(flowData, node.default, elseCircle.id, {
         ...dims,
         padding: {
             x: position.x - dims.nodeWidth,
-            y: elseCircle.position.y,
+            y: elseCircle.position.y - dims.circleSize / 4,
         },
     }, updater.makeChildUpdaterForChooseAction(i, null), `${nodeId}.${totalChildren}.`)
     if (lastPoint.position) {

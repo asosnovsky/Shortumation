@@ -6,7 +6,6 @@ import { Handle, Position, XYPosition } from 'react-flow-renderer';
 
 
 export interface DAGCircleProps {
-  onEdit?: () => void;
   onAdd?: () => void;
   onRemove?: () => void;
   size: number,
@@ -28,7 +27,6 @@ export const makeFlowCircle = (
 export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
   data: {
     size,
-    onEdit,
     onAdd,
     onRemove,
     backgroundColor,
@@ -38,7 +36,7 @@ export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
 }) => {
   const { classes } = useCircleStyles({
     size,
-    hasOnFunction: !!onEdit || !!onAdd,
+    hasOnFunction: !!onRemove || !!onAdd,
     hasRemoveFunction: !!onRemove,
     backgroundColor,
   });
@@ -47,18 +45,13 @@ export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
     {!disableTarget && <Handle type="target" position={Position.Left} />}
     <div className={classes.root}>
       {
-        onEdit ?
-          <PencilIcon
+        onAdd ?
+          <AddIcon
             size={70} units="%"
             className={classes.icon}
-            onClick={onEdit}
-          /> : onAdd ?
-            <AddIcon
-              size={70} units="%"
-              className={classes.icon}
-              onClick={onAdd}
-            />
-            : backgroundColor ? "" : "else"
+            onClick={onAdd}
+          />
+          : (backgroundColor || onRemove) ? "" : "else"
       }
       {onRemove ? <TrashIcon className={classes.trashIcon} onClick={onRemove} /> : <></>}
     </div>

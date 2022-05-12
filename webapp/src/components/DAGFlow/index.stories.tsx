@@ -12,16 +12,7 @@ export default {
     component: DAGAutomationFlow,
     parameters: { actions: { argTypesRegex: '^on.*' } },
     args: {
-        dims: {
-            nodeHeight: dgconst.NODE_HEIGHT,
-            nodeWidth: dgconst.NODE_WIDTH,
-            distanceFactor: dgconst.DISTANCE_FACTOR,
-            circleSize: dgconst.CIRCLE_SIZE,
-            padding: {
-                x: dgconst.PADDING,
-                y: dgconst.PADDING,
-            },
-        }
+        dims: dgconst.DEFAULT_DIMS
     }
 } as ComponentMeta<typeof DAGAutomationFlow>
 
@@ -29,8 +20,8 @@ const Template: ComponentStory<typeof DAGAutomationFlow> = args => {
     const [state, setState] = useState({
         trigger: args.trigger,
         sequence: args.sequence,
+        condition: args.condition,
     })
-    console.log(state)
     return <div className="page">
         <DAGAutomationFlow
             {...args}
@@ -40,6 +31,7 @@ const Template: ComponentStory<typeof DAGAutomationFlow> = args => {
                 setState({ ...state, trigger })
             }}
             onSequenceUpdate={sequence => setState({ ...state, sequence })}
+            onConditionUpdate={condition => setState({ ...state, condition })}
         />
     </div>
 }
@@ -47,6 +39,7 @@ const Template: ComponentStory<typeof DAGAutomationFlow> = args => {
 export const Simple = Template.bind({})
 Simple.args = {
     ...Simple.args,
+    condition: [],
     trigger: [
         {
             "platform": "numeric_state",
@@ -90,6 +83,7 @@ Simple.args = {
 export const Complex = Template.bind({})
 Complex.args = {
     ...Complex.args,
+    condition: [],
     trigger: [
         {
             "platform": "numeric_state",
@@ -213,7 +207,7 @@ Complex.args = {
 export const EmptyStart = Template.bind({})
 EmptyStart.args = {
     ...EmptyStart.args,
-    trigger: [
-    ],
+    condition: [],
+    trigger: [],
     sequence: []
 }

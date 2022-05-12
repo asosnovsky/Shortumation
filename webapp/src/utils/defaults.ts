@@ -58,4 +58,5 @@ export const defaultAutomation = (id: string): AutomationData => ({
     tags: {},
     trigger: [],
     sequence: [],
+    condition: [],
 })

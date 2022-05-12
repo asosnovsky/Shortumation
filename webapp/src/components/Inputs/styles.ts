@@ -1,5 +1,4 @@
 import { createAppUseStyles, AppTheme } from "styles/theme";
-import Color from 'chroma-js';
 
 const commonInputStyle = (theme: AppTheme) => ({
   input: {
@@ -251,8 +250,8 @@ export const useInputBubblesStyles = createAppUseStyles<{}>(theme => ({
     position: 'relative',
     border: `1px solid ${theme.primaryAccent}`,
     borderRadius: 10,
-    backgroundColor: Color(theme.primary).set('rgb.g', 150).alpha(0.35).hex(),
-    color: Color(theme.primary).brighten(5).hex(),
+    backgroundColor: theme.greenOpaque,
+    color: theme.primaryLight,
     fontSize: 16,
 
     marginLeft: 1,
@@ -262,8 +261,8 @@ export const useInputBubblesStyles = createAppUseStyles<{}>(theme => ({
 
     cursor: 'pointer',
     "&:hover": {
-      backgroundColor: Color(theme.primary).set('rgb.r', 150).alpha(0.35).hex(),
-      color: Color(theme.primary).brighten(5).alpha(0.35).hex(),
+      backgroundColor: theme.redOpaque,
+      color: theme.primaryLightOpaque,
     },
 
     "&:hover $deleteIcon": {
@@ -291,7 +290,7 @@ export const useInputBubblesStyles = createAppUseStyles<{}>(theme => ({
     padding: "3px 7px",
     "&:hover": {
       borderRadius: 100,
-      backgroundColor: Color(theme.primary).set('rgb.g', 150).alpha(0.35).hex(),
+      backgroundColor: theme.greenOpaque,
       borderColor: theme.secondaryAccent,
     },
   }

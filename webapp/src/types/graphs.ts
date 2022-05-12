@@ -1,1 +1,1 @@
-export type NodeColor = 'red' | 'blue' | 'green';
+export type NodeColor = 'red' | 'blue' | 'green' | 'lblue';
