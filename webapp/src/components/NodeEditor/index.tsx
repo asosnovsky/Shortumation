@@ -27,15 +27,18 @@ export const NodeEditor: FC<Props> = ({
   // state
   const state = useEditorNodeState(node);
 
-  // state
+  // alias
   const isModified = state.isModified;
   const isReady = state.isReady();
+  const areYouSureNotReady = () => !isReady ?
+    window.confirm("This node is missing some values, are you sure you want to save?") :
+    true;
 
   // events
   onFlags(isReady, isModified);
 
   // render
-  return <div className={["node-editor--root", isModified ? "modded" : ""].join(" ")}>
+  return <div className={["node-editor--root", isModified ? "modded" : "", !isReady ? 'not-ready' : ''].join(" ")}>
     <div className="node-editor--body">
       <div className="node-editor--body-title">
         {allowedTypes.length > 1 ? <InputList
@@ -54,10 +57,12 @@ export const NodeEditor: FC<Props> = ({
       {state.renderOptionList()}
     </div>
     <div className="node-editor--footer">
-      <Button onClick={onClose}>Close</Button>
-      <Button onClick={() => {
-        isReady && onSave(state.data)
-      }} disabled={!isReady}>{saveBtnCreateText ? "Create" : "Save"}</Button>
+      <Button className="node-editor--footer--close" onClick={onClose}>Close</Button>
+      <Button className="node-editor--footer--save" onClick={() => {
+        areYouSureNotReady() && onSave(state.data)
+      }} title={!isReady ? "Some fields have not been properly filled up" : ""}>
+        {saveBtnCreateText ? "Create" : "Save"}
+      </Button>
       {children}
     </div>
   </div>

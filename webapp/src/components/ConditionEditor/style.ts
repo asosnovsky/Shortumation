@@ -43,7 +43,6 @@ export const useStyles = createAppUseStyles<{
             borderBottomRightRadius: 0,
             borderBottomLeftRadius: hasChildren ? 0 : 10,
             padding: 10,
-            maxWidth: 120,
             minWidth: 30,
             textOverflow: 'ellipsis',
             textAlign: 'center',
@@ -58,7 +57,8 @@ export const useStyles = createAppUseStyles<{
         },
         modifyBtn: ({ hasChildren }) => ({
             // styling
-            backgroundColor: theme.primary,
+            backgroundColor: theme.green,
+            color: theme.primary,
             fill: theme.primaryAccent,
             borderColor: theme.primaryAccent,
             borderWidth: 1,
@@ -72,13 +72,12 @@ export const useStyles = createAppUseStyles<{
             justifyContent: 'center',
             alignItems: 'center',
             padding: '0px 10px',
-            // position: hasChildren ? 'absolute' : 'block',
             right: 1,
             top: 10,
 
             // on hover
             "&:hover": {
-                backgroundColor: theme.primaryLight,
+                backgroundColor: theme.greenLight,
                 fill: theme.primaryAccentLight,
             },
             "&:hover $icon": {
@@ -94,7 +93,7 @@ export const useStyles = createAppUseStyles<{
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            border: `1px solid ${theme.primaryAccent}`,
+            border: `1px solid ${theme.secondaryAccent}`,
             borderBottomRightRadius: hasChildren ? 10 : 0,
             borderBottomLeftRadius: hasChildren ? 10 : 0,
             minHeight: hasChildren ? undefined : '100%'

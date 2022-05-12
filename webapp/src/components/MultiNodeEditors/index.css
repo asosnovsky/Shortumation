@@ -1,0 +1,15 @@
+.multinode-editor {
+    max-width: 80vw;
+}
+
+.multinode-editor--navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    min-width: 20vw;
+}
+
+.multinode-editor.modded>.multinode-editor--navbar * {
+    border-color: var(--green-light);
+}

@@ -1,0 +1,77 @@
+0:
+  Type: HA
+1:
+  Type: HA
+2:
+  Type: Button
+  Room: Living
+3:
+  Type: Button
+  Room: Kitchen
+4:
+  Type: Button
+  Room: Kitchen
+5:
+  Type: Button
+  Room: Kitchen
+6:
+  Type: Button
+  Room: Kitchen
+7:
+  Type: Button
+  Room: Living
+8:
+  Type: Button
+  Room: Baby
+9:
+  Type: Button
+  Room: Baby
+10:
+  Type: Button
+  Room: Baby
+11:
+  Type: Routine
+  Room: Baby
+12:
+  Type: Routine
+  Room: Baby
+13:
+  Type: Window
+  Room: Office
+14:
+  Type: Door
+  Room: Balcony
+15:
+  Type: Routine
+16:
+  Type: Button
+  Room: Baby
+17:
+  Type: Routine
+18:
+  Type: Routine
+19:
+  Type: Door
+  Room: Bedroom
+20:
+  Type: Ensure Power
+21:
+  Type: Ensure Power
+22:
+  Type: Motion
+  Room: Office
+23:
+  Type: Routine
+  Room: Baby
+24:
+  Type: Climate
+  Climate: Heat
+25:
+  Type: Climate
+  Climate: Time
+26:
+  Type: Routine
+27:
+  Type: Button
+  Room: Bedroom
+  BadOne: yes

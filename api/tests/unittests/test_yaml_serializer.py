@@ -9,9 +9,10 @@ from src.yaml_serializer.types import (
     SecretValue,
     IncludedYamlDir,
 )
-
+from tests.utils import SAMPLES_FOLDER
 
 class dumping_yamls_tests(TestCase):
+
     def test_dumping_includes(self):
         yaml = dump_yaml(
             {

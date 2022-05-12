@@ -1,3 +1,4 @@
+from ruamel.yaml import YAML
 from unittest import TestCase
 from fastapi.testclient import TestClient
 from src.api.app import make_app
@@ -110,6 +111,210 @@ class automation_update_tests(BaseTestCase):
         self.assertNotEqual(original_auto, new_auto)
         self.assertEqual(ExtenededAutomationData(metadata=AutomationMetdata(id="testme")).dict(), new_auto)
 
+    def test_consistent_standard_1(self):
+        resp = self.client.post("/automations/list", json={"limit": 1, "offset": 15})
+        original_auto = resp.json()["data"][0]
+        original_auto['metadata']['alias'] = "I CHANGED!"
+        resp = self.client.post(
+            "/automations",
+            json={
+                "index": 15,
+                "data": original_auto,
+            },
+        )
+        self.assertEqual(resp.status_code, 200)
+        with (self.config_folder / "automations.yaml").open('r') as fp:
+            disk_data = dict(YAML().load(fp)[15])
+        trigger = list(map(dict, disk_data.pop('trigger')))
+        condition = disk_data.pop('condition')
+        action = list(map(dict, disk_data.pop('action')))
+        self.assertDictEqual(disk_data, {
+            "id": "1629422438707", 
+            "alias": "I CHANGED!", 
+            "description": "", 
+            "mode": "single"
+        })
+        self.assertListEqual(trigger, [
+            {"platform": "time", "at": "input_datetime.vita_night_pump_time"}
+        ])
+        self.assertListEqual(condition, [])
+        self.assertListEqual(action, [
+            {
+                "conditions": [
+                    {"condition": "time", "after": "input_datetime.vita_night_pump_time", "before": "00:00:00"}, 
+                    {"condition": "time", "after": "00:00:00", "before": "06:00:00"}
+                ], 
+                "condition": "and"
+            }, 
+            {
+                "service": "light.turn_on", 
+                "target": {
+                    "entity_id": "light.bulb_staircase", 
+                    "area_id": "living_room"
+                }, 
+                "data": {
+                    "brightness_pct": 40, 
+                    "transition": 15
+                }
+            }
+        ])
+
+    def test_consistent_standard_2(self):
+        resp = self.client.post("/automations/list", json={"limit": 1, "offset": 27})
+        original_auto = resp.json()["data"][0]
+        original_auto['metadata']['alias'] = "I CHANGED!"
+        resp = self.client.post(
+            "/automations",
+            json={
+                "index": 27,
+                "data": original_auto,
+            },
+        )
+        self.assertEqual(resp.status_code, 200)
+        with (self.config_folder / "automations.yaml").open('r') as fp:
+            disk_data = dict(YAML().load(fp)[27])
+        trigger = list(map(dict, disk_data.pop('trigger')))
+        condition = disk_data.pop('condition')
+        action = list(map(dict, disk_data.pop('action')))
+        self.assertDictEqual(disk_data, {
+            "id": "1649947692702", 
+            "alias": "I CHANGED!", 
+            "description": "", 
+            "mode": "single"
+        })
+        self.assertListEqual(trigger, [
+            {
+                "device_id": "das2qdasdasdasadaasd",
+                 "domain": "zha", 
+                 "platform": "device", 
+                 "type": "remote_button_short_press", 
+                 "subtype": "turn_on", 
+                 "id": "turn_on"
+            }, 
+            {
+                "device_id": "das2qdasdasdasadaasd", 
+                "domain": "zha", 
+                "platform": "device", 
+                "type": "remote_button_short_press", 
+                "subtype": "turn_off",
+                "id": "turn_off"
+            }, 
+            {
+                "device_id": "das2qdasdasdasadaasd", 
+                "domain": "zha", 
+                "platform": "device", 
+                "type": "remote_button_short_press", 
+                "subtype": "dim_up", 
+                "id": "dim_up"
+            }, 
+            {
+                "device_id": "das2qdasdasdasadaasd", 
+                "domain": "zha", 
+                "platform": "device", 
+                "type": "remote_button_short_press", 
+                "subtype": "dim_down", 
+                "id": "dim_down"
+            }, 
+            {
+                "device_id": "das2qdasdasdasadaasd", 
+                "domain": "zha", 
+                "platform": "device", 
+                "type": "remote_button_double_press", 
+                "subtype": "turn_on", 
+                "id": "up_dbclk"
+            }
+        ])
+        self.assertListEqual(condition, [])
+        self.assertListEqual(action, [
+            {
+                "choose": [
+                    {
+                        "conditions": [
+                            {
+                                "condition": "trigger", 
+                                "id": "turn_off", 
+                            }
+                        ], 
+                        "sequence": [
+                            {
+                                "action": "device", 
+                                "type": "turn_off", 
+                                "device_id": "das2qdasdasdasadaasd", 
+                                "entity_id": "light.bulb_ari_lamp", 
+                                "domain": "light"
+                            }
+                        ]
+                    }, 
+                    {
+                        "conditions": [
+                            {
+                                "condition": "trigger", 
+                                "id": "turn_on", 
+                            }
+                        ], 
+                        "sequence": [
+                            {
+                                "action": "service", 
+                                "service": "light.turn_on", 
+                                "data": {"color_temp": 153, "brightness_pct": 100}, 
+                                "target": {"device_id": "das2qdasdasdasadaasd"}
+                            }
+                        ]
+                    }, 
+                    {
+                        "conditions": [
+                            {
+                                "condition": "trigger", 
+                                "id": "dim_up", 
+                            }
+                        ], 
+                        "sequence": [
+                            {
+                                "action": "device", 
+                                "device_id": "das2qdasdasdasadaasd", 
+                                "domain": "light", 
+                                "entity_id": "light.bulb_ari_lamp", 
+                                "type": "brightness_increase"
+                            }
+                        ]
+                    }, 
+                    {
+                        "conditions": [
+                            {
+                                "condition": "trigger", 
+                                "id": "dim_down", 
+                            }
+                        ], 
+                        "sequence": [
+                            {
+                                "action": "device", 
+                                "device_id": "das2qdasdasdasadaasd", 
+                                "domain": "light", 
+                                "entity_id": "light.bulb_ari_lamp", 
+                                "type": "brightness_decrease"
+                            }
+                        ]
+                    }, 
+                    {
+                        "conditions": [
+                            {
+                                "condition": "trigger", 
+                                "id": "up_dbclk", 
+                            }
+                        ], 
+                        "sequence": [
+                            {
+                                "action": "service", 
+                                "service": "light.turn_on", 
+                                "data": {"color_temp": 500, "brightness_pct": 100}, 
+                                "target": {"device_id": "das2qdasdasdasadaasd"}
+                            }
+                        ]
+                    }
+                ], 
+                "default": []
+            }
+        ])
 
 class automation_delete_tests(BaseTestCase):
     def test_delete_some(self):
