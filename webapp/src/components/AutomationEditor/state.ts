@@ -41,6 +41,7 @@ export const useAutomatioEditorState = (
     return {
         updateTrigger: makeUpdate('trigger'),
         updateSequence: makeUpdate('sequence'),
+        updateCondition: makeUpdate('condition'),
         updateMetadata: (metadata: AutomationMetadata, tags: Array<[string, string]>) => {
             if (state.status !== 'loading') {
                 update({
@@ -80,6 +81,7 @@ const genEditorData = (automation: AutomationData) => {
         metadata,
         trigger,
         sequence,
+        condition,
     } = automation;
 
     const tags: [string, string][] = Object.keys(automation.tags).map(tagName => [tagName, automation.tags[tagName]]);
@@ -88,6 +90,7 @@ const genEditorData = (automation: AutomationData) => {
         metadata,
         trigger,
         sequence,
+        condition,
         tags,
     }
 }

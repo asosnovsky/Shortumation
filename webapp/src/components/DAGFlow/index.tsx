@@ -5,13 +5,15 @@ import { AutomationSequenceNode } from "types/automations";
 import { AutomationTrigger } from 'types/automations/triggers';
 import { triggerToFlow } from "./triggerConvertor";
 import { DAGNode } from "./DAGNode";
-import { DAGAutomationFlowDims, FlowData, ModalState } from './types';
+import { DAGAutomationFlowDims, FlowData, ModalState, UpdateModalState } from './types';
 import { DAGCircle } from './DAGCircle';
 import { sequenceToFlow } from "./sequenceConvertor";
 import { makeSequenceUpdater } from "./updater";
 import { NodeEditor } from "components/NodeEditor";
 import { MultiNodeEditor } from "components/MultiNodeEditors";
 import { Modal } from "components/Modal";
+import { AutomationCondition } from "types/automations/conditions";
+import { makeConditionPoint } from "./flowDataMods";
 
 const nodeTypes = {
     'dagnode': DAGNode,
@@ -20,19 +22,23 @@ const nodeTypes = {
 
 interface Props {
     className?: string;
-    sequence: AutomationSequenceNode[];
     trigger: AutomationTrigger[];
+    condition: AutomationCondition[];
+    sequence: AutomationSequenceNode[];
     dims: DAGAutomationFlowDims;
     onTriggerUpdate: (t: AutomationTrigger[]) => void;
     onSequenceUpdate: (s: AutomationSequenceNode[]) => void;
+    onConditionUpdate: (s: AutomationCondition[]) => void;
 }
 
 export const DAGAutomationFlow: FC<Props> = ({
     className,
-    sequence,
     trigger,
+    condition,
+    sequence,
     onTriggerUpdate,
     onSequenceUpdate,
+    onConditionUpdate,
     dims,
 }) => {
     // state
@@ -63,7 +69,14 @@ export const DAGAutomationFlow: FC<Props> = ({
     }
 
     // convert automation to flow data
-    const condPoint = makeConditionPoint(dims);
+    const condPoint = makeConditionPoint('c', {
+        x: dims.padding.x + dims.nodeWidth * dims.distanceFactor,
+        y: dims.padding.y + dims.nodeHeight * 0.25
+    }, dims, condition.length, makeOnEditAutomationConditions(
+        condition,
+        onConditionUpdate,
+        setModalState,
+    ));
     const flowData: FlowData = {
         nodes: [condPoint],
         edges: [],
@@ -94,7 +107,12 @@ export const DAGAutomationFlow: FC<Props> = ({
         flowData,
         sequence,
         condPoint.id,
-        dims,
+        {
+            ...dims, padding: {
+                x: condPoint.position.x - dims.nodeWidth - dims.conditionWidth,
+                y: dims.padding.y,
+            }
+        },
         makeSequenceUpdater(sequence, onSequenceUpdate, setModalState),
     );
 
@@ -118,18 +136,13 @@ export const DAGAutomationFlow: FC<Props> = ({
     </>;
 }
 
-
-const makeConditionPoint = ({
-    padding,
-    nodeWidth,
-    nodeHeight,
-    circleSize,
-}: DAGAutomationFlowDims) => ({
-    id: `c`,
-    type: 'dagcircle',
-    position: { x: padding.x + nodeWidth * 2, y: padding.y + nodeHeight * 0.25 },
-    data: {
-        size: circleSize,
-        backgroundColor: 'blue',
-    }
+const makeOnEditAutomationConditions = (
+    conditions: AutomationCondition[],
+    updateConditions: (c: AutomationCondition[]) => void,
+    openModal: UpdateModalState,
+) => () => openModal({
+    single: false,
+    node: conditions,
+    allowedTypes: ['condition'],
+    update: c => updateConditions(c as any),
 })

@@ -13,6 +13,7 @@ export interface AutomationMetadata {
 export interface AutomationData {
   metadata: AutomationMetadata;
   trigger: AutomationTrigger[];
+  condition: AutomationCondition[];
   sequence: AutomationSequenceNode[];
   tags: Record<string, string>;
 }

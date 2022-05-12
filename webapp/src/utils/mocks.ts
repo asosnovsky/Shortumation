@@ -12,6 +12,7 @@ export const createMockAuto = (tags: Record<string, string> = {}): AutomationDat
     mode: 'single',
   },
   tags,
+  condition: [],
   trigger: [
     {
       "platform": "numeric_state",

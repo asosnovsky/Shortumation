@@ -10,16 +10,7 @@ export default {
   component: AutomationEditor,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
-    dims: {
-      nodeHeight: dgconst.NODE_HEIGHT,
-      nodeWidth: dgconst.NODE_WIDTH,
-      distanceFactor: dgconst.DISTANCE_FACTOR,
-      circleSize: dgconst.CIRCLE_SIZE,
-      padding: {
-        x: dgconst.PADDING,
-        y: dgconst.PADDING,
-      },
-    }
+    dims: dgconst.DEFAULT_DIMS
   }
 } as ComponentMeta<typeof AutomationEditor>
 
@@ -43,6 +34,7 @@ export const Simple = Template.bind({})
 Simple.args = {
   ...Simple.args,
   automation: {
+    condition: [],
     tags: {
       "Room": "Bathroom",
       "For": "Toliet",
@@ -103,6 +95,7 @@ export const EmptyStart = Template.bind({})
 EmptyStart.args = {
   ...EmptyStart.args,
   automation: {
+    condition: [],
     tags: {},
     metadata: {
       id: "random",

@@ -1,10 +1,22 @@
 :root {
-    --primary: #111111;
+    --primary: #111;
+    --primary-light: #333;
+    --primary-light-opaque: #3335;
+    --secondary-opaque: #1c1c1c;
     --secondary: #1c1c1c;
-    --primary-accent: #bbbbbb;
+    --primary-accent: #bbb;
+    --primary-accent-light: #eee;
     --secondary-accent: #929191;
+    --green: #1f1;
+    --green-opaque: #1f15;
+    --green-light: #6f5;
     --error: #c55;
+    --error-opaque: #c555;
+    --error-accent: #9f3a3a;
     --change: #0f9;
+    --condition-primary: #447;
+    --condition-accent: #8af;
+    --condition-primary-opaque: #4476;
     touch-action: pan-x pan-y;
     height: 100%;
 }

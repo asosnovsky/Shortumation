@@ -1,5 +1,4 @@
 import { Styles } from "jss";
-import Color from 'chroma-js';
 import { createAppUseStyles } from "styles/theme";
 
 export const useStyles = createAppUseStyles<{
@@ -26,9 +25,9 @@ export const useStyles = createAppUseStyles<{
             padding: 0,
             position: 'relative',
             display: 'flex',
-            flexDirection: hasChildren? 'column' : 'row',
+            flexDirection: hasChildren ? 'column' : 'row',
         }),
-        title: ({hasChildren}) => ({
+        title: ({ hasChildren }) => ({
             display: 'flex',
             border: hasChildren ? `1px solid ${theme.primaryAccent}` : 'none',
             borderRadius: 10,
@@ -36,7 +35,7 @@ export const useStyles = createAppUseStyles<{
             borderBottomLeftRadius: 0,
             height: '100%',
         }),
-        titleText: ({hasChildren}) => ({
+        titleText: ({ hasChildren }) => ({
             background: theme.condition.primaryColor,
             border: `1px solid ${theme.primaryAccent}`,
             borderRadius: 10,
@@ -57,7 +56,7 @@ export const useStyles = createAppUseStyles<{
             left: -35,
             top: 10,
         },
-        modifyBtn: ({hasChildren}) => ({
+        modifyBtn: ({ hasChildren }) => ({
             // styling
             backgroundColor: theme.primary,
             fill: theme.primaryAccent,
@@ -67,7 +66,7 @@ export const useStyles = createAppUseStyles<{
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
             cursor: 'pointer',
-            
+
             // positioning
             display: 'flex',
             justifyContent: 'center',
@@ -79,8 +78,8 @@ export const useStyles = createAppUseStyles<{
 
             // on hover
             "&:hover": {
-                backgroundColor: Color(theme.primary).brighten().hex(),
-                fill: Color(theme.primaryAccent).brighten().hex(),
+                backgroundColor: theme.primaryLight,
+                fill: theme.primaryAccentLight,
             },
             "&:hover $icon": {
                 transform: "rotate(90deg)"
@@ -88,13 +87,13 @@ export const useStyles = createAppUseStyles<{
         }),
         icon: {},
         deleteBtn,
-        children: ({hasChildren}) => ({
+        children: ({ hasChildren }) => ({
             flex: 1,
             paddingLeft: hasChildren ? 50 : 10,
             paddingRight: hasChildren ? 0 : 10,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent:  'center',
+            justifyContent: 'center',
             border: `1px solid ${theme.primaryAccent}`,
             borderBottomRightRadius: hasChildren ? 10 : 0,
             borderBottomLeftRadius: hasChildren ? 10 : 0,
@@ -114,8 +113,8 @@ export const useStyles = createAppUseStyles<{
             paddingRight: 20,
             cursor: 'pointer',
             "&:hover": {
-                backgroundColor: Color(theme.primary).brighten().hex(),
-                fill: Color(theme.primaryAccent).brighten().hex(),
+                backgroundColor: theme.primaryLight,
+                fill: theme.primaryAccentLight,
             },
         },
         addBtn: {
@@ -131,8 +130,8 @@ export const useStyles = createAppUseStyles<{
             paddingRight: 20,
             cursor: 'pointer',
             "&:hover": {
-                backgroundColor: Color(theme.primary).brighten().hex(),
-                fill: Color(theme.primaryAccent).brighten().hex(),
+                backgroundColor: theme.primaryLight,
+                fill: theme.primaryAccentLight,
             },
         }
     }

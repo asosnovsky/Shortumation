@@ -1,20 +1,23 @@
 import { AutomationTrigger } from 'types/automations/triggers';
 import { DAGAutomationFlowDims, FlowData, TriggerMakerOptions } from './types';
 import { makeFlowCircle } from './DAGCircle';
+import { makeAddButton } from './flowDataMods';
 
 export const triggerToFlow = (
     flowData: FlowData,
     trigger: AutomationTrigger[],
     toPoint: string,
-    {
+    dims: DAGAutomationFlowDims,
+    opts: TriggerMakerOptions,
+) => {
+    const {
         distanceFactor,
         nodeHeight,
         nodeWidth,
         circleSize,
         padding,
-    }: DAGAutomationFlowDims,
-    opts: TriggerMakerOptions,
-) => {
+        conditionHeight,
+    } = dims;
     // convert all triggers to dag nodes
     trigger.forEach((t, i) => {
         const flowId = `t-${i}`;
@@ -39,19 +42,13 @@ export const triggerToFlow = (
     });
 
     // create a 'add button'
-    flowData.nodes.push(makeFlowCircle(
+    flowData.nodes.push(makeAddButton(
         'trigger-add',
         {
             x: padding.x + nodeWidth * 0.4,
-            y: padding.y + nodeHeight * distanceFactor * trigger.length,
+            y: padding.y + conditionHeight / 2 + nodeHeight * distanceFactor * trigger.length,
         },
-        {
-            size: circleSize,
-            backgroundColor: 'green',
-            onAdd: opts.onAdd,
-            disableSource: true,
-            disableTarget: true,
-        }
-
+        dims,
+        opts.onAdd
     ))
 } 

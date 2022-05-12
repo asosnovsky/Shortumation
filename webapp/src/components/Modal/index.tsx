@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { createAppUseStyles } from "styles/theme";
-import Color from 'chroma-js';
 
 export interface ModalStyleProps {
   open: boolean;
@@ -26,7 +25,7 @@ const useModalStyle = createAppUseStyles<ModalStyleProps>(theme => ({
     width: '100vw',
     top: 0,
     left: 0,
-    backgroundColor: Color(theme.secondary).alpha(0.5).hex(),
+    backgroundColor: theme.secondaryOpaque,
   },
   inner: {
     zIndex: 10,
