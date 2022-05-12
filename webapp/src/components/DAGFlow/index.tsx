@@ -59,10 +59,7 @@ export const DAGAutomationFlow: FC<Props> = ({
             modalBody = <MultiNodeEditor
                 sequence={modalState.node}
                 onClose={() => setModalState(null)}
-                onSave={(n) => {
-                    modalState.update(n as any);
-                    setModalState(null);
-                }}
+                onSave={(n) => modalState.update(n as any)}
                 allowedTypes={['condition']}
             />
         }

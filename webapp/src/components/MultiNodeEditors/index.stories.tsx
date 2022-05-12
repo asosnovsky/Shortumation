@@ -30,7 +30,9 @@ export default {
 export const Simple: ComponentStory<typeof MultiNodeEditor> = args => {
 
   return <div className="page">
-    <MultiNodeEditor {...args} />
+    <div className="center column" style={{ paddingTop: "1em" }}>
+      <MultiNodeEditor {...args} />
+    </div>
   </div>
 }
 export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {

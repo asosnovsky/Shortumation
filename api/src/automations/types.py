@@ -39,7 +39,7 @@ class AutomationData(BaseModel):
 
     def to_primitive(self):
         return {
-            **self.metadata.dict(),
+            **self.metadata.dict(exclude_unset=True, exclude_none=True),
             "trigger": self.trigger,
             "condition": [],
             "action": [action.to_primitive() for action in self.sequence],

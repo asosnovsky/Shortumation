@@ -17,6 +17,10 @@
     border-color: var(--change);
 }
 
+.node-editor--root.not-ready .node-editor--footer--save {
+    color: var(--error)
+}
+
 .node-editor--body-title {
     display: flex;
     flex-direction: row;

@@ -21,6 +21,7 @@ class parser_tests(TestCase):
             {"condition": "time", "after": "10:00:00", "weekday": ["mon", "tue"]},
             {"condition": "what is this?", "wuba": "dub"},
             SecretValue("supersecretcondition", "rm -rf ./*"),
+            {"condition": "and", ""}
         ]
         expected_process = [
             AutomationConditionNode(

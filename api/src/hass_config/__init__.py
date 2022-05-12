@@ -10,8 +10,10 @@ def find_hass_config() -> HassConfig:
     if config("USE_EXAMPLE_REPO", False, cast=bool):
         print("using USE_EXAMPLE_REPO")
         from tests.utils import create_copy_of_example_config
-
-        return HassConfig(create_copy_of_example_config())
+        
+        path = create_copy_of_example_config()
+        print("|-> ", path)
+        return HassConfig(path)
 
     if "HASSIO_TOKEN" in os.environ:
         return HassConfig(Path("/config"))
