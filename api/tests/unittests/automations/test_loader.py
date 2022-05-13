@@ -1,7 +1,5 @@
 from unittest import TestCase
 from src.automations.types import (
-    AutomationActionNode,
-    AutomationConditionNode,
     AutomationMetdata,
     ExtenededAutomationData,
 )
@@ -46,21 +44,18 @@ class loader_tests(TestCase):
                     mode="single",
                 ),
                 trigger=[{"platform": "homeassistant", "event": "shutdown"}],
+                condition=[{
+                    "condition": "template",
+                    "value_template": "states(time.time) >= '10:00:00'",
+                }],
                 sequence=[
-                    AutomationConditionNode(
-                        condition="template",
-                        condition_data={"value_template": "states(time.time) >= '10:00:00'"},
-                    ),
-                    AutomationActionNode(
-                        action="device",
-                        action_data={
-                            "device_id": NOT_IMPLEMENTED_SV_MSG,
-                            "domain": "mobile_app",
-                            "type": "notify",
-                            "title": "Hassio Status",
-                            "message": "Hassio Is turning off...",
-                        },
-                    ),
+                    {
+                        "device_id": NOT_IMPLEMENTED_SV_MSG,
+                        "domain": "mobile_app",
+                        "type": "notify",
+                        "title": "Hassio Status",
+                        "message": "Hassio Is turning off...",
+                    }
                 ],
                 tags={}
             ),

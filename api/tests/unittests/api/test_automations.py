@@ -137,15 +137,15 @@ class automation_update_tests(BaseTestCase):
         self.assertListEqual(trigger, [
             {"platform": "time", "at": "input_datetime.vita_night_pump_time"}
         ])
-        self.assertListEqual(condition, [])
-        self.assertListEqual(action, [
-            {
+        self.assertListEqual(condition, [{
                 "conditions": [
                     {"condition": "time", "after": "input_datetime.vita_night_pump_time", "before": "00:00:00"}, 
                     {"condition": "time", "after": "00:00:00", "before": "06:00:00"}
                 ], 
                 "condition": "and"
-            }, 
+            }, ])
+        self.assertListEqual(action, [
+            
             {
                 "service": "light.turn_on", 
                 "target": {
@@ -226,95 +226,100 @@ class automation_update_tests(BaseTestCase):
         ])
         self.assertListEqual(condition, [])
         self.assertListEqual(action, [
-            {
-                "choose": [
-                    {
-                        "conditions": [
-                            {
-                                "condition": "trigger", 
-                                "id": "turn_off", 
+        {
+            "choose": [
+                {
+                    "conditions": [
+                        {
+                            "condition": "trigger",
+                            "id": "turn_off"
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "type": "turn_off",
+                            "device_id": "das2qdasdasdasadaasd",
+                            "entity_id": "light.bulb_ari_lamp",
+                            "domain": "light"
+                        }
+                    ]
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "trigger",
+                            "id": "turn_on"
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "service": "light.turn_on",
+                            "data": {
+                                "color_temp": 153,
+                                "brightness_pct": 100
+                            },
+                            "target": {
+                                "device_id": "das2qdasdasdasadaasd"
                             }
-                        ], 
-                        "sequence": [
-                            {
-                                "action": "device", 
-                                "type": "turn_off", 
-                                "device_id": "das2qdasdasdasadaasd", 
-                                "entity_id": "light.bulb_ari_lamp", 
-                                "domain": "light"
+                        }
+                    ]
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "trigger",
+                            "id": "dim_up"
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "device_id": "das2qdasdasdasadaasd",
+                            "domain": "light",
+                            "entity_id": "light.bulb_ari_lamp",
+                            "type": "brightness_increase"
+                        }
+                    ]
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "trigger",
+                            "id": "dim_down"
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "device_id": "das2qdasdasdasadaasd",
+                            "domain": "light",
+                            "entity_id": "light.bulb_ari_lamp",
+                            "type": "brightness_decrease"
+                        }
+                    ]
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "trigger",
+                            "id": "up_dbclk"
+                        }
+                    ],
+                    "sequence": [
+                        {
+                            "service": "light.turn_on",
+                            "data": {
+                                "color_temp": 500,
+                                "brightness_pct": 100
+                            },
+                            "target": {
+                                "device_id": "das2qdasdasdasadaasd"
                             }
-                        ]
-                    }, 
-                    {
-                        "conditions": [
-                            {
-                                "condition": "trigger", 
-                                "id": "turn_on", 
-                            }
-                        ], 
-                        "sequence": [
-                            {
-                                "action": "service", 
-                                "service": "light.turn_on", 
-                                "data": {"color_temp": 153, "brightness_pct": 100}, 
-                                "target": {"device_id": "das2qdasdasdasadaasd"}
-                            }
-                        ]
-                    }, 
-                    {
-                        "conditions": [
-                            {
-                                "condition": "trigger", 
-                                "id": "dim_up", 
-                            }
-                        ], 
-                        "sequence": [
-                            {
-                                "action": "device", 
-                                "device_id": "das2qdasdasdasadaasd", 
-                                "domain": "light", 
-                                "entity_id": "light.bulb_ari_lamp", 
-                                "type": "brightness_increase"
-                            }
-                        ]
-                    }, 
-                    {
-                        "conditions": [
-                            {
-                                "condition": "trigger", 
-                                "id": "dim_down", 
-                            }
-                        ], 
-                        "sequence": [
-                            {
-                                "action": "device", 
-                                "device_id": "das2qdasdasdasadaasd", 
-                                "domain": "light", 
-                                "entity_id": "light.bulb_ari_lamp", 
-                                "type": "brightness_decrease"
-                            }
-                        ]
-                    }, 
-                    {
-                        "conditions": [
-                            {
-                                "condition": "trigger", 
-                                "id": "up_dbclk", 
-                            }
-                        ], 
-                        "sequence": [
-                            {
-                                "action": "service", 
-                                "service": "light.turn_on", 
-                                "data": {"color_temp": 500, "brightness_pct": 100}, 
-                                "target": {"device_id": "das2qdasdasdasadaasd"}
-                            }
-                        ]
-                    }
-                ], 
-                "default": []
-            }
-        ])
+                        }
+                    ]
+                }
+            ],
+            "default": []
+        }
+    ])
 
 class automation_delete_tests(BaseTestCase):
     def test_delete_some(self):
