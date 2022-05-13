@@ -19,7 +19,7 @@ export const InputList: FC<Props<any>> = ({
   const { classes } = useInputListStyles({
     invalidCurrent
   });
-  return <InputWrapper label={label} labelSize={'small'} noMargin error={invalidCurrent && "Invalid Selection"}>
+  return <InputWrapper label={label} labelSize={'small'} noMargin error={invalidCurrent ? "Invalid Selection" : undefined}>
     <select
       title={invalidCurrent ? "Invalid Selection" : ""}
       className={classes.input}
