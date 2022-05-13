@@ -1,0 +1,8 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/ari/Projects/Shortumation'
+docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml build
+docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml up -d
+sleep 1
+docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml ps
+make: Leaving directory '/home/ari/Projects/Shortumation'
+ 
