@@ -40,13 +40,17 @@
 - id: shortu-2
   alias: Neat trick
   description: ''
-  trigger_variables:
   mode: queued
   trigger: []
   condition: []
   action:
   - alias: Choose
-    default: []
+    default:
+    - condition: and
+      alias: ''
+      conditions:
+      - condition: or
+        conditions: []
     choose: []
   - service: lights.turn_on
     target:

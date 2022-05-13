@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.0.14] - Using vanila ha yaml
+
+- Supporing vanilla out of the box HA yaml as oppose to parsing them (no more $smType)
+- Conditions have now a more a explicit node
+
 ## [0.0.13] - Better Styling with react-flow
 
 - Fixed up styling (using react-flow)
