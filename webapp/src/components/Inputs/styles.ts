@@ -35,6 +35,7 @@ export const useButtonStyles = createAppUseStyles<{}>(theme => ({
 export const useInputWrapperStyles = createAppUseStyles<{
   labelSize: 'normal' | 'small',
   noMargin: boolean,
+  hasError: boolean,
 }>(theme => {
   return {
     wrapper: ({ noMargin }) => ({
@@ -51,7 +52,16 @@ export const useInputWrapperStyles = createAppUseStyles<{
       top: labelSize === 'normal' ? '0.5em' : '0.25em',
       fontWeight: 'bold',
       color: theme.primaryAccent,
-    })
+    }),
+    error: ({ hasError }) => (hasError ? {
+      textAlign: 'center',
+      color: theme.red,
+      padding: '0.25em',
+      border: `1px solid ${theme.red}`,
+      borderTop: 'none',
+      borderBottomRightRadius: 5,
+      borderBottomLeftRadius: 5,
+    } : {})
   }
 })
 
@@ -111,13 +121,17 @@ export const useInputNumberStyles = createAppUseStyles<{}>(theme => {
   }
 });
 
-export const useInputListStyles = createAppUseStyles<{}>(theme => {
+export const useInputListStyles = createAppUseStyles<{
+  invalidCurrent: boolean;
+}>(theme => {
   const styles = commonInputStyle(theme);
   return {
-    input: {
+    input: ({ invalidCurrent }) => ({
       ...styles.input,
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+      borderColor: invalidCurrent ? theme.redAccent : styles.input.borderColor,
+      color: invalidCurrent ? theme.redLight : styles.input.color,
+    }),
   }
 });
 

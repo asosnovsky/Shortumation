@@ -30,6 +30,7 @@ export const {
     red: 'var(--error)',
     redOpaque: 'var(--error-opaque)',
     redAccent: 'var(--error-accent)',
+    redLight: 'var(--error-light)',
 }));
 
 export type GetThemeType<C extends Context<any>> = C extends Context<infer T> ? T : unknown;

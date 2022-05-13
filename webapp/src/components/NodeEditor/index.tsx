@@ -1,12 +1,13 @@
 import "./index.css";
 
-import { FC } from "react";
+import { FC } from 'react';
 import { AutomationNode, AutomationNodeMapping } from 'types/automations/index';
 import { useEditorNodeState } from "./OptionManager";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Button";
+import InputBoolean from "components/Inputs/InputBoolean";
 
-export interface Props {
+export interface NodeEditorProps {
   node: AutomationNode
   allowedTypes?: Array<keyof AutomationNodeMapping>;
   onClose?: () => void;
@@ -15,7 +16,7 @@ export interface Props {
   saveBtnCreateText?: boolean;
 }
 
-export const NodeEditor: FC<Props> = ({
+export const NodeEditor: FC<NodeEditorProps> = ({
   node,
   allowedTypes = ["action", "condition", "trigger"],
   onClose = () => { },
@@ -30,15 +31,14 @@ export const NodeEditor: FC<Props> = ({
   // alias
   const isModified = state.isModified;
   const isReady = state.isReady();
-  const areYouSureNotReady = () => !isReady ?
-    window.confirm("This node is missing some values, are you sure you want to save?") :
+  const areYouSureNotReady = (what: string) => !isReady ?
+    window.confirm(`This node is missing some values, are you sure you want to ${what}?`) :
     true;
 
   // events
   onFlags(isReady, isModified);
-
   // render
-  return <div className={["node-editor--root", isModified ? "modded" : "", !isReady ? 'not-ready' : ''].join(" ")}>
+  return <div className={["node-editor--root", isModified ? "modded" : "", (!isReady && isModified) ? 'not-ready' : ''].join(" ")}>
     <div className="node-editor--body">
       <div className="node-editor--body-title">
         {allowedTypes.length > 1 ? <InputList
@@ -53,14 +53,21 @@ export const NodeEditor: FC<Props> = ({
           options={state.subTypes}
           onChange={state.setSubType}
         /> : <></>}
+        <InputBoolean label="Yaml" onChange={state.setYamlMode} value={state.yamlMode} />
       </div>
       {state.renderOptionList()}
     </div>
     <div className="node-editor--footer">
-      <Button className="node-editor--footer--close" onClick={onClose}>Close</Button>
-      <Button className="node-editor--footer--save" onClick={() => {
-        areYouSureNotReady() && onSave(state.data)
-      }} title={!isReady ? "Some fields have not been properly filled up" : ""}>
+      <Button className="node-editor--footer--close" onClick={() => areYouSureNotReady('close') && onClose()}>Close</Button>
+      <Button
+        className="node-editor--footer--save"
+        onClick={() => {
+          areYouSureNotReady('save') && onSave(state.data)
+        }}
+        title={
+          !isReady ? "Some fields have not been properly filled up" : ""
+        }
+      >
         {saveBtnCreateText ? "Create" : "Save"}
       </Button>
       {children}

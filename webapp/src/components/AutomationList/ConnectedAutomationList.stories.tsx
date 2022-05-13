@@ -2,23 +2,14 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { ConnectedAutomationList } from ".";
 import { createMockAuto } from "utils/mocks";
 import { useMockApiService } from "apiService";
-import * as dgconst from 'components/DAGSvgs/constants';
+import { DEFAULT_DIMS } from 'components/DAGSvgs/constants';
 
 export default {
   title: 'App/AutomationList/Connected',
   component: ConnectedAutomationList,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
-    dims: {
-      nodeHeight: dgconst.NODE_HEIGHT,
-      nodeWidth: dgconst.NODE_WIDTH,
-      distanceFactor: dgconst.DISTANCE_FACTOR,
-      circleSize: dgconst.CIRCLE_SIZE,
-      padding: {
-        x: dgconst.PADDING,
-        y: dgconst.PADDING,
-      },
-    },
+    dims: DEFAULT_DIMS,
     initialAutomations: [],
   }
 } as ComponentMeta<typeof ConnectedAutomationList>;

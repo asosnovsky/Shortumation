@@ -1,6 +1,7 @@
 import * as yaml from "js-yaml";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import InputTextArea from "./InputTextArea";
+import { useDelayedFunction, useDelayEffect } from 'utils/useDelay';
 
 export interface Props<T extends {}> {
   label: string;
@@ -14,25 +15,37 @@ export default function InputYaml<T>({
   onChange,
   resizable,
 }: Props<T>) {
-  const [text, setText] = useState("");
-  useEffect(() => {
-    setText(yaml.dump(value));
-  }, [value]);
-  const delayId = useRef<null | number>(null);
-  const delayedUpdate = (update: string) => {
-    setText(update)
-    if (delayId.current) {
-      window.clearTimeout(delayId.current);
-      delayId.current = null;
+  const [{ text, error }, setState] = useState<{
+    text: string,
+    error: undefined | string,
+  }>({
+    text: yaml.dump(value),
+    error: undefined
+  });
+  const setText = (t: string) => {
+    try {
+      console.log(yaml.dump(yaml.load(t)));
+      setState({ text: t, error: undefined })
+    } catch (_) {
+      setState({ text: t, error: "! Invalid Yaml !" })
     }
-    delayId.current = window.setTimeout(() => {
-      onChange(yaml.load(update) as any)
-    }, 1000);
   }
+  useDelayEffect(() => {
+    if (!error && (yaml.dump(value) !== text)) {
+      if (text) {
+        onChange(yaml.load(text) as any)
+      } else if (Array.isArray(value)) {
+        onChange([] as any)
+      } else {
+        onChange({} as any)
+      }
+    }
+  }, [text], 1000)
   return <InputTextArea
+    error={error}
     label={label}
     value={text}
-    onChange={delayedUpdate}
+    onChange={setText}
     resizable={resizable}
   />
 }

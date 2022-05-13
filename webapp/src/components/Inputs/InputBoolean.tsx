@@ -1,3 +1,4 @@
+import "./InputBoolean.css";
 import InputWrapper from "./InputWrapper";
 
 export interface Props {
@@ -10,12 +11,8 @@ export default function InputBoolean({
   value = false,
   onChange,
 }: Props) {
-  return <InputWrapper label={label}>
-    <span className="checkbox" onClick={e => {
-      e.preventDefault()
-      onChange(!value)
-    }}>
-      {value ? '✔️' : ' '}
-    </span>
-  </InputWrapper>
+  return <div className="input-boolean" onClick={() => onChange(!value)}>
+    <input type="checkbox" checked={value} onChange={() => { }} />
+    <label>{label}</label>
+  </div>
 }

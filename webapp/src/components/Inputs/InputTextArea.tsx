@@ -9,6 +9,7 @@ export interface Props {
   value: string;
   onChange: (v: string) => void;
   additionalTooltipFilters?: Record<string, string>;
+  error?: string;
   resizable?: boolean;
 }
 export default function InputTextArea({
@@ -16,13 +17,14 @@ export default function InputTextArea({
   textBoxFor,
   value = "",
   onChange,
+  error,
   additionalTooltipFilters = {},
   resizable = false,
 }: Props) {
   const { classes } = useInputTextAreaStyles({ resizable });
   const tooltip = useToolTip();
   const [isFocused, setIsFocused] = useState(false)
-  return <InputWrapper label={label} labelSize={(value === '') && !isFocused ? 'normal' : 'small'}>
+  return <InputWrapper error={error} label={label} labelSize={(value === '') && !isFocused ? 'normal' : 'small'}>
     <textarea
       className={classes.input}
       value={value}

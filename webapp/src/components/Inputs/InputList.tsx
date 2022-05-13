@@ -15,17 +15,33 @@ export const InputList: FC<Props<any>> = ({
   current, options, onChange, label,
   ...selattr
 }) => {
-  const { classes } = useInputListStyles({});
-  return <InputWrapper label={label} labelSize={'small'} noMargin>
+  const invalidCurrent = !options.includes(current);
+  const { classes } = useInputListStyles({
+    invalidCurrent
+  });
+  return <InputWrapper label={label} labelSize={'small'} noMargin error={invalidCurrent && "Invalid Selection"}>
     <select
+      title={invalidCurrent ? "Invalid Selection" : ""}
       className={classes.input}
       {...selattr} value={current}
       onChange={e => {
         e.preventDefault();
-        onChange(e.currentTarget.value as any);
+        console.log(e.currentTarget.id)
+        console.log(e.currentTarget.value)
+        console.log(e.currentTarget.innerHTML)
+        if (e.currentTarget.id === 'invalid') {
+          onChange(options[0])
+        } else {
+          onChange(e.currentTarget.value as any);
+        }
       }}
     >
-      {options.map((t, i) => <option id={String(i)} key={i}>{t}</option>)}
+      {options.map((t, i) => <option id={String(i)} key={i} value={t}>{t}</option>)}
+      {invalidCurrent ? <option
+        id={'invalid'}
+        value={current}
+        style={{ display: 'none' }}
+      >!{current}!</option> : <></>}
     </select>
   </InputWrapper>
 }

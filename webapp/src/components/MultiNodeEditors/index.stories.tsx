@@ -10,6 +10,7 @@ export default {
   component: MultiNodeEditor,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
+    allowedTypes: ['action', 'condition', 'trigger'],
     sequence: [
       {
         "condition": "numeric_state",
@@ -28,10 +29,14 @@ export default {
 } as ComponentMeta<typeof MultiNodeEditor>
 
 export const Simple: ComponentStory<typeof MultiNodeEditor> = args => {
+  const [state, setState] = useState(args.sequence);
 
   return <div className="page">
     <div className="center column" style={{ paddingTop: "1em" }}>
-      <MultiNodeEditor {...args} />
+      <MultiNodeEditor {...args} sequence={state} onSave={s => {
+        args.onSave && args.onSave(s)
+        setState(s)
+      }} />
     </div>
   </div>
 }
@@ -39,6 +44,7 @@ export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
 
   const [open, setOpen] = useState(false);
   const [state, setState] = useState(props.sequence);
+  console.log({ state })
   return <div className="page">
     <Button onClick={() => setOpen(!open)}>Open Editor</Button>
     <Modal open={open}>
@@ -46,8 +52,19 @@ export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
         {...props}
         sequence={state}
         onClose={() => setOpen(!open)}
-        onSave={setState}
+        onSave={s => {
+          props.onSave && props.onSave(s)
+          setState(s)
+        }}
       />
     </Modal>
   </div>
 };
+
+
+export const EmptyConditionEditor = Simple.bind({})
+EmptyConditionEditor.args = {
+  ...EmptyConditionEditor.args,
+  allowedTypes: ['condition'],
+  sequence: [],
+}

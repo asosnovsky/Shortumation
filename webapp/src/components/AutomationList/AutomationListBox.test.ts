@@ -5,6 +5,7 @@ import { createMockAuto } from 'utils/mocks';
 test('group automations', () => {
     const automations: AutomationData[] = [
         {
+            condition: [],
             metadata: {
                 id: '1',
                 alias: '',
@@ -19,6 +20,7 @@ test('group automations', () => {
             trigger: [],
         },
         {
+            condition: [],
             metadata: {
                 id: '2',
                 alias: '',
@@ -33,6 +35,7 @@ test('group automations', () => {
             trigger: [],
         },
         {
+            condition: [],
             metadata: {
                 id: '3',
                 alias: '',
