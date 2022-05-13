@@ -1,100 +1,24 @@
 import "./index.css";
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AutomationNode, AutomationNodeMapping } from 'types/automations';
 import { NodeEditor } from 'components/NodeEditor';
 import { Button } from 'components/Inputs/Button';
 import { AutomationTriggerDevice } from 'types/automations/triggers';
+import { useMultiNodeEditorState } from "./state";
+import { MultiNodeEditorProps } from "./types";
 
 
-const makeDefault = (nodeType: keyof AutomationNodeMapping): AutomationNode => {
-  switch (nodeType) {
-    case 'action':
-      return {
-        'data': {},
-        'service': '',
-        'target': {},
-      }
-    case 'condition':
-      return {
-        condition: 'and',
-        conditions: []
-      }
-    default:
-      return {
-        platform: 'device',
-        device_id: '',
-        domain: '',
-        type: '',
-        subtype: '',
-      } as AutomationTriggerDevice
-  }
-}
-
-export interface MultiNodeEditorProps {
-  sequence: AutomationNode[];
-  allowedTypes?: Array<keyof AutomationNodeMapping>;
-  onClose?: () => void;
-  onSave?: (n: AutomationNode[]) => void;
-}
-
-export const MultiNodeEditor: FC<MultiNodeEditorProps> = ({
-  sequence: initialState,
-  allowedTypes = ['action', 'condition'],
-  onClose: _onClose = () => { },
-  onSave = () => { },
-}) => {
+export const MultiNodeEditor: FC<MultiNodeEditorProps> = props => {
   // state
-  const [{ slide, state, isModified, isReady }, setState] = useState({
-    slide: 0,
-    state: initialState,
-    isModified: false,
-    isReady: true,
-  })
-  // alias
-  const areYouSureItsNotReady = () => !isReady ?
-    window.confirm("The node is not ready, are you sure you want to move?") :
-    true
-  const areYouSureItsModified = () => !isModified ?
-    window.confirm("If you close this without saving, you will lose all progress!") :
-    true
-  const onClose = () => areYouSureItsModified() ?
-    _onClose() :
-    null
-  const onAdd = () => setState({
-    slide: state.length,
-    state: [...state, makeDefault(allowedTypes[0])],
-    isReady,
-    isModified: true,
-  });
-  const onRemove = () => setState({
-    slide: slide > 0 ? slide - 1 : 0,
-    state: [...state.slice(0, slide), ...state.slice(slide + 1)],
-    isReady,
-    isModified: true,
-  });
-  const onAllSave = (n: AutomationNode) => onSave([
-    ...state.slice(0, slide), n, ...state.slice(slide + 1)
-  ]);
-  const onNextOrAdd = () => {
-    if (!areYouSureItsNotReady()) {
-      return
-    }
-    if (slide >= state.length - 1) {
-      onAdd()
-    } else {
-      setState({ slide: slide + 1, state, isReady, isModified, })
-    }
-  }
-  const onBack = () => areYouSureItsNotReady() &&
-    setState({ slide: slide - 1, state, isReady, isModified })
+  const state = useMultiNodeEditorState(props)
   // components
   const nextOrAddBtn = <Button
-    onClick={onNextOrAdd}
+    onClick={state.moveForward}
   >
-    {(slide < state.length - 1) ? ">>" : "+"}
+    {!state.isLast ? ">>" : "+"}
   </Button>;
   // branch
-  if (state.length === 0) {
+  if (state.isEmpty) {
     return <div className='column center' style={{
       minWidth: '20vw',
     }}>
@@ -107,30 +31,26 @@ export const MultiNodeEditor: FC<MultiNodeEditorProps> = ({
         {nextOrAddBtn}
       </div>
       <div className='column center' style={{ marginTop: '1em' }}>
-        <Button onClick={onClose}>Close</Button>
-        <Button onClick={() => onSave(state)}>Save</Button>
+        <Button onClick={state.onClose}>Close</Button>
       </div>
     </div>
   }
-  return <div className={["multinode-editor", isModified ? "modded" : ''].join(' ')}>
+  return <div className={["multinode-editor", state.isModified ? "modded" : ''].join(' ')}>
     <div className="multinode-editor--navbar">
-      <Button onClick={onBack} disabled={slide === 0}>{"<<"}</Button>
-      <Button onClick={onRemove}> Delete</Button>
+      <Button onClick={state.moveBack} disabled={state.currentSlideNumber === 0}>{"<<"}</Button>
+      <Button onClick={state.onRemove}> Delete</Button>
       {nextOrAddBtn}
     </div>
     <NodeEditor
-      key={slide}
-      node={state[slide]}
-      allowedTypes={allowedTypes}
-      onClose={onClose}
-      onSave={onAllSave}
-      onFlags={
-        (ir) => (ir !== isReady) &&
-          setState({ slide, state, isReady: ir, isModified })
-      }
+      key={state.currentSlideNumber}
+      node={state.currentSlide}
+      allowedTypes={props.allowedTypes}
+      onClose={state.onClose}
+      onSave={state.onSave}
+      onFlags={state.updateInternalNode}
     />
     <div className='column center'>
-      <span>{slide + 1}/{state.length}</span>
+      <span>{state.currentSlideNumber + 1}/<u className="multinode-editor--total">{state.totalSlides}</u></span>
     </div>
   </div>
 }

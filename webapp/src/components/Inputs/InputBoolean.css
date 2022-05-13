@@ -1,0 +1,20 @@
+.input-boolean {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+    border: 1px solid var(--secondary-accent);
+    border-radius: 5px;
+    padding: 0.5em;
+    background-color: var(--secondary);
+}
+
+.input-boolean:hover, .input-boolean:hover * {
+    cursor: pointer;
+    background-color: var(--secondary-opaque);
+}
+
+.input-boolean * {
+    user-select: none;
+}

@@ -18,7 +18,6 @@ export const useAutomatioEditorState = (
     const [state, update] = useState<EditorState>({
         status: "loading",
     });
-
     const makeUpdate = <K extends keyof EditorData, D extends EditorData[K]>(name: K) => (
         data: D
     ) => state.status !== 'loading' && update({

@@ -13,3 +13,7 @@
 .multinode-editor.modded>.multinode-editor--navbar * {
     border-color: var(--green-light);
 }
+
+.multinode-editor.modded .multinode-editor--total {
+    color: var(--green-light)
+}

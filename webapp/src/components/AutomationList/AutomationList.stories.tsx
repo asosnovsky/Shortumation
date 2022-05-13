@@ -10,16 +10,7 @@ export default {
   component: AutomationList,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
-    dims: {
-      nodeHeight: dgconst.NODE_HEIGHT,
-      nodeWidth: dgconst.NODE_WIDTH,
-      distanceFactor: dgconst.DISTANCE_FACTOR,
-      circleSize: dgconst.CIRCLE_SIZE,
-      padding: {
-        x: dgconst.PADDING,
-        y: dgconst.PADDING,
-      },
-    }
+    dims: dgconst.DEFAULT_DIMS
   }
 } as ComponentMeta<typeof AutomationList>;
 

@@ -1,7 +1,9 @@
-import { AutomationNode, AutomationNodeSubtype, AutomationNodeTypes } from "types/automations";
+import { AutomationNode, AutomationNodeMapping, AutomationNodeSubtype, AutomationNodeTypes } from "types/automations";
+import { AutomationTrigger } from 'types/automations/triggers';
 
 
 export const getNodeType = (node: AutomationNode): AutomationNodeTypes => {
+    console.log({ node })
     if ('condition' in node) {
         return 'condition'
     } else if ('platform' in node) {
@@ -50,5 +52,30 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): Auto
             ] as any
         default:
             return [];
+    }
+}
+
+
+export const makeDefault = (nodeType: keyof AutomationNodeMapping): AutomationNode => {
+    switch (nodeType) {
+        case 'action':
+            return {
+                'data': {},
+                'service': '',
+                'target': {},
+            }
+        case 'condition':
+            return {
+                condition: 'and',
+                conditions: []
+            }
+        default:
+            return {
+                platform: 'device',
+                device_id: '',
+                domain: '',
+                type: '',
+                subtype: '',
+            } as AutomationTrigger
     }
 }

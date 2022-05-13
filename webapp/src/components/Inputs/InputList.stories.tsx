@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 
 import { InputList } from "./InputList";
 
@@ -12,7 +12,12 @@ export default {
 
 const Template: ComponentStory<typeof InputList> = args => {
 
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState(args.current);
+  useEffect(() => {
+    if (value !== args.current) {
+      setValue(args.current)
+    }
+  }, [args.current])
   return <div className="page">
     <InputList {...args} current={value} onChange={setValue} />
   </div>
@@ -20,6 +25,18 @@ const Template: ComponentStory<typeof InputList> = args => {
 
 export const SimpleText = Template.bind({})
 SimpleText.args = {
+  label: "Entity ID",
+  options: [
+    'Bob',
+    'Martin',
+    "Toots"
+  ]
+}
+
+
+export const InvalidSelection = Template.bind({})
+InvalidSelection.args = {
+  current: "Derek",
   label: "Entity ID",
   options: [
     'Bob',
