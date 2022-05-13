@@ -1,9 +1,7 @@
 import "./index.css";
-import { FC, useEffect, useState } from 'react';
-import { AutomationNode, AutomationNodeMapping } from 'types/automations';
+import { FC } from 'react';
 import { NodeEditor } from 'components/NodeEditor';
 import { Button } from 'components/Inputs/Button';
-import { AutomationTriggerDevice } from 'types/automations/triggers';
 import { useMultiNodeEditorState } from "./state";
 import { MultiNodeEditorProps } from "./types";
 

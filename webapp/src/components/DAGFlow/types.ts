@@ -3,7 +3,7 @@ import { AutomationSequenceNode } from 'types/automations';
 import { DAGCircleProps } from './DAGCircle';
 import { DAGNodeProps } from './DAGNode';
 import { AutomationTrigger } from 'types/automations/triggers';
-import { MultiNodeEditorProps } from 'components/MultiNodeEditors';
+import { MultiNodeEditorProps } from 'components/MultiNodeEditors/types';
 
 
 export type DAGAutomationFlowDims = {
