@@ -1,10 +1,7 @@
-from itertools import chain
-from typing import Iterable, Iterator
+from typing import Iterator, Union
 from pydantic.error_wrappers import ValidationError
-from src.automations.tags import TagManager
 from src.json_serializer import normalize_obj
-from .types import AutomationData, AutomationMetdata, ExtenededAutomationData
-from .parsers import _parse_actions
+from .types import AutomationMetdata, ExtenededAutomationData
 from .errors import InvalidAutomationFile
 
 # Single loader
@@ -25,16 +22,30 @@ def load_automation(
     try:
         yield ExtenededAutomationData(
             metadata=AutomationMetdata.parse_obj(auto_raw),
-            sequence=list(
-                _parse_actions(
-                    chain(
-                        auto_raw.get("condition", []),
-                        auto_raw.get("action", []),
-                    )
-                )
-            ),
-            trigger=[normalize_obj(obj) for obj in auto_raw.get("trigger", [])],
+            condition=load_conditions(auto_raw.get("condition", [])),
+            sequence=load_conditions(auto_raw.get("action", [])),
+            trigger=normalize_obj(auto_raw.get("trigger", [])),
             tags=tags,
         )
     except ValidationError as err:
         raise InvalidAutomationFile from err
+
+
+def load_conditions(conditions: Union[dict, list, str]):
+    if isinstance(conditions, list):
+        return list(map(ensure_condition_dictionary, conditions))
+    else:
+        return [
+            ensure_condition_dictionary(conditions)
+        ]
+
+def ensure_condition_dictionary(c: Union[str, dict]):
+    c = normalize_obj(c)
+    if isinstance(c, str):
+        return {
+            "condition": "template",
+            "value_template": c
+        }
+    elif isinstance(c, dict):
+        return c
+    raise InvalidAutomationFile(f"Invalid type for condition object {c}")
