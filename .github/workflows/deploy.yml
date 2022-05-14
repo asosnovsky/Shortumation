@@ -9,8 +9,8 @@ on:
         description: Bump Version
         default: v1.0.0
         required: true
-    description: 
-      required: true
+      description: 
+        required: true
 
 jobs:
   init:
