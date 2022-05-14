@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.15] - Publish to dockerhub
+
+- Publishing images to docker hub
+
 ## [0.0.14] - Using vanila ha yaml
 
 - Supporing vanilla out of the box HA yaml as oppose to parsing them (no more $smType)
