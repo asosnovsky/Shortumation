@@ -6,8 +6,6 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Bump Version
-        default: ${{ github.ref }}
         required: true
       description: 
         required: true
