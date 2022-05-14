@@ -2,17 +2,15 @@ name: Build add-on
 env:
   BUILD_ARGS: "--test"
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
-on:
+on: 
   workflow_dispatch:
-    inputs: 
-      description: Bump Version
-      required: true
+    inputs:
+      version:
+        description: Bump Version
+        default: v1.0.0
+        required: true
     description: 
       required: true
-    
-  push:
-    tags:
-      - 'v*' 
 
 jobs:
   init:
