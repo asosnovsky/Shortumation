@@ -7,7 +7,7 @@ on:
     inputs:
       version:
         description: Bump Version
-        default: v1.0.0
+        default: ${{ github.ref }}
         required: true
       description: 
         required: true
