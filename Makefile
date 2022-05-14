@@ -1,7 +1,13 @@
 DC=docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml
 
-local_run:
+build:
 	$(DC) build
+
+push:
+	$(DC) push
+
+local_run:
+	$(MAKE) build
 	$(DC) up -d
 	sleep 1
 	$(DC) ps
