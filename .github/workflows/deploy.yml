@@ -18,20 +18,24 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
       - name: Login to DockerHub
         uses: docker/login-action@v2.0.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build ${{ matrix.arch }}
+      - name: Build ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
         run: |
           ARCH=${{ matrix.arch }} && \
-          BUILD_TAG=${{ github.ref }} && \
+          BUILD_TAG=${{ steps.get_version.outputs.VERSION }} && \
           make build
 
-      - name: Push ${{ matrix.arch }}
+      - name: Push ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
         run: |
           ARCH=${{ matrix.arch }} && \
-          BUILD_TAG=${{ github.ref }} && \
+          BUILD_TAG=${{ steps.get_version.outputs.VERSION }} && \
           make push
