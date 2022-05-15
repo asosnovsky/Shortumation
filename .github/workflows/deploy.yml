@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
+      - name: ${{ github.ref }} / ${{ matrix.arch }}
         uses: home-assistant/builder@2022.03.1
         with:
           args: |
