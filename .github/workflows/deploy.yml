@@ -12,9 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Deploy
-    # strategy:
-    #   matrix:
-    #     arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
     steps:
       - name: Check out repository
@@ -46,6 +46,6 @@ jobs:
         uses: home-assistant/builder@2022.03.1
         with:
           args: |
-            --all \
+            --${{ matrix.arch }} \
             --target . \
             --docker-hub /asosnovsky/shortumation
