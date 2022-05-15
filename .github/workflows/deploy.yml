@@ -47,6 +47,5 @@ jobs:
         with:
           args: |
             --all \
-            --version ${{ steps.get_version.outputs.VERSION }} \
             --target . \
-            --docker-hub asosnovsky/shortumation
+            --docker-hub /asosnovsky/shortumation
