@@ -15,10 +15,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)-g$(echo ${{ github.sha }} | cut -c1-5 )
 
       - name: Login to DockerHub
         uses: docker/login-action@v2.0.0
@@ -30,6 +26,5 @@ jobs:
         uses: home-assistant/builder@2022.03.1
         with:
           args: |
-            --version ${{ steps.get_version.outputs.VERSION }} \
             --${{ matrix.arch }} \
             --target . 

@@ -1,5 +1,5 @@
 name: Shortumation
-version: v0.1.1-gc830f
+version: 0.1.1b
 slug: shortumation
 image: asosnovsky/shortumation-{arch}
 url: "https://github.com/asosnovsky/Shortumation"
