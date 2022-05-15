@@ -2,12 +2,13 @@ name: Build add-on
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
 on: 
-  release:
-    types: [published]
+  workflow_dispatch:
+  push:
+    branch: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Deploy ${{ github.ref }}
+    name: Test ${{ github.sha }}
     strategy:
       matrix:
         arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
@@ -27,5 +28,6 @@ jobs:
         uses: home-assistant/builder@2022.03.1
         with:
           args: |
+            --test \
             --${{ matrix.arch }} \
             --target . 
