@@ -14,6 +14,11 @@ jobs:
         arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
       - name: Check out repository
         uses: actions/checkout@v3
 
