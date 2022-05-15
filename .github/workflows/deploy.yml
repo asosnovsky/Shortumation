@@ -6,6 +6,8 @@ on:
   workflow_dispatch:
   release:
     types: [published]
+  push:
+    branch: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
