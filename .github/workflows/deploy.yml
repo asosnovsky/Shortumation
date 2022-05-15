@@ -47,5 +47,4 @@ jobs:
         with:
           args: |
             --${{ matrix.arch }} \
-            --target . \
-            --docker-hub /asosnovsky/shortumation
+            --target . 
