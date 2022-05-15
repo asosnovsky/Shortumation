@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-      - name: Publish
+      - name: ${{ matrix.arch }}
         uses: home-assistant/builder@2022.03.1
         with:
           args: |
