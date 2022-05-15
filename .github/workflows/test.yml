@@ -1,4 +1,4 @@
-name: Test add-on
+name: Test
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
 on: 
@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test ${{ github.sha }}
+    name: ${{ matrix.arch }}
     strategy:
       matrix:
         arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]

@@ -1,4 +1,4 @@
-name: Build add-on
+name: Deploy
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
 on: 
@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Deploy ${{ github.ref }}
+    name: ${{ matrix.arch }}
     strategy:
       matrix:
         arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
