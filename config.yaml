@@ -8,10 +8,11 @@ arch:
   - aarch64
   - amd64
   - armhf
-  - armv7
+  - armv7s
   - i386
 startup: application
 boot: auto
+init: false
 ingress: true
 ingress_port: 8000
 ingress_entry: "web/"
