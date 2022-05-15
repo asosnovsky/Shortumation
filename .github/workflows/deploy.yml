@@ -32,10 +32,10 @@ jobs:
         run: |
           ARCH=${{ matrix.arch }} && \
           BUILD_TAG=${{ steps.get_version.outputs.VERSION }} && \
-          make build
+          docker-compose -f docker-compose.build.yaml build
 
       - name: Push ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
         run: |
           ARCH=${{ matrix.arch }} && \
           BUILD_TAG=${{ steps.get_version.outputs.VERSION }} && \
-          make push
+          docker-compose -f docker-compose.build.yaml push
