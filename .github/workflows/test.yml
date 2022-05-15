@@ -1,4 +1,4 @@
-name: Build add-on
+name: Test add-on
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
 on: 
