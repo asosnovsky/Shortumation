@@ -11,10 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build ${{ github.ref }} / ${{ matrix.arch }} 
-    strategy:
-      matrix:
-        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+    name: Deploy
+    # strategy:
+    #   matrix:
+    #     arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
     steps:
       - name: Check out repository
@@ -30,14 +30,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
-        run: |
-          ARCH=${{ matrix.arch }} \
-          BUILD_TAG=${{ steps.get_version.outputs.VERSION }} \
-          docker-compose -f docker-compose.build.yaml build
+      # - name: Build ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
+      #   run: |
+      #     ARCH=${{ matrix.arch }} \
+      #     BUILD_TAG=${{ steps.get_version.outputs.VERSION }} \
+      #     docker-compose -f docker-compose.build.yaml build
 
-      - name: Push ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
-        run: |
-          ARCH=${{ matrix.arch }} \
-          BUILD_TAG=${{ steps.get_version.outputs.VERSION }} \
-          docker-compose -f docker-compose.build.yaml push
+      # - name: Push ${{ steps.get_version.outputs.VERSION }} / ${{ matrix.arch }}
+      #   run: |
+      #     ARCH=${{ matrix.arch }} \
+      #     BUILD_TAG=${{ steps.get_version.outputs.VERSION }} \
+      #     docker-compose -f docker-compose.build.yaml push
+
+      - name: Publish
+        uses: home-assistant/builder@2022.03.1
+        with:
+          args: |
+            --all \
+            --version ${{ steps.get_version.outputs.VERSION }} \
+            --target . \
+            --docker-hub asosnovsky/shortumation
