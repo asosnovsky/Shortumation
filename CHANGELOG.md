@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.2] - Docker Hub Images
+
+- Publishing images to docker hub is now stable
+
 ## [0.0.15] - Publish to dockerhub
 
 - Publishing images to docker hub
