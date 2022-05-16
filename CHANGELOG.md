@@ -1,4 +1,4 @@
-# Changelog
+# Changelog -- [![GitHub version](https://badge.fury.io/gh/asosnovsky%2FShortumation.svg)](https://badge.fury.io/gh/asosnovsky%2FShortumation)
 
 ## [0.1.2] - Docker Hub Images
 
