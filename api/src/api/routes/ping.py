@@ -1,5 +1,6 @@
-from fastapi import APIRouter
 from datetime import datetime
+
+from fastapi import APIRouter
 
 from src.env import BUILD_VERSION
 

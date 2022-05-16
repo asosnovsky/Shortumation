@@ -1,5 +1,10 @@
 from ruamel.yaml import YAML
-from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir, SecretValue
+
+from src.yaml_serializer.types import (
+    IncludedYaml,
+    IncludedYamlDir,
+    SecretValue,
+)
 
 yaml = YAML()
 yaml.register_class(IncludedYaml)

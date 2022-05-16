@@ -1,6 +1,8 @@
 from typing import Dict, List, Literal, Optional, Union
-from pydantic.fields import Field
+
 from pydantic import BaseModel
+from pydantic.fields import Field
+
 
 class AutomationMetdata(BaseModel):
     id: str
@@ -14,7 +16,7 @@ class AutomationData(BaseModel):
     metadata: AutomationMetdata
     trigger: List[dict] = []
     condition: List[dict] = []
-    sequence: List[dict] = [] 
+    sequence: List[dict] = []
 
     def to_primitive(self):
         return {
@@ -23,6 +25,7 @@ class AutomationData(BaseModel):
             "condition": self.condition,
             "action": self.sequence,
         }
+
 
 class ExtenededAutomationData(AutomationData):
     tags: Dict[str, str] = Field(default_factory=dict)

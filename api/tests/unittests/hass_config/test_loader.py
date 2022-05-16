@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from src.automations.types import AutomationData, AutomationMetdata
 from src.hass_config.errors import MissingFile
 from src.hass_config.loader import HassConfig

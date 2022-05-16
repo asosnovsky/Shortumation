@@ -1,6 +1,8 @@
 import os
-from decouple import config
 from pathlib import Path
+
+from decouple import config
+
 from .loader import HassConfig
 
 
@@ -9,7 +11,7 @@ def find_hass_config() -> HassConfig:
     if config("USE_EXAMPLE_REPO", False, cast=bool):
         print("using USE_EXAMPLE_REPO")
         from tests.utils import create_copy_of_example_config
-        
+
         path = create_copy_of_example_config()
         print("|-> ", path)
         return HassConfig(path)

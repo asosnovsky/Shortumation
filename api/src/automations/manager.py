@@ -1,7 +1,9 @@
 from typing import Iterator, List, Optional
+
 from src.automations.errors import FailedDeletion
 from src.automations.types import AutomationData, ExtenededAutomationData
 from src.hass_config.loader import HassConfig
+
 from .loader import load_automation
 
 
@@ -45,7 +47,7 @@ class AutomationManager:
         tags[index] = automation.tags
         self.hass_config.save_automations(automations)
         self.hass_config.save_tags(tags)
-        
+
     def delete(self, index: int):
         automations: List[dict] = []
         deleted = False

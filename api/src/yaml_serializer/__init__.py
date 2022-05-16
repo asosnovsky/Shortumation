@@ -1,5 +1,6 @@
 import io
-from typing import Any, Union, TextIO
+from typing import Any, TextIO, Union
+
 from src.yaml_serializer.base_yaml import yaml
 
 

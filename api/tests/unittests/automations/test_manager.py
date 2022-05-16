@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from src.automations.errors import FailedDeletion, InvalidAutomationFile
 from src.automations.types import AutomationMetdata, ExtenededAutomationData
 from tests.utils import (

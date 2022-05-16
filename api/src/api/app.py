@@ -1,10 +1,11 @@
-from sys import prefix
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
 from src.automations.manager import AutomationManager
-from src.env import ROOT_FOLDER, ORIGIN
-from .routes import ping, automations, details
+from src.env import ORIGIN, ROOT_FOLDER
+
+from .routes import automations, details, ping
 
 
 def make_app(automation_mgr: AutomationManager) -> FastAPI:

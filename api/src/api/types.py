@@ -1,7 +1,9 @@
 from typing import Generic, List, TypeVar
+
 from pydantic import BaseModel
 from pydantic.fields import Field
 from pydantic.generics import GenericModel
+
 from src.automations.types import ExtenededAutomationData
 
 DataT = TypeVar("DataT")

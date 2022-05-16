@@ -1,18 +1,16 @@
 import io
 from unittest import TestCase
-from src.yaml_serializer import (
-    dump_yaml,
-    load_yaml,
-)
+
+from src.yaml_serializer import dump_yaml, load_yaml
 from src.yaml_serializer.types import (
     IncludedYaml,
-    SecretValue,
     IncludedYamlDir,
+    SecretValue,
 )
 from tests.utils import SAMPLES_FOLDER
 
-class dumping_yamls_tests(TestCase):
 
+class dumping_yamls_tests(TestCase):
     def test_dumping_includes(self):
         yaml = dump_yaml(
             {

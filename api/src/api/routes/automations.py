@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from src.automations.manager import AutomationManager
+
 from src.api.types import (
     DeleteAutoRequest,
     ListData,
@@ -7,6 +7,7 @@ from src.api.types import (
     UpdateAutoRequest,
 )
 from src.automations.errors import FailedDeletion
+from src.automations.manager import AutomationManager
 from src.automations.types import AutomationData
 
 

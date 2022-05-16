@@ -1,8 +1,12 @@
 from typing import Iterator, Union
+
 from pydantic.error_wrappers import ValidationError
+
 from src.json_serializer import normalize_obj
-from .types import AutomationMetdata, ExtenededAutomationData
+
 from .errors import InvalidAutomationFile
+from .types import AutomationMetdata, ExtenededAutomationData
+
 
 # Single loader
 def load_automation(
@@ -35,17 +39,13 @@ def load_conditions(conditions: Union[dict, list, str]):
     if isinstance(conditions, list):
         return list(map(ensure_condition_dictionary, conditions))
     else:
-        return [
-            ensure_condition_dictionary(conditions)
-        ]
+        return [ensure_condition_dictionary(conditions)]
+
 
 def ensure_condition_dictionary(c: Union[str, dict]):
     c = normalize_obj(c)
     if isinstance(c, str):
-        return {
-            "condition": "template",
-            "value_template": c
-        }
+        return {"condition": "template", "value_template": c}
     elif isinstance(c, dict):
         return c
     raise InvalidAutomationFile(f"Invalid type for condition object {c}")

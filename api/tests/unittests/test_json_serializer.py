@@ -1,11 +1,13 @@
 import json
 from unittest import TestCase
-from ruamel.yaml.scalarstring import ScalarString
-from ruamel.yaml.scalarint import ScalarInt
+
 from ruamel.yaml.scalarbool import ScalarBoolean
 from ruamel.yaml.scalarfloat import ScalarFloat
-from src.yaml_serializer.types import SecretValue, NOT_IMPLEMENTED_SV_MSG
+from ruamel.yaml.scalarint import ScalarInt
+from ruamel.yaml.scalarstring import ScalarString
+
 from src.json_serializer import json_dumps
+from src.yaml_serializer.types import NOT_IMPLEMENTED_SV_MSG, SecretValue
 
 
 class json_serializer_tests(TestCase):

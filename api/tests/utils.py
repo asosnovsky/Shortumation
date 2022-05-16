@@ -1,11 +1,11 @@
+from pathlib import Path
 from shutil import copytree
 from tempfile import mkdtemp
-from pathlib import Path
 from typing import List, Literal, Optional, Tuple
+
 from src.automations.manager import AutomationManager
 from src.automations.types import AutomationData
 from src.hass_config.loader import HassConfig
-
 from src.yaml_serializer import dump_yaml
 from src.yaml_serializer.types import IncludedYaml
 
@@ -15,7 +15,9 @@ HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "config"
 HA_CONFIG2_EXAMPLE = SAMPLES_FOLDER / "config-2"
 
 
-def get_example_automation_loader(config_to_copy: Path = HA_CONFIG_EXAMPLE) -> Tuple[Path, HassConfig, AutomationManager]:
+def get_example_automation_loader(
+    config_to_copy: Path = HA_CONFIG_EXAMPLE,
+) -> Tuple[Path, HassConfig, AutomationManager]:
     """Creates an example automation loader from the samples folder
 
     Returns:

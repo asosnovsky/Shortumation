@@ -10,7 +10,7 @@ setup:
 	$(PIP) install .[dev]
 
 lint:
-	$(VENV_BIN)/vulture --exclude src
+	$(VENV_BIN)/vulture src .vulture_whitelist
 	$(MAKE) lint-project 
 	$(MAKE) lint-tests 
 

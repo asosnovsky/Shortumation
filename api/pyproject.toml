@@ -29,3 +29,15 @@ exclude = '''
 
 [tool.coverage.run]
 omit = ["./venv/*", "tests/*"]
+
+[[tool.mypy.overrides]]
+module = "decouple.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "ruamel.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_missing_imports = true

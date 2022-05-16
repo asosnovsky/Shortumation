@@ -1,13 +1,8 @@
 from unittest import TestCase
-from src.automations.types import (
-    AutomationMetdata,
-    ExtenededAutomationData,
-)
+
 from src.automations.loader import load_automation
-from src.yaml_serializer.types import (
-    SecretValue,
-    NOT_IMPLEMENTED_SV_MSG,
-)
+from src.automations.types import AutomationMetdata, ExtenededAutomationData
+from src.yaml_serializer.types import NOT_IMPLEMENTED_SV_MSG, SecretValue
 
 
 class loader_tests(TestCase):
@@ -31,7 +26,7 @@ class loader_tests(TestCase):
                     ],
                     "mode": "single",
                 },
-                {}
+                {},
             )
         )
         self.assertEqual(
@@ -44,10 +39,12 @@ class loader_tests(TestCase):
                     mode="single",
                 ),
                 trigger=[{"platform": "homeassistant", "event": "shutdown"}],
-                condition=[{
-                    "condition": "template",
-                    "value_template": "states(time.time) >= '10:00:00'",
-                }],
+                condition=[
+                    {
+                        "condition": "template",
+                        "value_template": "states(time.time) >= '10:00:00'",
+                    }
+                ],
                 sequence=[
                     {
                         "device_id": NOT_IMPLEMENTED_SV_MSG,
@@ -57,6 +54,6 @@ class loader_tests(TestCase):
                         "message": "Hassio Is turning off...",
                     }
                 ],
-                tags={}
+                tags={},
             ),
         )

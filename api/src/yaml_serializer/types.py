@@ -1,4 +1,5 @@
 from typing import NamedTuple
+
 from ruamel.yaml.nodes import Node
 from ruamel.yaml.representer import BaseRepresenter
 

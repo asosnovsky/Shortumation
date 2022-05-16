@@ -1,9 +1,9 @@
-from fastapi import APIRouter
 from datetime import datetime
 
-from src.hass_config import HassConfig
-from src.env import BUILD_VERSION
+from fastapi import APIRouter
 
+from src.env import BUILD_VERSION
+from src.hass_config import HassConfig
 
 
 def make_details_router(hass_config: HassConfig) -> APIRouter:
