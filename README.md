@@ -1,6 +1,11 @@
 # Shortumation [![GitHub version](https://badge.fury.io/gh/asosnovsky%2FShortumation.svg)](https://badge.fury.io/gh/asosnovsky%2FShortumation)
 
-![image](https://user-images.githubusercontent.com/7451445/167028000-41528244-47be-408e-8f47-55187c0e5dcd.png)
+
+
+![image](https://user-images.githubusercontent.com/7451445/168672575-fb19997d-fe9b-4192-96b0-733b62519797.png)
+
+![image](https://user-images.githubusercontent.com/7451445/168672840-71ceaa8a-2bee-443e-9150-5b0f03b05d08.png)
+
 
 A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
 
