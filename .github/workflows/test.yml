@@ -45,10 +45,12 @@ jobs:
     strategy:
       matrix:
         action: [lint, coverage, security-checks]
-    container:
-      image: python:3.9
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
       - name: Install Dependencies
         run: cd api && make setup
       - name: Echo dependencies
