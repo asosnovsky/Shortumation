@@ -1,5 +1,4 @@
 import os
-from typing import cast
 from decouple import config
 from pathlib import Path
 from .loader import HassConfig
@@ -15,8 +14,9 @@ def find_hass_config() -> HassConfig:
         print("|-> ", path)
         return HassConfig(path)
 
-    if "HASSIO_TOKEN" in os.environ:
-        return HassConfig(Path("/config"))
+    config_dir = Path("/config")
+    if config_dir.is_dir():
+        return HassConfig(config_dir)
 
     """Put together the default configuration directory based on the OS."""
     data_dir = Path(config("APPDATA", None) if os.name == "nt" else os.path.expanduser("~"))

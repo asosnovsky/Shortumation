@@ -12,21 +12,22 @@ from src.yaml_serializer.types import IncludedYaml
 THIS_FOLDER = Path(__file__).parent
 SAMPLES_FOLDER = THIS_FOLDER / "samples"
 HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "config"
+HA_CONFIG2_EXAMPLE = SAMPLES_FOLDER / "config-2"
 
 
-def get_example_automation_loader() -> Tuple[Path, HassConfig, AutomationManager]:
+def get_example_automation_loader(config_to_copy: Path = HA_CONFIG_EXAMPLE) -> Tuple[Path, HassConfig, AutomationManager]:
     """Creates an example automation loader from the samples folder
 
     Returns:
         Tuple[Path, HassConfig, AutomationManager]
     """
-    root_folder = create_copy_of_example_config()
+    root_folder = create_copy_of_example_config(config_to_copy)
     hass_config = HassConfig(root_folder)
     automation_loader = AutomationManager(hass_config)
     return root_folder, hass_config, automation_loader
 
 
-def create_copy_of_example_config() -> Path:
+def create_copy_of_example_config(config_to_copy: Path = HA_CONFIG_EXAMPLE) -> Path:
     """Creates a copy of the example config folder
 
     Returns:
@@ -34,7 +35,7 @@ def create_copy_of_example_config() -> Path:
     """
     root_folder = Path(mkdtemp())
     root_folder.rmdir()
-    copytree(HA_CONFIG_EXAMPLE, root_folder)
+    copytree(config_to_copy, root_folder)
     return root_folder
 
 

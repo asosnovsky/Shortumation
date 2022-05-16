@@ -34,6 +34,7 @@ def normalize_obj(obj: Any) -> Any:
         or isinstance(obj, int)
         or isinstance(obj, float)
         or isinstance(obj, bool)
+        or obj is None
     ):
         return obj
     else:

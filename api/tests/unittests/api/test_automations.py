@@ -3,7 +3,7 @@ from unittest import TestCase
 from fastapi.testclient import TestClient
 from src.api.app import make_app
 from src.automations.types import AutomationData, AutomationMetdata, ExtenededAutomationData
-from tests.utils import get_example_automation_loader
+from tests.utils import HA_CONFIG2_EXAMPLE, get_example_automation_loader
 
 
 class BaseTestCase(TestCase):
@@ -17,6 +17,13 @@ class BaseTestCase(TestCase):
 
 
 class automation_list_tests(BaseTestCase):
+    
+    test_params = {
+        "total": 28,
+        "subtest2_found_items": 3,
+        "subtest1_found_items": 10
+    }
+
     def test_get_list_of_everything(self):
         data = self.client.post(
             "/automations/list",
@@ -34,8 +41,8 @@ class automation_list_tests(BaseTestCase):
                 "limit": 50,
             },
         )
-        self.assertEqual(d["totalItems"], 28)
-        self.assertEqual(len(d["data"]), 28)
+        self.assertEqual(d["totalItems"], self.test_params['total'])
+        self.assertEqual(len(d["data"]), self.test_params['total'])
 
     def test_subset1(self):
         data = self.client.post(
@@ -54,8 +61,8 @@ class automation_list_tests(BaseTestCase):
                 "limit": 10,
             },
         )
-        self.assertEqual(d["totalItems"], 28)
-        self.assertEqual(len(d["data"]), 10)
+        self.assertEqual(d["totalItems"], self.test_params['total'])
+        self.assertEqual(len(d["data"]), self.test_params["subtest1_found_items"])
 
     def test_subset2(self):
         data = self.client.post(
@@ -74,8 +81,23 @@ class automation_list_tests(BaseTestCase):
                 "limit": 10,
             },
         )
-        self.assertEqual(d["totalItems"], 28)
-        self.assertEqual(len(d["data"]), 3)
+        self.assertEqual(d["totalItems"], self.test_params['total'])
+        self.assertEqual(len(d["data"]), self.test_params["subtest2_found_items"])
+
+class automation2_lists_tests(automation_list_tests):
+    test_params = {
+        "total": 1,
+        "subtest2_found_items": 0,
+        "subtest1_found_items": 1,
+    }
+    def setUp(self) -> None:
+        (
+            self.config_folder,
+            self.hass_config,
+            self.automation_loader,
+        ) = get_example_automation_loader(HA_CONFIG2_EXAMPLE)
+        self.client = TestClient(make_app(self.automation_loader))
+
 
 
 class automation_update_tests(BaseTestCase):
