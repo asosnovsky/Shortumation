@@ -13,10 +13,12 @@ export default {
 
 
 const Template: ComponentStory<typeof AutomationListBox> = args => {
-  const [autos, setAutos] = useState(args.automations)
-  console.log({ args })
+  const [selected, setSelected] = useState(args.selected)
   return <div className="page">
-    <AutomationListBox {...args} automations={autos} />
+    <AutomationListBox {...args} automations={args.automations} selected={selected} onSelectAutomation={(i) => {
+      setSelected(i)
+      args.onSelectAutomation(i)
+    }} />
   </div>
 }
 

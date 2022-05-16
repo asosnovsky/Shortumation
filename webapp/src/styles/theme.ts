@@ -16,8 +16,8 @@ export const {
     primaryLightOpaque: 'var(--primary-light-opaque)',
     secondary: 'var(--secondary)',
     secondaryOpaque: 'var(--secondary-opaque)',
-    primaryAccent: 'var(--primary-acccent)',
-    primaryAccentLight: 'var(--primary-acccent-light)',
+    primaryAccent: 'var(--primary-accent)',
+    primaryAccentLight: 'var(--primary-accent-light)',
     secondaryAccent: 'var(--secondary-accent)',
     condition: {
         primaryColor: 'var(--condition-primary)',

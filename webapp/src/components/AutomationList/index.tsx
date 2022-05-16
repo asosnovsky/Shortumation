@@ -42,6 +42,7 @@ export const AutomationList: FC<AutomationListParams> = ({
           setCurrent(automations.length)
         }}
         onSelectAutomation={setCurrent}
+        selected={current}
         onRemove={onRemove}
       />
       <ButtonIcon

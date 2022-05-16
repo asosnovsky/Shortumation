@@ -9,6 +9,7 @@ import { TrashIcon } from "components/Icons";
 
 export type Props = {
     automations: AutomationData[];
+    selected: number;
     onSelectAutomation: (i: number) => void;
     onRemove: (i: number) => void;
     onAdd: () => void;
@@ -16,6 +17,7 @@ export type Props = {
 
 export const AutomationListBox: FC<Props> = ({
     automations,
+    selected,
     onSelectAutomation,
     onAdd,
     onRemove,
@@ -23,9 +25,9 @@ export const AutomationListBox: FC<Props> = ({
 
     const tags = getTagList(automations);
     const [searchText, setSearchText] = useState('');
-    const [selected, setSelected] = useState<number[]>([]);
-    const filteredAutomations = filterAutomations(automations, searchText, selected, tags);
-    const groups = groupAutomations(filteredAutomations.map(([a, _]) => a), selected, tags);
+    const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>([]);
+    const filteredAutomations = filterAutomations(automations, searchText, selectedTagIdx, tags);
+    const groups = groupAutomations(filteredAutomations.map(([a, _]) => a), selectedTagIdx, tags);
 
     return <div className="automation-list-box">
         <div className="automation-list-box--nav">
@@ -36,14 +38,14 @@ export const AutomationListBox: FC<Props> = ({
             />
             <InputMultiSelect
                 label="Tags"
-                selected={selected}
-                onChange={setSelected}
+                selected={selectedTagIdx}
+                onChange={setSelectedTagIdx}
                 options={tags}
                 max={3}
             />
         </div>
         <div className="automation-list-box--body">
-            {convertGroupsToItems(groups, filteredAutomations, onSelectAutomation, onRemove)}
+            {convertGroupsToItems(groups, filteredAutomations, onSelectAutomation, onRemove, selected)}
         </div>
         <div className="automation-list-box--bottom">
             <Button onClick={onAdd}>Add</Button>
@@ -123,13 +125,14 @@ const convertGroupsToItems = (
     autos: Array<[AutomationData, number]>,
     onSelectAutomation: (i: number) => void,
     onRemove: (i: number) => void,
+    selected: number,
 ) => {
     if (Array.isArray(groups)) {
         return groups.map(i => {
             const [auto, autoIndex] = autos[i];
             return <div
                 key={i}
-                className="automation-list-box--body--item"
+                className={["automation-list-box--body--item", selected === autoIndex ? 'selected' : ''].join(' ')}
                 title={`Name = ${auto.metadata.alias}\nID = ${auto.metadata.id}\nDescription = ${auto.metadata.description}`}
                 onClick={() => onSelectAutomation(autoIndex)}
             >
