@@ -4,10 +4,9 @@ env:
 on: 
   # release:
   #   types: [published]
-  on:
-    push:
-      paths:
-        - 'config.yaml'
+  push:
+    paths:
+      - 'config.yaml'
 jobs:
   build:
     runs-on: ubuntu-latest
