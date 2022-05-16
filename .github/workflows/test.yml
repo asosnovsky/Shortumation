@@ -5,10 +5,12 @@ on:
   workflow_dispatch:
   push:
     branch: [main]
+  pull_request:
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: ${{ matrix.arch }}
+    name: Build Test for ${{ matrix.arch }}
     strategy:
       matrix:
         arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
@@ -36,3 +38,37 @@ jobs:
             --test \
             --${{ matrix.arch }} \
             --target . 
+  python:
+    name: "Python Tests"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        action: [lint, coverage, security-checks]
+    container:
+      image: python:3.9
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: cd api && make setup
+      - name: Echo dependencies
+        run: cd api && ./venv/bin/pip freeze
+      - name: Running ${{ matrix.action }}
+        run: cd api && make ${{ matrix.action }}
+
+  nodejs:
+    name: "NodeJs Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+          cache-dependency-path: webapp/yarn.lock
+      - name: Install Dependencies
+        run: cd webapp && yarn install
+      - name: Echo dependencies
+        run: cd webapp && react-scripts test --ci=true --all --watchAll=false
+      
+
+        
