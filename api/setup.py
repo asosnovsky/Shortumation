@@ -14,7 +14,7 @@ setuptools.setup(
         "dev": [
             "mypy==0.910",
             "mypy-extensions==0.4.3",
-            "black==21.7b0",
+            "black==22.3.0",
             "bandit==1.7.0",
             "isort==5.9.3",
             "coverage==5.5",

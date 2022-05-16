@@ -19,6 +19,7 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
         with:
+          all_but_latest: true
           access_token: ${{ github.token }}
 
       - name: Check out repository
@@ -67,8 +68,8 @@ jobs:
           cache-dependency-path: webapp/yarn.lock
       - name: Install Dependencies
         run: cd webapp && yarn install
-      - name: Echo dependencies
-        run: cd webapp && react-scripts test --ci=true --all --watchAll=false
+      - name: Run Tests
+        run: cd webapp && yarn test:ci
       
 
         
