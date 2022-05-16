@@ -1,7 +1,7 @@
 import { AutomationData } from "types/automations";
 import { API } from "./base";
 import { ListData, ListParams } from "./types";
-import { AUTOMTAION_LIST, AUTOMTAION_ROOT } from './paths';
+import { AUTOMTAION_LIST, AUTOMTAION_ITEM } from './paths';
 
 
 export const makeAutomationAPI = (api: API) => ({
@@ -14,19 +14,19 @@ export const makeAutomationAPI = (api: API) => ({
     });
     return data;
   },
-  async update({index, auto}: {index: number, auto: AutomationData}) {
+  async update({ index, auto }: { index: number, auto: AutomationData }) {
     return await api.makeCall({
-      path: AUTOMTAION_ROOT,
+      path: AUTOMTAION_ITEM,
       data: {
         index,
         data: auto
       },
     })
   },
-  async remove({index}: {index: number}) {
+  async remove({ index }: { index: number }) {
     return await api.makeCall({
       method: "DELETE",
-      path: AUTOMTAION_ROOT,
+      path: AUTOMTAION_ITEM,
       data: {
         index,
       }

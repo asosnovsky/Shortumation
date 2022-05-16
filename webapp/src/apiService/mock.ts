@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { AutomationData } from 'types/automations';
 import { API } from './base';
-import { AUTOMTAION_LIST, AUTOMTAION_ROOT } from './paths';
+import { AUTOMTAION_LIST, AUTOMTAION_ITEM } from './paths';
 
 
 export const useMockAPI = (
@@ -26,7 +26,7 @@ export const useMockAPI = (
           }))
         } as any
       }
-      if (path === AUTOMTAION_ROOT) {
+      if (path === AUTOMTAION_ITEM) {
         if (method === 'POST') {
           const { index, data: auto } = data as any;
           if (index >= automationsRef.current.length) {
@@ -37,7 +37,7 @@ export const useMockAPI = (
               auto,
               ...automationsRef.current.slice(index + 1)
             ];
-          } 
+          }
           return {
             ok: true,
             data: {}

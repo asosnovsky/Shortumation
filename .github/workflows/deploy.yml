@@ -9,44 +9,70 @@ on:
     paths:
       - 'config.yaml'
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Build & Publish
-    # strategy:
-    #   matrix:
-    #     arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
+  metadata:
+    runs-on: ubuntu-latest
+    name: Metadata
+    outputs: 
+      version: ${{ steps.version.outputs.VERSION }}
+      changlelog: ${{ steps.changlelog.outputs.CHANGELOG }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      
       - name: Get Version
         id: version
         shell: bash
         run: |
           echo ::set-output name=VERSION::$(cat config.yaml | sed -nr 's/version: (.*)/\1/p')
+      - name: Get Changelog
+        id: changlelog
+        shell: bash
+        run: |
+          echo ::set-output name=CHANGELOG::$(cat CHANGELOG.md)
 
+  build:
+    runs-on: ubuntu-latest
+    name: Build & Publish ${{ matrix.arch }}
+    needs:
+      - metadata
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      
       - name: Login to DockerHub
         uses: docker/login-action@v2.0.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name:  ${{ steps.version.outputs.VERSION }}
+      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
         uses: home-assistant/builder@2022.03.1
         with:
           args: |
-            --all \
+            --${{ matrix.arch }} \
             --target . 
-      
-      - name: Publish Release ${{ steps.version.outputs.VERSION }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs:
+      - metadata
+      - build
+    name: Publish Github Release
+    steps:
+      - name: Publish Release ${{ needs.metadata.outputs.version }}
         uses: actions/github-script@v6
         env: 
-          VERSION: ${{ steps.version.outputs.VERSION }}
+          VERSION: ${{ needs.metadata.outputs.version }}
+          CHANGELOG: ${{ needs.metadata.outputs.changlelog }}
         with:
           script: |
             github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: process.env.VERSION,
+              body: process.env.CHANGELOG,
             });

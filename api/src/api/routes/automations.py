@@ -25,11 +25,11 @@ def make_automation_router(automations: AutomationManager) -> APIRouter:
             ),
         )
 
-    @router.post("")
+    @router.post("/item")
     def upsert_auto(body: UpdateAutoRequest):
         automations.update(body.index, body.data)
 
-    @router.delete("")
+    @router.delete("/item")
     def delete_auto(body: DeleteAutoRequest):
         try:
             automations.delete(body.index)
