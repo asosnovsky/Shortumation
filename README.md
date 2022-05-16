@@ -1,4 +1,4 @@
-# Shortumation
+# Shortumation [![GitHub version](https://badge.fury.io/gh/asosnovsky%2FShortumation.svg)](https://badge.fury.io/gh/asosnovsky%2FShortumation)
 
 ![image](https://user-images.githubusercontent.com/7451445/167028000-41528244-47be-408e-8f47-55187c0e5dcd.png)
 
