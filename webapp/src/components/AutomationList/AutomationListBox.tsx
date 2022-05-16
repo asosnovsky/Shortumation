@@ -161,6 +161,7 @@ const convertGroupsToItems = (
                 autos={autos}
                 onSelectAutomation={onSelectAutomation}
                 onRemove={onRemove}
+                selected={selected}
             />
         })
     }
@@ -173,16 +174,18 @@ const AutomationListBoxGroup: FC<{
     autos: Array<[AutomationData, number]>,
     onSelectAutomation: (i: number) => void,
     onRemove: (i: number) => void;
+    selected: number,
 }> = ({
     groupName,
     groups,
     autos,
     onSelectAutomation,
     onRemove,
+    selected,
 }) => {
         const [open, setOpen] = useState(false);
         return <div className="automation-list-box--body--group">
             <b onClick={() => setOpen(!open)}>{groupName} {!open ? "⊕" : "⊖"}</b>
-            {open && convertGroupsToItems(groups, autos, onSelectAutomation, onRemove)}
+            {open && convertGroupsToItems(groups, autos, onSelectAutomation, onRemove, selected)}
         </div>
     }
