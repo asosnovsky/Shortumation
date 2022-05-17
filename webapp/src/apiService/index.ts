@@ -5,7 +5,6 @@ import { useAPIService } from './core';
 import { useMockAPI } from "./mock";
 
 const locationPrefixWeb = window.location.pathname.match(/(.+)\/web/i);
-console.log(process.env)
 
 export const useConnectedApiService = () => useAPIService(
   makeAutomationAPI(makeRemoteAPI(

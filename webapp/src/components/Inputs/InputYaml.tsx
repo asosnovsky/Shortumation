@@ -24,7 +24,6 @@ export default function InputYaml<T>({
   });
   const setText = (t: string) => {
     try {
-      console.log(yaml.dump(yaml.load(t)));
       setState({ text: t, error: undefined })
     } catch (_) {
       setState({ text: t, error: "! Invalid Yaml !" })

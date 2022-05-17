@@ -26,9 +26,6 @@ export const InputList: FC<Props<any>> = ({
       {...selattr} value={current}
       onChange={e => {
         e.preventDefault();
-        console.log(e.currentTarget.id)
-        console.log(e.currentTarget.value)
-        console.log(e.currentTarget.innerHTML)
         if (e.currentTarget.id === 'invalid') {
           onChange(options[0])
         } else {

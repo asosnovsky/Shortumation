@@ -11,7 +11,6 @@ const mockSequenceUpdater = (defaultState: AutomationSequenceNode[] = []) => {
         state,
         s => {
             state = s
-            console.log(state, s)
         },
         ms => modalStates.push(ms)
     );

@@ -3,7 +3,6 @@ import { AutomationTrigger } from 'types/automations/triggers';
 
 
 export const getNodeType = (node: AutomationNode): AutomationNodeTypes => {
-    console.log({ node })
     if ('condition' in node) {
         return 'condition'
     } else if ('platform' in node) {

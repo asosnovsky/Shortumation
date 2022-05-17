@@ -44,7 +44,6 @@ export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
 
   const [open, setOpen] = useState(false);
   const [state, setState] = useState(props.sequence);
-  console.log({ state })
   return <div className="page">
     <Button onClick={() => setOpen(!open)}>Open Editor</Button>
     <Modal open={open}>

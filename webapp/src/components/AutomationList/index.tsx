@@ -34,11 +34,6 @@ export const AutomationList: FC<AutomationListParams> = ({
   const { isMobile } = useWindowSize();
   // alias
   const currentAuto = automations.length > 0 ? automations[current] : null;
-  const automationListListCls = [
-    "automation-list--list",
-    hideList ? "hide" : "show",
-    isMobile ? 'mobile' : ''
-  ].join(' ')
   // render
   return <div className={["automation-list--root", isMobile ? 'mobile' : ''].join(' ')}>
     <div className={["automation-list--list", hideList ? "hide" : "show"].join(' ')}>

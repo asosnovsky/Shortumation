@@ -27,7 +27,6 @@ export const useMultiNodeEditorState = (props: MultiNodeEditorProps) => {
         internalNodeModified,
     } = state;
     const setState = (a: MultiNodeEditorInternalState) => {
-        console.log('setting state', a)
         _setState(a)
     }
     return {

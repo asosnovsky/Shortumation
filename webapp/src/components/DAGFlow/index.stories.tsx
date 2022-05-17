@@ -27,7 +27,6 @@ const Template: ComponentStory<typeof DAGAutomationFlow> = args => {
             {...args}
             {...state}
             onTriggerUpdate={trigger => {
-                console.log({ trigger })
                 setState({ ...state, trigger })
             }}
             onSequenceUpdate={sequence => setState({ ...state, sequence })}
