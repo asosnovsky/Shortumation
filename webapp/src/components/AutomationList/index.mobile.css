@@ -19,21 +19,22 @@
 
 .automation-list--root.mobile .automation-editor--info-box {
     min-width: 100vw;
-    min-height: 100vh;
+    min-height: calc(100vh - 5em);
     max-width: 100vw;
-    max-height: 100vh;
+    max-height: calc(100vh - 5em);
     padding: 0;
 }
 
 .automation-list--root.mobile .automation-editor--info-box-inner {
-    margin-top: 1.75em;
-    padding: 0.5em;
-    direction: rtl;
+    margin-top: 2.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-bottom: 2em;
 }
 
 .automation-list--root.mobile .automation-editor--info-box--icon {
     left: 1.25em;
-    bottom: 1em;
+    bottom: 0em;
     background-color: var(--primary);
     transform: rotate(90deg);
 }

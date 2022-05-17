@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import ReactFlow, { MiniMap, Controls } from 'react-flow-renderer';
+import ReactFlow, { Controls } from 'react-flow-renderer';
 import { AutomationSequenceNode } from "types/automations";
 import { AutomationTrigger } from 'types/automations/triggers';
 import { triggerToFlow } from "./triggerConvertor";
@@ -127,7 +127,6 @@ export const DAGAutomationFlow: FC<Props> = ({
             nodesDraggable={false}
             {...flowData}
         >
-            <MiniMap />
             <Controls />
         </ReactFlow>
     </>;

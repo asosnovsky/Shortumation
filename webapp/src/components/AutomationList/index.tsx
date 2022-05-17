@@ -43,7 +43,12 @@ export const AutomationList: FC<AutomationListParams> = ({
           onAdd(defaultAutomation(`shortu-${automations.length}`));
           setCurrent(automations.length)
         }}
-        onSelectAutomation={setCurrent}
+        onSelectAutomation={i => {
+          setCurrent(i);
+          if (isMobile) {
+            setHideList(true)
+          }
+        }}
         selected={current}
         onRemove={onRemove}
       />
