@@ -1,0 +1,69 @@
+/* none-hidden */
+.automation-list--root.mobile {
+    flex-direction: column;
+}
+
+.automation-list--root.mobile>.automation-list--list {
+    max-width: 100vw;
+    min-height: 100vh;
+}
+
+.automation-list--root.mobile .automation-editor {
+    flex-direction: column;
+}
+
+.automation-list--root.mobile .automation-list--list-hide {
+    transform: rotate(90deg);
+    left: 1.25em;
+}
+
+.automation-list--root.mobile .automation-editor--info-box {
+    min-width: 100vw;
+    min-height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    padding: 0;
+}
+
+.automation-list--root.mobile .automation-editor--info-box-inner {
+    margin-top: 1.75em;
+    padding: 0.5em;
+    direction: rtl;
+}
+
+.automation-list--root.mobile .automation-editor--info-box--icon {
+    left: 1.25em;
+    bottom: 1em;
+    background-color: var(--primary);
+    transform: rotate(90deg);
+}
+
+
+/* list hide */
+.automation-list--root.mobile .automation-list--list.hide {
+    width: 100vw;
+    min-height: 0;
+    max-height: 0;
+}
+
+.automation-list--root.mobile .automation-list--list.hide .automation-list--list-hide {
+    transform: rotate(270deg);
+    position: fixed;
+    top: 0.75em;
+    z-index: 20;
+}
+
+/* info box hide */
+.automation-list--root.mobile .automation-editor--info-box.hide {
+    width: 100vw;
+    min-height: 0;
+    max-height: 0;
+}
+
+.automation-list--root.mobile .automation-editor--info-box.hide .automation-editor--info-box--icon {
+    transform: rotate(270deg);
+    position: fixed;
+    top: 0.75em;
+    background-color: var(--green-opaque);
+    z-index: 30;
+}

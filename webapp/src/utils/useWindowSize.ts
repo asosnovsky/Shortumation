@@ -5,27 +5,24 @@ interface Size {
   width: number;
   height: number;
   ratioWbh: number;
+  isMobile: boolean;
 }
 
 // Hook
-export default function useWindowSize(): Size {
+export default function useWindowSize(mobileRatioInd: number = 0.8): Size {
+
   // Initialize state with undefined width/height so server and client renders match
   // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = useState<Size>({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    ratioWbh: window.innerWidth / window.innerHeight,
-  });
+  const [windowSize, setWindowSize] = useState<Size>(makeUpdate(window, mobileRatioInd));
+
+  // alias
+
 
   useEffect(() => {
     // Handler to call on window resize
     function handleResize() {
       // Set window width/height to state
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-        ratioWbh: window.innerWidth / window.innerHeight,
-      });
+      setWindowSize(makeUpdate(window, mobileRatioInd));
     }
 
     // Add event listener
@@ -40,3 +37,10 @@ export default function useWindowSize(): Size {
 
   return windowSize;
 }
+
+const makeUpdate = (w: Window, mobileRatioInd: number): Size => ({
+  width: w.innerWidth,
+  height: w.innerHeight,
+  ratioWbh: w.innerWidth / w.innerHeight,
+  isMobile: w.innerWidth / w.innerHeight <= mobileRatioInd,
+})

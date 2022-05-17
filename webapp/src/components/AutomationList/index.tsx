@@ -1,4 +1,5 @@
 import "./index.css";
+import "./index.mobile.css";
 import { AutomationEditor } from "components/AutomationEditor";
 import { FC, useState } from "react";
 import { AutomationData } from "types/automations";
@@ -8,6 +9,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
 import { DAGAutomationFlowDims } from 'components/DAGFlow/types';
+import useWindowSize from "utils/useWindowSize";
 
 
 interface AutomationListParams {
@@ -29,12 +31,17 @@ export const AutomationList: FC<AutomationListParams> = ({
   // state
   const [hideList, setHideList] = useState(false);
   const [current, setCurrent] = useState(0);
+  const { isMobile } = useWindowSize();
   // alias
   const currentAuto = automations.length > 0 ? automations[current] : null;
-  const automationListListCls = "automation-list--list" + (hideList ? " hide" : " show")
+  const automationListListCls = [
+    "automation-list--list",
+    hideList ? "hide" : "show",
+    isMobile ? 'mobile' : ''
+  ].join(' ')
   // render
-  return <div className="automation-list--root">
-    <div className={automationListListCls}>
+  return <div className={["automation-list--root", isMobile ? 'mobile' : ''].join(' ')}>
+    <div className={["automation-list--list", hideList ? "hide" : "show"].join(' ')}>
       <AutomationListBox
         automations={automations}
         onAdd={() => {
