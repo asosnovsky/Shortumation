@@ -2,10 +2,9 @@ name: Deploy
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
 on: 
-  # release:
-  #   types: [published]
   workflow_dispatch:
   push:
+    branch: [main]
     paths:
       - 'config.yaml'
 jobs:
