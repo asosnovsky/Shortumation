@@ -7,7 +7,7 @@ A better way to write automations in home-assistant without having to install an
 ![image](https://user-images.githubusercontent.com/7451445/168672840-71ceaa8a-2bee-443e-9150-5b0f03b05d08.png)
 
 
-A [home-assistent addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
+A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
 
 ## Features
 
@@ -28,7 +28,7 @@ See roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortuma
 
 **How is this different from Node-Red?**
 
-  > Node-Red is both an execution engine and an automation editor, which means that in order for you automations to run you have to have an additional component running and executing the automations. Shortumations simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
+  > Node-Red is both an execution engine and an automation editor, which means that in order for you automations to run you have to have an additional component running and executing the automations. Shortumation simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
 
 **Which HA Installation does this support?**
 
