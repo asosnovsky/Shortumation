@@ -20,7 +20,7 @@ panel_icon: mdi:home-automation
 hassio_role: manager
 privileged:
   - SYS_RAWIO
-host_network: true
+host_network: false
 auth_api: true
 map:
   - config:rw
