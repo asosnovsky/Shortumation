@@ -108,7 +108,7 @@ class automation_update_tests(BaseTestCase):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
         self.assertEqual(resp.json()["totalItems"], 28)
         resp = self.client.post(
-            "/automations",
+            "/automations/item",
             json={
                 "index": 29,
                 "data": AutomationData(metadata=AutomationMetdata(id="testme")).dict(),
@@ -124,7 +124,7 @@ class automation_update_tests(BaseTestCase):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 20})
         original_auto = resp.json()["data"][0]
         resp = self.client.post(
-            "/automations",
+            "/automations/item",
             json={
                 "index": 20,
                 "data": AutomationData(metadata=AutomationMetdata(id="testme")).dict(),
@@ -143,7 +143,7 @@ class automation_update_tests(BaseTestCase):
         original_auto = resp.json()["data"][0]
         original_auto["metadata"]["alias"] = "I CHANGED!"
         resp = self.client.post(
-            "/automations",
+            "/automations/item",
             json={
                 "index": 15,
                 "data": original_auto,
@@ -194,7 +194,7 @@ class automation_update_tests(BaseTestCase):
         original_auto = resp.json()["data"][0]
         original_auto["metadata"]["alias"] = "I CHANGED!"
         resp = self.client.post(
-            "/automations",
+            "/automations/item",
             json={
                 "index": 27,
                 "data": original_auto,
@@ -326,7 +326,7 @@ class automation_delete_tests(BaseTestCase):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
         self.assertEqual(resp.json()["totalItems"], 28)
         resp = self.client.delete(
-            "/automations",
+            "/automations/item",
             json={
                 "index": 20,
             },
