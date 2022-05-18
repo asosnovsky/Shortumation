@@ -1,12 +1,12 @@
-name: Manual Build
-on: 
+name: "Manual Build ${{ github.event.inputs.version }}"
+on:
   workflow_dispatch:
     inputs:
-      version: 
+      version:
         type: string
+        description: "Version Number"
         required: true
 jobs:
-
   build:
     runs-on: ubuntu-latest
     name: Build & Publish ${{ github.event.inputs.version }} / ${{ matrix.arch }}
@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      
+
       - name: Login to DockerHub
         uses: docker/login-action@v2.0.0
         with:
@@ -31,4 +31,4 @@ jobs:
             --${{ matrix.arch }} \
             --version ${{ github.event.inputs.version }} \
             --additional-tag edge \
-            --target . 
+            --target .
