@@ -23,6 +23,22 @@ A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI 
 
 See roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1).
 
+## Installation
+
+### Addon
+
+Add the repository URL under **Supervisor → Add-on store → ⋮ → Manage add-on repositories**:
+
+    https://github.com/asosnovsky/Shortumation
+
+It should now appear in your `Add-on Store` and you should be able to install it!
+
+### Containerized
+
+Please note that this way of using Shortumation is **not future proof**, currently we use the `/config/automation.yaml` file as our source of truth for the automations. Which means that we do not need access to the HA API or Websockets. In future release you may need to configure some additional compomenents to enable this. 
+
+If this warning does not scare you or you still want to try things out, then take a look at the example [docker-compose.yaml](example/containerized/docker-compose.yaml).
+
 
 ## FAQ
 

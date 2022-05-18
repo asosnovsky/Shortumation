@@ -1,0 +1,21 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - config:/config
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+
+  shortumation:
+    # make sure to replace the ARCH with whatever system you are running!
+    image: "asosnovsky/shortumation-${ARCH:-amd64}:latest"
+    volumes:
+      - config:/config
+    ports:
+      - 8081:8000
+
+volumes:
+  config:
