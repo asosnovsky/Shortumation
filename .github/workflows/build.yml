@@ -1,6 +1,4 @@
 name: Manual Build
-env:
-  MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
 on: 
   workflow_dispatch:
     version: 
