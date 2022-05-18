@@ -9,7 +9,7 @@ type AutomationActionNodeBase<Data extends Object> = Data & {
 
 export type ServiceAction = AutomationActionNodeBase<{
     service: string;
-    target: any;
+    target?: any;
     data: any;
 }>
 export type RepeatAction = AutomationActionNodeBase<{
@@ -38,7 +38,7 @@ export type ChooseAction = AutomationActionNodeBase<{
         conditions: AutomationCondition[];
         sequence: AutomationSequenceNode[];
     }>;
-    default: AutomationSequenceNode[];
+    default?: AutomationSequenceNode[];
 }>
 export type AutomationAction =
     | ServiceAction

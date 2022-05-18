@@ -2,13 +2,19 @@ import { AutomationNode, AutomationNodeTypes } from "types/automations";
 import { AutomationTime } from "types/automations/common";
 
 
-export const convertTimeToString = ({
-    hours = 0,
-    minutes = 0,
-    seconds = 0,
-    milliseconds = 0,
-}: AutomationTime) => [hours, minutes, seconds, milliseconds].map(n => String(n).padStart(2, '0')).join(':')
-
+export const convertTimeToString = (t: AutomationTime) => {
+    if (typeof t === 'string') {
+        return t
+    } else {
+        const {
+            hours = 0,
+            minutes = 0,
+            seconds = 0,
+            milliseconds = 0,
+        } = t
+        return [hours, minutes, seconds, milliseconds].map(n => String(n).padStart(2, '0')).join(':')
+    }
+}
 export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(node: AutomationNode<N>): string => {
     if (node.alias) {
         return node.alias;

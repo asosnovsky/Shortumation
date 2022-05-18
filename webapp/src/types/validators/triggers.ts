@@ -1,5 +1,5 @@
 import * as st from 'superstruct'
-import { AutomationTime } from './common'
+import { AutomationTimeString, AutomationTime } from './common'
 
 
 const AutomationTriggerBase = {
@@ -67,7 +67,7 @@ export const AutomationTriggerTemplate = st.object({
 export const AutomationTriggerTime = st.object({
     ...AutomationTriggerBase,
     platform: st.literal('time'),
-    at: AutomationTime,
+    at: AutomationTimeString,
 })
 
 export const AutomationTriggerTimePattern = st.object({

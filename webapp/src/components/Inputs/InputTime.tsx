@@ -1,14 +1,15 @@
 import { PropsWithChildren, useState } from "react";
-import { AutomationTime } from "types/automations/common";
+import { AutomationTime, AutomationTimeObject } from "types/automations/common";
 import { milisecondsToObject } from "utils/time";
 import InputWrapper from "./InputWrapper";
 import { useInputTimeStyles } from "./styles";
+import { convertStringToAutomationTimeObject } from 'utils/time';
 
 export interface Props {
   textBoxFor?: string;
   label: string;
   value?: AutomationTime;
-  onChange: (v?: AutomationTime) => void;
+  onChange: (v?: AutomationTimeObject) => void;
   onEnter?: () => void;
 }
 export default function InputTime({
@@ -21,11 +22,14 @@ export default function InputTime({
 }: PropsWithChildren<Props>) {
   let cleanValue = '';
   if (value) {
+    if (typeof value === 'string') {
+      value = convertStringToAutomationTimeObject(value);
+    }
     const {
-      hours,
-      minutes,
-      seconds,
-      milliseconds,
+      hours = 0,
+      minutes = 0,
+      seconds = 0,
+      milliseconds = 0,
     } = value;
     cleanValue = [hours, minutes, seconds].map(x => String(x).padStart(2, '0')).join(':') + `.${String(milliseconds).padStart(3, '0')}`;
   }

@@ -253,6 +253,201 @@ FewAutos.args = {
         }
       ],
       "tags": {}
+    },
+    {
+      "metadata": {
+        "id": "1649726828269",
+        "alias": "Climate Heat Mode Settings",
+        "description": "Ensures that the climate is always in sync with the house settings",
+        "trigger_variables": null,
+        "mode": "single"
+      },
+      "trigger": [
+        {
+          "platform": "state",
+          "entity_id": "climate.main_floor",
+          "id": "main"
+        },
+        {
+          "platform": "state",
+          "entity_id": "climate.second_floor",
+          "id": "second"
+        },
+        {
+          "platform": "state",
+          "entity_id": "input_boolean.thermostats_house_is_heating",
+          "id": "setting"
+        }
+      ],
+      "condition": [],
+      "sequence": [
+        {
+          "choose": [
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "setting"
+                }
+              ],
+              "sequence": [
+                {
+                  "service": "climate.turn_off",
+                  "data": {},
+                  "target": {
+                    "device_id": [
+                      "d88dcfe82bc9a1c0f2b77b871848155e",
+                      "ef2d47fdeef19f8984b85f92f2597f73"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "state",
+                  "entity_id": "input_boolean.thermostats_house_is_heating",
+                  "state": "on"
+                }
+              ],
+              "sequence": [
+                {
+                  "choose": [
+                    {
+                      "conditions": [
+                        {
+                          "condition": "and",
+                          "conditions": [
+                            {
+                              "condition": "template",
+                              "value_template": "{{ trigger.to_state.state != 'heat' }}"
+                            },
+                            {
+                              "condition": "template",
+                              "value_template": "{{ trigger.to_state.state != 'off' }}"
+                            }
+                          ]
+                        }
+                      ],
+                      "sequence": [
+                        {
+                          "service": "climate.set_hvac_mode",
+                          "data": {
+                            "hvac_mode": "heat"
+                          },
+                          "target": {
+                            "entity_id": "{{ trigger.entity_id }}"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "choose": [
+                {
+                  "conditions": [
+                    {
+                      "condition": "and",
+                      "conditions": [
+                        {
+                          "condition": "template",
+                          "value_template": "{{ trigger.to_state.state != 'cool' }}"
+                        },
+                        {
+                          "condition": "template",
+                          "value_template": "{{ trigger.to_state.state != 'off' }}"
+                        }
+                      ]
+                    }
+                  ],
+                  "sequence": [
+                    {
+                      "service": "climate.set_hvac_mode",
+                      "data": {
+                        "hvac_mode": "cool"
+                      },
+                      "target": {
+                        "entity_id": "{{ trigger.entity_id }}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tags": {}
+    },
+    {
+      "metadata": {
+        "id": "1628024070687",
+        "alias": "Baby Light Setting",
+        "description": "Configures max/min light settings for the baby ",
+        "trigger_variables": null,
+        "mode": "single"
+      },
+      "trigger": [
+        {
+          "platform": "time",
+          "at": "21:00:00",
+          "id": "night"
+        },
+        {
+          "platform": "time",
+          "at": "07:30:00",
+          "id": "day"
+        }
+      ],
+      "condition": [],
+      "sequence": [
+        {
+          "choose": [
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "night"
+                }
+              ],
+              "sequence": [
+                {
+                  "service": "zwave_js.set_config_parameter",
+                  "data": {
+                    "parameter": "5",
+                    "value": "15"
+                  }
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "day"
+                }
+              ],
+              "sequence": [
+                {
+                  "service": "zwave_js.set_config_parameter",
+                  "data": {
+                    "parameter": "5",
+                    "value": 100
+                  }
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ],
+      "tags": {}
     }
   ],
 }

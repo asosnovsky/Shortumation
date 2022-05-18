@@ -209,7 +209,7 @@ const addChooseNode = (
     }, { size: dims.circleSize })
     flowData.nodes.push(elseCircle)
     addEdge(flowData, nodeId, elseCircle.id, true)
-    const lastPoint = sequenceToFlow(flowData, node.default, elseCircle.id, {
+    const lastPoint = sequenceToFlow(flowData, node.default ?? [], elseCircle.id, {
         ...dims,
         padding: {
             x: position.x - dims.nodeWidth,

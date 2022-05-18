@@ -1,13 +1,14 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerTime } from 'types/automations/triggers';
 import InputTime from 'components/Inputs/InputTime';
+import { convertObjectToAutomationTimeString } from 'utils/time';
 
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {
   defaultState: () => ({
     "alias": "",
     "platform": 'time',
-    "at": {},
+    "at": "",
   }),
   isReady: ({ alias }) => {
     return (alias !== '')
@@ -19,7 +20,7 @@ export const TriggerTime: OptionManager<AutomationTriggerTime> = {
         value={state.at}
         onChange={_at => setState({
           ...state,
-          at: _at ?? {},
+          at: _at ? convertObjectToAutomationTimeString(_at) : "00:00:00",
         })}
       />
     </>

@@ -68,7 +68,7 @@ export const makeSequenceUpdater = (
         )
       } else {
         return makeSequenceUpdater(
-          node.default,
+          node.default ?? [],
           seq => this.updateNode(i, {
             ...node,
             default: seq
