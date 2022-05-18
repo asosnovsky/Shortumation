@@ -1,18 +1,17 @@
 name: Deploy
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
-on: 
+on:
   workflow_dispatch:
   push:
     branch: [main]
     paths:
-      - 'config.yaml'
+      - "config.yaml"
 jobs:
-
   metadata:
     runs-on: ubuntu-latest
     name: Metadata
-    outputs: 
+    outputs:
       version: ${{ steps.version.outputs.VERSION }}
       changlelog: ${{ steps.changlelog.outputs.CHANGELOG }}
     steps:
@@ -29,42 +28,41 @@ jobs:
         run: |
           echo ::set-output name=CHANGELOG::$(cat CHANGELOG.md)
 
-  build:
-    runs-on: ubuntu-latest
-    name: Build & Publish ${{ matrix.arch }}
-    needs:
-      - metadata
-    strategy:
-      matrix:
-        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+  # build:
+  #   runs-on: ubuntu-latest
+  #   name: Build & Publish ${{ matrix.arch }}
+  #   needs:
+  #     - metadata
+  #   strategy:
+  #     matrix:
+  #       arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-      
-      - name: Login to DockerHub
-        uses: docker/login-action@v2.0.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v3
 
-      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: home-assistant/builder@2022.03.1
-        with:
-          args: |
-            --${{ matrix.arch }} \
-            --target . 
+  #     - name: Login to DockerHub
+  #       uses: docker/login-action@v2.0.0
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  #     - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
+  #       uses: home-assistant/builder@2022.03.1
+  #       with:
+  #         args: |
+  #           --${{ matrix.arch }} \
+  #           --target .
 
   publish:
     runs-on: ubuntu-latest
     needs:
       - metadata
-      - build
     name: Publish Github Release
     steps:
       - name: Publish Release ${{ needs.metadata.outputs.version }}
         uses: actions/github-script@v6
-        env: 
+        env:
           VERSION: ${{ needs.metadata.outputs.version }}
           CHANGELOG: ${{ needs.metadata.outputs.changlelog }}
         with:
