@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.10] - More Bug Fixes
+
+- Allowing null or undefined values for metadata fields
+- Trigger.platform==time will now have the .at property better supported
+
 ## [0.1.9] - Fixed up invalid types for various triggers
 
 - Some triggers had invalid types and were causing a false-positive validation
