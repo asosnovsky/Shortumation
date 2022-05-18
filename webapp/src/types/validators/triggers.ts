@@ -95,7 +95,7 @@ export const AutomationTriggerZone = st.object({
 export const AutomationTriggerDevice = st.object({
     ...AutomationTriggerBase,
     platform: st.literal('device'),
-    entity_id: st.string(),
+    entity_id: st.optional(st.string()),
     device_id: st.string(),
     domain: st.string(),
     type: st.string(),
