@@ -9,6 +9,8 @@
     display: flex;
     flex-direction: column;
     padding: 1em;
+    overflow: scroll;
+    height: 100%;
 }
 
 .automation-editor--flow-wrapper {
