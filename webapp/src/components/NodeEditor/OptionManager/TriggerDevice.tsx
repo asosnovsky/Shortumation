@@ -11,6 +11,7 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
     "type": "",
     "subtype": "",
     "device_id": "",
+    "entity_id": "",
   }),
   isReady: ({ alias }) => {
     return (alias !== '')
@@ -32,6 +33,10 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
       <InputText label="Device" value={state.device_id ?? ""} onChange={device_id => setState({
         ...state,
         device_id
+      })} />
+      <InputText label="Entity" value={state.entity_id ?? ""} onChange={entity_id => setState({
+        ...state,
+        entity_id
       })} />
     </>
   }

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.9] - Fixed up invalid types for various triggers
+
+- Some triggers had invalid types and were causing a false-positive validation
+
 ## [0.1.8] - Support for Malformed Automations
 
 - API will no longer error out on missing values or invalid lists

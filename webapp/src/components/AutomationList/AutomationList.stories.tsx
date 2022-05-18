@@ -62,6 +62,198 @@ FewAutos.args = {
     createMockAuto({ "Room": "Office", "Type": "Lights" }),
     createMockAuto({ "Room": "Office" }),
     createMockAuto(),
+    {
+      "metadata": {
+        "id": "1649947692702",
+        "alias": "Bed Remote",
+        "description": "",
+        "trigger_variables": null,
+        "mode": "single"
+      },
+      "trigger": [
+        {
+          "device_id": "asdasdasdas",
+          "domain": "zha",
+          "platform": "device",
+          "type": "remote_button_short_press",
+          "subtype": "turn_on",
+          "id": "turn_on"
+        },
+        {
+          "device_id": "asdasdasdas",
+          "domain": "zha",
+          "platform": "device",
+          "type": "remote_button_short_press",
+          "subtype": "turn_off",
+          "id": "turn_off"
+        },
+        {
+          "device_id": "asdasdasdas",
+          "domain": "zha",
+          "platform": "device",
+          "type": "remote_button_short_press",
+          "subtype": "dim_up",
+          "id": "dim_up"
+        },
+        {
+          "device_id": "asdasdasdas",
+          "domain": "zha",
+          "platform": "device",
+          "type": "remote_button_short_press",
+          "subtype": "dim_down",
+          "id": "dim_down"
+        },
+        {
+          "device_id": "asdasdasdas",
+          "domain": "zha",
+          "platform": "device",
+          "type": "remote_button_double_press",
+          "subtype": "turn_on",
+          "id": "up_dbclk"
+        }
+      ],
+      "condition": [],
+      "sequence": [
+        {
+          "choose": [
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "turn_off"
+                }
+              ],
+              "sequence": [
+                {
+                  "type": "turn_off",
+                  "device_id": "asdasdasdasdas",
+                  "entity_id": "light.bulb_ari_lamp",
+                  "domain": "light"
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "turn_on"
+                }
+              ],
+              "sequence": [
+                {
+                  "service": "light.turn_on",
+                  "data": {
+                    "color_temp": 153,
+                    "brightness_pct": 100
+                  },
+                  "target": {
+                    "device_id": "asdasdasdasdas"
+                  }
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "dim_up"
+                }
+              ],
+              "sequence": [
+                {
+                  "device_id": "asdasdasdasdas",
+                  "domain": "light",
+                  "entity_id": "light.bulb_ari_lamp",
+                  "type": "brightness_increase"
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "dim_down"
+                }
+              ],
+              "sequence": [
+                {
+                  "device_id": "asdasdasdasdas",
+                  "domain": "light",
+                  "entity_id": "light.bulb_ari_lamp",
+                  "type": "brightness_decrease"
+                }
+              ]
+            },
+            {
+              "conditions": [
+                {
+                  "condition": "trigger",
+                  "id": "up_dbclk"
+                }
+              ],
+              "sequence": [
+                {
+                  "service": "light.turn_on",
+                  "data": {
+                    "color_temp": 500,
+                    "brightness_pct": 100
+                  },
+                  "target": {
+                    "device_id": "asdasdasdasdas"
+                  }
+                }
+              ]
+            }
+          ],
+          "default": []
+        }
+      ],
+      "tags": {
+        "Type": "Remote",
+        "Room": "Bedroom"
+      }
+    },
+    {
+      "metadata": {
+        "id": "1641617168123",
+        "alias": "Ensure On",
+        "description": "",
+        "trigger_variables": null,
+        "mode": "single"
+      },
+      "trigger": [
+        {
+          "platform": "device",
+          "type": "turned_off",
+          "device_id": "tasdasdasdasdasdasda",
+          "entity_id": "switch.power_washer",
+          "domain": "switch"
+        },
+        {
+          "platform": "device",
+          "type": "turned_off",
+          "device_id": "dasdasdasdasdas",
+          "entity_id": "switch.plug_living_room_tv",
+          "domain": "switch"
+        }
+      ],
+      "condition": [],
+      "sequence": [
+        {
+          "type": "turn_on",
+          "device_id": "tasdasdasdasdasdasda",
+          "entity_id": "switch.power_washer",
+          "domain": "switch"
+        },
+        {
+          "type": "turn_on",
+          "device_id": "dasdasdasdasdas",
+          "entity_id": "switch.plug_living_room_tv",
+          "domain": "switch"
+        }
+      ],
+      "tags": {}
+    }
   ],
 }
 

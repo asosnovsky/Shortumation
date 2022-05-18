@@ -3,7 +3,8 @@ import { AutomationTime } from './common'
 
 
 const AutomationTriggerBase = {
-    alias: st.optional(st.string())
+    alias: st.optional(st.string()),
+    id: st.optional(st.string()),
 }
 
 export const AutomationTriggerEvent = st.object({
@@ -94,10 +95,11 @@ export const AutomationTriggerZone = st.object({
 export const AutomationTriggerDevice = st.object({
     ...AutomationTriggerBase,
     platform: st.literal('device'),
+    entity_id: st.string(),
     device_id: st.string(),
     domain: st.string(),
     type: st.string(),
-    subtype: st.string(),
+    subtype: st.optional(st.string()),
 })
 
 
