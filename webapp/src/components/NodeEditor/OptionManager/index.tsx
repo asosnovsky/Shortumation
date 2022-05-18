@@ -18,6 +18,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, uState: UseStat
   const { node: currentNode, isModified, yamlMode, invalidManualYaml } = allState;
   useEffect(() => {
     setAllState({ ...allState, node: originalNode, isModified: false, })
+    // eslint-disable-next-line
   }, [originalNode])
   const setState = (node: AutomationNode) => setAllState(({ ...allState, node, isModified: true, }));
   const setYamlMode = (yamlMode: boolean) => setAllState({ ...allState, yamlMode, });

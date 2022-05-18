@@ -5,6 +5,7 @@ export const useDelayEffect = (cb: () => void, deps: any[], timeout: number) => 
     const fcn = useDelayedFunction(cb, timeout);
     useEffect(() => {
         fcn()
+        // eslint-disable-next-line
     }, deps)
 }
 
