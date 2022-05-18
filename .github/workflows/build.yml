@@ -4,6 +4,7 @@ on:
     inputs:
       version: 
         type: string
+        required: true
 jobs:
 
   build:
