@@ -1,0 +1,33 @@
+name: Deploy
+env:
+  MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
+on: 
+  workflow_dispatch:
+    version: 
+      type: string
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build & Publish ${{ github.event.inputs.version }} / ${{ matrix.arch }}
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push to Dockerhub
+        uses: home-assistant/builder@2022.03.1
+        with:
+          args: |
+            --${{ matrix.arch }} \
+            --version ${{ github.event.inputs.version }} \
+            --target . 
