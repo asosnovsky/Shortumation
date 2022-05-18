@@ -1,4 +1,4 @@
-name: "Manual Build ${{ github.event.inputs.version }}"
+name: "Manual Build"
 on:
   workflow_dispatch:
     inputs:
