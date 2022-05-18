@@ -63,7 +63,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        action: [test:ci, tsc:ci, build]
+        action: 
+          - "test:ci"
+          - "tsc:ci"
+          - "build"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
