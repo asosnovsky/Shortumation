@@ -80,8 +80,8 @@ export const AutoInfoBox: FC<Props> = ({
   return <div className={`automation-editor--info-box ${className}`}>
     <div className="automation-editor--info-box-inner">
       <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
-      <InputText label="Name" value={metadata.alias} onChange={onUpdateMetadata('alias')} />
-      <InputTextArea label="Description" value={metadata.description} onChange={onUpdateMetadata('description')} />
+      <InputText label="Name" value={metadata.alias ?? ""} onChange={onUpdateMetadata('alias')} />
+      <InputTextArea label="Description" value={metadata.description ?? ""} onChange={onUpdateMetadata('description')} />
       <InputList
         label="Mode"
         current={metadata.mode}

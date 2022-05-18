@@ -71,8 +71,8 @@ const filterAutomations = (autos: AutomationData[], searchText: string, selected
     if (searchText.length > 0) {
         if (
             !(
-                a.metadata.description.toLocaleLowerCase().includes(searchText) ||
-                a.metadata.alias.toLocaleLowerCase().includes(searchText)
+                (a.metadata.description ?? "").toLocaleLowerCase().includes(searchText) ||
+                (a.metadata.alias ?? "").toLocaleLowerCase().includes(searchText)
             )
         ) {
             return false
@@ -169,8 +169,8 @@ export const MetadataBox: FC<{
     let title = <span>{"BadAuto<<Missing Metadata>>"}</span>
     if (auto.metadata) {
         title = <>
-            <b>{String(auto.metadata.alias).slice(0, 15)} <span>({String(auto.metadata.id).slice(0, 5)})</span></b>
-            <span>{String(auto.metadata.description).slice(0, 25)}</span>
+            <b>{String(auto.metadata.alias ?? "").slice(0, 15)} <span>({String(auto.metadata.id).slice(0, 5)})</span></b>
+            <span>{String(auto.metadata.description ?? "").slice(0, 25)}</span>
         </>
     }
     return <div

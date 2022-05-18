@@ -448,6 +448,58 @@ FewAutos.args = {
         }
       ],
       "tags": {}
+    },
+    {
+      "metadata": {
+        "id": "alarmanlage_an",
+        "alias": "alarmanlage_an (Uhrzeit)",
+        "mode": "single"
+      },
+      tags: {},
+      "trigger": [
+        {
+          "entity_id": "sensor.time",
+          "platform": "state",
+          "to": "23:30"
+        }
+      ],
+      "condition": [
+        {
+          "condition": "or",
+          "conditions": [
+            {
+              "condition": "state",
+              "entity_id": "person.simon",
+              "state": "home"
+            },
+            {
+              "condition": "state",
+              "entity_id": "person.leni",
+              "state": "home"
+            }
+          ]
+        }
+      ],
+      "sequence": [
+        {
+          "service": "alarm_control_panel.alarm_arm_night",
+          "target": {
+            "entity_id": [
+              "alarm_control_panel.alarmo"
+            ]
+          },
+          "data": {
+            "code": "xxx"
+          }
+        },
+        {
+          "service": "alarm_control_panel.alarm_arm_away",
+          "data": {},
+          "target": {
+            "entity_id": "alarm_control_panel.blink_home"
+          }
+        }
+      ],
     }
   ],
 }

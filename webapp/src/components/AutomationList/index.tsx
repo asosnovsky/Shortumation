@@ -40,7 +40,7 @@ export const AutomationList: FC<AutomationListParams> = ({
       <AutomationListBox
         automations={automations}
         onAdd={() => {
-          onAdd(defaultAutomation(`shortu-${automations.length}`));
+          onAdd(defaultAutomation(String(Date.now())));
           setCurrent(automations.length)
         }}
         onSelectAutomation={i => {
