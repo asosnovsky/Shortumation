@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.7] - Support for Malformed Automations
+
+- API will no longer error out on missing values or invalid lists
+- Frontend has support for displaying bad automations
+
 ## [0.1.6] - Mobile Mode
 
 - Improved mobile mode
