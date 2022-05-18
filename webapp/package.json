@@ -15,6 +15,7 @@
     "react-jss": "^10.8.2",
     "react-router-dom": "6",
     "react-scripts": "4.0.3",
+    "superstruct": "^0.15.4",
     "theming": "^3.3.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1",
@@ -23,6 +24,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "tsc": "tsc -w",
+    "tsc:ci": "tsc",
     "test:ci": "react-scripts test --ci=true --all --watchAll=false",
     "test": "react-scripts test",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",

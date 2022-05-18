@@ -1,5 +1,4 @@
 import { AutomationNodeSubtype, AutomationNodeTypes } from "types/automations";
-import { ActionType } from "types/automations/actions";
 import { AutomationNode } from '../../types/automations/index';
 
 

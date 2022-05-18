@@ -16,8 +16,6 @@ export default function useWindowSize(mobileRatioInd: number = 0.8): Size {
   const [windowSize, setWindowSize] = useState<Size>(makeUpdate(window, mobileRatioInd));
 
   // alias
-
-
   useEffect(() => {
     // Handler to call on window resize
     function handleResize() {
@@ -33,7 +31,7 @@ export default function useWindowSize(mobileRatioInd: number = 0.8): Size {
 
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleResize);
-  }, []); // Empty array ensures that effect is only run on mount
+  }, [mobileRatioInd]); // Empty array ensures that effect is only run on mount
 
   return windowSize;
 }

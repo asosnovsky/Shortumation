@@ -111,3 +111,63 @@ EmptyStart.args = {
     sequence: []
   }
 }
+
+export const BadAutomationInvalidMetadata = Template.bind({})
+BadAutomationInvalidMetadata.args = {
+  ...BadAutomationInvalidMetadata.args,
+  automation: {
+    condition: [],
+    tags: {},
+    metadata: {
+    } as any,
+    trigger: [
+    ],
+    sequence: []
+  }
+}
+
+export const BadAutomationInvalidTriggers = Template.bind({})
+BadAutomationInvalidTriggers.args = {
+  ...BadAutomationInvalidTriggers.args,
+  automation: {
+    condition: [],
+    tags: {},
+    metadata: {
+      id: "random",
+      alias: "Random",
+      description: "Example Metadata",
+      trigger_variables: {
+        'wowo': '!'
+      },
+      mode: 'single',
+    },
+    trigger: [
+      "haha I am a string"
+    ] as any,
+    sequence: []
+  }
+}
+
+export const BadAutomationInvalidSequence = Template.bind({})
+BadAutomationInvalidSequence.args = {
+  ...BadAutomationInvalidSequence.args,
+  automation: {
+    condition: [],
+    tags: {},
+    metadata: {
+      id: "random",
+      alias: "Bad Choose Sequence",
+      description: "Example Metadata",
+      trigger_variables: {
+        'wowo': '!'
+      },
+      mode: 'single',
+    },
+    trigger: [],
+    sequence: [
+      {
+        choose: {}
+      }
+    ] as any
+  }
+}

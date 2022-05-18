@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { AddIcon, PencilIcon, TrashIcon } from '../Icons/index';
+import { AddIcon, TrashIcon } from '../Icons/index';
 import { useCircleStyles } from './styles';
 import { Handle, Position, XYPosition } from 'react-flow-renderer';
 

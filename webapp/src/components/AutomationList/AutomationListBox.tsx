@@ -1,6 +1,6 @@
 import "./AutomationListBox.css";
 import { FC, useState } from 'react';
-import { AutomationData } from "types/automations";
+import { AutomationData, AutomationMetadata } from "types/automations";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 import InputText from "components/Inputs/InputText";
 import { Button } from "components/Inputs/Button";
@@ -65,6 +65,9 @@ export const getTagList = (autos: AutomationData[]): string[] => Object.keys(aut
     }, {}))
 
 const filterAutomations = (autos: AutomationData[], searchText: string, selected: number[], tags: string[]): Array<[AutomationData, number]> => autos.map<[AutomationData, number]>((a, i) => [a, i]).filter(([a, i]) => {
+    if (!a.metadata) {
+        return true
+    }
     if (searchText.length > 0) {
         if (
             !(
@@ -130,25 +133,17 @@ const convertGroupsToItems = (
     if (Array.isArray(groups)) {
         return groups.map(i => {
             const [auto, autoIndex] = autos[i];
+            let title = "BadAuto<<Missing Metadata>>"
+            if (auto.metadata) {
+                title = `Name = ${auto.metadata.alias}\nID = ${auto.metadata.id}\nDescription = ${auto.metadata.description}`
+            }
             return <div
                 key={i}
                 className={["automation-list-box--body--item", selected === autoIndex ? 'selected' : ''].join(' ')}
-                title={`Name = ${auto.metadata.alias}\nID = ${auto.metadata.id}\nDescription = ${auto.metadata.description}`}
+                title={title}
                 onClick={() => onSelectAutomation(autoIndex)}
             >
-                <div
-                    className="automation-list-box--body--item--title"
-                >
-                    <b>{auto.metadata.alias.slice(0, 15)} <span>({auto.metadata.id.slice(0, 5)})</span></b>
-                    <span>{auto.metadata.description.slice(0, 25)}</span>
-                    <div
-                        className="automation-list-box--body--item--tags"
-                    >
-                        {Object.keys(auto.tags).map(tagName => <span key={tagName}>
-                            <b>{tagName}:</b> {auto.tags[tagName]}
-                        </span>)}
-                    </div>
-                </div>
+                <MetadataBox metadata={auto.metadata} tags={auto.tags} />
                 <Button onClick={() => onRemove(autoIndex)}><TrashIcon /></Button>
             </div>
         })
@@ -165,6 +160,31 @@ const convertGroupsToItems = (
             />
         })
     }
+}
+
+export const MetadataBox: FC<{
+    metadata: AutomationMetadata,
+    tags: Record<string, string>,
+}> = (auto) => {
+    let title = <span>{"BadAuto<<Missing Metadata>>"}</span>
+    if (auto.metadata) {
+        title = <>
+            <b>{String(auto.metadata.alias).slice(0, 15)} <span>({String(auto.metadata.id).slice(0, 5)})</span></b>
+            <span>{String(auto.metadata.description).slice(0, 25)}</span>
+        </>
+    }
+    return <div
+        className="automation-list-box--body--item--title"
+    >
+        {title}
+        <div
+            className="automation-list-box--body--item--tags"
+        >
+            {Object.keys(auto.tags).map(tagName => <span key={tagName}>
+                <b>{tagName}:</b> {auto.tags[tagName]}
+            </span>)}
+        </div>
+    </div>
 }
 
 

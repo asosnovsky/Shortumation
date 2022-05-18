@@ -24,11 +24,11 @@ class manager_tests(TestCase):
         _, _, loader = get_example_automation_loader()
         self.assertIsNone(loader.get(-1))
         self.assertIsNone(loader.get(1_000))
-        self.assertIsNone(loader.get(31))
+        self.assertIsNone(loader.get(33))
 
     def test_length(self):
         _, _, loader = get_example_automation_loader()
-        self.assertEqual(loader.get_total_items(), 28)
+        self.assertEqual(loader.get_total_items(), 32)
 
     def test_bad_automations_file(self):
         folder, _, manager = get_dummy_automation_loader(
@@ -51,11 +51,11 @@ class manager_tests(TestCase):
 
     def test_create_automation_with_example_folder(self):
         _, _, manager = get_example_automation_loader()
-        self.assertEqual(manager.get_total_items(), 28)
-        manager.update(32, ExtenededAutomationData(metadata=AutomationMetdata(id="test1")))
-        auto = manager.get(28)
+        self.assertEqual(manager.get_total_items(), 32)
+        manager.update(40, ExtenededAutomationData(metadata=AutomationMetdata(id="test1")))
+        auto = manager.get(32)
         self.assertIsNotNone(auto)
-        self.assertEqual(manager.get_total_items(), 29)
+        self.assertEqual(manager.get_total_items(), 33)
         self.assertEqual(auto.metadata.id, "test1")  # type: ignore
 
     def test_update_automation(self):

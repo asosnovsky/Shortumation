@@ -24,7 +24,7 @@ class BaseTestCase(TestCase):
 
 class automation_list_tests(BaseTestCase):
 
-    test_params = {"total": 28, "subtest2_found_items": 3, "subtest1_found_items": 10}
+    test_params = {"total": 32, "subtest2_found_items": 7, "subtest1_found_items": 10}
 
     def test_get_list_of_everything(self):
         data = self.client.post(
@@ -106,18 +106,18 @@ class automation2_lists_tests(automation_list_tests):
 class automation_update_tests(BaseTestCase):
     def test_insert_new(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
-        self.assertEqual(resp.json()["totalItems"], 28)
+        self.assertEqual(resp.json()["totalItems"], 32)
         resp = self.client.post(
             "/automations/item",
             json={
-                "index": 29,
+                "index": 33,
                 "data": AutomationData(metadata=AutomationMetdata(id="testme")).dict(),
             },
         )
         self.assertEqual(resp.status_code, 200)
-        resp = self.client.post("/automations/list", json={"limit": 1, "offset": 28})
+        resp = self.client.post("/automations/list", json={"limit": 1, "offset": 32})
         data = resp.json()
-        self.assertEqual(data["totalItems"], 29)
+        self.assertEqual(data["totalItems"], 33)
         self.assertEqual(data["data"][0]["metadata"]["id"], "testme")
 
     def test_update_some(self):
@@ -324,7 +324,7 @@ class automation_update_tests(BaseTestCase):
 class automation_delete_tests(BaseTestCase):
     def test_delete_some(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
-        self.assertEqual(resp.json()["totalItems"], 28)
+        self.assertEqual(resp.json()["totalItems"], 32)
         resp = self.client.delete(
             "/automations/item",
             json={
@@ -333,4 +333,4 @@ class automation_delete_tests(BaseTestCase):
         )
         self.assertEqual(resp.status_code, 200)
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
-        self.assertEqual(resp.json()["totalItems"], 27)
+        self.assertEqual(resp.json()["totalItems"], 31)

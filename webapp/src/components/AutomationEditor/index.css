@@ -5,6 +5,12 @@
     height: 100%;
 }
 
+.automation-editor-failures {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+}
+
 .automation-editor--flow-wrapper {
     flex: 1;
     padding: 0 0.5em 0 0.5em;

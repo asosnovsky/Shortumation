@@ -5,7 +5,7 @@ export const useDelayEffect = (cb: () => void, deps: any[], timeout: number) => 
     const fcn = useDelayedFunction(cb, timeout);
     useEffect(() => {
         fcn()
-    }, [deps])
+    }, deps)
 }
 
 export const useDelayedFunction = <FcnParams extends any[]>(

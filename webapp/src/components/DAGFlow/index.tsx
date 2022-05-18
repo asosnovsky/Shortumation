@@ -20,7 +20,18 @@ const nodeTypes = {
     'dagcircle': DAGCircle,
 }
 
-interface Props {
+const makeOnEditAutomationConditions = (
+    conditions: AutomationCondition[],
+    updateConditions: (c: AutomationCondition[]) => void,
+    openModal: UpdateModalState,
+) => () => openModal({
+    single: false,
+    node: conditions,
+    allowedTypes: ['condition'],
+    update: c => updateConditions(c as any),
+})
+
+export interface DAGAutomationFlowProps {
     className?: string;
     trigger: AutomationTrigger[];
     condition: AutomationCondition[];
@@ -31,7 +42,7 @@ interface Props {
     onConditionUpdate: (s: AutomationCondition[]) => void;
 }
 
-export const DAGAutomationFlow: FC<Props> = ({
+export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
     className,
     trigger,
     condition,
@@ -131,14 +142,3 @@ export const DAGAutomationFlow: FC<Props> = ({
         </ReactFlow>
     </>;
 }
-
-const makeOnEditAutomationConditions = (
-    conditions: AutomationCondition[],
-    updateConditions: (c: AutomationCondition[]) => void,
-    openModal: UpdateModalState,
-) => () => openModal({
-    single: false,
-    node: conditions,
-    allowedTypes: ['condition'],
-    update: c => updateConditions(c as any),
-})

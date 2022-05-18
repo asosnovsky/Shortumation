@@ -1,4 +1,4 @@
-from typing import Iterator, Union
+from typing import Any, Iterator, Union
 
 from pydantic.error_wrappers import ValidationError
 
@@ -26,18 +26,27 @@ def load_automation(
     try:
         yield ExtenededAutomationData(
             metadata=AutomationMetdata.parse_obj(auto_raw),
-            condition=load_conditions(auto_raw.get("condition", [])),
-            sequence=load_conditions(auto_raw.get("action", [])),
-            trigger=normalize_obj(auto_raw.get("trigger", [])),
+            condition=ifempty_or_null_then_list(load_conditions(auto_raw.get("condition", []))),
+            sequence=ifempty_or_null_then_list(load_conditions(auto_raw.get("action", []))),
+            trigger=ifempty_or_null_then_list(normalize_obj(auto_raw.get("trigger", []))),
             tags=tags,
         )
     except ValidationError as err:
         raise InvalidAutomationFile from err
 
 
+def ifempty_or_null_then_list(obj: Any):
+    if not isinstance(obj, list):
+        return []
+    else:
+        return obj
+
+
 def load_conditions(conditions: Union[dict, list, str]):
     if isinstance(conditions, list):
         return list(map(ensure_condition_dictionary, conditions))
+    elif not conditions:
+        return []
     else:
         return [ensure_condition_dictionary(conditions)]
 

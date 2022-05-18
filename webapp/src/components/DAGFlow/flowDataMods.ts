@@ -1,5 +1,5 @@
 import { makeFlowCircle } from "./DAGCircle"
-import { DAGAutomationFlowDims, FlowData } from "./types"
+import { DAGAutomationFlowDims } from "./types"
 import { XYPosition } from 'react-flow-renderer';
 
 export const makeAddButton = (

@@ -8,10 +8,6 @@ import InputYaml from 'components/Inputs/InputYaml';
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
 
-const mockUseState: UseState = s => {
-  return [s, () => { }]
-}
-
 export const useEditorNodeState = (originalNode: AutomationNode, uState: UseState = useState) => {
   const [allState, setAllState] = uState({
     node: originalNode,

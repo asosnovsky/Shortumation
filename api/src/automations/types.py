@@ -9,7 +9,7 @@ class AutomationMetdata(BaseModel):
     alias: Optional[str] = None
     description: Optional[str] = None
     trigger_variables: Optional[Dict[str, Union[str, int, bool, float]]] = None
-    mode: Literal["single", "restart", "queued", "parallel"] = "single"
+    mode: str = "single"
 
 
 class AutomationData(BaseModel):

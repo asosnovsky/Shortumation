@@ -64,3 +64,57 @@ FewAutos.args = {
     createMockAuto(),
   ],
 }
+
+
+
+export const BadAutmations = Template.bind({})
+BadAutmations.args = {
+  ...BadAutmations.args,
+  automations: [
+    {
+      condition: [],
+      tags: {},
+      metadata: {
+        id: "Bad Choose Sequence",
+        alias: "Bad Choose",
+        description: "Example Metadata",
+        trigger_variables: {
+          'wowo': '!'
+        },
+        mode: 'single',
+      },
+      trigger: [],
+      sequence: [
+        {
+          choose: {}
+        }
+      ] as any
+    },
+    {
+      condition: [],
+      tags: {},
+      metadata: {
+        id: "random",
+        alias: "Bad Trigger",
+        description: "Example Metadata",
+        trigger_variables: {
+          'wowo': '!'
+        },
+        mode: 'single',
+      },
+      trigger: [
+        "haha I am a string"
+      ] as any,
+      sequence: []
+    },
+    {
+      condition: [],
+      tags: {},
+      metadata: {
+      } as any,
+      trigger: [
+      ],
+      sequence: []
+    }
+  ],
+}

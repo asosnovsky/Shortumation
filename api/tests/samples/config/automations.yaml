@@ -811,3 +811,31 @@
           device_id: das2qdasdasdasadaasd
     default: []
   mode: single
+- id: 'baddy-1'
+  alias: 'bad triggers'
+  description: ''
+  trigger: ""
+  condition: []
+  action: []
+  mode: single
+- id: 'baddy-2'
+  alias: 'null things'
+  description: ''
+  trigger: 
+  condition: 
+  action: 
+  mode: single
+- id: 'baddy-3'
+  alias: 'big null things'
+  description: 
+  trigger: 
+  condition: 
+  action: 
+  mode: single
+- id: 'bad mode'
+  alias: 'bade mode'
+  description: "" 
+  trigger: []
+  condition: [] 
+  action:  []
+  mode: bad

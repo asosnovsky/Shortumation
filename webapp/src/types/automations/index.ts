@@ -1,15 +1,11 @@
+import * as st from 'superstruct'
+
 import { ActionType, AutomationAction } from "./actions";
 import { AutomationCondition, ConditionType } from "./conditions";
 import { AutomationTrigger, TriggerType } from "./triggers";
+import * as mv from "types/validators/metadata";
 
-
-export interface AutomationMetadata {
-  id: string;
-  alias: string;
-  description: string;
-  trigger_variables?: Record<string, string>;
-  mode: "single" | "restart" | "queued" | "parallel";
-}
+export type AutomationMetadata = st.Infer<typeof mv.AutomationMetadata>
 export interface AutomationData {
   metadata: AutomationMetadata;
   trigger: AutomationTrigger[];

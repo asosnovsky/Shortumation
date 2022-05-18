@@ -1,6 +1,5 @@
 import { AutomationTrigger } from 'types/automations/triggers';
 import { DAGAutomationFlowDims, FlowData, TriggerMakerOptions } from './types';
-import { makeFlowCircle } from './DAGCircle';
 import { makeAddButton } from './flowDataMods';
 
 export const triggerToFlow = (
@@ -14,7 +13,6 @@ export const triggerToFlow = (
         distanceFactor,
         nodeHeight,
         nodeWidth,
-        circleSize,
         padding,
         conditionHeight,
     } = dims;

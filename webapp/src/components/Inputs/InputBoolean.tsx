@@ -1,5 +1,4 @@
 import "./InputBoolean.css";
-import InputWrapper from "./InputWrapper";
 
 export interface Props {
   label: string;

@@ -61,6 +61,9 @@ jobs:
   nodejs:
     name: "NodeJs Tests"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        action: [test:ci, tsc:ci, build]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -71,7 +74,7 @@ jobs:
       - name: Install Dependencies
         run: cd webapp && yarn install
       - name: Run Tests
-        run: cd webapp && yarn test:ci
+        run: cd webapp && yarn ${{ matrix.action }}
       
 
         

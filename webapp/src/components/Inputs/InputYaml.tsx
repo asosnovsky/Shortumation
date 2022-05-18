@@ -1,7 +1,7 @@
 import * as yaml from "js-yaml";
 import { useState } from "react";
 import InputTextArea from "./InputTextArea";
-import { useDelayedFunction, useDelayEffect } from 'utils/useDelay';
+import { useDelayEffect } from 'utils/useDelay';
 
 export interface Props<T extends {}> {
   label: string;

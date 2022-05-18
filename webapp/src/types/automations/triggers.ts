@@ -1,79 +1,24 @@
+import * as st from 'superstruct'
 import { AutomationTime } from "./common";
+import * as v from "types/validators/triggers";
 
 interface AutomationTriggerBase {
     alias?: string;
 }
 
-export interface AutomationTriggerEvent extends AutomationTriggerBase {
-    platform: 'event';
-    event_type: string | string[];
-    event_data?: any;
-    context?: any;
-}
-export interface AutomationTriggerHA extends AutomationTriggerBase {
-    platform: 'homeassistant';
-    event: 'start' | 'shutdown';
-}
-export interface AutomationTriggerMQTT extends AutomationTriggerBase {
-    platform: 'mqtt';
-    topic: string;
-    payload: string;
-    value_template: string;
-}
-export interface AutomationTriggerNumericState extends AutomationTriggerBase {
-    platform: 'numeric_state';
-    entity_id: string | string[];
-    attribute?: string;
-    value_template?: string;
-    above?: string;
-    below?: string;
-    for?: AutomationTime;
-}
-export interface AutomationTriggerState extends AutomationTriggerBase {
-    platform: 'state';
-    entity_id: string | string[];
-    attribute?: string;
-    from?: string;
-    to?: string;
-    for?: AutomationTime;
-}
-export interface AutomationTriggerTag extends AutomationTriggerBase {
-    platform: 'tag';
-    tag_id: string;
-    device_id: string | string[];
-}
-export interface AutomationTriggerTemplate extends AutomationTriggerBase {
-    platform: 'template';
-    value_template: string;
-    for?: AutomationTime;
-}
-export interface AutomationTriggerTime extends AutomationTriggerBase {
-    platform: 'time';
-    at: AutomationTime;
-}
-export interface AutomationTriggerTimePattern extends AutomationTriggerBase {
-    platform: 'time_pattern';
-    hours?: string;
-    minutes?: string;
-    seconds?: string;
-}
-export interface AutomationTriggerWebhook extends AutomationTriggerBase {
-    platform: 'webhook';
-    webhook_id: string;
-}
-export interface AutomationTriggerZone extends AutomationTriggerBase {
-    platform: 'zone';
-    entity_id: string | string[];
-    zone: string;
-    event: 'enter' | 'leave';
-}
-export interface AutomationTriggerDevice extends AutomationTriggerBase {
-    platform: 'device';
-    device_id: string;
-    domain: string;
-    type: string;
-    subtype: string;
-}
+export type AutomationTriggerEvent = st.Infer<typeof v.AutomationTriggerEvent>;
+export type AutomationTriggerHA = st.Infer<typeof v.AutomationTriggerHA>;
+export type AutomationTriggerMQTT = st.Infer<typeof v.AutomationTriggerMQTT>;
+export type AutomationTriggerNumericState = st.Infer<typeof v.AutomationTriggerNumericState>;
+export type AutomationTriggerState = st.Infer<typeof v.AutomationTriggerState>;
+export type AutomationTriggerTag = st.Infer<typeof v.AutomationTriggerTag>;
+export type AutomationTriggerTemplate = st.Infer<typeof v.AutomationTriggerTemplate>;
+export type AutomationTriggerTime = st.Infer<typeof v.AutomationTriggerTime>;
+export type AutomationTriggerTimePattern = st.Infer<typeof v.AutomationTriggerTimePattern>;
+export type AutomationTriggerWebhook = st.Infer<typeof v.AutomationTriggerWebhook>;
+export type AutomationTriggerZone = st.Infer<typeof v.AutomationTriggerZone>;
+export type AutomationTriggerDevice = st.Infer<typeof v.AutomationTriggerDevice>;
+
 export type AutomationTrigger =
     | AutomationTriggerEvent
     | AutomationTriggerHA
