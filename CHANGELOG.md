@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12] - Less Intense Error Messages
+
+- Added more node-based errors (this way it's easier to see where validations failed)
+- Made the validators less strict in order to capture more edge cases that HA supports
+- Nicer auto-generated descriptions for some trigger nodes
+
+
 ## [0.1.10] - More Bug Fixes
 
 - Allowing null or undefined values for metadata fields
