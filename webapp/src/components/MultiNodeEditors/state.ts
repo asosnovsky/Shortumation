@@ -130,12 +130,12 @@ export const useMultiNodeEditorState = (props: MultiNodeEditorProps) => {
             })
         },
         onClose() {
-            if (!multiNode.isSaved) {
+            if (!multiNode.isSaved && multiNode.isModified) {
                 if (!window.confirm("You haven't saved your work, are you ok with losing it?")) {
                     return
                 }
+                props.onSave && props.onSave(slides)
             }
-            props.onSave && props.onSave(slides)
             props.onClose && props.onClose()
         }
     }
