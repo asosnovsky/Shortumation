@@ -41,9 +41,7 @@ export const sequenceToFlow = (
                 try {
                     const out = addChooseNode(node, position, nodeId, dims, updater, i);
                     position = out.lastPos
-                    console.log(out);
                     flowData = mergeFlowDatas(flowData, out.flowData);
-                    console.log(flowData);
                 } catch (err) {
                     console.error(err)
                     addErrorNode(flowData, nodeId, position, dims, err, updater.makeOnEditForBadNode(i));

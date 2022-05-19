@@ -127,7 +127,6 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         },
         makeSequenceUpdater(sequence, onSequenceUpdate, setModalState),
     );
-    console.log(flowData)
     // render
     return <>
         <Modal open={!!modalState}>

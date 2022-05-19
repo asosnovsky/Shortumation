@@ -16,10 +16,39 @@ export const convertTimeToString = (t: AutomationTime) => {
     }
 }
 export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(node: AutomationNode<N>): string => {
+    console.log(node)
     if (node.alias) {
         return node.alias;
     }
     if ('platform' in node) {
+        if (node.platform === 'time') {
+            return node.at
+        }
+        if (node.platform === 'homeassistant') {
+            if (node.event === 'start') {
+                return 'HA is starting'
+            } else {
+                return 'HA is shutting down'
+            }
+        }
+        if (node.platform === 'tag') {
+            return `Tag = ${node.tag_id}`
+        }
+        if (node.platform === 'state') {
+            let out = "";
+            if (typeof node.entity_id === 'string') {
+                out = node.entity_id
+            } else {
+                out = node.entity_id[0] + " and more"
+            }
+            if (node.from) {
+                out += ` from ${node.from}`
+            }
+            if (node.to) {
+                out += ` to ${node.to}`
+            }
+            return out
+        }
         return node.platform
     }
     if ('condition' in node) {

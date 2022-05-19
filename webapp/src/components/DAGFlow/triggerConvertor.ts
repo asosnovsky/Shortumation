@@ -1,6 +1,7 @@
 import { AutomationTrigger } from 'types/automations/triggers';
 import { DAGAutomationFlowDims, FlowData, TriggerMakerOptions } from './types';
 import { makeAddButton } from './flowDataMods';
+import { getDescriptionFromAutomationNode } from 'utils/formatting';
 
 export const triggerToFlow = (
     flowData: FlowData,
@@ -23,7 +24,7 @@ export const triggerToFlow = (
             id: flowId,
             type: 'dagnode',
             data: {
-                label: t.alias ?? t.platform,
+                label: getDescriptionFromAutomationNode(t),
                 height: nodeHeight,
                 width: nodeWidth,
                 color: 'red',

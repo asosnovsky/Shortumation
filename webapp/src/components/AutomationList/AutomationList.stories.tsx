@@ -511,6 +511,38 @@ BadAutmations.args = {
   ...BadAutmations.args,
   automations: [
     {
+      "metadata": {
+        "alias": "Set Thermostat to 76 at 8am",
+        "description": "",
+        "mode": "single",
+      } as any,
+      "trigger": [
+        {
+          "at": "08:00:00",
+          "platform": "time"
+        }
+      ],
+      "condition": [
+        {
+          "condition": "state",
+          "entity_id": "climate.thermostat",
+          "state": "cool"
+        }
+      ],
+      "sequence": [
+        {
+          "data": {
+            "temperature": 76
+          },
+          "service": "climate.set_temperature",
+          "target": {
+            "entity_id": "climate.thermostat"
+          }
+        }
+      ],
+      "tags": {},
+    },
+    {
       condition: [],
       tags: {},
       metadata: {

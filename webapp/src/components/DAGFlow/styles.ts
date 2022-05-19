@@ -78,6 +78,7 @@ export const useNodeStyles = createAppUseStyles<{
       textOverflow: 'ellipsis',
       overflow: "hidden",
       whiteSpace: "break-spaces",
+      lineBreak: "anywhere",
       cursor: 'default',
     },
     buttonDelete: {
