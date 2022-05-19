@@ -152,6 +152,22 @@ export const validateNode = (node: AutomationNode): MiniFailure[] | null => {
             } else if (nodeSubType === 'device') {
                 return getFailures(node, v.triggers.AutomationTriggerDevice)
             }
+        } else if (nodeType === 'condition') {
+            if (['and', 'or', 'not'].includes(nodeSubType)) {
+                return getFailures(node, v.conditions.LogicCondition)
+            } else if (nodeSubType === 'numeric_state') {
+                return getFailures(node, v.conditions.NumericCondition)
+            } else if (nodeSubType === 'state') {
+                return getFailures(node, v.conditions.StateCondition)
+            } else if (nodeSubType === 'template') {
+                return getFailures(node, v.conditions.TemplateCondition)
+            } else if (nodeSubType === 'trigger') {
+                return getFailures(node, v.conditions.TriggerCondition)
+            } else if (nodeSubType === 'time') {
+                return getFailures(node, v.conditions.TimeCondition)
+            } else if (nodeSubType === 'zone') {
+                return getFailures(node, v.conditions.ZoneCondition)
+            }
         }
     } catch (err) {
         console.warn(err)

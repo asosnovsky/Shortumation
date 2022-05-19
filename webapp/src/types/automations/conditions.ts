@@ -1,5 +1,6 @@
 import { AutomationTime } from "./common";
-
+import * as st from 'superstruct';
+import * as v from "types/validators/conditions";
 type AutomationConditionNodeBase<Name extends String, Data extends Object> = {
     condition: Name;
     alias?: string;
@@ -7,35 +8,12 @@ type AutomationConditionNodeBase<Name extends String, Data extends Object> = {
 export type LogicCondition = AutomationConditionNodeBase<'and' | 'or' | 'not', {
     conditions: AutomationCondition[];
 }>;
-export type NumericCondition = AutomationConditionNodeBase<'numeric_state', {
-    entity_id: string | string[];
-    above?: string;
-    below?: string;
-    attribute?: string;
-    value_template?: string;
-}>;
-export type StateCondition = AutomationConditionNodeBase<'state', {
-    entity_id: string | string[];
-    state: string | string[];
-    for?: AutomationTime;
-    attribute?: string;
-}>;
-export type TemplateCondition = AutomationConditionNodeBase<'template', {
-    value_template: string;
-}>;
-export type TimeCondition = AutomationConditionNodeBase<'time', {
-    after?: AutomationTime;
-    before?: AutomationTime;
-    weekday?: Array<'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'>;
-}>;
-export type TriggerCondition = AutomationConditionNodeBase<'trigger', {
-    id: string;
-}>;
-export type ZoneCondition = AutomationConditionNodeBase<'zone', {
-    zone: string;
-    entity_id: string | string[];
-    state: string | string[];
-}>;
+export type NumericCondition = st.Infer<typeof v.NumericCondition>;
+export type StateCondition = st.Infer<typeof v.StateCondition>;
+export type TemplateCondition = st.Infer<typeof v.TemplateCondition>;
+export type TimeCondition = st.Infer<typeof v.TimeCondition>;
+export type TriggerCondition = st.Infer<typeof v.TriggerCondition>;
+export type ZoneCondition = st.Infer<typeof v.ZoneCondition>;
 export type AutomationCondition =
     | LogicCondition
     | NumericCondition

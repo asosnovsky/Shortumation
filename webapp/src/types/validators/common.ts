@@ -1,6 +1,9 @@
 import * as st from 'superstruct'
 
-
+export const EntityId = st.union([
+    st.string(),
+    st.array(st.string()),
+])
 export const AutomationTimeString = st.refine(st.string(), 'TimeString', (v, c) => {
     // https://www.home-assistant.io/docs/automation/trigger/#time-string
     const bits: string[] = v.split(':')
