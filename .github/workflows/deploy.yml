@@ -71,5 +71,4 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: process.env.VERSION,
-              body: process.env.CHANGELOG,
             });
