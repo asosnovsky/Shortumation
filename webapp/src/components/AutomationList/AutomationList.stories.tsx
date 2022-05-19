@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { AutomationList } from ".";
 import { createMockAuto } from "utils/mocks";
-import * as dgconst from 'components/DAGSvgs/constants';
+import * as dgconst from 'components/DAGFlow/constants';
 
 export default {
   title: 'App/AutomationList',

@@ -4,6 +4,7 @@ import { DAGCircleProps } from './DAGCircle';
 import { DAGNodeProps } from './DAGNode';
 import { AutomationTrigger } from 'types/automations/triggers';
 import { MultiNodeEditorProps } from 'components/MultiNodeEditors/types';
+import { DAGErrorNodeProps } from './DAGErrorNode';
 
 
 export type DAGAutomationFlowDims = {
@@ -16,7 +17,7 @@ export type DAGAutomationFlowDims = {
     distanceFactor: number;
 }
 
-export type DAGAutomationFlowNode = Node<DAGNodeProps | DAGCircleProps | any>;
+export type DAGAutomationFlowNode = Node<DAGNodeProps | DAGCircleProps | DAGErrorNodeProps | any>;
 export type FlowData = {
     nodes: DAGAutomationFlowNode[],
     edges: Edge[],
@@ -34,6 +35,7 @@ export type UpdateModalState<T extends AutomationSequenceNode | AutomationTrigge
 
 export type ModalState<T extends AutomationSequenceNode | AutomationTrigger = any> = {
     single: true,
+    isError?: boolean,
     node: T
     update: (n: T) => void;
     saveBtnCreateText?: boolean;

@@ -229,7 +229,10 @@ export const useInputTextAreaStyles = createAppUseStyles<{ resizable: boolean }>
   return {
     input: ({ resizable }) => ({
       ...styles.input,
-      resize: resizable ? 'both' : 'none'
+      resize: resizable ? 'both' : 'none',
+      minWidth: "calc(100% - 2em)",
+      maxWidth: "calc(100% - 2em)",
+      minHeight: "8em"
     })
   }
 });

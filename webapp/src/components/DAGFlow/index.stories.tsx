@@ -4,7 +4,7 @@ import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DAGAutomationFlow } from '.';
 import { useState } from 'react';
-import * as dgconst from "components/DAGSvgs/constants";
+import * as dgconst from "components/DAGFlow/constants";
 
 
 export default {
@@ -209,4 +209,25 @@ EmptyStart.args = {
     condition: [],
     trigger: [],
     sequence: []
+}
+
+
+export const Errors = Template.bind({})
+Errors.args = {
+    ...Errors.args,
+    condition: [
+        {
+            "condition": "numeric_state",
+        } as any
+    ],
+    trigger: [
+        {
+            "platform": "event",
+        } as any
+    ],
+    sequence: [
+        {
+            "choose": {}
+        } as any
+    ]
 }

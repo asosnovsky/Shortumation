@@ -19,15 +19,13 @@ export type AutomationNodeMapping = {
   "action": AutomationAction;
   "condition": AutomationCondition;
 }
-export type AutomationNodeTypes = keyof AutomationNodeMapping | undefined;
+export type AutomationNodeTypes = keyof AutomationNodeMapping;
 export type AutomationNode<N extends AutomationNodeTypes = any> =
-  N extends undefined ? AutomationTrigger :
   N extends 'trigger' ? AutomationTrigger :
   N extends 'action' ? AutomationAction :
   N extends 'condition' ? AutomationCondition :
   never;
 export type AutomationNodeSubtype<T extends AutomationNodeTypes = any> =
-  T extends undefined ? TriggerType :
   T extends 'trigger' ? TriggerType :
   T extends 'action' ? ActionType :
   T extends 'condition' ? ConditionType :

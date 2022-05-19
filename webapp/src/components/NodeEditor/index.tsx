@@ -14,6 +14,7 @@ export interface NodeEditorProps {
   onSave?: (n: AutomationNode) => void;
   onFlags?: (isReady: boolean, isModified: boolean) => void;
   saveBtnCreateText?: boolean;
+  isErrored?: boolean;
 }
 
 export const NodeEditor: FC<NodeEditorProps> = ({
@@ -23,10 +24,11 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   onSave = () => { },
   onFlags = () => { },
   saveBtnCreateText = false,
-  children
+  children,
+  isErrored = false,
 }) => {
   // state
-  const state = useEditorNodeState(node);
+  const state = useEditorNodeState(node, isErrored);
 
   // alias
   const isModified = state.isModified;
@@ -53,7 +55,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
           options={state.subTypes}
           onChange={state.setSubType}
         /> : <></>}
-        <InputBoolean label="Yaml" onChange={state.setYamlMode} value={state.yamlMode} />
+        <InputBoolean label="Yaml" onChange={state.setYamlMode} value={state.yamlMode} disabled={state.isErrored} />
       </div>
       {state.renderOptionList()}
     </div>

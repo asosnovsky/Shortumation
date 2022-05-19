@@ -15,17 +15,15 @@ export interface DAGNodeProps {
   hasInput?: boolean;
   accentBackground?: boolean;
 }
-export const DAGNode: FC<{ data: DAGNodeProps }> = ({
-  data: {
-    label,
-    height,
-    width,
-    onXClick,
-    onEditClick = () => { },
-    color,
-    hasInput = false,
-    accentBackground = false,
-  },
+export const DAGNode: FC<DAGNodeProps> = ({
+  label,
+  height,
+  width,
+  onXClick,
+  onEditClick = () => { },
+  color,
+  hasInput = false,
+  accentBackground = false,
 }) => {
   const { classes, theme } = useNodeStyles({
     color,

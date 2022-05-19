@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { ConnectedAutomationList } from ".";
 import { createMockAuto } from "utils/mocks";
 import { useMockApiService } from "apiService";
-import { DEFAULT_DIMS } from 'components/DAGSvgs/constants';
+import { DEFAULT_DIMS } from 'components/DAGFlow/constants';
 
 export default {
   title: 'App/AutomationList/Connected',

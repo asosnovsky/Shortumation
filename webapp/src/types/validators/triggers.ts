@@ -7,7 +7,7 @@ const AutomationTriggerBase = {
     id: st.optional(st.string()),
 }
 
-export const AutomationTriggerEvent = st.object({
+export const AutomationTriggerEvent = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('event'),
     event_type: st.union([st.string(), st.array(st.string())]),
@@ -15,13 +15,13 @@ export const AutomationTriggerEvent = st.object({
     context: st.any(),
 })
 
-export const AutomationTriggerHA = st.object({
+export const AutomationTriggerHA = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('homeassistant'),
     event: st.enums(['start', 'shutdown']),
 })
 
-export const AutomationTriggerMQTT = st.object({
+export const AutomationTriggerMQTT = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('mqtt'),
     topic: st.string(),
@@ -29,7 +29,7 @@ export const AutomationTriggerMQTT = st.object({
     value_template: st.string(),
 })
 
-export const AutomationTriggerNumericState = st.object({
+export const AutomationTriggerNumericState = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('numeric_state'),
     entity_id: st.union([st.string(), st.array(st.string())]),
@@ -40,7 +40,7 @@ export const AutomationTriggerNumericState = st.object({
     for: st.optional(AutomationTime),
 })
 
-export const AutomationTriggerState = st.object({
+export const AutomationTriggerState = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('state'),
     entity_id: st.union([st.string(), st.array(st.string())]),
@@ -50,27 +50,27 @@ export const AutomationTriggerState = st.object({
     for: st.optional(AutomationTime),
 })
 
-export const AutomationTriggerTag = st.object({
+export const AutomationTriggerTag = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('tag'),
     tag_id: st.string(),
     device_id: st.union([st.string(), st.array(st.string())]),
 })
 
-export const AutomationTriggerTemplate = st.object({
+export const AutomationTriggerTemplate = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('template'),
     value_template: st.string(),
     for: st.optional(AutomationTime),
 })
 
-export const AutomationTriggerTime = st.object({
+export const AutomationTriggerTime = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('time'),
     at: AutomationTimeString,
 })
 
-export const AutomationTriggerTimePattern = st.object({
+export const AutomationTriggerTimePattern = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('time_pattern'),
     hours: st.optional(st.string()),
@@ -78,13 +78,13 @@ export const AutomationTriggerTimePattern = st.object({
     seconds: st.optional(st.string()),
 })
 
-export const AutomationTriggerWebhook = st.object({
+export const AutomationTriggerWebhook = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('webhook'),
     webhook_id: st.string(),
 })
 
-export const AutomationTriggerZone = st.object({
+export const AutomationTriggerZone = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('zone'),
     entity_id: st.union([st.string(), st.array(st.string())]),
@@ -92,7 +92,7 @@ export const AutomationTriggerZone = st.object({
     event: st.enums(['enter', 'leave'])
 })
 
-export const AutomationTriggerDevice = st.object({
+export const AutomationTriggerDevice = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('device'),
     entity_id: st.optional(st.string()),

@@ -52,3 +52,9 @@
     min-height: 50px;
     min-width: 25vw;
 }
+
+.node-editor--error {
+    max-width: 30em;
+    overflow: auto;
+    max-height: 10em;
+}

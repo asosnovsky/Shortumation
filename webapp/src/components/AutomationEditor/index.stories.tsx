@@ -2,7 +2,7 @@ import React from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AutomationEditor } from './index';
 import { useState } from 'react';
-import * as dgconst from 'components/DAGSvgs/constants';
+import * as dgconst from 'components/DAGFlow/constants';
 
 
 export default {

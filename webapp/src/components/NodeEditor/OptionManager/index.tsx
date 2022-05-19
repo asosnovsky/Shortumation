@@ -2,18 +2,17 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
-import { getNodeType, getSubTypeList } from 'utils/automations';
-import { getNodeSubType } from '../constants';
+import { getNodeType, getNodeSubType, getSubTypeList, validateNode } from 'utils/automations';
 import InputYaml from 'components/Inputs/InputYaml';
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
 
-export const useEditorNodeState = (originalNode: AutomationNode, uState: UseState = useState) => {
+export const useEditorNodeState = (originalNode: AutomationNode, isErrored: boolean, uState: UseState = useState) => {
   const [allState, setAllState] = uState({
     node: originalNode,
     yamlMode: false,
     isModified: false,
-    invalidManualYaml: "",
+    ...computeInvalidYaml(originalNode, isErrored)
   });
   const { node: currentNode, isModified, yamlMode, invalidManualYaml } = allState;
   useEffect(() => {
@@ -25,9 +24,20 @@ export const useEditorNodeState = (originalNode: AutomationNode, uState: UseStat
   const setStateForManualYaml = (yaml: any) => {
     try {
       createData(yaml, yaml)
-      setAllState({ ...allState, node: yaml, invalidManualYaml: '' })
+      const errors = validateNode(yaml);
+      if (errors) {
+        setAllState({
+          ...allState, invalidManualYaml: <ul key={'error'}>
+            {errors.map(({ message, path }, i) => <li key={i}>
+              <b>{path}</b>: {message}
+            </li>)}
+          </ul>
+        })
+      } else {
+        setAllState({ ...allState, node: yaml, invalidManualYaml: <></> })
+      }
     } catch (err) {
-      setAllState({ ...allState, invalidManualYaml: String(err) })
+      setAllState({ ...allState, invalidManualYaml: <>{String(err)}</> })
     }
   }
   const {
@@ -42,15 +52,19 @@ export const useEditorNodeState = (originalNode: AutomationNode, uState: UseStat
     nodeType,
     subType,
     subTypes,
-    yamlMode,
     setYamlMode,
     invalidManualYaml,
     isModified,
+    isErrored: allState.isErrored,
+    get yamlMode() {
+      return allState.isErrored || yamlMode
+    },
     get data() {
       return currentNode
     },
     renderOptionList() {
-      if (yamlMode) {
+      if (yamlMode || allState.isErrored) {
+
         return <>
           <InputYaml
             label=''
@@ -58,7 +72,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, uState: UseStat
             onChange={setStateForManualYaml}
             resizable
           />
-          <span className="node-editor--error">{invalidManualYaml}</span>
+          <div className="node-editor--error">{invalidManualYaml}</div>
         </>
       }
       return optionManager.renderOptionList(currentNode, setState);
@@ -99,5 +113,24 @@ const createData = (originalNode: AutomationNode, currentNode: AutomationNode) =
     subType,
     subTypes,
     optionManager,
+  }
+}
+
+const computeInvalidYaml = (node: AutomationNode, isErrored: boolean) => {
+  const errors = validateNode(node);
+  if (errors) {
+    return {
+      isErrored: true,
+      invalidManualYaml: <ul key={'error'}>
+        {errors.map(({ message, path }, i) => <li key={i}>
+          <b>{path}</b>: {message}
+        </li>)}
+      </ul>
+    }
+  } else {
+    return {
+      isErrored,
+      invalidManualYaml: <></>
+    }
   }
 }

@@ -1,5 +1,4 @@
 import * as st from 'superstruct'
-import { AutomationTime } from "./common";
 import * as v from "types/validators/triggers";
 
 interface AutomationTriggerBase {

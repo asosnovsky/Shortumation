@@ -14,9 +14,12 @@ import { MultiNodeEditor } from "components/MultiNodeEditors";
 import { Modal } from "components/Modal";
 import { AutomationCondition } from "types/automations/conditions";
 import { makeConditionPoint } from "./flowDataMods";
+import { convertToFlowNode } from "./helpers";
+import { DAGErrorNode } from "./DAGErrorNode";
 
 const nodeTypes = {
-    'dagnode': DAGNode,
+    'dagnode': convertToFlowNode(DAGNode),
+    'errornode': convertToFlowNode(DAGErrorNode),
     'dagcircle': DAGCircle,
 }
 
@@ -61,6 +64,7 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         if (modalState.single) {
             modalBody = <NodeEditor
                 node={modalState.node}
+                isErrored={modalState.isError}
                 onClose={() => setModalState(null)}
                 onSave={n => { modalState.update(n as any); setModalState(null); }}
                 allowedTypes={modalState.allowedTypes}
@@ -123,7 +127,7 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         },
         makeSequenceUpdater(sequence, onSequenceUpdate, setModalState),
     );
-
+    console.log(flowData)
     // render
     return <>
         <Modal open={!!modalState}>

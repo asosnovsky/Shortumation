@@ -38,7 +38,16 @@ export const sequenceToFlow = (
         // draw node
         if (getNodeType(node) === 'action') {
             if ('choose' in node) {
-                position = addChooseNode(flowData, node, position, nodeId, dims, updater, i)
+                try {
+                    const out = addChooseNode(node, position, nodeId, dims, updater, i);
+                    position = out.lastPos
+                    console.log(out);
+                    flowData = mergeFlowDatas(flowData, out.flowData);
+                    console.log(flowData);
+                } catch (err) {
+                    console.error(err)
+                    addErrorNode(flowData, nodeId, position, dims, err, updater.makeOnEditForBadNode(i));
+                }
             } else {
                 addSingleNode(flowData, node, position, nodeId, dims, {
                     onEditClick: updater.makeOnModalOpenForNode(i, node),
@@ -56,6 +65,7 @@ export const sequenceToFlow = (
         lastPointId = nodeId;
         lasPos = position;
     }
+
     // add button
     const addCircle = makeAddButton(
         `${prefix}-+`,
@@ -117,10 +127,33 @@ const addSingleNode = (
     position,
 });
 
+const addErrorNode = (
+    flowData: FlowData,
+    nodeId: string,
+    position: XYPosition,
+    {
+        nodeHeight,
+        nodeWidth,
+    }: DAGAutomationFlowDims,
+    error: any,
+    onEdit: () => void,
+    hasInput: boolean = true,
+) => flowData.nodes.push({
+    id: nodeId,
+    type: 'errornode',
+    position,
+    data: {
+        height: nodeHeight,
+        width: nodeWidth,
+        hasInput,
+        onEdit,
+        error,
+    }
+})
+
 
 
 const addChooseNode = (
-    flowData: FlowData,
     node: ChooseAction,
     position: XYPosition,
     nodeId: string,
@@ -128,6 +161,10 @@ const addChooseNode = (
     updater: SequenceUpdater,
     i: number,
 ) => {
+    const flowData: FlowData = {
+        nodes: [],
+        edges: [],
+    };
     addSingleNode(flowData, node, position, nodeId, dims, {
         onEditClick: updater.makeOnModalOpenForNode(i, node),
         onXClick: () => updater.removeNode(i),
@@ -221,5 +258,11 @@ const addChooseNode = (
     } else {
         lastPos = xyApply(lastPos, elseCircle.position, Math.max)
     }
-    return lastPos
+    return { lastPos, flowData }
+}
+
+export const mergeFlowDatas = (fd1: FlowData, fd2: FlowData): FlowData => {
+    fd1.edges = fd1.edges.concat(fd2.edges);
+    fd1.nodes = fd1.nodes.concat(fd2.nodes);
+    return fd1
 }

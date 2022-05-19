@@ -2,6 +2,7 @@ import { AutomationSequenceNode } from "types/automations";
 import { ChooseAction } from "types/automations/actions";
 import { AutomationCondition } from "types/automations/conditions";
 import { UpdateModalState } from "./types";
+import { getNodeType } from '../../utils/automations';
 
 export type SequenceUpdater = ReturnType<typeof makeSequenceUpdater>;
 
@@ -114,6 +115,16 @@ export const makeSequenceUpdater = (
       })
     }
   },
+  makeOnEditForBadNode(i: number) {
+    const node = sequence[i];
+    return () => openModal({
+      single: true,
+      isError: true,
+      node,
+      allowedTypes: [getNodeType(node)],
+      update: n => this.updateNode(i, n),
+    })
+  }
 });
 
 
