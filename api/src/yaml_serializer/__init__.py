@@ -1,9 +1,10 @@
-import yaml
 import io
 from typing import Any, TextIO, Union
 
-from src.yaml_serializer.loader import YamlSafeLoader
+import yaml
+
 from src.yaml_serializer.dumper import YamlSafeDumper
+from src.yaml_serializer.loader import YamlSafeLoader
 
 
 def dump_yaml(obj: Any) -> str:
@@ -16,7 +17,7 @@ def dump_yaml(obj: Any) -> str:
         str
     """
     stream = io.StringIO()
-    yaml.dump(
+    yaml.dump(  # nosec
         obj,
         stream,
         default_flow_style=False,
@@ -37,4 +38,4 @@ def load_yaml(yaml_stream: TextIO) -> Union[dict, list]:
     Returns:
         List[dict, list]
     """
-    return yaml.load(yaml_stream, Loader=YamlSafeLoader)
+    return yaml.load(yaml_stream, Loader=YamlSafeLoader)  # nosec
