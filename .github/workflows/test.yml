@@ -8,9 +8,25 @@ on:
   pull_request:
     branches: [main]
 jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    name: Metadata
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Get Version
+        id: version
+        shell: bash
+        run: |
+          echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)-g$(echo ${{ github.sha }} | cut -c1-3)
+
   python:
     name: "Python Tests"
     runs-on: ubuntu-latest
+    needs:
+      - metadata
     strategy:
       matrix:
         action: [lint, coverage, security-checks]
@@ -24,12 +40,14 @@ jobs:
         run: cd api && make setup
       - name: Echo dependencies
         run: cd api && ./venv/bin/pip freeze
-      - name: Running ${{ matrix.action }}
+      - name: ${{ needs.metadata.outputs.version }} / ${{ matrix.action }}
         run: cd api && make ${{ matrix.action }}
 
   nodejs:
     name: "NodeJs Tests"
     runs-on: ubuntu-latest
+    needs:
+      - metadata
     strategy:
       matrix:
         action:
@@ -45,19 +63,8 @@ jobs:
           cache-dependency-path: webapp/yarn.lock
       - name: Install Dependencies
         run: cd webapp && yarn install
-      - name: Run Tests
+      - name: ${{ needs.metadata.outputs.version }} / ${{ matrix.action }}
         run: cd webapp && yarn ${{ matrix.action }}
-
-  metadata:
-    runs-on: ubuntu-latest
-    name: Metadata
-    outputs:
-      version: ${{ steps.get_version.outputs.VERSION }}
-    steps:
-      - name: Get the version
-        id: version
-        shell: "bash"
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)-g$(echo ${{ github.sha }} | cut -c1-3)
 
   deploy:
     runs-on: ubuntu-latest
