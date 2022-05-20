@@ -1,5 +1,7 @@
 # Shortumation 
 
+[![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml)
+
 A better way to write automations in home-assistant without having to install and run a seperate automation engine!
 
 ![image](https://user-images.githubusercontent.com/7451445/168672575-fb19997d-fe9b-4192-96b0-733b62519797.png)
