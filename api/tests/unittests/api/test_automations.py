@@ -1,7 +1,6 @@
+import yaml
 from unittest import TestCase
-
 from fastapi.testclient import TestClient
-from ruamel.yaml import YAML
 
 from src.api.app import make_app
 from src.automations.types import (
@@ -151,7 +150,7 @@ class automation_update_tests(BaseTestCase):
         )
         self.assertEqual(resp.status_code, 200)
         with (self.config_folder / "automations.yaml").open("r") as fp:
-            disk_data = dict(YAML().load(fp)[15])
+            disk_data = dict(yaml.safe_load(fp)[15])
         trigger = list(map(dict, disk_data.pop("trigger")))
         condition = disk_data.pop("condition")
         action = list(map(dict, disk_data.pop("action")))
@@ -202,7 +201,7 @@ class automation_update_tests(BaseTestCase):
         )
         self.assertEqual(resp.status_code, 200)
         with (self.config_folder / "automations.yaml").open("r") as fp:
-            disk_data = dict(YAML().load(fp)[27])
+            disk_data = dict(yaml.safe_load(fp)[27])
         trigger = list(map(dict, disk_data.pop("trigger")))
         condition = disk_data.pop("condition")
         action = list(map(dict, disk_data.pop("action")))
