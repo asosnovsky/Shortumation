@@ -4,15 +4,16 @@ import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
 import { getNodeType, getNodeSubType, getSubTypeList, validateNode } from 'utils/automations';
 import InputYaml from 'components/Inputs/InputYaml';
+import InputText from 'components/Inputs/InputText';
+import { getDescriptionFromAutomationNode } from 'utils/formatting';
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
 
 export const useEditorNodeState = (originalNode: AutomationNode, isErrored: boolean, uState: UseState = useState) => {
   const [allState, setAllState] = uState({
-    node: originalNode,
     yamlMode: false,
     isModified: false,
-    ...computeInvalidYaml(originalNode, isErrored)
+    ...computeInvalidYaml(originalNode)
   });
   const { node: currentNode, isModified, yamlMode, invalidManualYaml } = allState;
   useEffect(() => {
@@ -24,20 +25,12 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
   const setStateForManualYaml = (yaml: any) => {
     try {
       createData(yaml, yaml)
-      const errors = validateNode(yaml);
-      if (errors) {
-        setAllState({
-          ...allState, invalidManualYaml: <ul key={'error'}>
-            {errors.map(({ message, path }, i) => <li key={i}>
-              <b>{path}</b>: {message}
-            </li>)}
-          </ul>
-        })
-      } else {
-        setAllState({ ...allState, node: yaml, invalidManualYaml: <></> })
-      }
+      setAllState({
+        ...allState,
+        ...computeInvalidYaml(yaml)
+      })
     } catch (err) {
-      setAllState({ ...allState, invalidManualYaml: <>{String(err)}</> })
+      setAllState({ ...allState, invalidManualYaml: <>{String(err)}</>, isErrored: true, })
     }
   }
   const {
@@ -63,9 +56,13 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
       return currentNode
     },
     renderOptionList() {
+      const aliasEditor = <InputText label="Alias" value={getDescriptionFromAutomationNode(allState.node)} onChange={alias => setState({
+        ...allState.node,
+        alias
+      })} />
       if (yamlMode || allState.isErrored) {
-
         return <>
+          {aliasEditor}
           <InputYaml
             label=''
             value={currentNode}
@@ -74,7 +71,10 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
           <div className="node-editor--error">{invalidManualYaml}</div>
         </>
       }
-      return optionManager.renderOptionList(currentNode, setState);
+      return <>
+        {aliasEditor}
+        {optionManager.renderOptionList(currentNode, setState)}
+      </>;
     },
     isReady() {
       return optionManager.isReady(currentNode);
@@ -115,10 +115,11 @@ const createData = (originalNode: AutomationNode, currentNode: AutomationNode) =
   }
 }
 
-const computeInvalidYaml = (node: AutomationNode, isErrored: boolean) => {
+const computeInvalidYaml = (node: AutomationNode) => {
   const errors = validateNode(node);
   if (errors) {
     return {
+      node,
       isErrored: true,
       invalidManualYaml: <ul key={'error'}>
         {errors.map(({ message, path }, i) => <li key={i}>
@@ -128,7 +129,8 @@ const computeInvalidYaml = (node: AutomationNode, isErrored: boolean) => {
     }
   } else {
     return {
-      isErrored,
+      node,
+      isErrored: false,
       invalidManualYaml: <></>
     }
   }

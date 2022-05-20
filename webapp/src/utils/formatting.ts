@@ -16,7 +16,6 @@ export const convertTimeToString = (t: AutomationTime) => {
     }
 }
 export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(node: AutomationNode<N>): string => {
-    console.log(node)
     if (node.alias) {
         return node.alias;
     }

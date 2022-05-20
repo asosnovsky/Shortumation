@@ -35,7 +35,9 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   const isReady = state.isReady();
   const areYouSureNotReady = (what: string) => !isReady ?
     window.confirm(`This node is missing some values, are you sure you want to ${what}?`) :
-    true;
+    state.isErrored ?
+      window.confirm(`This node contains errors, are you sure you want to ${what}?`) :
+      true;
 
   // events
   onFlags(isReady, isModified);
