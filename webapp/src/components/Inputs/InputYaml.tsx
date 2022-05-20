@@ -1,7 +1,10 @@
 import * as yaml from "js-yaml";
 import { useState } from "react";
-import InputTextArea from "./InputTextArea";
 import { useDelayEffect } from 'utils/useDelay';
+
+import CodeMirror from '@uiw/react-codemirror';
+import InputWrapper from "./InputWrapper";
+
 
 export interface Props<T extends {}> {
   label: string;
@@ -24,6 +27,7 @@ export default function InputYaml<T>({
   });
   const setText = (t: string) => {
     try {
+      yaml.load(t)
       setState({ text: t, error: undefined })
     } catch (_) {
       setState({ text: t, error: "! Invalid Yaml !" })
@@ -40,11 +44,12 @@ export default function InputYaml<T>({
       }
     }
   }, [text], 1000)
-  return <InputTextArea
-    error={error}
-    label={label}
-    value={text}
-    onChange={setText}
-    resizable={resizable}
-  />
+  return <InputWrapper label={label} error={error}>
+    <CodeMirror
+      theme={"dark"}
+      value={text}
+      lang="yaml"
+      onChange={setText}
+    />
+  </InputWrapper>
 }
