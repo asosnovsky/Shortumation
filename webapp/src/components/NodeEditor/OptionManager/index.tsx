@@ -20,7 +20,10 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
     setAllState({ ...allState, node: originalNode, isModified: false, })
     // eslint-disable-next-line
   }, [originalNode])
-  const setState = (node: AutomationNode) => setAllState(({ ...allState, node, isModified: true, }));
+  const setState = (node: AutomationNode) => setAllState(({
+    ...allState, node,
+    isModified: JSON.stringify(node) !== JSON.stringify(originalNode),
+  }));
   const setYamlMode = (yamlMode: boolean) => setAllState({ ...allState, yamlMode, });
   const setStateForManualYaml = (yaml: any) => {
     try {

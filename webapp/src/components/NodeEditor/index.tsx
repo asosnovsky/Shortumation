@@ -66,7 +66,13 @@ export const NodeEditor: FC<NodeEditorProps> = ({
       <Button
         className="node-editor--footer--save"
         onClick={() => {
-          areYouSureNotReady('save') && onSave(state.data)
+          if (areYouSureNotReady('save')) {
+            if (JSON.stringify(state.data) !== JSON.stringify(node)) {
+              onSave(state.data)
+            } else {
+              onClose()
+            }
+          }
         }}
         title={
           !isReady ? "Some fields have not been properly filled up" : ""
