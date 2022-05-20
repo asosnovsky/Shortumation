@@ -1,5 +1,6 @@
-import yaml
 from unittest import TestCase
+
+import yaml
 from fastapi.testclient import TestClient
 
 from src.api.app import make_app
