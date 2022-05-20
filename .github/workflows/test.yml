@@ -25,7 +25,7 @@ jobs:
           echo ::set-output name=VERSION::$(git describe --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
       - name: ${{ steps.version.outputs.VERSION }}
         shell: bash
-        run: /
+        run: |
           echo ${{ steps.version.outputs.VERSION }}
 
   python:
