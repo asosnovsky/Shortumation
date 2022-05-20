@@ -18,7 +18,7 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
     target !== ''
   ),
   renderOptionList: (state, setState) => {
-    const { service, alias = "", target } = state;
+    const { service, target } = state;
     const update = updateActionData(state, setState);
     return <>
       <InputText

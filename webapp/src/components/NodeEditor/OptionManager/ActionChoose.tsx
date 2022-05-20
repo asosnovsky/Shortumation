@@ -1,6 +1,5 @@
-import InputText from "components/Inputs/InputText";
 import { ChooseAction } from "types/automations/actions";
-import { OptionManager, updateActionData } from './OptionManager';
+import { OptionManager } from './OptionManager';
 
 
 export const ActionChooseState: OptionManager<ChooseAction> = {

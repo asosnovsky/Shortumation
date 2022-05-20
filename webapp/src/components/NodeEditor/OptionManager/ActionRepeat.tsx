@@ -1,5 +1,4 @@
 import InputNumber from "components/Inputs/InputNumber";
-import InputText from "components/Inputs/InputText";
 import InputYaml from "components/Inputs/InputYaml";
 import { RepeatAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from './OptionManager';
