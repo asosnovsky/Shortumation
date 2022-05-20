@@ -22,11 +22,6 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
     const update = updateActionData(state, setState);
     return <>
       <InputText
-        label="Description"
-        value={alias}
-        onChange={alias => update({ alias })}
-      />
-      <InputText
         textBoxFor="service"
         label="Service"
         value={service}

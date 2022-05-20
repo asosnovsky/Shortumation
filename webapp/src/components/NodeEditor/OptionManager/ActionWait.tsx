@@ -21,11 +21,6 @@ export const ActionWaitState: OptionManager<WaitAction> = {
     const update = updateActionData(state, setState);
     return <>
       <InputText
-        label="Description"
-        value={state.alias ?? ""}
-        onChange={alias => update({ alias })}
-      />
-      <InputText
         textBoxFor="template"
         label="Template"
         value={state.wait_template}

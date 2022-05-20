@@ -18,11 +18,6 @@ export const TriggerEventState: OptionManager<AutomationTriggerEvent> = {
   renderOptionList: (state, setState) => {
     return <>
       <InputText
-        label="Description"
-        value={state.alias ?? ""}
-        onChange={alias => setState({ ...state, alias })}
-      />
-      <InputText
         label="Event Type"
         value={String(state.event_type)}
         onChange={event_type => setState({ ...state, event_type })}

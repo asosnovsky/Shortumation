@@ -18,11 +18,6 @@ export const ActionEventState: OptionManager<FireEventAction> = {
     const update = updateActionData(state, setState);
     return <>
       <InputText
-        label="Description"
-        value={state.alias ?? ""}
-        onChange={alias => update({ alias })}
-      />
-      <InputText
         textBoxFor="event"
         label="Event"
         value={state.event}

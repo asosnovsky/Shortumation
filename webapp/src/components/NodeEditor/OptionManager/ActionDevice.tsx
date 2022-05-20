@@ -28,11 +28,6 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
     const update = updateActionData(state, setState);
     return <>
       <InputText
-        label="Description"
-        value={state.alias ?? ""}
-        onChange={alias => update({ alias })}
-      />
-      <InputText
         textBoxFor="device_id"
         label="Device"
         value={state.device_id}

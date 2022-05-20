@@ -12,14 +12,8 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
   isReady: ({ alias }) => {
     return alias !== ''
   },
-  renderOptionList: (state, setState) => {
-    const update = updateActionData(state, setState);
+  renderOptionList: () => {
     return <>
-      <InputText
-        label="Description"
-        value={state.alias ?? ""}
-        onChange={alias => update({ alias })}
-      />
     </>
   }
 }

@@ -6,5 +6,6 @@ export const Generic: OptionManager<any> = {
   isReady: _ => true,
   renderOptionList: () => <>
     <b>THIS IS NOT SUPPORTED YET!</b>
+    <span>But feel free to modify the yaml!</span>
   </>
 }

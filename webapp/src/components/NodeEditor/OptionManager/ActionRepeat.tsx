@@ -23,11 +23,6 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
     return <>
-      <InputText
-        label="Description"
-        value={state.alias ?? ""}
-        onChange={alias => update({ alias })}
-      />
       <InputNumber
         label="How many times?"
         value={state.repeat.count}
