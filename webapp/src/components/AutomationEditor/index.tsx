@@ -133,11 +133,11 @@ export const ValidationBox: FC<{
       </>)}
     </ul>
     <span>Please correct the automation file manually and then continue!</span>
-    <InputYaml label="Metadata" value={data.metadata} onChange={makeSave('metadata')} resizable />
-    <InputYaml label="Tags" value={data.tags} onChange={makeSave('tags')} resizable />
-    <InputYaml label="Trigger" value={data.trigger} onChange={makeSave('trigger')} resizable />
-    <InputYaml label="Condition" value={data.condition} onChange={makeSave('condition')} resizable />
-    <InputYaml label="Actions" value={data.sequence} onChange={makeSave('sequence')} resizable />
+    <InputYaml label="Metadata" value={data.metadata} onChange={makeSave('metadata')} />
+    <InputYaml label="Tags" value={data.tags} onChange={makeSave('tags')} />
+    <InputYaml label="Trigger" value={data.trigger} onChange={makeSave('trigger')} />
+    <InputYaml label="Condition" value={data.condition} onChange={makeSave('condition')} />
+    <InputYaml label="Actions" value={data.sequence} onChange={makeSave('sequence')} />
     <Button disabled={failures.length > 0} onClick={() => props.onSave(data)}>Save</Button>
   </div>
 }

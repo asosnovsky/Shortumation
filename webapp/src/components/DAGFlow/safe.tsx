@@ -70,11 +70,11 @@ export class SafeDAGAutomationFlow extends Component<DAGAutomationFlowProps, Sta
                     <span key={i}>{s}</span><br key={`br-${i}`} />
                 </>)}
                 <h2>Automation YAML</h2>
-                <InputYaml resizable label="Trigger" value={this.state.trigger} onChange={makeSet('trigger')} />
+                <InputYaml label="Trigger" value={this.state.trigger} onChange={makeSet('trigger')} />
                 <Button onClick={makeSave('trigger')}>Save Triggers</Button>
-                <InputYaml resizable label="Condition" value={this.state.condition} onChange={makeSet('condition')} />
+                <InputYaml label="Condition" value={this.state.condition} onChange={makeSet('condition')} />
                 <Button onClick={makeSave('condition')}>Save Conditions</Button>
-                <InputYaml resizable label="Action" value={this.state.sequence} onChange={makeSet('sequence')} />
+                <InputYaml label="Action" value={this.state.sequence} onChange={makeSet('sequence')} />
                 <Button onClick={makeSave('sequence')}>Save Actions</Button>
             </div>
         }

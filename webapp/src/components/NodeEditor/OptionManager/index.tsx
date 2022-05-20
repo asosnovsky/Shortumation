@@ -70,7 +70,6 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
             label=''
             value={currentNode}
             onChange={setStateForManualYaml}
-            resizable
           />
           <div className="node-editor--error">{invalidManualYaml}</div>
         </>

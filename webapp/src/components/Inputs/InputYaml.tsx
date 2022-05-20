@@ -10,13 +10,11 @@ export interface Props<T extends {}> {
   label: string;
   value: T;
   onChange: (v: T) => void;
-  resizable?: boolean;
 }
 export default function InputYaml<T>({
   label,
   value = {} as any,
   onChange,
-  resizable,
 }: Props<T>) {
   const [{ text, error }, setState] = useState<{
     text: string,

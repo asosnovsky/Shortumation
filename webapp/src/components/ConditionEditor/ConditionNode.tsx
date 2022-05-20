@@ -116,7 +116,6 @@ export const ConditionNode: FC<{
           label=""
           value={condition}
           onChange={update => onUpdate(update as any)}
-          resizable
         />}
         {!yamlMode && childrenConditions}
         {!yamlMode && hasChildren && <div className={classes.addBtnContainer}>
