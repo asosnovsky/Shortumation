@@ -16,11 +16,17 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Get Version
         id: version
         shell: bash
         run: |
-          echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)-g$(echo ${{ github.sha }} | cut -c1-3)
+          echo ::set-output name=VERSION::$(git describe --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
+      - name: ${{ steps.version.outputs.VERSION }}
+        shell: bash
+        run: /
+          echo ${{ steps.version.outputs.VERSION }}
 
   python:
     name: "Python Tests"
