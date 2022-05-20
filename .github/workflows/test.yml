@@ -1,44 +1,13 @@
 name: Test
 env:
   MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
-on: 
+on:
   workflow_dispatch:
   push:
     branch: [main]
   pull_request:
     branches: [main]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Build Test for ${{ matrix.arch }}
-    strategy:
-      matrix:
-        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
-
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          all_but_latest: true
-          access_token: ${{ github.token }}
-
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2.0.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-
-      - name: ${{ matrix.arch }}
-        uses: home-assistant/builder@2022.03.1
-        with:
-          args: |
-            --test \
-            --${{ matrix.arch }} \
-            --target . 
   python:
     name: "Python Tests"
     runs-on: ubuntu-latest
@@ -63,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        action: 
+        action:
           - "test:ci"
           - "tsc:ci"
           - "build"
@@ -72,12 +41,50 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: "yarn"
           cache-dependency-path: webapp/yarn.lock
       - name: Install Dependencies
         run: cd webapp && yarn install
       - name: Run Tests
         run: cd webapp && yarn ${{ matrix.action }}
-      
 
-        
+  metadata:
+    runs-on: ubuntu-latest
+    name: Metadata
+    outputs:
+      version: ${{ steps.get_version.outputs.VERSION }}
+    steps:
+      - name: Get the version
+        id: version
+        shell: "bash"
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)-g$(echo ${{ github.sha }} | cut -c1-3)
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build & Publish ${{ matrix.arch }}
+    needs:
+      - metadata
+      - nodejs
+      - python
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
+        uses: home-assistant/builder@2022.03.1
+        with:
+          args: |
+            --${{ matrix.arch }} \
+            --version ${{ needs.metadata.outputs.version }} \
+            --additional-tag edge \
+            --target .
