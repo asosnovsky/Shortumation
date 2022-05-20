@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.13] - YAML
+
+- Better YAML
+- Rewrote yaml parser/loader to use pyyaml and safe mode
+- Cleaned up description vs alias
+
 ## [0.1.12] - Less Intense Error Messages
 
 - Added more node-based errors (this way it's easier to see where validations failed)
