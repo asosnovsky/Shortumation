@@ -1,7 +1,7 @@
 from typing import NamedTuple
 
-from ruamel.yaml.nodes import Node
-from ruamel.yaml.representer import BaseRepresenter
+from yaml.nodes import Node
+from yaml.representer import BaseRepresenter
 
 
 class IncludedYaml(NamedTuple):

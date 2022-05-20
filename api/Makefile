@@ -43,4 +43,5 @@ clean:
 run-local:
 	rm -f web
 	ln -s ../webapp/build web
+	cd ../webapp && yarn build
 	USE_EXAMPLE_REPO=1 $(VENV_BIN)/uvicorn src.app:app --reload
