@@ -34,6 +34,13 @@
     border-radius: 5px;
 }
 
+.automation-editor--info-box--tag-list {
+    max-height: 30vh;
+    overflow-y: scroll;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
 .automation-editor--info-box--tags>h1 {
     font-size: 1.5em;
 }
@@ -49,20 +56,12 @@
 
 .automation-editor--info-box--tag>div {
     margin: 0;
+    flex: 1;
 }
 
 .automation-editor--info-box--tag>div>input {
     max-width: 5em;
     padding: 1em 0.25em 0.2em 0.25em;
-}
-
-.automation-editor--info-box--tag>button {
-    height: 1.25em;
-    width: 1.25em;
-    font-size: 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .automation-editor--info-box--tag--error {
@@ -81,4 +80,13 @@
 .automation-editor--info-box--tag--error.show {
     height: fit-content;
     opacity: 1;
+}
+
+.automation-editor--info-box--tag--trash, .automation-editor--info-box--tag--add {
+    height: 2em;
+    width: 2em;
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

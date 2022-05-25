@@ -94,19 +94,21 @@ export const AutoInfoBox: FC<Props> = ({
       />
       <div className="automation-editor--info-box--tags">
         <h1>Tags</h1>
-        {tags.map(([tagName, tagValue], tagIndex) => <div className="automation-editor--info-box--tag">
-          <Button onClick={() => onRemoveTag(tagIndex)} ><TrashIcon /></Button>
-          <InputText value={tagName} label="Name" onChange={v => updateTagName(v, tagIndex)} />
-          <InputText value={tagValue} label="Tag" onChange={v => onUpdateTags(v, tagIndex)} />
-          <span className={["automation-editor--info-box--tag--error", (errorIndex === tagIndex) ? "show" : "hide"].join(" ")}>
-            {error}
-          </span>
-        </div>)}
+        <div className="automation-editor--info-box--tag-list">
+          {tags.map(([tagName, tagValue], tagIndex) => <div className="automation-editor--info-box--tag">
+            <InputText value={tagName} label="Name" onChange={v => updateTagName(v, tagIndex)} />
+            <InputText value={tagValue} label="Tag" onChange={v => onUpdateTags(v, tagIndex)} />
+            <Button className="automation-editor--info-box--tag--trash" onClick={() => onRemoveTag(tagIndex)} ><TrashIcon /></Button>
+            <span className={["automation-editor--info-box--tag--error", (errorIndex === tagIndex) ? "show" : "hide"].join(" ")}>
+              {error}
+            </span>
+          </div>)}
+        </div>
         <hr />
         <div className="automation-editor--info-box--tag">
           <InputText value={newTag[0]} label="Name" onChange={v => setNewTag([v, newTag[1]])} onEnter={addNewTag} />
           <InputText value={newTag[1]} label="Tag" onChange={v => setNewTag([newTag[0], v])} onEnter={addNewTag} />
-          <Button onClick={addNewTag} ><AddIcon /></Button>
+          <Button className="automation-editor--info-box--tag--add" onClick={addNewTag} ><AddIcon /></Button>
           <span className={["automation-editor--info-box--tag--error", (errorIndex === 'new') ? "show" : "hide"].join(" ")}>
             {error}
           </span>
