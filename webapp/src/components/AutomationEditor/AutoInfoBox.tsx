@@ -2,7 +2,6 @@ import "./AutoInfoBox.css";
 import { AutomationMetadata } from "types/automations";
 import { InputList } from "components/Inputs/InputList";
 import InputText from "components/Inputs/InputText";
-import InputTextArea from "components/Inputs/InputTextArea";
 import { FC, useRef, useState } from 'react';
 import { AddIcon, TrashIcon } from "components/Icons";
 import { Button } from "components/Inputs/Button";
@@ -81,7 +80,7 @@ export const AutoInfoBox: FC<Props> = ({
     <div className="automation-editor--info-box-inner">
       <InputText label="ID" value={metadata.id} onChange={onUpdateMetadata('id')} />
       <InputText label="Name" value={metadata.alias ?? ""} onChange={onUpdateMetadata('alias')} />
-      <InputTextArea label="Description" value={metadata.description ?? ""} onChange={onUpdateMetadata('description')} />
+      <InputText multiline label="Description" value={metadata.description ?? ""} onChange={onUpdateMetadata('description')} />
       <InputList
         label="Mode"
         current={metadata.mode}

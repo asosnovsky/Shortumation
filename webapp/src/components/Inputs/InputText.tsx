@@ -9,6 +9,8 @@ export interface Props {
   onChange: (v: string) => void;
   onEnter?: () => void;
   additionalTooltipFilters?: Record<string, string>;
+  multiline?: boolean;
+  maxRows?: number;
 }
 export default function InputText({
   label,
@@ -17,11 +19,13 @@ export default function InputText({
   onChange,
   onEnter = () => { },
   additionalTooltipFilters = {},
+  multiline = false,
+  maxRows = 4,
   children,
 }: PropsWithChildren<Props>) {
   const tooltip = useToolTip();
   const [isFocused, setIsFocused] = useState(false)
-  return <TextField inputMode="text" variant="filled" focused={isFocused} label={label} value={value}
+  return <TextField multiline={multiline} maxRows={maxRows} fullWidth inputMode="text" variant="filled" focused={isFocused} label={label} value={value}
     onKeyDown={e => {
       if (e.key === 'Enter') {
         onEnter();
