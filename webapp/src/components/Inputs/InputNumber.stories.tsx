@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useState } from "react";
 
 import InputNumber from "./InputNumber";
@@ -18,14 +19,14 @@ export default {
 export const NullStart: ComponentStory<typeof InputNumber> = args => {
 
   const [value, setValue] = useState<number | undefined>(undefined)
-  return <div className="page">
+  return <Page>
     <InputNumber {...args} value={value} onChange={setValue} />
-  </div>
+  </Page>
 }
 export const SomeStuffAtStart: ComponentStory<typeof InputNumber> = args => {
 
   const [value, setValue] = useState<number | undefined>(10)
-  return <div className="page">
+  return <Page>
     <InputNumber {...args} value={value} onChange={setValue} />
-  </div>
+  </Page>
 }

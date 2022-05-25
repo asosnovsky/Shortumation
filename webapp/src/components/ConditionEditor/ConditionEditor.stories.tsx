@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { ConditionEditor } from ".";
 import { AutomationCondition } from 'types/automations/conditions';
+import { Page } from "components/Page";
 
 export default {
   title: 'ConditionEditor',
@@ -40,12 +41,12 @@ export const Basic: ComponentStory<typeof ConditionEditor> = args => {
     ]
   })
   return (
-    <div className="page">
+    <Page>
       <ConditionEditor
         onUpdate={setState}
         onDelete={() => { }}
         condition={state}
       />
-    </div>
+    </Page>
   )
 }

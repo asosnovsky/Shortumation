@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { AutomationListBox } from "./AutomationListBox";
 import { createMockAuto } from "utils/mocks";
+import { Page } from "components/Page";
 
 export default {
   title: 'App/AutomationList/Box',
@@ -14,12 +15,12 @@ export default {
 
 const Template: ComponentStory<typeof AutomationListBox> = args => {
   const [selected, setSelected] = useState(args.selected)
-  return <div className="page">
+  return <Page>
     <AutomationListBox {...args} automations={args.automations} selected={selected} onSelectAutomation={(i) => {
       setSelected(i)
       args.onSelectAutomation(i)
     }} />
-  </div>
+  </Page>
 }
 
 export const EmptyStart = Template.bind({})

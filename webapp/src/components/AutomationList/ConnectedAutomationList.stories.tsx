@@ -3,6 +3,7 @@ import { ConnectedAutomationList } from ".";
 import { createMockAuto } from "utils/mocks";
 import { useMockApiService } from "apiService";
 import { DEFAULT_DIMS } from 'components/DAGFlow/constants';
+import { Page } from "components/Page";
 
 export default {
   title: 'App/AutomationList/Connected',
@@ -17,12 +18,12 @@ export default {
 
 const Template: ComponentStory<any> = args => {
   const api = useMockApiService(args.initialAutomations);
-  return <div className="page">
+  return <Page>
     <ConnectedAutomationList
       {...args}
       api={api}
     />
-  </div>
+  </Page>
 }
 
 export const EmptyStart = Template.bind({})

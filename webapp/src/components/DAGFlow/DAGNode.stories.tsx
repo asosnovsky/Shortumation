@@ -8,6 +8,7 @@ import * as dgconst from "components/DAGFlow/constants";
 import ReactFlow, { Controls } from 'react-flow-renderer';
 import { DAGNode } from "./DAGNode";
 import { convertToFlowNode } from "./helpers";
+import { Page } from "components/Page";
 
 
 export default {
@@ -30,7 +31,7 @@ export const Colors: ComponentStory<typeof DAGNode> = args => {
     "type": "mynode",
     "position": { "x": 50 + dgconst.NODE_HEIGHT * dgconst.DISTANCE_FACTOR * i, "y": 50 + dgconst.NODE_HEIGHT * dgconst.DISTANCE_FACTOR * i }
   }));
-  return <div className="page">
+  return <Page>
     <ReactFlow
       defaultNodes={nodes}
       nodeTypes={{
@@ -43,5 +44,5 @@ export const Colors: ComponentStory<typeof DAGNode> = args => {
     >
       <Controls />
     </ReactFlow>
-  </div>
+  </Page>
 }

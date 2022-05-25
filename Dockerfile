@@ -23,6 +23,7 @@ RUN pip install . /app
 # <--- Webapp Build --> 
 COPY webapp/ /app/web-builder
 RUN cd /app/web-builder && \
+    echo "REACT_APP_BUILD_VERSION=${BUILD_VERSION} >> /app/web-builder/.env.production" \
     yarn && \
     yarn build && \
     cp -r /app/web-builder/build /app/web && \

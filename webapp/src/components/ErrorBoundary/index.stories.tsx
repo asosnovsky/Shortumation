@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ErrorBoundary } from ".";
+import { Page } from "components/Page";
 
 
 export default {
@@ -15,20 +16,20 @@ export const ErrorThrown: ComponentStory<typeof ErrorBoundary> = args => {
     const BadComponent: FC = () => {
         throw new Error("!!!")
     }
-    return <div className="page">
+    return <Page>
         <ErrorBoundary>
             <BadComponent />
         </ErrorBoundary>
-    </div>
+    </Page>
 }
 
 export const NoError: ComponentStory<typeof ErrorBoundary> = args => {
     const GoodComponent: FC = () => {
         return <span>All Good.</span>
     }
-    return <div className="page">
+    return <Page>
         <ErrorBoundary>
             <GoodComponent />
         </ErrorBoundary>
-    </div>
+    </Page>
 }

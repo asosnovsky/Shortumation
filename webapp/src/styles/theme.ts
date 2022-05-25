@@ -1,5 +1,4 @@
 import "styles/root.css";
-import "styles/page.css";
 
 import { Classes } from "jss";
 import { Context, createContext } from "react"

@@ -3,6 +3,7 @@ import { ComponentStory } from "@storybook/react";
 import { IconBase } from "./base";
 import { PencilIcon, CheckMarkIcon, TrashIcon, InfoIcon, ArrowIcon, AddIcon, ZoomIcon, GearIcon } from ".";
 import { ButtonIcon } from "./ButtonIcons";
+import { Page } from "components/Page";
 
 export default {
   title: 'Icons',
@@ -12,7 +13,7 @@ export default {
 
 export const IconList: ComponentStory<typeof IconBase> = (args) => {
 
-  return <div className="page">
+  return <Page>
     <PencilIcon {...args} />
     <CheckMarkIcon {...args} />
     <AddIcon {...args} />
@@ -20,7 +21,7 @@ export const IconList: ComponentStory<typeof IconBase> = (args) => {
     <InfoIcon {...args} />
     <ZoomIcon {...args} />
     <GearIcon {...args} />
-  </div>
+  </Page>
 }
 IconList.args = {
   size: 2,
@@ -30,9 +31,9 @@ IconList.args = {
 
 export const ButtonIconExample: ComponentStory<typeof IconBase> = (args) => {
 
-  return <div className="page">
+  return <Page>
     <ButtonIcon {...args}>{ArrowIcon}</ButtonIcon>
-  </div>
+  </Page>
 }
 ButtonIconExample.args = {
   size: 2,

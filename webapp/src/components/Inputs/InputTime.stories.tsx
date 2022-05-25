@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useState } from "react";
 import { AutomationTime } from "types/automations/common";
 
@@ -14,9 +15,9 @@ export default {
 const Template: ComponentStory<typeof InputTime> = args => {
 
   const [value, setValue] = useState<AutomationTime | undefined>(undefined);
-  return <div className="page">
+  return <Page>
     <InputTime {...args} value={value} onChange={setValue} />
-  </div>
+  </Page>
 }
 
 export const SimpleText = Template.bind({})

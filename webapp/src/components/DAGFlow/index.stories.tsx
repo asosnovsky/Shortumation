@@ -5,6 +5,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { DAGAutomationFlow } from '.';
 import { useState } from 'react';
 import * as dgconst from "components/DAGFlow/constants";
+import { Page } from "components/Page";
 
 
 export default {
@@ -22,7 +23,7 @@ const Template: ComponentStory<typeof DAGAutomationFlow> = args => {
         sequence: args.sequence,
         condition: args.condition,
     })
-    return <div className="page">
+    return <Page>
         <DAGAutomationFlow
             {...args}
             {...state}
@@ -32,7 +33,7 @@ const Template: ComponentStory<typeof DAGAutomationFlow> = args => {
             onSequenceUpdate={sequence => setState({ ...state, sequence })}
             onConditionUpdate={condition => setState({ ...state, condition })}
         />
-    </div>
+    </Page>
 }
 
 export const Simple = Template.bind({})

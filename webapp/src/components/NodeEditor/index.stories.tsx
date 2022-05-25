@@ -6,6 +6,7 @@ import { AutomationCondition } from "types/automations/conditions";
 import { Button } from "components/Inputs/Button";
 import { useState } from 'react';
 import { Modal } from "components/Modal";
+import { Page } from "components/Page";
 
 
 export default {
@@ -23,9 +24,9 @@ export default {
 
 const Base: ComponentStory<typeof NodeEditor> = props => {
 
-  return <div className="page">
+  return <Page>
     <NodeEditor {...props} />
-  </div>
+  </Page>
 };
 export const Action = Base.bind({})
 export const SingleOption = Action.bind({})
@@ -59,10 +60,10 @@ Condition.args = {
 export const InAModal: ComponentStory<typeof NodeEditor> = props => {
 
   const [open, setOpen] = useState(false);
-  return <div className="page">
+  return <Page>
     <Button onClick={() => setOpen(!open)}>Open Editor</Button>
     <Modal open={open}>
       <NodeEditor {...props} onClose={() => setOpen(!open)} />
     </Modal>
-  </div>
+  </Page>
 };

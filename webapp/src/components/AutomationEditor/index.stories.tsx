@@ -3,6 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { AutomationEditor } from './index';
 import { useState } from 'react';
 import * as dgconst from 'components/DAGFlow/constants';
+import { Page } from "components/Page";
 
 
 export default {
@@ -16,7 +17,7 @@ export default {
 
 const Template: ComponentStory<typeof AutomationEditor> = args => {
   const [state, setState] = useState(args.automation)
-  return <div className="page">
+  return <Page>
     <AutomationEditor
       {...args}
       automation={state}
@@ -24,7 +25,7 @@ const Template: ComponentStory<typeof AutomationEditor> = args => {
         window.setTimeout(() => setState(s), 3000)
       }}
     />
-  </div>
+  </Page>
 }
 
 export const Loading = Template.bind({});

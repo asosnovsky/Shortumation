@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AutomationList } from ".";
 import { createMockAuto } from "utils/mocks";
 import * as dgconst from 'components/DAGFlow/constants';
+import { Page } from "components/Page";
 
 export default {
   title: 'App/AutomationList',
@@ -17,7 +18,7 @@ export default {
 
 const Template: ComponentStory<typeof AutomationList> = args => {
   const [autos, setAutos] = useState(args.automations)
-  return <div className="page">
+  return <Page>
     <AutomationList {...args} automations={autos}
       onAdd={a => {
         args.onAdd(a);
@@ -39,7 +40,7 @@ const Template: ComponentStory<typeof AutomationList> = args => {
         ]);
       }}
     />
-  </div>
+  </Page>
 }
 
 export const EmptyStart = Template.bind({})

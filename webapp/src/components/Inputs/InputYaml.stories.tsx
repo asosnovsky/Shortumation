@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useState } from "react";
 
 import InputYaml from "./InputYaml";
@@ -15,9 +16,9 @@ const Template: ComponentStory<typeof InputYaml> = args => {
   const [value, setValue] = useState({
     "test": "data"
   })
-  return <div className="page">
+  return <Page>
     <InputYaml {...args} value={value} onChange={setValue} />
-  </div>
+  </Page>
 }
 
 export const SimpleText = Template.bind({})

@@ -3,6 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { MultiNodeEditor } from ".";
 import { Button } from "components/Inputs/Button";
 import { Modal } from "components/Modal";
+import { Page } from "components/Page";
 
 
 export default {
@@ -31,20 +32,20 @@ export default {
 export const Simple: ComponentStory<typeof MultiNodeEditor> = args => {
   const [state, setState] = useState(args.sequence);
 
-  return <div className="page">
+  return <Page>
     <div className="center column" style={{ paddingTop: "1em" }}>
       <MultiNodeEditor {...args} sequence={state} onSave={s => {
         args.onSave && args.onSave(s)
         setState(s)
       }} />
     </div>
-  </div>
+  </Page>
 }
 export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
 
   const [open, setOpen] = useState(false);
   const [state, setState] = useState(props.sequence);
-  return <div className="page">
+  return <Page>
     <Button onClick={() => setOpen(!open)}>Open Editor</Button>
     <Modal open={open}>
       <MultiNodeEditor
@@ -57,7 +58,7 @@ export const InAModal: ComponentStory<typeof MultiNodeEditor> = props => {
         }}
       />
     </Modal>
-  </div>
+  </Page>
 };
 
 

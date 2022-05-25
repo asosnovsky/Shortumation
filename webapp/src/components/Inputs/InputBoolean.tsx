@@ -1,4 +1,6 @@
-import "./InputBoolean.css";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 export interface Props {
   label: string;
@@ -12,8 +14,7 @@ export default function InputBoolean({
   onChange,
   disabled = false,
 }: Props) {
-  return <div className={["input-boolean", disabled ? 'disabled' : ''].join(' ')} onClick={() => onChange(!value)}>
-    <input type="checkbox" checked={value} onChange={() => { }} disabled={disabled} />
-    <label>{label}</label>
-  </div>
+  return <FormGroup>
+    <FormControlLabel disabled={disabled} control={<Checkbox checked={value} onChange={() => onChange(!value)} />} label={label} />
+  </FormGroup>
 }

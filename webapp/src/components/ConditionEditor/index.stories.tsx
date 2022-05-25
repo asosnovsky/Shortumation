@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useState } from "react";
 import { AutomationCondition } from "types/automations/conditions";
 
@@ -14,14 +15,14 @@ export default {
 const Template: ComponentStory<typeof ConditionEditor> = ({ condition, ...args }) => {
 
   const [data, setData] = useState(condition);
-  return <div className="page">
+  return <Page>
     <ConditionEditor {...args}
       condition={data}
       onUpdate={data => {
         setData(data)
       }}
     />
-  </div>
+  </Page>
 }
 
 export const TemplateViewer = Template.bind({})

@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useState, useEffect } from 'react';
 
 import { InputList } from "./InputList";
@@ -18,9 +19,9 @@ const Template: ComponentStory<typeof InputList> = args => {
       setValue(args.current)
     }
   }, [args.current])
-  return <div className="page">
+  return <Page>
     <InputList {...args} current={value} onChange={setValue} />
-  </div>
+  </Page>
 }
 
 export const SimpleText = Template.bind({})

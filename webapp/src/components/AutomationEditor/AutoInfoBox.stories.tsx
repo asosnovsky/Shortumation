@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useState } from "react";
 import { AutoInfoBox } from "./AutoInfoBox";
 
@@ -12,7 +13,7 @@ export default {
 export const NoTags: ComponentStory<typeof AutoInfoBox> = args => {
   const [[metadata, tags], setState] = useState([args.metadata, args.tags])
   return (
-    <div className="page">
+    <Page>
       <AutoInfoBox
         className=""
         metadata={metadata}
@@ -22,7 +23,7 @@ export const NoTags: ComponentStory<typeof AutoInfoBox> = args => {
           setState([m, t])
         }}
       />
-    </div>
+    </Page>
   )
 }
 NoTags.args = {

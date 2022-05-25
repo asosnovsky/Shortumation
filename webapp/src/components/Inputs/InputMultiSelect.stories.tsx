@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Page } from "components/Page";
 import { useEffect, useState } from "react";
 
 import InputMultiSelect from "./InputMultiSelect";
@@ -18,12 +19,12 @@ const Template: ComponentStory<typeof InputMultiSelect> = args => {
     setValue(args.selected);
   }, [args.selected])
 
-  return <div className="page">
+  return <Page>
     <InputMultiSelect {...args} onChange={a => {
       setValue(a);
       args.onChange(a);
     }} options={args.options} selected={value} />
-  </div>
+  </Page>
 }
 
 export const Simple = Template.bind({})

@@ -7,6 +7,7 @@ import * as dgconst from "components/DAGFlow/constants";
 import ReactFlow, { Controls } from 'react-flow-renderer';
 import { DAGErrorNode } from "./DAGErrorNode";
 import { convertToFlowNode } from "./helpers";
+import { Page } from "components/Page";
 
 
 export default {
@@ -29,7 +30,7 @@ export const Examples: ComponentStory<typeof DAGErrorNode> = args => {
       "y": 50 + dgconst.NODE_HEIGHT * dgconst.DISTANCE_FACTOR * i
     }
   }));
-  return <div className="page">
+  return <Page>
     <ReactFlow
       defaultNodes={nodes}
       nodeTypes={{
@@ -42,5 +43,5 @@ export const Examples: ComponentStory<typeof DAGErrorNode> = args => {
     >
       <Controls />
     </ReactFlow>
-  </div>
+  </Page>
 }
