@@ -3,8 +3,8 @@ import { AutomationTriggerNumericState } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
 import { InputEntity } from 'components/Inputs/InputTextBubble';
 import InputNumber from 'components/Inputs/InputNumber';
-import InputTextArea from 'components/Inputs/InputTextArea';
 import InputTime from 'components/Inputs/InputTime';
+import InputYaml from 'components/Inputs/InputYaml';
 
 
 export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> = {
@@ -45,10 +45,14 @@ export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> =
           below: below ? String(below) : undefined,
         })}
       />
-      <InputTextArea label="Template" value={state.value_template ?? ""} onChange={value_template => setState({
-        ...state,
-        value_template
-      })} resizable />
+      <InputYaml
+        label="Template"
+        value={state.value_template ?? ""}
+        onChange={value_template => setState({
+          ...state,
+          value_template
+        })}
+      />
       <InputTime
         label="For"
         value={state.for}

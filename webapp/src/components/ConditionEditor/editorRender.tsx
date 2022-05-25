@@ -3,11 +3,11 @@ import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, 
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
-import InputTextArea from "components/Inputs/InputTextArea";
 import { InputEntity } from "components/Inputs/InputTextBubble";
 import { ConditionNode } from "./ConditionNode";
 import { genUpdateMethods } from "./nestedUpdater";
 import InputTime from "components/Inputs/InputTime";
+import InputYaml from "components/Inputs/InputYaml";
 
 
 interface Editor<C extends AutomationCondition> extends FC<{
@@ -50,10 +50,10 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
       ...condition,
       alias
     })} />
-    <InputTextArea label="Template" value={condition.value_template} onChange={value_template => onChange({
+    <InputYaml label="Template" value={condition.value_template} onChange={value_template => onChange({
       ...condition,
       value_template
-    })} resizable />
+    })} />
   </div>
 }
 
@@ -94,10 +94,10 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
         below: below ? String(below) : undefined,
       })}
     />
-    <InputTextArea label="Template" value={condition.value_template ?? ""} onChange={value_template => onChange({
+    <InputYaml label="Template" value={condition.value_template ?? ""} onChange={value_template => onChange({
       ...condition,
       value_template
-    })} resizable />
+    })} />
   </div>
 }
 
