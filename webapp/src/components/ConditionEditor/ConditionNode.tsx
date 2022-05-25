@@ -117,7 +117,9 @@ export const ConditionNode: FC<{
           value={condition}
           onChange={update => onUpdate(update as any)}
         />}
-        {!yamlMode && childrenConditions}
+        <div className={classes.conditionWrap}>
+          {!yamlMode && childrenConditions}
+        </div>
         {!yamlMode && hasChildren && <div className={classes.addBtnContainer}>
           <button className={classes.addBtn} onClick={() => onAddChild()}>Add</button>
         </div>}

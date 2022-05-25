@@ -45,7 +45,7 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
   onChange,
   condition,
 }) => {
-  return <div>
+  return <>
     <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
       alias
@@ -54,7 +54,7 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
       ...condition,
       value_template
     })} />
-  </div>
+  </>
 }
 
 
@@ -62,7 +62,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
   onChange,
   condition,
 }) => {
-  return <div>
+  return <>
     <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
       alias
@@ -98,7 +98,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
       ...condition,
       value_template
     })} />
-  </div>
+  </>
 }
 
 
@@ -126,7 +126,7 @@ export const StateEditor: Editor<StateCondition> = ({
   onChange,
   condition,
 }) => {
-  return <div>
+  return <>
     <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
       alias
@@ -158,14 +158,14 @@ export const StateEditor: Editor<StateCondition> = ({
         for: _for,
       })}
     />
-  </div>
+  </>
 }
 
 export const TimeEditor: Editor<TimeCondition> = ({
   onChange,
   condition,
 }) => {
-  return <div>
+  return <>
     <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
       alias
@@ -187,14 +187,14 @@ export const TimeEditor: Editor<TimeCondition> = ({
       })}
     />
     <b>Weekday not support for no, use yaml for now</b> {condition.weekday}
-  </div>
+  </>
 }
 
 export const TriggerEditor: Editor<TriggerCondition> = ({
   onChange,
   condition,
 }) => {
-  return <div>
+  return <>
     <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
       alias
@@ -203,14 +203,14 @@ export const TriggerEditor: Editor<TriggerCondition> = ({
       ...condition,
       id
     })} />
-  </div>
+  </>
 }
 
 export const ZoneEditor: Editor<ZoneCondition> = ({
   onChange,
   condition,
 }) => {
-  return <div>
+  return <>
     <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
       ...condition,
       alias
@@ -234,5 +234,5 @@ export const ZoneEditor: Editor<ZoneCondition> = ({
         state,
       })}
     />
-  </div>
+  </>
 }

@@ -86,6 +86,9 @@ export const useStyles = createAppUseStyles<{
         }),
         icon: {},
         deleteBtn,
+        conditionWrap: {
+            overflow: 'auto',
+        },
         children: ({ hasChildren }) => ({
             flex: 1,
             paddingLeft: hasChildren ? 50 : 10,
@@ -96,7 +99,8 @@ export const useStyles = createAppUseStyles<{
             border: `1px solid ${theme.secondaryAccent}`,
             borderBottomRightRadius: hasChildren ? 10 : 0,
             borderBottomLeftRadius: hasChildren ? 10 : 0,
-            minHeight: hasChildren ? undefined : '100%'
+            minHeight: hasChildren ? undefined : '100%',
+            overflow: 'scroll'
         }),
         addBtnContainer: {
             display: 'flex',

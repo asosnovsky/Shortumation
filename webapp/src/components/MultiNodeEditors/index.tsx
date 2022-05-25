@@ -4,11 +4,13 @@ import { NodeEditor } from 'components/NodeEditor';
 import { Button } from 'components/Inputs/Button';
 import { useMultiNodeEditorState } from "./state";
 import { MultiNodeEditorProps } from "./types";
+import useWindowSize from 'utils/useWindowSize';
 
 
 export const MultiNodeEditor: FC<MultiNodeEditorProps> = props => {
   // state
-  const state = useMultiNodeEditorState(props)
+  const state = useMultiNodeEditorState(props);
+  const { isMobile } = useWindowSize();
   // components
   const nextOrAddBtn = <Button
     onClick={state.moveForward}
@@ -33,7 +35,7 @@ export const MultiNodeEditor: FC<MultiNodeEditorProps> = props => {
       </div>
     </div>
   }
-  return <div className={["multinode-editor", state.isModified ? "modded" : ''].join(' ')}>
+  return <div className={["multinode-editor", state.isModified ? "modded" : '', isMobile ? 'mobile' : ''].join(' ')}>
     <div className="multinode-editor--navbar">
       <Button onClick={state.moveBack} disabled={state.currentSlideNumber === 0}>{"<<"}</Button>
       <Button onClick={state.onRemove}> Delete</Button>

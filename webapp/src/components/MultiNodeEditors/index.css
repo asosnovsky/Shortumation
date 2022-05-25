@@ -1,5 +1,22 @@
 .multinode-editor {
     max-width: 80vw;
+    min-width: 60vw;
+}
+
+.multinode-editor.mobile {
+    max-width: 95vw;
+}
+
+.multinode-editor .node-editor--root {
+    padding: 0;
+}
+
+.multinode-editor .node-editor--body {
+    padding-bottom: 1em;
+    padding-top: 0.25em;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    max-height: 60vh;
 }
 
 .multinode-editor--navbar {
