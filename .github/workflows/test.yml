@@ -35,7 +35,10 @@ jobs:
       - metadata
     strategy:
       matrix:
-        action: [lint, coverage, security-checks]
+        action:
+          - lint
+          - coverage
+          - security-checks
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -59,7 +62,6 @@ jobs:
         action:
           - "test:ci"
           - "tsc:ci"
-          - "build"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
