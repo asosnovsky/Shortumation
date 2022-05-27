@@ -9,12 +9,11 @@ import InputYaml from 'components/Inputs/InputYaml';
 
 export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'numeric_state',
     "entity_id": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

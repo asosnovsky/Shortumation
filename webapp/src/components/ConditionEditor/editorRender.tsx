@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition, TriggerCondition, ZoneCondition } from 'types/automations/conditions';
-import { getDescriptionFromAutomationNode } from "utils/formatting";
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
 import { InputEntity } from "components/Inputs/InputTextBubble";
@@ -46,10 +45,6 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
   condition,
 }) => {
   return <>
-    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
-      ...condition,
-      alias
-    })} />
     <InputYaml label="Template" value={condition.value_template} onChange={value_template => onChange({
       ...condition,
       value_template
@@ -63,10 +58,6 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
   condition,
 }) => {
   return <>
-    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
-      ...condition,
-      alias
-    })} />
     <InputEntity
       value={condition.entity_id}
       onChange={entity_id => onChange({
@@ -127,10 +118,6 @@ export const StateEditor: Editor<StateCondition> = ({
   condition,
 }) => {
   return <>
-    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
-      ...condition,
-      alias
-    })} />
     <InputEntity
       value={condition.entity_id}
       onChange={entity_id => onChange({
@@ -166,10 +153,6 @@ export const TimeEditor: Editor<TimeCondition> = ({
   condition,
 }) => {
   return <>
-    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
-      ...condition,
-      alias
-    })} />
     <InputTime
       label="After"
       value={condition.after}
@@ -195,10 +178,6 @@ export const TriggerEditor: Editor<TriggerCondition> = ({
   condition,
 }) => {
   return <>
-    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
-      ...condition,
-      alias
-    })} />
     <InputText label="Trigger ID" value={condition.id} onChange={id => onChange({
       ...condition,
       id
@@ -211,10 +190,6 @@ export const ZoneEditor: Editor<ZoneCondition> = ({
   condition,
 }) => {
   return <>
-    <InputText label="Alias" value={condition.alias ?? getDescriptionFromAutomationNode(condition)} onChange={alias => onChange({
-      ...condition,
-      alias
-    })} />
     <InputText label="Zone" value={condition.zone} onChange={zone => onChange({
       ...condition,
       zone

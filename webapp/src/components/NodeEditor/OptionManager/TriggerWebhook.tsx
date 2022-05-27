@@ -5,12 +5,11 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerWebhook: OptionManager<AutomationTriggerWebhook> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'webhook',
     "webhook_id": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

@@ -6,14 +6,13 @@ import InputYaml from "components/Inputs/InputYaml";
 
 export const TriggerEventState: OptionManager<AutomationTriggerEvent> = {
   defaultState: () => ({
-    "alias": "",
     "platform": "event",
     "event_type": "",
     "event_data": {},
     "context": {},
   }),
-  isReady: ({ alias, event_type }) => {
-    return (alias !== '') && (event_type !== "")
+  isReady: ({ event_type }) => {
+    return (event_type !== "")
   },
   renderOptionList: (state, setState) => {
     return <>

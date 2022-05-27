@@ -3,7 +3,6 @@ import { AutomationTimeString, AutomationTime, EntityId } from './common'
 
 
 const AutomationTriggerBase = {
-    alias: st.optional(st.string()),
     id: st.optional(st.string()),
 }
 

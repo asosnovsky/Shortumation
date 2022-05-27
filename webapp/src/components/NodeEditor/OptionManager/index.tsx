@@ -59,10 +59,27 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
       return currentNode
     },
     renderOptionList() {
-      const aliasEditor = <InputText label="Alias" value={getDescriptionFromAutomationNode(allState.node)} onChange={alias => setState({
-        ...allState.node,
-        alias
-      })} />
+      let aliasEditor = <></>
+      if (nodeType === 'trigger') {
+        aliasEditor = <InputText
+          label="Trigger ID"
+          value={(allState.node as any).id}
+          onChange={id => setState({
+            ...allState.node,
+            id
+          } as any)}
+        />
+      }
+      if (nodeType === 'action') {
+        aliasEditor = <InputText
+          label="Alias"
+          value={getDescriptionFromAutomationNode(allState.node)}
+          onChange={alias => setState({
+            ...allState.node,
+            alias
+          } as any)}
+        />
+      }
       if (yamlMode || allState.isErrored) {
         return <>
           {aliasEditor}

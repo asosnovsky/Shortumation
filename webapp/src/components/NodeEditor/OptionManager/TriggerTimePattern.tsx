@@ -5,11 +5,10 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerTimePattern: OptionManager<AutomationTriggerTimePattern> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'time_pattern',
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

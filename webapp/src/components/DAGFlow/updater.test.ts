@@ -40,8 +40,8 @@ test("sequence updater updates nodes", () => {
     mock.updater.updateNode(0, {
         ...mock.state[0],
         alias: "Hello"
-    })
-    expect(mock.state[0].alias).toBe("Hello")
+    } as any)
+    expect((mock.state[0] as any).alias).toBe("Hello")
 })
 test('update conditions for node', () => {
     const mock = mockSequenceUpdater([

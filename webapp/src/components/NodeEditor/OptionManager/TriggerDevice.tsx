@@ -6,7 +6,6 @@ import { InputEntity } from 'components/Inputs/InputTextBubble';
 
 export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'device',
     "domain": "",
     "type": "",
@@ -14,8 +13,8 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
     "device_id": "",
     "entity_id": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

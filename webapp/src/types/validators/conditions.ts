@@ -2,9 +2,7 @@ import * as st from 'superstruct'
 import { AutomationTime, EntityId } from './common';
 
 
-export const AutomationConditionNodeBase = st.type({
-    alias: st.optional(st.string()),
-});
+export const AutomationConditionNodeBase = st.type({});
 export const LogicCondition = st.intersection([
     AutomationConditionNodeBase,
     st.type({

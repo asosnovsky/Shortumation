@@ -6,12 +6,11 @@ import { convertObjectToAutomationTimeString } from 'utils/time';
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'time',
     "at": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

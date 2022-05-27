@@ -52,7 +52,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
           onChange={state.setNodeType}
         /> : <></>}
         {state.nodeType !== 'condition' ? <InputList
-          label={`${state.nodeType} type`}
+          label={`${state.nodeType.slice(0, 1).toUpperCase()}${state.nodeType.slice(1)} Type`}
           current={state.subType as any}
           options={state.subTypes}
           onChange={state.setSubType}

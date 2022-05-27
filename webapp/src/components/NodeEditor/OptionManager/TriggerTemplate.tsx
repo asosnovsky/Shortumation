@@ -6,12 +6,11 @@ import InputTime from 'components/Inputs/InputTime';
 
 export const TriggerTemplate: OptionManager<AutomationTriggerTemplate> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'template',
     "value_template": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

@@ -5,12 +5,11 @@ import { InputList } from "components/Inputs/InputList";
 
 export const TriggerHAState: OptionManager<AutomationTriggerHA> = {
   defaultState: () => ({
-    "alias": "HA Starts",
     "platform": "homeassistant",
     "event": "start",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>
@@ -20,7 +19,6 @@ export const TriggerHAState: OptionManager<AutomationTriggerHA> = {
         options={['start', 'shutdown']}
         onChange={event => setState({
           ...state, event,
-          alias: event === 'shutdown' ? "HA Shutdown" : "HA Starts"
         })}
       />
     </>

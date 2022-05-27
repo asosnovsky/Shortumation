@@ -3,7 +3,6 @@ import * as st from 'superstruct';
 import * as v from "types/validators/conditions";
 type AutomationConditionNodeBase<Name extends String, Data extends Object> = {
     condition: Name;
-    alias?: string;
 } & Data;
 export type LogicCondition = AutomationConditionNodeBase<'and' | 'or' | 'not', {
     conditions: AutomationCondition[];

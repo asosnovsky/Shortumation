@@ -16,10 +16,14 @@ export const convertTimeToString = (t: AutomationTime) => {
     }
 }
 export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(node: AutomationNode<N>): string => {
-    if (node.alias) {
+    if (('alias' in node) && node.alias) {
         return node.alias;
     }
+
     if ('platform' in node) {
+        if (node.id) {
+            return node.id ?? '';
+        }
         if (node.platform === 'time') {
             return node.at
         }

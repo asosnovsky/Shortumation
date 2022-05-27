@@ -7,12 +7,11 @@ import InputTime from 'components/Inputs/InputTime';
 
 export const TriggerState: OptionManager<AutomationTriggerState> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'state',
     "entity_id": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

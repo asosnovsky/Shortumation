@@ -7,14 +7,13 @@ import { InputEntity } from 'components/Inputs/InputTextBubble';
 
 export const TriggerZone: OptionManager<AutomationTriggerZone> = {
   defaultState: () => ({
-    "alias": "",
     "platform": 'zone',
     "zone": "",
     "event": "enter",
     "entity_id": "",
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

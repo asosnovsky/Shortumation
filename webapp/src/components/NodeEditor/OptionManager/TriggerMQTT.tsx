@@ -5,14 +5,13 @@ import InputText from 'components/Inputs/InputText';
 
 export const TriggerMQTTState: OptionManager<AutomationTriggerMQTT> = {
   defaultState: () => ({
-    "alias": "",
     "platform": "mqtt",
     "payload": "",
     "topic": "",
     "value_template": ""
   }),
-  isReady: ({ alias }) => {
-    return (alias !== '')
+  isReady: ({ }) => {
+    return true
   },
   renderOptionList: (state, setState) => {
     return <>

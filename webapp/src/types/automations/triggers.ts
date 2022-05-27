@@ -1,10 +1,6 @@
 import * as st from 'superstruct'
 import * as v from "types/validators/triggers";
 
-interface AutomationTriggerBase {
-    alias?: string;
-}
-
 export type AutomationTriggerEvent = st.Infer<typeof v.AutomationTriggerEvent>;
 export type AutomationTriggerHA = st.Infer<typeof v.AutomationTriggerHA>;
 export type AutomationTriggerMQTT = st.Infer<typeof v.AutomationTriggerMQTT>;
