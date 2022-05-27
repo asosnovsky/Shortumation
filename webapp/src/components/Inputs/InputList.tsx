@@ -1,5 +1,5 @@
 import { FC } from "react";
-import FilledInput from '@mui/material/FilledInput';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -21,12 +21,12 @@ export const InputList: FC<Props<any>> = ({
   id,
   className,
 }) => {
-  const invalidCurrent = !options.includes(current);
-  return <FormControl variant="filled" sx={{ marginRight: "0.25em" }}>
+  const invalidCurrent = current && !options.includes(current);
+  return <FormControl variant="filled" sx={{ marginRight: "0.25em", minWidth: `${label.length * 0.75}em` }}>
     <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
     <Select
       className={className}
-      fullWidth
+      autoWidth
       id={id}
       value={current}
       onChange={(e) => {
@@ -35,6 +35,8 @@ export const InputList: FC<Props<any>> = ({
       label={label}
       variant="filled"
       placeholder={label}
+      error={invalidCurrent}
+
     >
       {options.map((t, i) => (
         <MenuItem
@@ -45,6 +47,7 @@ export const InputList: FC<Props<any>> = ({
         </MenuItem>
       ))}
     </Select>
+    <FormHelperText>{invalidCurrent ? `'${current}' is not a valid selection` : ''}</FormHelperText>
   </FormControl>
   // return <InputWrapper label={label} labelSize={'small'} noMargin error={invalidCurrent ? "Invalid Selection" : undefined}>
   //   <select
