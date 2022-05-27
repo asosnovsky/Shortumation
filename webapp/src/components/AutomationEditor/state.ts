@@ -6,7 +6,7 @@ import { MiniFailure } from '../../types/validators/helper';
 
 export type EditorData = ReturnType<typeof genEditorData>;
 export type EditorState = {
-    status: 'unchanged' | 'changed',
+    status: 'unchanged' | 'changed' | 'saving',
     data: EditorData
 } | {
     status: 'loading'
@@ -43,7 +43,8 @@ export const useAutomatioEditorState = (
             }), {})
         };
         update({
-            status: "loading",
+            status: "saving",
+            data,
         })
         onSave(cleanData);
     }

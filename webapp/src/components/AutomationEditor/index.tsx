@@ -11,6 +11,8 @@ import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 import { MiniFailure } from 'types/validators/helper';
 import InputYaml from "components/Inputs/InputYaml";
 import { TagDB } from "components/AutomationList/TagDB";
+import Skeleton from "@mui/material/Skeleton";
+import LinearProgress from "@mui/material/LinearProgress";
 
 interface Props {
   automation?: AutomationData;
@@ -41,7 +43,9 @@ export const AutomationEditor: FC<Props> = ({
   // render
   if (state.status === 'loading') {
     return <div className="automation-editor loading">
-      Loading...
+      <LinearProgress className="linear-loader" />
+      <Skeleton className="mock-list" variant="rectangular" />
+      <Skeleton className="mock-graph" variant="rectangular" />
     </div>
   }
   if (state.status === 'invalid') {
@@ -53,6 +57,7 @@ export const AutomationEditor: FC<Props> = ({
     />
   }
   return <div className="automation-editor">
+    {state.status === 'saving' && <LinearProgress className="linear-loader" />}
     <AutoInfoBox
       className={closeInfo ? "hide" : "show"}
       metadata={state.data.metadata}

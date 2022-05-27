@@ -21,7 +21,7 @@ const Template: ComponentStory<typeof AutomationEditor> = args => {
   return <Page>
     <AutomationEditor
       {...args}
-      tagDB={makeTagDB([state as any])}
+      tagDB={makeTagDB(state ? [state] : [])}
       automation={state}
       onUpdate={s => {
         window.setTimeout(() => setState(s), 3000)

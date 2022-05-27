@@ -45,3 +45,20 @@ FewAutos.args = {
     createMockAuto(),
   ],
 }
+
+export const Loading: ComponentStory<any> = args => {
+  const api = useMockApiService(args.initialAutomations);
+  return <Page>
+    <ConnectedAutomationList
+      {...args}
+      api={{
+        ...api,
+        state: {
+          "automations": {
+            "ready": false
+          }
+        }
+      }}
+    />
+  </Page>
+}

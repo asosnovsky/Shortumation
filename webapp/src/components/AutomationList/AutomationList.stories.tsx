@@ -140,3 +140,41 @@ BadAutmations.args = {
     }
   ],
 }
+
+
+export const FewAutosWithSlowLoader: ComponentStory<typeof AutomationList> = args => {
+  const [autos, setAutos] = useState(args.automations)
+  return <Page>
+    <AutomationList {...args} automations={autos}
+      onAdd={a => {
+        window.setTimeout(() => {
+          args.onAdd(a);
+          setAutos([...autos, a]);
+        }, 10000)
+      }}
+      onRemove={i => {
+        window.setTimeout(() => {
+          args.onRemove(i);
+          setAutos([
+            ...autos.slice(0, i),
+            ...autos.slice(i + 1),
+          ]);
+        }, 10000)
+      }}
+      onUpdate={(i, a) => {
+        window.setTimeout(() => {
+          args.onUpdate(i, a);
+          setAutos([
+            ...autos.slice(0, i),
+            a,
+            ...autos.slice(i + 1),
+          ]);
+        }, 10000)
+      }}
+    />
+  </Page>
+}
+FewAutosWithSlowLoader.args = {
+  ...FewAutosWithSlowLoader.args,
+  automations: bigMockAutoList,
+}

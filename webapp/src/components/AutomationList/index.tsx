@@ -11,6 +11,8 @@ import { AutomationListBox } from "./AutomationListBox";
 import { DAGAutomationFlowDims } from 'components/DAGFlow/types';
 import useWindowSize from "utils/useWindowSize";
 import { makeTagDB } from "./TagDB";
+import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 
 
 interface AutomationListParams {
@@ -88,7 +90,12 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
   dims
 }) => {
   if (!automations.ready) {
-    return <span>Loading...</span>
+    return <div className="automation-list--root loading">
+      <LinearProgress />
+      <div className="automation-list--circle-loader">
+        <CircularProgress />
+      </div>
+    </div>
   }
   if (!automations.ok) {
     return <span>Error {automations.error}</span>
