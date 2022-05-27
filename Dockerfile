@@ -19,21 +19,23 @@ RUN apk add --no-cache \
     npm \
     build-base \
     python3-dev  
-RUN pip install -U wheel setuptools pip && \ 
-    npm i -g yarn
+
+# <--- Scripts --> 
+COPY docker/bin /app/bin
+
+# <--- PREP --> 
+RUN /app/bin/prep.sh
 
 # <--- Python Dependencies --> 
 COPY api/setup.py /app/setup.py
-RUN pip install . /app
 
 # <--- Webapp Build --> 
 COPY webapp/ /app/web-builder
 RUN cd /app/web-builder && \
-    echo "REACT_APP_BUILD_VERSION=${BUILD_VERSION}" > /app/web-builder/.env.production && \
-    yarn && \
-    yarn build && \
-    cp -r /app/web-builder/build /app/web && \
-    rm -rf /app/web-builder
+    echo "REACT_APP_BUILD_VERSION=${BUILD_VERSION}" > /app/web-builder/.env.production
+
+# <--- BUILD --> 
+RUN /app/bin/build.sh /app /app/web-builder
 
 # <--- Api Code --> 
 COPY api/src /app/src
