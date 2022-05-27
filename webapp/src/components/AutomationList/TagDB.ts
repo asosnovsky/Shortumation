@@ -2,11 +2,14 @@ import { AutomationData } from "types/automations";
 
 export type TagDB = ReturnType<typeof makeTagDB>;
 export const makeTagDB = (automations: AutomationData[]) => {
-    const allTags: Record<string, string[]> = {};
+    const allTags: Record<string, Set<string>> = {};
     automations.forEach(({ tags }) =>
         Object.keys(tags).forEach(tagName => {
             const tagValue = tags[tagName];
-            allTags[tagName] = (allTags[tagName] ?? []).concat([tagValue]);
+            if (!allTags[tagName]) {
+                allTags[tagName] = new Set()
+            }
+            allTags[tagName].add(tagValue);
         })
     );
     const allTagNames = Object.keys(allTags);
@@ -15,7 +18,7 @@ export const makeTagDB = (automations: AutomationData[]) => {
             return allTagNames.filter(n => !myTags.includes(n))
         },
         getTagValues(tagName: string): string[] {
-            return allTags[tagName] ?? [];
+            return allTags[tagName] ? Array.from(allTags[tagName].values()) : [];
         }
     }
 }
