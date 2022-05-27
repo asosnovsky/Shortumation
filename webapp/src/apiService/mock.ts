@@ -15,7 +15,7 @@ export const useMockAPI = (
       method = "POST",
       data = {}
     }) {
-      console.debug("[[mockCall]]", method, path, data);
+      // console.debug("[[mockCall]]", method, path, data);
       if (path === AUTOMTAION_LIST) {
         return {
           ok: true,

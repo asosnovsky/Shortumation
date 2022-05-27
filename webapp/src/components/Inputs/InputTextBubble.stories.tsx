@@ -42,3 +42,27 @@ export const EntityId: ComponentStory<typeof InputTextBubble> = args => {
     <InputEntity value={value} onChange={setValue} />
   </Page>
 }
+
+
+export const ManyOptions: ComponentStory<typeof InputTextBubble> = args => {
+
+  const [value, setValue] = useState<string | string[]>('hello')
+  return <Page>
+    <InputTextBubble {...args} value={value} onChange={setValue} />
+  </Page>
+}
+
+ManyOptions.args = {
+  ...ManyOptions.args,
+  options: [
+    'sensor.humidity_bathroom',
+    'sensor.humidity_bedroom',
+    'sensor.humidity_laundry',
+    'sensor.temp_bathroom',
+    'sensor.temp_bedroom',
+    'switch.living_room',
+    'switch.bathroom',
+    'light.bedroom_main',
+    'light.bedroom_second',
+  ]
+}

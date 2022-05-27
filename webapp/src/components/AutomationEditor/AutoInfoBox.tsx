@@ -5,12 +5,15 @@ import InputText from "components/Inputs/InputText";
 import { FC, useRef, useState } from 'react';
 import { AddIcon, TrashIcon } from "components/Icons";
 import { Button } from "components/Inputs/Button";
+import InputAutoText from "components/Inputs/InputAutoText";
+import { TagDB } from "components/AutomationList/TagDB";
 
 interface Props {
   className: string;
   metadata: AutomationMetadata;
   tags: Array<[string, string]>;
   onUpdate: (m: AutomationMetadata, tags: Array<[string, string]>) => void;
+  tagDB: TagDB;
 }
 export const AutoInfoBox: FC<Props> = ({
   metadata,
@@ -18,6 +21,7 @@ export const AutoInfoBox: FC<Props> = ({
   onUpdate,
   className,
   children,
+  tagDB,
 }) => {
   // state
   const [newTag, setNewTag] = useState<[string, string]>(["", ""])
@@ -25,6 +29,7 @@ export const AutoInfoBox: FC<Props> = ({
   const errorTimeoutId = useRef(-1);
 
   // aliases
+  const foundNewTagNames = tagDB.getTagNames(tags.map(([n, _]) => n));
   const setError = (index: number | 'new', msg: string) => {
     _setError([index, msg])
     if (errorTimeoutId.current >= 0) {
@@ -68,7 +73,9 @@ export const AutoInfoBox: FC<Props> = ({
     if (error) {
       return setError('new', error)
     }
-    onUpdate(metadata, tags.concat([newTag]));
+    onUpdate(metadata, tags.concat([
+      newTag.map(x => x.trim()) as [string, string]
+    ]));
     setNewTag(['', '']);
   }
   const onRemoveTag = (tagIndex: number) => onUpdate(metadata, [
@@ -96,22 +103,40 @@ export const AutoInfoBox: FC<Props> = ({
         <h1>Tags</h1>
         <div className="automation-editor--info-box--tag-list">
           {tags.map(([tagName, tagValue], tagIndex) => <div className="automation-editor--info-box--tag">
-            <InputText value={tagName} label="Name" onChange={v => updateTagName(v, tagIndex)} />
-            <InputText value={tagValue} label="Tag" onChange={v => onUpdateTags(v, tagIndex)} />
+            <InputAutoText
+              value={tagName}
+              label="Name"
+              onChange={v => updateTagName(v, tagIndex)}
+              options={foundNewTagNames}
+              error={errorIndex === tagIndex ? error : undefined}
+            />
+            <InputAutoText
+              value={tagValue}
+              label="Tag"
+              onChange={v => onUpdateTags(v, tagIndex)}
+              options={tagDB.getTagValues(tagName)}
+              error={errorIndex === tagIndex ? error : undefined}
+            />
             <Button className="automation-editor--info-box--tag--trash" onClick={() => onRemoveTag(tagIndex)} ><TrashIcon /></Button>
-            <span className={["automation-editor--info-box--tag--error", (errorIndex === tagIndex) ? "show" : "hide"].join(" ")}>
-              {error}
-            </span>
           </div>)}
         </div>
         <hr />
         <div className="automation-editor--info-box--tag">
-          <InputText value={newTag[0]} label="Name" onChange={v => setNewTag([v, newTag[1]])} onEnter={addNewTag} />
-          <InputText value={newTag[1]} label="Tag" onChange={v => setNewTag([newTag[0], v])} onEnter={addNewTag} />
+          <InputAutoText
+            value={newTag[0]}
+            label="Name"
+            onChange={v => setNewTag([v, newTag[1]])}
+            options={foundNewTagNames}
+            error={errorIndex === 'new' ? error : undefined}
+          />
+          <InputAutoText
+            value={newTag[1]}
+            label="Tag"
+            onChange={v => setNewTag([newTag[0], v])}
+            options={tagDB.getTagValues(newTag[0])}
+            error={errorIndex === 'new' ? error : undefined}
+          />
           <Button className="automation-editor--info-box--tag--add" onClick={addNewTag} ><AddIcon /></Button>
-          <span className={["automation-editor--info-box--tag--error", (errorIndex === 'new') ? "show" : "hide"].join(" ")}>
-            {error}
-          </span>
         </div>
       </div>
     </div>

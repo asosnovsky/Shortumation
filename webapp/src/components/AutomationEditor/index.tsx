@@ -10,16 +10,19 @@ import { SafeDAGAutomationFlow } from "components/DAGFlow/safe";
 import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 import { MiniFailure } from 'types/validators/helper';
 import InputYaml from "components/Inputs/InputYaml";
+import { TagDB } from "components/AutomationList/TagDB";
 
 interface Props {
   automation?: AutomationData;
   dims: DAGAutomationFlowDims;
   onUpdate: (auto: AutomationData) => void;
+  tagDB: TagDB;
 }
 export const AutomationEditor: FC<Props> = ({
   dims,
   automation: propsAutos,
   onUpdate: propsOnUpdate,
+  tagDB,
 }) => {
   // state
   const {
@@ -55,6 +58,7 @@ export const AutomationEditor: FC<Props> = ({
       metadata={state.data.metadata}
       tags={state.data.tags}
       onUpdate={updateMetadata}
+      tagDB={tagDB}
     >
       <ButtonIcon
         className="automation-editor--info-box--icon"

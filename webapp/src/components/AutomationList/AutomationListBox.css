@@ -5,7 +5,8 @@
 }
 
 .automation-list-box--body {
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     height: 100%;
     flex: 1;
     user-select: none;
@@ -24,7 +25,15 @@
     padding-bottom: 0.5em;
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: white;
+    border-color: var(--primary-accent);
+}
+
+.automation-list-box--body--group.other {
+    border-color: var(--green);
+}
+
+.automation-list-box--body--group.other>b {
+    color: var(--change);
 }
 
 .automation-list-box--body--group>.automation-list-box--body--group {

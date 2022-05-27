@@ -10,6 +10,7 @@ import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
 import { DAGAutomationFlowDims } from 'components/DAGFlow/types';
 import useWindowSize from "utils/useWindowSize";
+import { makeTagDB } from "./TagDB";
 
 
 interface AutomationListParams {
@@ -34,6 +35,7 @@ export const AutomationList: FC<AutomationListParams> = ({
   const { isMobile } = useWindowSize();
   // alias
   const currentAuto = automations.length > 0 ? automations[current] : null;
+  const tagDB = makeTagDB(automations);
   // render
   return <div className={["automation-list--root", isMobile ? 'mobile' : ''].join(' ')}>
     <div className={["automation-list--list", hideList ? "hide" : "show"].join(' ')}>
@@ -64,6 +66,7 @@ export const AutomationList: FC<AutomationListParams> = ({
         automation={currentAuto}
         onUpdate={a => onUpdate(current, a)}
         dims={dims}
+        tagDB={tagDB}
       /> : <></>}
     </div>
     {children}

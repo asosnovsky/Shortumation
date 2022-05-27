@@ -5,6 +5,7 @@ import InputMultiSelect from "components/Inputs/InputMultiSelect";
 import InputText from "components/Inputs/InputText";
 import { Button } from "components/Inputs/Button";
 import { TrashIcon } from "components/Icons";
+import { MetadataBox } from "./AutomationMetadataBox";
 
 
 export type Props = {
@@ -78,13 +79,6 @@ const filterAutomations = (autos: AutomationData[], searchText: string, selected
             return false
         }
     }
-    if (selected.length > 0) {
-        for (const i of selected) {
-            if (!a.tags[tags[i]]) {
-                return false
-            }
-        }
-    }
     return true
 })
 
@@ -105,13 +99,21 @@ export const groupAutomations = (
         let lastKey: string | null = null;
         for (const i of selected) {
             tag = tags[i];
-            if (lastKey !== null) {
+            if (lastKey) {
                 where = where[lastKey]
             }
-            if (!where[a.tags[tag]]) {
-                where[a.tags[tag]] = {}
+            if (a.tags[tag]) {
+                if (!where[a.tags[tag]]) {
+                    where[a.tags[tag]] = {}
+                }
+                lastKey = a.tags[tag]
+            } else {
+                if (!where[""]) {
+                    where[""] = []
+                }
+                lastKey = ""
+                break
             }
-            lastKey = a.tags[tag]
         }
         if (lastKey !== null) {
             if (!where[lastKey] || !Array.isArray(where[lastKey])) {
@@ -148,7 +150,12 @@ const convertGroupsToItems = (
             </div>
         })
     } else {
-        return Object.keys(groups).map(groupName => {
+        return Object.keys(groups).sort((a, b) => {
+            if (!a) {
+                return 1
+            }
+            return a < b ? 1 : -1
+        }).map(groupName => {
             return <AutomationListBoxGroup
                 key={groupName}
                 groupName={groupName}
@@ -162,33 +169,9 @@ const convertGroupsToItems = (
     }
 }
 
-export const MetadataBox: FC<{
-    metadata: AutomationMetadata,
-    tags: Record<string, string>,
-}> = (auto) => {
-    let title = <span>{"BadAuto<<Missing Metadata>>"}</span>
-    if (auto.metadata) {
-        title = <>
-            <b>{String(auto.metadata.alias ?? "").slice(0, 15)} <span>({String(auto.metadata.id).slice(0, 5)})</span></b>
-            <span>{String(auto.metadata.description ?? "").slice(0, 25)}</span>
-        </>
-    }
-    return <div
-        className="automation-list-box--body--item--title"
-    >
-        {title}
-        <div
-            className="automation-list-box--body--item--tags"
-        >
-            {Object.keys(auto.tags).map(tagName => <span key={tagName}>
-                <b>{tagName}:</b> {auto.tags[tagName]}
-            </span>)}
-        </div>
-    </div>
-}
 
 
-const AutomationListBoxGroup: FC<{
+export const AutomationListBoxGroup: FC<{
     groupName: string,
     groups: any,
     autos: Array<[AutomationData, number]>,
@@ -204,8 +187,13 @@ const AutomationListBoxGroup: FC<{
     selected,
 }) => {
         const [open, setOpen] = useState(false);
-        return <div className="automation-list-box--body--group">
-            <b onClick={() => setOpen(!open)}>{groupName} {!open ? "⊕" : "⊖"}</b>
+        const isOther = !groupName;
+        const openIcon = !open ? "⊕" : "⊖";
+        const total = isOther ? <small>
+            {groups.length} item{groups.length !== 1 ? 's' : ''} (untagged)
+        </small> : <></>
+        return <div className={["automation-list-box--body--group", isOther ? 'other' : ''].join(' ')}>
+            <b onClick={() => setOpen(!open)}>{groupName} {openIcon} {total}</b>
             {open && convertGroupsToItems(groups, autos, onSelectAutomation, onRemove, selected)}
         </div>
     }

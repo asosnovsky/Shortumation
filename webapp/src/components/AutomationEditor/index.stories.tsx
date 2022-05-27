@@ -4,6 +4,7 @@ import { AutomationEditor } from './index';
 import { useState } from 'react';
 import * as dgconst from 'components/DAGFlow/constants';
 import { Page } from "components/Page";
+import { makeTagDB } from "components/AutomationList/TagDB";
 
 
 export default {
@@ -11,7 +12,7 @@ export default {
   component: AutomationEditor,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   args: {
-    dims: dgconst.DEFAULT_DIMS
+    dims: dgconst.DEFAULT_DIMS,
   }
 } as ComponentMeta<typeof AutomationEditor>
 
@@ -20,6 +21,7 @@ const Template: ComponentStory<typeof AutomationEditor> = args => {
   return <Page>
     <AutomationEditor
       {...args}
+      tagDB={makeTagDB([state as any])}
       automation={state}
       onUpdate={s => {
         window.setTimeout(() => setState(s), 3000)

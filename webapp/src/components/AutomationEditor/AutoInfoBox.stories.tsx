@@ -1,12 +1,20 @@
+
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { makeTagDB } from "components/AutomationList/TagDB";
 import { Page } from "components/Page";
 import { useState } from "react";
 import { AutoInfoBox } from "./AutoInfoBox";
+import { defaultAutomation } from 'utils/defaults';
 
 export default {
   title: 'App/AutomationList/Editor/InfoBox',
   component: AutoInfoBox,
   parameters: { actions: { argTypesRegex: '^on.*' } },
+  args: {
+    tagDB: makeTagDB([
+      defaultAutomation("test")
+    ])
+  }
 } as ComponentMeta<typeof AutoInfoBox>;
 
 
@@ -15,6 +23,7 @@ export const NoTags: ComponentStory<typeof AutoInfoBox> = args => {
   return (
     <Page>
       <AutoInfoBox
+        {...args}
         className=""
         metadata={metadata}
         tags={tags}

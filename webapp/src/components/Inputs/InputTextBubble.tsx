@@ -1,55 +1,46 @@
-import { FC, useState } from "react";
-import InputText from "./InputText";
-import { useInputBubblesStyles } from "./styles";
+import Chip from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import { FC } from "react";
 
 export interface Props {
   label: string;
-  textBoxFor?: string;
   value: string | string[];
+  options?: string[];
   onChange: (v: string[]) => void;
-  additionalTooltipFilters?: Record<string, string>;
 }
 export default function InputTextBubble({
   value = "",
   label,
-  textBoxFor,
+  options = [],
   onChange,
-  additionalTooltipFilters = {},
 }: Props) {
-  const { classes } = useInputBubblesStyles({});
-  let selected: string[];
-  if (typeof value === 'string') {
-    selected = [value]
-  } else {
-    selected = value
-  }
-  const [text, setText] = useState('');
-  const addNew = () => {
-    if (text) {
-      onChange([text].concat(selected))
-      setText("")
-    }
-  };
 
-  return <InputText
-    label={label}
-    value={text}
-    textBoxFor={textBoxFor}
-    onChange={t => setText(t)}
-    onEnter={() => addNew()}
-    additionalTooltipFilters={additionalTooltipFilters}
-  >
-    <div className={classes.bubbles}>
-      {selected.map((s, i) => <div className={classes.bubble} onClick={() => onChange([
-        ...selected.slice(0, i),
-        ...selected.slice(i + 1),
-      ])}>
-        {s}
-        <span className={classes.deleteIcon}>X</span>
-      </div>)}
-    </div>
-    <button className={classes.addBtn} onClick={() => addNew()}>+</button>
-  </InputText>
+  const selected = Array.isArray(value) ? value : [value];
+
+  return <Autocomplete
+    multiple
+    freeSolo
+    value={selected}
+    options={options}
+    onChange={(_e, v) => onChange(
+      v === null ? [] :
+        Array.isArray(v) ? v : [v]
+    )}
+    renderInput={params => <TextField
+      {...params}
+      variant="filled"
+      label={label}
+    />}
+    renderTags={(tagValue, getTagProps) =>
+      tagValue.map((option, index) => (
+        <Chip
+          label={option}
+          {...getTagProps({ index })}
+        />
+      ))
+    }
+  />
 }
 
 export const InputEntity: FC<{
@@ -62,5 +53,4 @@ export const InputEntity: FC<{
       value={value}
       onChange={onChange}
       label="Entity ID"
-      textBoxFor="entity_id"
     />

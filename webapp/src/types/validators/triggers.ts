@@ -1,5 +1,5 @@
 import * as st from 'superstruct'
-import { AutomationTimeString, AutomationTime } from './common'
+import { AutomationTimeString, AutomationTime, EntityId } from './common'
 
 
 const AutomationTriggerBase = {
@@ -95,7 +95,7 @@ export const AutomationTriggerZone = st.type({
 export const AutomationTriggerDevice = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('device'),
-    entity_id: st.optional(st.string()),
+    entity_id: st.optional(EntityId),
     device_id: st.string(),
     domain: st.string(),
     type: st.string(),

@@ -64,24 +64,6 @@
     padding: 1em 0.25em 0.2em 0.25em;
 }
 
-.automation-editor--info-box--tag--error {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 0;
-}
-
-.automation-editor--info-box--tag--error.hide {
-    height: 0;
-    opacity: 0;
-    display: none;
-}
-
-.automation-editor--info-box--tag--error.show {
-    height: fit-content;
-    opacity: 1;
-}
-
 .automation-editor--info-box--tag--trash, .automation-editor--info-box--tag--add {
     height: 2em;
     width: 2em;

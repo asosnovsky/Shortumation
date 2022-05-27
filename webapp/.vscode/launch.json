@@ -2,24 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug CRA Tests",
+            "name": "Debug Jest Tests",
             "type": "node",
             "request": "launch",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
-            "args": [
-                "test",
-                "--runInBand",
-                "--no-cache",
-                "--watchAll=false"
+            "runtimeArgs": [
+                "--inspect-brk",
+                "${workspaceRoot}/node_modules/.bin/jest",
+                "--runInBand"
             ],
-            "cwd": "${workspaceRoot}",
-            "protocol": "inspector",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
-            "env": {
-                "CI": "true"
-            },
-            "disableOptimisticBPs": true
+            "port": 9229
         }
     ]
 }

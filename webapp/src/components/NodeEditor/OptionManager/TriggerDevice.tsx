@@ -1,6 +1,7 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerDevice } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
+import { InputEntity } from 'components/Inputs/InputTextBubble';
 
 
 export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
@@ -34,7 +35,7 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
         ...state,
         device_id
       })} />
-      <InputText label="Entity" value={state.entity_id ?? ""} onChange={entity_id => setState({
+      <InputEntity value={state.entity_id ?? ""} onChange={entity_id => setState({
         ...state,
         entity_id
       })} />
