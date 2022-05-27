@@ -18,7 +18,7 @@ export const makeTagDB = (automations: AutomationData[]) => {
             return allTagNames.filter(n => !myTags.includes(n))
         },
         getTagValues(tagName: string): string[] {
-            return allTags[tagName] ? Array.from(allTags[tagName].values()) : [];
+            return allTags[tagName] ? Array.from(allTags[tagName].values()).sort() : [];
         }
     }
 }
