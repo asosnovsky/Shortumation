@@ -4,9 +4,9 @@
 
 A better way to write automations in home-assistant without having to install and run a seperate automation engine!
 
-![image](https://user-images.githubusercontent.com/7451445/168672575-fb19997d-fe9b-4192-96b0-733b62519797.png)
+![image](https://user-images.githubusercontent.com/7451445/170770378-122c6722-993d-40ac-801d-387cfaccd41f.png)
 
-![image](https://user-images.githubusercontent.com/7451445/168672840-71ceaa8a-2bee-443e-9150-5b0f03b05d08.png)
+![image](https://user-images.githubusercontent.com/7451445/170770572-fd38950a-b6b4-4b49-8c94-fb0a5f3008ce.png)
 
 
 A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).

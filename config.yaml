@@ -1,5 +1,5 @@
 name: Shortumation
-version: 0.1.13
+version: v0.1.14
 slug: shortumation
 image: asosnovsky/shortumation-{arch}
 url: "https://github.com/asosnovsky/Shortumation"
@@ -26,6 +26,6 @@ map:
   - config:rw
 options: {}
 ports:
-  8000/tcp: 8000
+  8000/tcp:
 ports_description:
   8000/tcp: Main port for the API & Web.

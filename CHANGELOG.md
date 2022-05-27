@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.14] - Material UI + Autocomplete v2
+
+- Brought some Material UI elements for input and text
+- Autocomplete for tags
+- Using 'id' as alias for trigger (as it seems to break HA otherwise)
+- Not using 'alias' for conditions, always auto-generating it (again, this used to break HA)
+- Added missing `data` object to service-actions
+
 ## [0.1.13] - YAML
 
 - Better YAML
