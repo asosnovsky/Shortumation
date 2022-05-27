@@ -7,18 +7,16 @@ import { OptionManager, updateActionData } from './OptionManager';
 export const ActionCallServiceState: OptionManager<ServiceAction> = {
   defaultState: () => ({
     service: "",
-    target: "",
+    target: {},
     data: {},
   }),
   isReady: ({
-    service, alias, target
+    service,
   }) => (
-    service !== '' &&
-    alias !== '' &&
-    target !== ''
+    service !== ''
   ),
   renderOptionList: (state, setState) => {
-    const { service, target } = state;
+    const { service, target, data } = state;
     const update = updateActionData(state, setState);
     return <>
       <InputText
@@ -31,6 +29,11 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
         label="Target"
         value={target}
         onChange={target => update({ target })}
+      />
+      <InputYaml
+        label="Data"
+        value={data}
+        onChange={data => update({ data })}
       />
     </>
   }

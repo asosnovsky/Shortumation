@@ -56,6 +56,15 @@ Condition.args = {
   } as AutomationCondition,
 }
 
+export const UnSupported = Action.bind({})
+UnSupported.args = {
+  ...UnSupported.args,
+  node: {
+    "condition": "bargs",
+    "platform": "rouge"
+  } as any,
+}
+
 
 export const InAModal: ComponentStory<typeof NodeEditor> = props => {
 
