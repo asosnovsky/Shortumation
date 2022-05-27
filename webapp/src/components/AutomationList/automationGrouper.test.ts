@@ -1,6 +1,6 @@
 import { makeGrouping } from "./automationGrouper";
 import { AutomationData } from 'types/automations/index';
-import { createMockAuto } from 'utils/mocks';
+import { bigMockAutoList, createMockAuto } from 'utils/mocks';
 
 const automations: AutomationData[] = [
     createMockAuto({
@@ -46,3 +46,27 @@ test('2 groupings', () => {
     expect(grouped.getAutomations(grouped.top[2])).toHaveLength(2)
     expect(grouped.getSubGroups(grouped.top[2])).toHaveLength(0)
 });
+test('bigAutoList groupings has not duplicate ids', () => {
+    const grouped = makeGrouping(bigMockAutoList, ['Room', "Remote"], 0);
+    const flattenAndCount = (gid: number): Record<number, number[]> => {
+        const subgroups = grouped.getSubGroups(gid);
+        if (subgroups.length > 0) {
+            return flattenAndConsolidate(subgroups)
+        } else {
+            return grouped.getAutomations(gid).reduce((sum: Record<number, number[]>, b) => {
+                sum[b] = (sum[b] ?? []).concat(gid)
+                return sum
+            }, {})
+        }
+    }
+    const flattenAndConsolidate = (gids: number[]): Record<number, number[]> => gids.map(flattenAndCount).reduce((a, b) => {
+        for (const k of Object.keys(b).map(Number)) {
+            a[k] = (a[k] ?? []).concat(b[k])
+        }
+        return a
+    }, {})
+    const countedAutos = flattenAndConsolidate(grouped.top)
+    for (const key of Object.keys(countedAutos).map(Number)) {
+        expect(countedAutos[key]).toHaveLength(1)
+    }
+})

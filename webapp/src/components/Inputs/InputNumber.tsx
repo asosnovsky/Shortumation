@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import InputWrapper from "./InputWrapper";
 import { useInputNumberStyles } from "./styles";
 
