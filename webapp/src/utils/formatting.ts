@@ -104,7 +104,7 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
         return `Trigger ${node.event}`
     }
     if ('device_id' in node) {
-        return `${node.type} on ${node.device_id}`
+        return `${node.type ?? ""} on ${node.device_id ?? ""}`
     }
     if ('choose' in node) {
         return "Choose"

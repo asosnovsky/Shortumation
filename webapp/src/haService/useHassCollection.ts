@@ -2,18 +2,21 @@ import { Collection, Connection } from "home-assistant-js-websocket";
 import { useState, useEffect } from 'react';
 import { useHAConnection } from "./connection";
 
-export type HACollectionState<T> = {
+type _HACollectionState<T> = {
     ready: false,
     collection?: Collection<T>,
 } | {
     ready: true,
     collection: Collection<T>,
 }
+export type HACollectionState<T, D = {}> = _HACollectionState<T> & {
+    additional: Partial<D>
+}
 export const useHassCollection = <T, D extends {} = {}>(
     getHACollection: (c: Connection) => Collection<T>,
     updateAdditionalProps?: (n: T | {}) => D,
-) => {
-    const [state, setState] = useState<HACollectionState<T>>({
+): HACollectionState<T, D> => {
+    const [state, setState] = useState<_HACollectionState<T>>({
         ready: false
     });
     const conn = useHAConnection();

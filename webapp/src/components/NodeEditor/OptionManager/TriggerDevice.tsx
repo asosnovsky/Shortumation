@@ -3,6 +3,7 @@ import { AutomationTriggerDevice } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
 import { InputEntity } from 'components/Inputs/InputEntities';
 import InputTextBubble from 'components/Inputs/InputTextBubble';
+import { InputDevice } from 'components/Inputs/InputDevice';
 
 
 export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
@@ -24,9 +25,9 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
         ...state,
         subtype
       })} />
-      <InputText label="Device" value={state.device_id ?? ""} onChange={device_id => setState({
+      <InputDevice value={state.device_id ?? ""} onChange={device_id => setState({
         ...state,
-        device_id
+        device_id: device_id ?? "",
       })} />
       <InputEntity restrictToDomain={state.domain ? [state.domain] : undefined} value={state.entity_id ?? ""} multiple onChange={entity_id => setState({
         ...state,

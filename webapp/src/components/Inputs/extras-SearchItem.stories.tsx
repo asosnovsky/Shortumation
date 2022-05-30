@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 
-import { SearchItem } from "./InputEntities";
+import { SearchItem } from "./extras";
 
 export default {
-  title: 'Inputs/InputEntity/SearchItem',
+  title: 'Inputs/Extras/SearchItem',
   component: SearchItem,
   parameters: { actions: { argTypesRegex: '^on.*' } },
   argTypes: {}

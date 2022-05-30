@@ -1,3 +1,4 @@
+import { InputDevice } from "components/Inputs/InputDevice";
 import { InputEntity } from "components/Inputs/InputEntities";
 import InputText from "components/Inputs/InputText";
 import { DeviceAction } from "types/automations/actions";
@@ -7,16 +8,16 @@ import { OptionManager, updateActionData } from './OptionManager';
 export const ActionDeviceState: OptionManager<DeviceAction> = {
   defaultState: () => ({
     alias: "",
+    device_id: ""
   }),
   isReady: () => true,
-  renderOptionList: (state, setState) => {
+  renderOptionList: (state, setState, entities) => {
+    console.log(entities.collection?.state)
     const update = updateActionData(state, setState);
     return <>
-      <InputText
-        textBoxFor="device_id"
-        label="Device"
+      <InputDevice
         value={state.device_id ?? ""}
-        onChange={device_id => update({ device_id })}
+        onChange={device_id => update({ device_id: device_id ?? "" })}
       />
       <InputText
         textBoxFor="type"

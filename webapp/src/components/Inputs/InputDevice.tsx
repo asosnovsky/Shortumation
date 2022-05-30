@@ -1,16 +1,15 @@
 import "./InputEntities.css";
 import { FC } from "react";
-import { useHAEntities } from 'haService';
+import { DeviceRegistryOption, useHADeviceRegistry } from 'haService';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { prettyName } from "utils/formatting";
 import { EntityId } from 'types/automations/common';
 import { Badge } from "@mui/material";
 import { SearchItem } from "./extras";
+import { prettyName } from 'utils/formatting';
 
 export type InputEntityProps = {
-    restrictToDomain?: string[],
     label?: string,
 } & ({
     value: string | null;
@@ -22,31 +21,14 @@ export type InputEntityProps = {
     onChange: (v: string[]) => void;
 })
 
-export const InputEntity: FC<InputEntityProps> = props => {
+export const InputDevice: FC<InputEntityProps> = props => {
     // state
-    const entities = useHAEntities();
+    const dr = useHADeviceRegistry();
 
     // processing of inputs
-    const options = entities.getOptions(props.restrictToDomain);
+    const options = dr.getOptions();
     const value = Array.isArray(props.value) ? props.value : !!props.value ? [props.value] : [];
-    const errors = entities.validateOptions(value, props.restrictToDomain);
 
-    // processing of errors
-    let helperText = <></>;
-    let error: boolean = false;
-    if (errors !== null) {
-        error = true
-        if (errors.length > 0) {
-            helperText = <Badge
-                className="input-entities--errors"
-                badgeContent={errors.length} color="error"
-            >
-                <ul title={errors.join(', and')}>{errors.map((msg, i) => <li key={i}>
-                    {msg}
-                </li>)}</ul>
-            </Badge>
-        }
-    }
     // events
     const onChange = (_e: any, v: any) => {
         const cleanValue: string[] = v === null ? [] :
@@ -70,33 +52,33 @@ export const InputEntity: FC<InputEntityProps> = props => {
         value={value}
         options={options}
         onChange={onChange}
-        getOptionLabel={entities.getLabel}
+        getOptionLabel={dr.getLabel}
+        groupBy={opt => (typeof opt !== 'string') ? prettyName(opt.manufacturer) : ''}
         filterOptions={(opts, s) => {
             const searchTerm = s.inputValue.toLocaleLowerCase();
             return opts.map(opt => {
                 let similarityScore = 0;
-                const eid = entities.getID(opt);
+                const eid = dr.getID(opt);
                 if (eid.toLocaleLowerCase().includes(searchTerm)) {
                     similarityScore = Math.abs(eid.length - searchTerm.length)
                 }
-                const name = entities.getLabel(opt);
+                const name = dr.getLabel(opt);
                 if (name.toLocaleLowerCase().includes(searchTerm)) {
                     similarityScore = Math.abs(eid.length - searchTerm.length)
                 }
                 return {
                     label: name,
                     id: eid,
-                    domain: (typeof opt === 'string') ? '' : opt.domain,
-                    similarityScore
+                    similarityScore,
+                    manufacturer: (typeof opt === 'string') ? '' : opt.manufacturer ?? ""
                 }
             }).filter(opt => opt.similarityScore > 0).sort((a, b) => {
                 return (a.similarityScore > b.similarityScore) ? 1 : -1
             })
         }}
-        groupBy={opt => (typeof opt !== 'string') ? prettyName(opt.domain) : ''}
         renderOption={(prop, option, { inputValue }) => {
-            const label = entities.getLabel(option);
-            const id = entities.getID(option);
+            const label = dr.getLabel(option);
+            const id = dr.getID(option);
 
             return <SearchItem
                 listProps={prop}
@@ -108,15 +90,13 @@ export const InputEntity: FC<InputEntityProps> = props => {
         renderInput={params => <TextField
             {...params}
             variant="filled"
-            label={props.label ?? "Entity ID"}
-            helperText={helperText}
-            error={error}
+            label={props.label ?? "Device"}
         />}
         renderTags={(tagValue, getTagProps) => <Badge badgeContent={tagValue.length} color="info">
             <div className="input-entities--tags">
                 {tagValue.map((option, index) => {
-                    const label = entities.getLabel(option);
-                    const id = entities.getID(option);
+                    const label = dr.getLabel(option);
+                    const id = dr.getID(option);
                     const props = getTagProps({ index });
                     props.className += ' input-entities--chip'
                     return (
@@ -135,4 +115,3 @@ export const InputEntity: FC<InputEntityProps> = props => {
         }
     />
 }
-

@@ -1,11 +1,14 @@
 import { entitiesColl, servicesColl } from "home-assistant-js-websocket"
+import { deviceRegistryColl } from "./DeviceRegistry";
+import { entityRegistryColl } from "./EntityRegistry";
+import { DeviceRegistryItem } from "./types";
 import { useHassCollection } from "./useHassCollection"
 
-export type Option = string | {
+export type Option<T = {}> = string | ({
     id: string,
     label: string,
-    domain: string,
-}
+} & T)
+export type EntityOption = Option<{ domain: string; }>
 export type HAEntitiesState = ReturnType<typeof useHAEntities>;
 export const useHAEntities = () => {
     const entities = useHassCollection(entitiesColl, state => ({
@@ -33,7 +36,7 @@ export const useHAEntities = () => {
             }
             return null
         },
-        getOptions(restrictToDomain?: string[]): Option[] {
+        getOptions(restrictToDomain?: string[]): EntityOption[] {
             if (!entities.ready) {
                 return []
             }
@@ -48,7 +51,7 @@ export const useHAEntities = () => {
                 domain: key.split('.')[0] ?? "n/a",
             }))
         },
-        getLabel: (opt: Option): string => {
+        getLabel: (opt: EntityOption): string => {
             if (typeof opt === 'string') {
                 if (entities.ready) {
                     return entities.collection.state[opt]?.attributes.friendly_name ?? opt;
@@ -57,7 +60,7 @@ export const useHAEntities = () => {
             }
             return opt.label ?? opt.id
         },
-        getID: (opt: Option): string => {
+        getID: (opt: EntityOption): string => {
             if (typeof opt === 'string') {
                 return opt
             }
@@ -74,4 +77,47 @@ export const useHAServices = () => {
     const services = useHassCollection(servicesColl);
 
     return services
+}
+
+export type DeviceRegistryOption = Option<{ manufacturer: string }>;
+export const useHADeviceRegistry = () => {
+    const dr = useHassCollection(deviceRegistryColl)
+    const getLabelForItem = (item: DeviceRegistryItem) => item ? item.name_by_user ??
+        item.name ??
+        item.id :
+        "";
+    const methods = {
+        getOptions(): DeviceRegistryOption[] {
+            if (!dr.ready) {
+                return []
+            }
+            const keys = Object.keys(dr.collection.state);
+            return keys.map(key => ({
+                id: key,
+                label: getLabelForItem(dr.collection.state[key]) ?? key,
+                manufacturer: dr.collection.state[key].manufacturer ?? "",
+            }))
+        },
+        getLabel: (opt: DeviceRegistryOption): string => {
+            if (typeof opt === 'string') {
+                if (dr.ready) {
+                    return getLabelForItem(dr.collection.state[opt]) ?? opt
+                }
+                return opt
+            }
+            return opt.label ?? opt.id
+        },
+        getID: (opt: DeviceRegistryOption): string => {
+            if (typeof opt === 'string') {
+                return opt
+            }
+            return opt.id
+        }
+    }
+    return { ...dr, ...methods }
+}
+export const useHAEntityRegistry = () => {
+    const dr = useHassCollection(entityRegistryColl)
+
+    return dr
 }

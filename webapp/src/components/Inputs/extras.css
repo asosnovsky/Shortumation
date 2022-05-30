@@ -1,0 +1,9 @@
+.input-extras--search-item--list {
+    display: flex;
+    flex-direction: row;
+    gap: 0.15em;
+}
+
+.input-extras--search-item--list>small::before {
+    content: "/ ";
+}

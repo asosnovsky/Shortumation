@@ -2,13 +2,13 @@
     max-width: 100%;
 }
 
-.input-entities--list, .input-entities--chip>span {
+.input-entities--chip>span {
     display: flex;
     flex-direction: row;
     gap: 0.15em;
 }
 
-.input-entities--list>small::before, .input-entities--chip>span>small::before {
+.input-entities--chip>span>small::before {
     content: "/ ";
 }
 
