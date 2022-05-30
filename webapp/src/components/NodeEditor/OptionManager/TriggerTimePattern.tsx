@@ -7,9 +7,7 @@ export const TriggerTimePattern: OptionManager<AutomationTriggerTimePattern> = {
   defaultState: () => ({
     "platform": 'time_pattern',
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputText label="Hours" value={state.hours ?? ""} onChange={hours => setState({

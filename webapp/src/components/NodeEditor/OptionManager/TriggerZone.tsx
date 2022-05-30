@@ -12,9 +12,7 @@ export const TriggerZone: OptionManager<AutomationTriggerZone> = {
     "event": "enter",
     "entity_id": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputText label="Zone" value={state.zone ?? ""} onChange={zone => setState({

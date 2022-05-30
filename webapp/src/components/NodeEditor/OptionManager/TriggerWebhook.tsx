@@ -8,9 +8,7 @@ export const TriggerWebhook: OptionManager<AutomationTriggerWebhook> = {
     "platform": 'webhook',
     "webhook_id": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputText label="Webhook ID" value={state.webhook_id ?? ""} onChange={webhook_id => setState({

@@ -9,9 +9,7 @@ export const TriggerTime: OptionManager<AutomationTriggerTime> = {
     "platform": 'time',
     "at": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputTime

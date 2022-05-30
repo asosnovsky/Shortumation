@@ -12,9 +12,7 @@ export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> =
     "platform": 'numeric_state',
     "entity_id": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputEntity

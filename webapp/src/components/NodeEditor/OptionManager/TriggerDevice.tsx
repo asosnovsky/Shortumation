@@ -13,9 +13,7 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
     "device_id": "",
     "entity_id": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputText label="Domain" value={state.domain ?? ""} onChange={domain => setState({

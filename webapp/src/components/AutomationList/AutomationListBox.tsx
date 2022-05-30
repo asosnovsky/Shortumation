@@ -1,6 +1,6 @@
 import "./AutomationListBox.css";
 import { FC, useState } from 'react';
-import { AutomationData, AutomationMetadata } from "types/automations";
+import { AutomationData } from "types/automations";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 import InputText from "components/Inputs/InputText";
 import { Button } from "components/Inputs/Button";

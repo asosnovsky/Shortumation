@@ -8,9 +8,7 @@ export const TriggerHAState: OptionManager<AutomationTriggerHA> = {
     "platform": "homeassistant",
     "event": "start",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputList

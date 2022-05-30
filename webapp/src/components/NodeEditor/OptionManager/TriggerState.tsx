@@ -10,9 +10,7 @@ export const TriggerState: OptionManager<AutomationTriggerState> = {
     "platform": 'state',
     "entity_id": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputEntity

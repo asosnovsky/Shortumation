@@ -9,9 +9,7 @@ export const TriggerTemplate: OptionManager<AutomationTriggerTemplate> = {
     "platform": 'template',
     "value_template": "",
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputText

@@ -10,9 +10,7 @@ export const TriggerMQTTState: OptionManager<AutomationTriggerMQTT> = {
     "topic": "",
     "value_template": ""
   }),
-  isReady: ({ }) => {
-    return true
-  },
+  isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
       <InputText
