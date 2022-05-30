@@ -47,14 +47,11 @@ const translateErrorCodes = (errorCode: number) => {
 }
 
 const createAuth = async () => {
-    console.log("detecting auth")
     let auth: Auth
     if (HASS_TOKEN) {
-        console.log("trying token")
         return createLongLivedTokenAuth(HASS_URL, HASS_TOKEN);
     }
     try {
-        console.log("trying to get from mem")
         auth = await getAuth();
         return auth
     } catch (err) {
@@ -63,7 +60,6 @@ const createAuth = async () => {
         }
     }
     try {
-        console.log("trying to get from url")
         auth = await getAuth({ hassUrl: HASS_URL });
         return auth
     } catch (err) {
@@ -93,15 +89,12 @@ startHAConnection().then(console.log).catch(console.error);
 export const useHAConnection = (): HAConnection => {
     const [conn, setConn] = useState<HAConnection>(haConnection);
     const timeID = useRef<number | undefined>(undefined);
-    console.log("connecting to HA")
     useEffect(() => {
-        console.log('connection state', conn.status)
         if (conn.status !== haConnection.status) {
             setConn(haConnection);
         }
         const waiter = () => {
             if (conn.status !== haConnection.status) {
-                console.log('setting status', conn.status, haConnection.status)
                 setConn(haConnection);
             }
             timeID.current = window.setTimeout(() => {

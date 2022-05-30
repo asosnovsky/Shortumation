@@ -3,7 +3,6 @@ import { AutomationData } from "types/automations";
 export type TagDB = ReturnType<typeof makeTagDB>;
 export const makeTagDB = (automations: AutomationData[]) => {
     const allTags: Record<string, Set<string>> = {};
-    console.log(automations)
     automations.forEach(({ tags }) =>
         Object.keys(tags).forEach(tagName => {
             const tagValue = tags[tagName];
