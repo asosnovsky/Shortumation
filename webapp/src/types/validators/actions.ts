@@ -46,10 +46,10 @@ export const FireEventAction = st.intersection([
 export const DeviceAction = st.intersection([
     AutomationActionNodeBase,
     st.type({
-        type: st.string(),
-        device_id: st.string(),
+        type: st.optional(st.string()),
+        device_id: st.optional(st.string()),
         entity_id: st.optional(st.string()),
-        domain: st.string(),
+        domain: st.optional(st.string()),
     })
 ]);
 

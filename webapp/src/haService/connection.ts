@@ -79,7 +79,7 @@ async function startHAConnection() {
     } catch (error) {
         haConnection = {
             status: 'error',
-            error: translateErrorCodes(error),
+            error: translateErrorCodes(error as any),
         }
         throw error
     }
