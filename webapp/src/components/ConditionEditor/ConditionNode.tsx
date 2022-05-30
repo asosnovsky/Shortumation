@@ -8,6 +8,7 @@ import InputYaml from "components/Inputs/InputYaml";
 import { getEditor } from "./editorRender";
 import { useStyles } from "./style";
 import { getViewer } from "./viewRender";
+import useWindowSize from "utils/useWindowSize";
 
 
 
@@ -31,6 +32,7 @@ export const ConditionNode: FC<{
     // state
     const [internalDisplayMode, setInternalDisplayMode] = useState(displayMode);
     const [yamlMode, setYamlMode] = useState(false);
+    const { isMobile } = useWindowSize();
     // alias
     const effectiveDM = internalDisplayMode || yamlMode;
     // effect
@@ -76,7 +78,7 @@ export const ConditionNode: FC<{
     } else if (condition.condition === 'or') {
       hasChildren = true
     }
-    const { classes } = useStyles({ hasChildren });
+    const { classes } = useStyles({ hasChildren, isMobile });
 
     // components
     const DeleteButton = (p: { onClick?: () => void, isRoot?: boolean }) =>

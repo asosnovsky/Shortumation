@@ -2,7 +2,8 @@ import { Styles } from "jss";
 import { createAppUseStyles } from "styles/theme";
 
 export const useStyles = createAppUseStyles<{
-    hasChildren: boolean
+    hasChildren: boolean,
+    isMobile: boolean,
 }>(theme => {
     const deleteBtn: Styles = {
         borderRadius: '10px',
@@ -20,12 +21,12 @@ export const useStyles = createAppUseStyles<{
         }
     }
     return {
-        root: ({ hasChildren }) => ({
+        root: ({ hasChildren, isMobile }) => ({
             background: theme.primary,
             padding: 0,
             position: 'relative',
             display: 'flex',
-            flexDirection: hasChildren ? 'column' : 'row',
+            flexDirection: isMobile ? 'column' : hasChildren ? 'column' : 'row',
         }),
         title: ({ hasChildren }) => ({
             display: 'flex',
