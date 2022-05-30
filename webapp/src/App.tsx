@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'components/ErrorBoundary';
 
 function App() {
   const api = useConnectedApiService();
+
   return (
     <div className="app">
       <ErrorBoundary>
