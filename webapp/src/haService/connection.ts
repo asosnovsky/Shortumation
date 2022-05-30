@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     getAuth,
     createConnection,
@@ -6,8 +6,11 @@ import {
     createLongLivedTokenAuth,
     Auth,
     Connection,
+    ERR_CANNOT_CONNECT,
+    ERR_CONNECTION_LOST,
+    ERR_INVALID_AUTH,
+    ERR_INVALID_HTTPS_TO_HTTP,
 } from "home-assistant-js-websocket";
-import { useDelayEffect } from 'utils/useDelay';
 
 const HASS_URL = process.env.REACT_APP_HASS_URL as string;
 const HASS_TOKEN = process.env.REACT_APP_HASS_TOKEN;
@@ -23,6 +26,25 @@ export type HAConnection = {
 let haConnection: HAConnection = {
     status: 'loading',
 };
+
+const translateErrorCodes = (errorCode: number) => {
+    if (errorCode === ERR_HASS_HOST_REQUIRED) {
+        return "Missing HASS host"
+    }
+    if (errorCode === ERR_CANNOT_CONNECT) {
+        return "Failed to connect"
+    }
+    if (errorCode === ERR_CONNECTION_LOST) {
+        return "Connection Lost"
+    }
+    if (errorCode === ERR_INVALID_AUTH) {
+        return "Invalid Host"
+    }
+    if (errorCode === ERR_INVALID_HTTPS_TO_HTTP) {
+        return "Invalid https to http"
+    }
+    return errorCode;
+}
 
 const createAuth = async () => {
     console.log("detecting auth")
@@ -61,7 +83,7 @@ async function startHAConnection() {
     } catch (error) {
         haConnection = {
             status: 'error',
-            error,
+            error: translateErrorCodes(error),
         }
         throw error
     }
@@ -70,10 +92,24 @@ async function startHAConnection() {
 startHAConnection().then(console.log).catch(console.error);
 export const useHAConnection = (): HAConnection => {
     const [conn, setConn] = useState<HAConnection>(haConnection);
-    useDelayEffect(() => {
+    const timeID = useRef<number | undefined>(undefined);
+    console.log("connecting to HA")
+    useEffect(() => {
+        console.log('connection state', conn.status)
         if (conn.status !== haConnection.status) {
             setConn(haConnection);
         }
-    }, [conn], conn.status === 'loading' ? 500 : 50000);
+        const waiter = () => {
+            if (conn.status !== haConnection.status) {
+                console.log('setting status', conn.status, haConnection.status)
+                setConn(haConnection);
+            }
+            timeID.current = window.setTimeout(() => {
+                waiter()
+            }, conn.status === 'loading' ? 500 : 5000)
+        }
+        waiter()
+        return () => window.clearTimeout(timeID.current)
+    }, [conn, setConn])
     return conn;
 };

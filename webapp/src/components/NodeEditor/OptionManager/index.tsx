@@ -6,6 +6,7 @@ import { getNodeType, getNodeSubType, getSubTypeList, validateNode } from 'utils
 import InputYaml from 'components/Inputs/InputYaml';
 import InputText from 'components/Inputs/InputText';
 import { getDescriptionFromAutomationNode } from 'utils/formatting';
+import { useHAEntities } from 'haService';
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
 
@@ -15,6 +16,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
     isModified: false,
     ...computeInvalidYaml(originalNode)
   });
+  const entities = useHAEntities();
   const { node: currentNode, isModified, yamlMode, invalidManualYaml } = allState;
   useEffect(() => {
     setAllState({ ...allState, node: originalNode, isModified: false, })
@@ -93,7 +95,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
       }
       return <>
         {aliasEditor}
-        {optionManager.renderOptionList(currentNode, setState)}
+        {optionManager.renderOptionList(currentNode, setState, entities)}
       </>;
     },
     isReady() {

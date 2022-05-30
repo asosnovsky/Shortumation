@@ -1,7 +1,7 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerState } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
-import { InputEntity } from 'components/Inputs/InputTextBubble';
+import { InputEntity } from 'components/Inputs/InputEntities';
 import InputTime from 'components/Inputs/InputTime';
 
 
@@ -15,6 +15,7 @@ export const TriggerState: OptionManager<AutomationTriggerState> = {
     return <>
       <InputEntity
         value={state.entity_id}
+        multiple
         onChange={entity_id => setState({
           ...state,
           entity_id

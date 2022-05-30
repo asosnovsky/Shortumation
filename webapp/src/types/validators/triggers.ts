@@ -4,6 +4,7 @@ import { AutomationTimeString, AutomationTime, EntityId } from './common'
 
 const AutomationTriggerBase = {
     id: st.optional(st.string()),
+    enabled: st.optional(st.boolean()),
 }
 
 export const AutomationTriggerEvent = st.type({
@@ -95,9 +96,9 @@ export const AutomationTriggerDevice = st.type({
     ...AutomationTriggerBase,
     platform: st.literal('device'),
     entity_id: st.optional(EntityId),
-    device_id: st.string(),
-    domain: st.string(),
-    type: st.string(),
+    device_id: st.optional(st.string()),
+    domain: st.optional(st.string()),
+    type: st.optional(st.string()),
     subtype: st.optional(st.string()),
 })
 

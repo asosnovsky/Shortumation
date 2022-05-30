@@ -65,6 +65,14 @@ UnSupported.args = {
   } as any,
 }
 
+export const DeviceTriggerExample = Action.bind({})
+DeviceTriggerExample.args = {
+  ...DeviceTriggerExample.args,
+  node: {
+    "platform": 'device',
+  },
+}
+
 
 export const InAModal: ComponentStory<typeof NodeEditor> = props => {
 

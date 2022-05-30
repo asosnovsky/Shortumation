@@ -1,3 +1,4 @@
+import { InputEntity } from "components/Inputs/InputEntities";
 import InputText from "components/Inputs/InputText";
 import { DeviceAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from './OptionManager';
@@ -39,9 +40,7 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
         value={state.type}
         onChange={type => update({ type })}
       />
-      <InputText
-        textBoxFor="entity_id"
-        label="Entity ID"
+      <InputEntity
         value={state.entity_id ?? ""}
         onChange={entity_id => update({ entity_id, domain: entity_id.split('.')[0] })}
       />

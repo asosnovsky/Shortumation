@@ -2,7 +2,7 @@ import { FC } from "react";
 import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition, TriggerCondition, ZoneCondition } from 'types/automations/conditions';
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
-import { InputEntity } from "components/Inputs/InputTextBubble";
+import { InputEntity } from "components/Inputs/InputEntities";
 import { ConditionNode } from "./ConditionNode";
 import { genUpdateMethods } from "./nestedUpdater";
 import InputTime from "components/Inputs/InputTime";
@@ -60,6 +60,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
   return <>
     <InputEntity
       value={condition.entity_id}
+      multiple
       onChange={entity_id => onChange({
         ...condition,
         entity_id
@@ -120,6 +121,7 @@ export const StateEditor: Editor<StateCondition> = ({
   return <>
     <InputEntity
       value={condition.entity_id}
+      multiple
       onChange={entity_id => onChange({
         ...condition,
         entity_id
@@ -196,6 +198,7 @@ export const ZoneEditor: Editor<ZoneCondition> = ({
     })} />
     <InputEntity
       value={condition.entity_id}
+      multiple
       onChange={entity_id => onChange({
         ...condition,
         entity_id

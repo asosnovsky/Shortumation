@@ -1,9 +1,10 @@
+import { HAEntitiesState } from 'haService';
 import { AutomationAction } from 'types/automations/actions';
 import { AutomationCondition } from 'types/automations/conditions';
 export interface OptionManager<T> {
   defaultState(): T;
   isReady(s: T): boolean;
-  renderOptionList(s: T, set: (s: T) => void): JSX.Element;
+  renderOptionList(s: T, set: (s: T) => void, entities: HAEntitiesState): JSX.Element;
 }
 
 

@@ -1,8 +1,7 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerZone } from 'types/automations/triggers';
-import InputText from 'components/Inputs/InputText';
 import { InputList } from 'components/Inputs/InputList';
-import { InputEntity } from 'components/Inputs/InputTextBubble';
+import { InputEntity } from 'components/Inputs/InputEntities';
 
 
 export const TriggerZone: OptionManager<AutomationTriggerZone> = {
@@ -15,9 +14,9 @@ export const TriggerZone: OptionManager<AutomationTriggerZone> = {
   isReady: () => true,
   renderOptionList: (state, setState) => {
     return <>
-      <InputText label="Zone" value={state.zone ?? ""} onChange={zone => setState({
+      <InputEntity label="Zone" restrictToDomain={['zone']} value={state.zone} onChange={zone => setState({
         ...state,
-        zone
+        zone: zone ?? ""
       })} />
       <InputList
         label="Event"
@@ -28,6 +27,8 @@ export const TriggerZone: OptionManager<AutomationTriggerZone> = {
         })}
       />
       <InputEntity
+        multiple
+        restrictToDomain={["device_tracker", "person"]}
         value={state.entity_id}
         onChange={entity_id => setState({
           ...state,

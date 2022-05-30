@@ -1,5 +1,5 @@
 
-import { convertTimeToString, getDescriptionFromAutomationNode } from "./formatting";
+import { convertTimeToString, getDescriptionFromAutomationNode, prettyName } from "./formatting";
 
 test('converting time to a string', () => {
     expect(convertTimeToString({ hours: 1 })).toEqual('01:00:00:00')
@@ -145,4 +145,11 @@ test('get State condition description', () => {
         entity_id: 'switch.kitchen_light',
         state: "on"
     })).toEqual("switch.kitchen_light is 'on'")
+})
+
+
+test('pretty naming', () => {
+    expect(prettyName('sensor')).toEqual("Sensor")
+    expect(prettyName('sensor.phone')).toEqual("Sensor Phone")
+    expect(prettyName('device_tracker')).toEqual("Device Tracker")
 })

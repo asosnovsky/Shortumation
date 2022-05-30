@@ -1,24 +1,20 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerDevice } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
-import { InputEntity } from 'components/Inputs/InputTextBubble';
+import { InputEntity } from 'components/Inputs/InputEntities';
+import InputTextBubble from 'components/Inputs/InputTextBubble';
 
 
 export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
   defaultState: () => ({
     "platform": 'device',
-    "domain": "",
-    "type": "",
-    "subtype": "",
-    "device_id": "",
-    "entity_id": "",
   }),
   isReady: () => true,
-  renderOptionList: (state, setState) => {
+  renderOptionList: (state, setState, { getDomainList }) => {
     return <>
-      <InputText label="Domain" value={state.domain ?? ""} onChange={domain => setState({
+      <InputTextBubble label="Domain" options={getDomainList()} value={state.domain} onChange={domain => setState({
         ...state,
-        domain
+        domain: domain ? domain[0] : "",
       })} />
       <InputText label="Type" value={state.type ?? ""} onChange={type => setState({
         ...state,
@@ -32,7 +28,7 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
         ...state,
         device_id
       })} />
-      <InputEntity value={state.entity_id ?? ""} onChange={entity_id => setState({
+      <InputEntity restrictToDomain={state.domain ? [state.domain] : undefined} value={state.entity_id ?? ""} multiple onChange={entity_id => setState({
         ...state,
         entity_id
       })} />

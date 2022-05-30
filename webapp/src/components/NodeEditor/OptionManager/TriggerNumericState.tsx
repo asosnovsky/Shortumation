@@ -1,7 +1,7 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerNumericState } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
-import { InputEntity } from 'components/Inputs/InputTextBubble';
+import { InputEntity } from 'components/Inputs/InputEntities';
 import InputNumber from 'components/Inputs/InputNumber';
 import InputTime from 'components/Inputs/InputTime';
 import InputYaml from 'components/Inputs/InputYaml';
@@ -17,6 +17,7 @@ export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> =
     return <>
       <InputEntity
         value={state.entity_id}
+        multiple
         onChange={entity_id => setState({
           ...state,
           entity_id

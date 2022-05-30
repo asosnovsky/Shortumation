@@ -49,26 +49,4 @@ export const InputList: FC<Props<any>> = ({
     </Select>
     <FormHelperText>{invalidCurrent ? `'${current}' is not a valid selection` : ''}</FormHelperText>
   </FormControl>
-  // return <InputWrapper label={label} labelSize={'small'} noMargin error={invalidCurrent ? "Invalid Selection" : undefined}>
-  //   <select
-  //     title={invalidCurrent ? "Invalid Selection" : ""}
-  //     className={classes.input}
-  //     {...selattr} value={current}
-  //     onChange={e => {
-  //       e.preventDefault();
-  //       if (e.currentTarget.id === 'invalid') {
-  //         onChange(options[0])
-  //       } else {
-  //         onChange(e.currentTarget.value as any);
-  //       }
-  //     }}
-  //   >
-  //     {options.map((t, i) => <option id={String(i)} key={i} value={t}>{t}</option>)}
-  //     {invalidCurrent ? <option
-  //       id={'invalid'}
-  //       value={current}
-  //       style={{ display: 'none' }}
-  //     >!{current}!</option> : <></>}
-  //   </select>
-  // </InputWrapper>
 }

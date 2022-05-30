@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { useState } from "react";
 
-import InputTextBubble, { InputEntity } from "./InputTextBubble";
+import InputTextBubble from "./InputTextBubble";
 
 export default {
   title: 'Inputs/InputTextBubble',
@@ -33,16 +33,6 @@ export const JustText: ComponentStory<typeof InputTextBubble> = args => {
     <InputTextBubble {...args} value={value} onChange={setValue} />
   </Page>
 }
-
-
-export const EntityId: ComponentStory<typeof InputTextBubble> = args => {
-
-  const [value, setValue] = useState<string | string[]>(['sensor.bathroom'])
-  return <Page>
-    <InputEntity value={value} onChange={setValue} />
-  </Page>
-}
-
 
 export const ManyOptions: ComponentStory<typeof InputTextBubble> = args => {
 

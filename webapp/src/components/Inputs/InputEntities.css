@@ -1,0 +1,35 @@
+.input-entities .BaseBadge-root {
+    max-width: 100%;
+}
+
+.input-entities--list, .input-entities--chip>span {
+    display: flex;
+    flex-direction: row;
+    gap: 0.15em;
+}
+
+.input-entities--list>small::before, .input-entities--chip>span>small::before {
+    content: "/ ";
+}
+
+.input-entities--chip>span>small {
+    size: 0.15em;
+}
+
+.input-entities--errors {
+    margin-top: 0.75em;
+}
+
+.input-entities--errors ul {
+    padding: 0 0 0 1em;
+    margin: 0;
+    max-height: 2.5em;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.input-entities--tags {
+    max-height: 5em;
+    max-width: 100%;
+    overflow: auto;
+}

@@ -9,7 +9,10 @@ export type HACollectionState<T> = {
     ready: true,
     collection: Collection<T>,
 }
-export const useHassCollection = <T>(getHACollection: (c: Connection) => Collection<T>) => {
+export const useHassCollection = <T, D extends {} = {}>(
+    getHACollection: (c: Connection) => Collection<T>,
+    updateAdditionalProps?: (n: T | {}) => D,
+) => {
     const [state, setState] = useState<HACollectionState<T>>({
         ready: false
     });
@@ -22,21 +25,32 @@ export const useHassCollection = <T>(getHACollection: (c: Connection) => Collect
                 ready: false,
                 collection,
             })
-            return collection.subscribe(d => {
+            const unsub = collection.subscribe(d => {
                 if (d && !state.ready) {
                     setState({
                         ready: true,
                         collection,
                     })
+                    unsub();
                 } else if (!d && state.ready) {
                     setState({
                         ready: true,
                         collection,
                     })
+                    unsub();
                 }
-            })
+            });
+            return unsub
         }
     }, [conn, getHACollection, state.ready]);
 
-    return state;
+    return {
+        ...state,
+        get additional(): Partial<D> {
+            if (state.ready && updateAdditionalProps) {
+                return updateAdditionalProps(state.collection.state)
+            }
+            return {}
+        }
+    }
 } 
