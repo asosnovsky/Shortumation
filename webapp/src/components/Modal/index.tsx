@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { createAppUseStyles } from "styles/theme";
 
 export interface ModalStyleProps {
   open: boolean;
 }
 export interface Props extends ModalStyleProps {
+  children: ReactNode;
 }
 const useModalStyle = createAppUseStyles<ModalStyleProps>(theme => ({
   root: ({ open }) => ({

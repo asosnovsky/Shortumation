@@ -123,6 +123,6 @@ export const prettyEntityId = (entityId: string | string[]) => {
 }
 
 export const prettyName = (n: string) => {
-    const clean = n.replaceAll(/[\.-_]/g, ' ');
+    const clean = n.replaceAll(/[.-_]/g, ' ');
     return clean.split(' ').map(x => x.slice(0, 1).toUpperCase() + x.slice(1)).join(' ')
 }

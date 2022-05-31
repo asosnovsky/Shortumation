@@ -1,6 +1,6 @@
 import "./InputEntities.css";
 import { FC } from "react";
-import { DeviceRegistryOption, useHADeviceRegistry } from 'haService';
+import { useHADeviceRegistry } from 'haService';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';

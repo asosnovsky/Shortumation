@@ -5,7 +5,7 @@ import { createAppUseStyles } from 'styles/theme';
 export interface ButtonIconStyleProps {
 }
 export interface ButtonIconProps extends IconBaseProps, ButtonIconStyleProps {
-  children: FC<IconBaseProps>;
+  Icon: FC<IconBaseProps>;
 }
 const useButtonIconStyles = createAppUseStyles(theme => ({
   buttonIcon: {
@@ -22,9 +22,9 @@ const useButtonIconStyles = createAppUseStyles(theme => ({
 
 
 export const ButtonIcon: FC<ButtonIconProps> = ({
-  children: Child,
+  Icon,
   className,
   ...props
-}) => <Child
+}) => <Icon
     className={`${useButtonIconStyles({}).classes.buttonIcon} ${className}`} {...props}
   />

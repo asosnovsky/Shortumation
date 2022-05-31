@@ -2,7 +2,7 @@ import "./AutoInfoBox.css";
 import { AutomationMetadata } from "types/automations";
 import { InputList } from "components/Inputs/InputList";
 import InputText from "components/Inputs/InputText";
-import { FC, useRef, useState } from 'react';
+import { FC, ReactNode, useRef, useState } from 'react';
 import { AddIcon, TrashIcon } from "components/Icons";
 import { Button } from "components/Inputs/Button";
 import InputAutoText from "components/Inputs/InputAutoText";
@@ -14,6 +14,7 @@ interface Props {
   tags: Array<[string, string]>;
   onUpdate: (m: AutomationMetadata, tags: Array<[string, string]>) => void;
   tagDB: TagDB;
+  children?: ReactNode;
 }
 export const AutoInfoBox: FC<Props> = ({
   metadata,

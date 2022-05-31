@@ -32,7 +32,7 @@ IconList.args = {
 export const ButtonIconExample: ComponentStory<typeof IconBase> = (args) => {
 
   return <Page>
-    <ButtonIcon {...args}>{ArrowIcon}</ButtonIcon>
+    <ButtonIcon {...args} Icon={ArrowIcon} />
   </Page>
 }
 ButtonIconExample.args = {

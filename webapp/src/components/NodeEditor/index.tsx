@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { AutomationNode, AutomationNodeMapping } from 'types/automations/index';
 import { useEditorNodeState } from "./OptionManager";
 import { InputList } from "components/Inputs/InputList";
@@ -15,6 +15,7 @@ export interface NodeEditorProps {
   onFlags?: (isReady: boolean, isModified: boolean) => void;
   saveBtnCreateText?: boolean;
   isErrored?: boolean;
+  children?: ReactNode;
 }
 
 export const NodeEditor: FC<NodeEditorProps> = ({

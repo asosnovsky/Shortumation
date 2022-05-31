@@ -85,47 +85,49 @@ export const ConditionNode: FC<{
       <button className={p.isRoot ? classes.deleteBtnRoot : classes.deleteBtn} onClick={p?.onClick}>X</button>
 
     return <div className={classes.root}>
-      {(showDelete && !effectiveDM) && <DeleteButton isRoot onClick={() => onDelete('root')} />}
-      <div className={classes.title}>
-        <InputList
-          label=""
-          className={classes.titleText}
-          current={condition.condition}
-          options={[
-            'or', 'not', 'and',
-            'template',
-            'numeric_state',
-            'state',
-            'time',
-            'trigger',
-            'zone',
-          ]}
-          onChange={(n: any) => onUpdate({
-            ...getConditionDefaultValues(n),
-            ...condition,
-            condition: n,
-          } as any)}
-        />
-        {effectiveDM && <button className={classes.yamlBtn} onClick={() => setYamlMode(!yamlMode)}>
-          {yamlMode ? 'visual' : 'yaml'}
-        </button>}
-        {!yamlMode && <button className={classes.modifyBtn} onClick={() => setInternalDisplayMode(!effectiveDM)}>
-          {effectiveDM ? <PencilIcon className={classes.icon} /> : <CheckMarkIcon className={classes.icon} />}
-        </button>}
-      </div>
-      <div className={classes.children}>
-        {yamlMode && <InputYaml
-          label=""
-          value={condition}
-          onChange={update => onUpdate(update as any)}
-        />}
-        <div className={classes.conditionWrap}>
-          {!yamlMode && childrenConditions}
+      <>
+        {(showDelete && !effectiveDM) && <DeleteButton isRoot onClick={() => onDelete('root')} />}
+        <div className={classes.title}>
+          <InputList
+            label=""
+            className={classes.titleText}
+            current={condition.condition}
+            options={[
+              'or', 'not', 'and',
+              'template',
+              'numeric_state',
+              'state',
+              'time',
+              'trigger',
+              'zone',
+            ]}
+            onChange={(n: any) => onUpdate({
+              ...getConditionDefaultValues(n),
+              ...condition,
+              condition: n,
+            } as any)}
+          />
+          {effectiveDM && <button className={classes.yamlBtn} onClick={() => setYamlMode(!yamlMode)}>
+            {yamlMode ? 'visual' : 'yaml'}
+          </button>}
+          {!yamlMode && <button className={classes.modifyBtn} onClick={() => setInternalDisplayMode(!effectiveDM)}>
+            {effectiveDM ? <PencilIcon className={classes.icon} /> : <CheckMarkIcon className={classes.icon} />}
+          </button>}
         </div>
-        {!yamlMode && hasChildren && <div className={classes.addBtnContainer}>
-          <button className={classes.addBtn} onClick={() => onAddChild()}>Add</button>
-        </div>}
-      </div>
-      {children({ classes })}
+        <div className={classes.children}>
+          {yamlMode && <InputYaml
+            label=""
+            value={condition}
+            onChange={update => onUpdate(update as any)}
+          />}
+          <div className={classes.conditionWrap}>
+            {!yamlMode && childrenConditions}
+          </div>
+          {!yamlMode && hasChildren && <div className={classes.addBtnContainer}>
+            <button className={classes.addBtn} onClick={() => onAddChild()}>Add</button>
+          </div>}
+        </div>
+        {children({ classes })}
+      </>
     </div>
   }

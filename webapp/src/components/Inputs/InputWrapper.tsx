@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { useInputWrapperStyles } from "./styles";
 
 
@@ -8,6 +8,7 @@ export interface Props {
   noMargin?: boolean;
   className?: string;
   error?: string;
+  children: ReactNode;
 }
 const InputWrapper: FC<Props> = ({ error, label, children, labelSize = 'normal', noMargin = false, className = "" }) => {
   const { classes } = useInputWrapperStyles({ labelSize, noMargin, hasError: !!error })

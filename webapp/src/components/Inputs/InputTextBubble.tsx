@@ -1,7 +1,6 @@
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { FC } from "react";
 
 export interface Props {
   label: string;

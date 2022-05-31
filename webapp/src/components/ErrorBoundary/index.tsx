@@ -1,5 +1,5 @@
 import "./index.css";
-import { Component, ErrorInfo } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
 
 type State = {
     hasError: false;
@@ -8,7 +8,9 @@ type State = {
     error: any,
     errorInfo?: ErrorInfo,
 }
-export class ErrorBoundary extends Component<{}, State> {
+export class ErrorBoundary extends Component<{
+    children: ReactNode
+}, State> {
 
     state: State = {
         hasError: false

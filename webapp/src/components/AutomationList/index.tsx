@@ -1,7 +1,7 @@
 import "./index.css";
 import "./index.mobile.css";
 import { AutomationEditor } from "components/AutomationEditor";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { AutomationData } from "types/automations";
 import { defaultAutomation } from 'utils/defaults';
 import { ArrowIcon } from "components/Icons";
@@ -21,6 +21,7 @@ interface AutomationListParams {
   onAdd: (auto: AutomationData) => void;
   onRemove: (i: number) => void;
   dims: DAGAutomationFlowDims;
+  children?: ReactNode;
 }
 
 export const AutomationList: FC<AutomationListParams> = ({
@@ -59,9 +60,8 @@ export const AutomationList: FC<AutomationListParams> = ({
       <ButtonIcon
         onClick={() => setHideList(!hideList)}
         className="automation-list--list-hide"
-      >
-        {ArrowIcon}
-      </ButtonIcon>
+        Icon={ArrowIcon}
+      />
     </div>
     <div className="automation-list--viewer">
       {currentAuto ? <AutomationEditor

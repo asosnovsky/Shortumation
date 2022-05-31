@@ -1,5 +1,5 @@
 import { Connection, getCollection } from "home-assistant-js-websocket";
-import { HassDevices, HassEntitiesRegistry } from './types';
+import { HassEntitiesRegistry } from './types';
 
 
 export const fetchEntityRegistry = (conn: Connection) => conn.sendMessagePromise<HassEntitiesRegistry>({

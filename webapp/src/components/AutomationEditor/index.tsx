@@ -69,7 +69,8 @@ export const AutomationEditor: FC<Props> = ({
         className="automation-editor--info-box--icon"
         onClick={() => setCloseInfo(!closeInfo)}
         title={closeInfo ? "Show Metadata" : "Hide Metadata"}
-      >{ArrowIcon}</ButtonIcon>
+        Icon={ArrowIcon}
+      />
     </AutoInfoBox>
 
     <div className={["automation-editor--flow-wrapper", state.status].join(" ")}>
