@@ -39,8 +39,6 @@ RUN /app/bin/build.sh /app /app/web-builder
 
 # <--- Api Code --> 
 COPY api/src /app/src
-COPY run.sh /app/run.sh
-RUN chmod +x /app/run.sh
 
 # <--- Ports --> 
 EXPOSE 8000
@@ -50,5 +48,5 @@ LABEL \
     io.hass.type="addon" \
     io.hass.arch="armhf|aarch64|i386|amd64"
 
-CMD [ "/app/run.sh" ]
+CMD [ "/app/bin/run.sh", "/app" ]
 

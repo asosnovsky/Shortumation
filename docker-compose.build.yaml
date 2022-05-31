@@ -1,7 +1,7 @@
 version: '3'
 services:
   addon:
-    image: "asosnovsky/shortumation-${ARCH:-amd64}:${BUILD_TAG:-latest}"
+    image: "asosnovsky/shortumation-${ARCH:-amd64}:${BUILD_TAG:-edge}"
     build:
       context: "./"
       dockerfile: "./Dockerfile"

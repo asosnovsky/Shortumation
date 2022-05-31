@@ -12,7 +12,6 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
   }),
   isReady: () => true,
   renderOptionList: (state, setState, entities) => {
-    console.log(entities.collection?.state)
     const update = updateActionData(state, setState);
     return <>
       <InputDevice

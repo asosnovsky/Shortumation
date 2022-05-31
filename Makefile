@@ -1,7 +1,10 @@
 DC=docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml
 
 build:
-	$(DC) build
+	$(DC) build\
+
+push:
+	$(DC) push
 
 run:
 	$(MAKE) build

@@ -14,6 +14,7 @@ import {
 
 const HASS_URL = process.env.REACT_APP_HASS_URL as string;
 const HASS_TOKEN = process.env.REACT_APP_HASS_TOKEN;
+const HASS_SUPERVISOR_TOKEN = process.env.REACT_APP_SUPERVISOR_TOKEN as string;
 export type HAConnection = {
     status: 'loading'
 } | {
@@ -51,6 +52,9 @@ const createAuth = async () => {
     if (HASS_TOKEN) {
         return createLongLivedTokenAuth(HASS_URL, HASS_TOKEN);
     }
+    if (HASS_SUPERVISOR_TOKEN) {
+        return await getAuth({ hassUrl: HASS_URL, authCode: HASS_SUPERVISOR_TOKEN });
+    }
     try {
         auth = await getAuth();
         return auth
@@ -79,7 +83,13 @@ async function startHAConnection() {
     } catch (error) {
         haConnection = {
             status: 'error',
-            error: translateErrorCodes(error as any),
+            error: {
+                originalError: JSON.stringify(error),
+                message: translateErrorCodes(error as any),
+                hassToken: !HASS_TOKEN ? "no" : "yes",
+                hasSuperToken: HASS_SUPERVISOR_TOKEN,
+                url: HASS_URL,
+            },
         }
         throw error
     }
