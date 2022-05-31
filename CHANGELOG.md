@@ -1,4 +1,4 @@
-# Changelog
+# Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
 ## [0.1.14] - Material UI + Autocomplete v2
 
