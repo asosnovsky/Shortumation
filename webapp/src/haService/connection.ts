@@ -87,7 +87,7 @@ async function startHAConnection() {
                 originalError: JSON.stringify(error),
                 message: translateErrorCodes(error as any),
                 hassToken: !HASS_TOKEN ? "no" : "yes",
-                hasSuperToken: HASS_SUPERVISOR_TOKEN,
+                hasSuperToken: !HASS_SUPERVISOR_TOKEN ? "no" : "yes",
                 url: HASS_URL,
             },
         }
