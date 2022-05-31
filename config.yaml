@@ -17,12 +17,10 @@ ingress: true
 ingress_port: 8000
 ingress_entry: "web/"
 homeassistant_api: true
-panel_icon: mdi:home-automation
-hassio_role: manager
-privileged:
-  - SYS_RAWIO
-host_network: false
 auth_api: true
+panel_icon: mdi:home-automation
+hassio_role: homeassistant
+host_network: false
 map:
   - config:rw
 options: {}

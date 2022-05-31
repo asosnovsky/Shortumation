@@ -7,4 +7,4 @@ services:
       dockerfile: "./Dockerfile"
       args:
         BUILD_ARCH: ${ARCH:-amd64}
-        BUILD_VERSION: ${BUILD_TAG:-latest}
+        BUILD_VERSION: ${BUILD_TAG:-edge}
