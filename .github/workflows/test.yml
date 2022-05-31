@@ -101,5 +101,4 @@ jobs:
           args: |
             --${{ matrix.arch }} \
             --version ${{ needs.metadata.outputs.version }} \
-            --additional-tag edge \
             --target .

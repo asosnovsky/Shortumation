@@ -30,5 +30,4 @@ jobs:
           args: |
             --${{ matrix.arch }} \
             --version ${{ github.event.inputs.version }} \
-            --additional-tag edge \
             --target .

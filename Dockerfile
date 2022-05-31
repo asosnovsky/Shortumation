@@ -10,6 +10,7 @@ ARG BUILD_VERSION
 
 # <--- Environment Variables --> 
 ENV HASSIO_TOKEN ""
+ENV SUPERVISOR_TOKEN ""
 ENV BUILD_VERSION $BUILD_VERSION
 
 # <--- System Wide Dependencies --> 
@@ -48,5 +49,6 @@ LABEL \
     io.hass.type="addon" \
     io.hass.arch="armhf|aarch64|i386|amd64"
 
-CMD [ "/app/bin/run.sh", "/app" ]
+ENTRYPOINT [ "/app/bin/run.sh" ]
+CMD [ "/app" ]
 

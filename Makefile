@@ -1,12 +1,29 @@
-DC=docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml
+BUILD_TAG=$(shell git describe --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
+DC=BUILD_TAG=${BUILD_TAG} docker-compose -f docker-compose.build.yaml -f docker-compose.test.yaml
+
+build-with-builder:
+	docker run \
+		--rm \
+		--privileged \
+		-v ~/.docker:/root/.docker \
+		-v /var/run/docker.sock:/var/run/docker.sock:ro \
+		-v ${PWD}:/data \
+		homeassistant/amd64-builder \
+			--amd64 \
+			--test \
+			--version ${BUILD_TAG} \
+			-t /data
 
 build:
-	$(DC) build\
+	$(DC) build
+
+build-no-cache:
+	$(DC) build --no-cache
 
 push:
 	$(DC) push
 
-run:
+start:
 	$(MAKE) build
 	$(DC) up -d
 	sleep 1
@@ -21,3 +38,8 @@ ps:
 stop:
 	$(DC) stop
 
+bash:
+	$(DC) exec addon bash
+
+config:
+	$(DC) config
