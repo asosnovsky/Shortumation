@@ -1,20 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import {
-    getAuth,
-    createConnection,
     ERR_HASS_HOST_REQUIRED,
     createLongLivedTokenAuth,
-    Auth,
     Connection,
     ERR_CANNOT_CONNECT,
     ERR_CONNECTION_LOST,
     ERR_INVALID_AUTH,
     ERR_INVALID_HTTPS_TO_HTTP,
+    createConnection as _createConnection,
 } from "home-assistant-js-websocket";
+import { remoteDetailsAPI } from 'apiService';
 
-const HASS_URL = process.env.REACT_APP_HASS_URL as string;
-const HASS_TOKEN = process.env.REACT_APP_HASS_TOKEN;
-const HASS_SUPERVISOR_TOKEN = process.env.REACT_APP_SUPERVISOR_TOKEN as string;
 export type HAConnection = {
     status: 'loading'
 } | {
@@ -47,52 +43,81 @@ const translateErrorCodes = (errorCode: number) => {
     return errorCode;
 }
 
-const createAuth = async () => {
-    let auth: Auth
-    if (HASS_TOKEN) {
-        return createLongLivedTokenAuth(HASS_URL, HASS_TOKEN);
-    }
-    if (HASS_SUPERVISOR_TOKEN) {
-        return await getAuth({ hassUrl: HASS_URL, authCode: HASS_SUPERVISOR_TOKEN });
-    }
-    try {
-        auth = await getAuth();
-        return auth
-    } catch (err) {
-        if (err !== ERR_HASS_HOST_REQUIRED) {
-            throw err
+type ReturnedToken = {
+    hassURL: string;
+    longToken: string
+} | {
+    hassURL: string;
+    hassioToken: string
+} | {
+    error: any;
+}
+const getToken = async (): Promise<ReturnedToken> => {
+    const data = await remoteDetailsAPI.makeCall({
+        "path": "/",
+        "method": "GET",
+    });
+    if (!data.ok) {
+        return {
+            error: {
+                message: "Failed to get token from api.",
+                originalError: data.error,
+            }
         }
     }
-    try {
-        auth = await getAuth({ hassUrl: HASS_URL });
-        return auth
-    } catch (err) {
-        throw err
+    const hassURL = data.data.hass_url;
+    const hassioToken = data.data.hassio_token;
+    if (!hassioToken) {
+        return {
+            error: {
+                message: [
+                    "Missing HASSIO Token, Please make sure the token is correctly passing to the container!",
+                    "Make sure the token `HASSIO_TOKEN` and `HASS_URL` are set properly."
+                ].join('\n'),
+            }
+        }
     }
+    return { hassioToken, hassURL }
+}
+
+const createConnection = async () => {
+    const tokens = await getToken();
+    try {
+        if ('hassioToken' in tokens) {
+            return _createConnection({
+                auth: createLongLivedTokenAuth(tokens.hassURL, tokens.hassioToken),
+            });
+        }
+    } catch (error) {
+        // eslint-disable-next-line 
+        throw {
+            originalError: JSON.stringify(error),
+            message: translateErrorCodes(error as any),
+            tokens,
+        }
+    }
+    throw tokens
 }
 
 async function startHAConnection() {
+    let connection: Connection;
     try {
-        const auth = await createAuth();
-        const connection = await createConnection({ auth });
-        haConnection = {
-            status: 'loaded',
-            connection,
-        }
-        return haConnection;
+        connection = await createConnection();
     } catch (error) {
         haConnection = {
             status: 'error',
             error: {
                 originalError: JSON.stringify(error),
                 message: translateErrorCodes(error as any),
-                hassToken: !HASS_TOKEN ? "no" : "yes",
-                hasSuperToken: !HASS_SUPERVISOR_TOKEN ? "no" : "yes",
-                url: HASS_URL,
-            },
+            }
         }
         throw error
     }
+    haConnection = {
+        status: 'loaded',
+        connection,
+    }
+    return haConnection;
 }
 
 startHAConnection().then(console.log).catch(console.error);

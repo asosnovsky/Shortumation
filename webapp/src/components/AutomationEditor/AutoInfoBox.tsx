@@ -103,7 +103,7 @@ export const AutoInfoBox: FC<Props> = ({
       <div className="automation-editor--info-box--tags">
         <h1>Tags</h1>
         <div className="automation-editor--info-box--tag-list">
-          {tags.map(([tagName, tagValue], tagIndex) => <div className="automation-editor--info-box--tag">
+          {tags.map(([tagName, tagValue], tagIndex) => <div key={tagIndex} className="automation-editor--info-box--tag">
             <InputAutoText
               value={tagName}
               label="Name"

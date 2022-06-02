@@ -10,13 +10,16 @@ export const makeRemoteAPI = (baseURL: string): API => ({
     data = {}
   }) {
     try {
-      const reply = await fetch(baseURL + path, {
+      const payload: RequestInit = {
         method,
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
-      });
+      };
+      if (method !== 'GET') {
+        payload["body"] = JSON.stringify(data);
+      }
+      const reply = await fetch(baseURL + path, payload);
       let response: APIResponse<any>;
       if (reply.status === 200) {
         response = {

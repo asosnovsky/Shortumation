@@ -1,7 +1,7 @@
 name: Shortumation
 version: v0.1.14
 slug: shortumation
-image: asosnovsky/shortumation-{arch}
+image: ghcr.io/asosnovsky/shortumation-{arch}
 url: "https://github.com/asosnovsky/Shortumation"
 description: "A homeassitant addon which provides better UI for automations & scripts."
 arch:

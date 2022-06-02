@@ -7,7 +7,7 @@ export interface ListParams {
 }
 export type APIRequest<D> = {
   path: string;
-  method?: "POST" | "DELETE",
+  method?: "POST" | "DELETE" | "GET",
   data?: D;
 };
 

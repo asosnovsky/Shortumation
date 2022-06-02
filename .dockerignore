@@ -4,3 +4,10 @@ webapp/.storybook
 webapp/.vscode
 webapp/.env.local
 webapp/tmux.sh
+api/.env
+api/.coverage
+api/venv
+api/build
+api/.mypy_cache
+api/.vscode
+api/.coverage
