@@ -92,8 +92,9 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2.0.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
         uses: home-assistant/builder@2022.03.1
