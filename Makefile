@@ -24,7 +24,6 @@ push:
 	$(DC) push
 
 start:
-	$(MAKE) build
 	$(DC) up -d
 	sleep 1
 	$(DC) ps

@@ -4,7 +4,7 @@ import { makeRemoteAPI } from "./base";
 import { useAPIService } from './core';
 import { useMockAPI } from "./mock";
 
-const locationPrefixWeb = window.location.pathname.match(/(.+)\/web/i);
+const locationPrefixWeb = window.location.pathname.match(/(\/.+\/)web/i);
 const baseURL = new URL(
   process.env.NODE_ENV === 'development' ?
     "http://localhost:8000" :
