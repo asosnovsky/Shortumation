@@ -1,14 +1,12 @@
 import json
+from typing import Any, Callable, Coroutine, Optional
+
 import websockets
 
-from typing import Callable, Coroutine, Optional
-
-from websockets.client import ClientConnection
-
-from src.logger import logger
 from src.env import HASSIO_TOKEN, HASSIO_WS
+from src.logger import logger
 
-OnMessage = Callable[[dict], Coroutine]
+OnMessage = Callable[[str], Coroutine]
 
 
 class WSRedirector:
@@ -21,7 +19,7 @@ class WSRedirector:
         self._host = host
         self._token = token
         self._on_message = on_message
-        self._client: Optional[ClientConnection] = None
+        self._client: Optional[Any] = None
         self._close: bool = False
 
     @property

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from src.env import BUILD_VERSION, HASSIO_WS, HASSIO_TOKEN
+from src.env import BUILD_VERSION, HASSIO_TOKEN, HASSIO_WS
 from src.hass_config import HassConfig
 
 

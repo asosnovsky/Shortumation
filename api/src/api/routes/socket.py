@@ -1,6 +1,8 @@
 import asyncio
 import json
+
 from fastapi import APIRouter, WebSocket
+
 from src.ws_redirect import WSRedirector
 
 router = APIRouter()
