@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.websocket("/api/websocket")
 async def websocket_endpoint(websocket: WebSocket):
-    async def on_message(ws: WSRedirector, msg: str):
+    async def on_message(msg: str):
         await websocket.send_text(msg)
 
     conn = WSRedirector(

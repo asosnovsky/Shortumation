@@ -3,6 +3,7 @@ upsert_auto  # unused function (/home/ari/Projects/Shortumation/api/src/api/rout
 delete_auto  # unused function (/home/ari/Projects/Shortumation/api/src/api/routes/automations.py:32)
 read_details  # unused function (/home/ari/Projects/Shortumation/api/src/api/routes/details.py:10)
 read_ping  # unused function (/home/ari/Projects/Shortumation/api/src/api/routes/ping.py:10)
+websocket_endpoint  # unused function (/home/ari/Projects/Shortumation/api/src/api/routes/socket.py:9)
 params  # unused variable (/home/ari/Projects/Shortumation/api/src/api/types.py:18)
 total_items  # unused variable (/home/ari/Projects/Shortumation/api/src/api/types.py:19)
 id  # unused variable (/home/ari/Projects/Shortumation/api/src/automations/types.py:8)
@@ -11,4 +12,3 @@ description  # unused variable (/home/ari/Projects/Shortumation/api/src/automati
 trigger_variables  # unused variable (/home/ari/Projects/Shortumation/api/src/automations/types.py:11)
 mode  # unused variable (/home/ari/Projects/Shortumation/api/src/automations/types.py:12)
 json_dumps  # unused function (/home/ari/Projects/Shortumation/api/src/json_serializer.py:5)
-logger  # unused variable (/home/ari/Projects/Shortumation/api/src/logger.py:16)
