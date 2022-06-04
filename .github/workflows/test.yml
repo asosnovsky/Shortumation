@@ -100,5 +100,6 @@ jobs:
         with:
           args: |
             --${{ matrix.arch }} \
+            --no-latest \
             --version ${{ needs.metadata.outputs.version }} \
             --target .
