@@ -9,7 +9,7 @@ import {
     ERR_INVALID_HTTPS_TO_HTTP,
     createConnection as _createConnection,
 } from "home-assistant-js-websocket";
-import { remoteDetailsAPI } from 'apiService';
+import { wsURL } from 'apiService';
 
 export type HAConnection = {
     status: 'loading'
@@ -43,60 +43,18 @@ const translateErrorCodes = (errorCode: number) => {
     return errorCode;
 }
 
-type ReturnedToken = {
-    hassURL: string;
-    longToken: string
-} | {
-    hassURL: string;
-    hassioToken: string
-} | {
-    error: any;
-}
-const getToken = async (): Promise<ReturnedToken> => {
-    const data = await remoteDetailsAPI.makeCall({
-        "path": "/",
-        "method": "GET",
-    });
-    if (!data.ok) {
-        return {
-            error: {
-                message: "Failed to get token from api.",
-                originalError: data.error,
-            }
-        }
-    }
-    const hassURL = data.data.hass_url;
-    const hassioToken = data.data.hassio_token;
-    if (!hassioToken) {
-        return {
-            error: {
-                message: [
-                    "Missing HASSIO Token, Please make sure the token is correctly passing to the container!",
-                    "Make sure the token `HASSIO_TOKEN` and `HASS_URL` are set properly."
-                ].join('\n'),
-            }
-        }
-    }
-    return { hassioToken, hassURL }
-}
-
 const createConnection = async () => {
-    const tokens = await getToken();
     try {
-        if ('hassioToken' in tokens) {
-            return _createConnection({
-                auth: createLongLivedTokenAuth(tokens.hassURL, tokens.hassioToken),
-            });
-        }
+        return _createConnection({
+            auth: createLongLivedTokenAuth(wsURL, 'xxx'),
+        });
     } catch (error) {
         // eslint-disable-next-line 
         throw {
             originalError: JSON.stringify(error),
             message: translateErrorCodes(error as any),
-            tokens,
         }
     }
-    throw tokens
 }
 
 async function startHAConnection() {

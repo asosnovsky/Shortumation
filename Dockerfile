@@ -9,9 +9,7 @@ WORKDIR /app
 ARG BUILD_VERSION
 
 # <--- Environment Variables --> 
-ENV HASSIO_TOKEN ""
 ENV BUILD_VERSION $BUILD_VERSION
-ENV HASS_URL "http://supervisor/"
 
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
