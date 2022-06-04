@@ -8,7 +8,7 @@ const locationPrefixWeb = window.location.pathname.match(/(.+)\/web/i);
 const baseURL = new URL(
   process.env.NODE_ENV === 'development' ?
     "http://localhost:8000" :
-    (!locationPrefixWeb ? '' : locationPrefixWeb[1])
+    window.location.origin + (!locationPrefixWeb ? '' : locationPrefixWeb[1])
 );
 export const wsURL = baseURL + "socket"
 console.log({ baseURL, wsURL })
