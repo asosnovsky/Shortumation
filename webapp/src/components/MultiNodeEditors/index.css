@@ -34,3 +34,15 @@
 .multinode-editor.modded .multinode-editor--total {
     color: var(--green-light)
 }
+
+.multinode-editor.modded .node-editor--footer--save {
+    border-color: var(--green-opaque);
+    background-color: var(--green-light);
+    color: var(--primary);
+}
+
+.multinode-editor.modded .node-editor--footer--save:hover {
+    border-color: var(--green-light);
+    background-color: var(--green-opaque);
+    color: var(--green-light);
+}

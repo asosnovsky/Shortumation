@@ -68,11 +68,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
         className="node-editor--footer--save"
         onClick={() => {
           if (areYouSureNotReady('save')) {
-            if (JSON.stringify(state.data) !== JSON.stringify(node)) {
-              onSave(state.data)
-            } else {
-              onClose()
-            }
+            onSave(state.data)
           }
         }}
         title={

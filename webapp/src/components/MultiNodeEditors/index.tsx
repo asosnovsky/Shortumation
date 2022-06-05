@@ -19,19 +19,18 @@ export const MultiNodeEditor: FC<MultiNodeEditorProps> = props => {
   </Button>;
   // branch
   if (state.isEmpty) {
-    return <div className='column center' style={{
+    return <div className={["multinode-editor", state.isModified ? "modded" : '', isMobile ? 'mobile' : ''].join(' ')} style={{
       minWidth: '20vw',
     }}>
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-      }}>
+      <div className="multinode-editor--navbar">
         {nextOrAddBtn}
       </div>
-      <div className='column center' style={{ marginTop: '1em' }}>
+      <div className='node-editor--footer' style={{ marginTop: '1em' }}>
         <Button onClick={state.onClose}>Close</Button>
+        <Button onClick={state.onSaveEmpty} className="node-editor--footer--save">Save</Button>
+      </div>
+      <div className='column center'>
+        <span>{state.currentSlideNumber}/<u className="multinode-editor--total">{state.totalSlides}</u></span>
       </div>
     </div>
   }

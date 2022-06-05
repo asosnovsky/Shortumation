@@ -60,13 +60,17 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
 
     // modal
     let modalBody = <></>
+    console.log(modalState)
     if (modalState) {
         if (modalState.single) {
             modalBody = <NodeEditor
                 node={modalState.node}
                 isErrored={modalState.isError}
                 onClose={() => setModalState(null)}
-                onSave={n => { modalState.update(n as any); setModalState(null); }}
+                onSave={n => {
+                    modalState.update(n as any);
+                    setModalState(null);
+                }}
                 allowedTypes={modalState.allowedTypes}
                 saveBtnCreateText={modalState.saveBtnCreateText}
             />

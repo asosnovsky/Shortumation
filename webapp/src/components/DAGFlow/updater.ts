@@ -27,19 +27,23 @@ export const makeSequenceUpdater = (
         choose: [],
         default: [],
       },
-      update: n => onChange([
-        ...sequence,
-        n,
-      ]),
+      update: n => {
+        onChange([
+          ...sequence,
+          n,
+        ])
+      },
       allowedTypes: ['action', 'condition']
     })
   },
   updateNode(i: number, node: AutomationSequenceNode) {
-    return onChange([
-      ...sequence.slice(0, i),
-      node,
-      ...sequence.slice(i + 1),
-    ])
+    if (JSON.stringify(node) !== JSON.stringify(sequence[i])) {
+      return onChange([
+        ...sequence.slice(0, i),
+        node,
+        ...sequence.slice(i + 1),
+      ])
+    }
   },
   updateChooseActionData(i: number, data: ChooseAction) {
     const node = sequence[i] as ChooseAction;

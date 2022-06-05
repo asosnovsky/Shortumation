@@ -107,9 +107,9 @@ export const useMultiNodeEditorState = (props: MultiNodeEditorProps) => {
                         slides.slice(slide + 1)
                     ),
                 multiNode: {
-                    isModified: multiNode.isModified,
+                    isModified: true,
                     isSaved: false,
-                }
+                },
             })
         },
         onSave(node: AutomationNode) {
@@ -129,11 +129,25 @@ export const useMultiNodeEditorState = (props: MultiNodeEditorProps) => {
                 internalNodeModified: false,
             })
         },
+        onSaveEmpty() {
+            justSaved.current = true
+            setState({
+                ...state,
+                multiNode: {
+                    isModified: multiNode.isModified,
+                    isSaved: true,
+                },
+                internalNodeModified: false,
+            })
+        },
         onClose() {
             if (!multiNode.isSaved && multiNode.isModified) {
                 if (!window.confirm("You haven't saved your work, are you ok with losing it?")) {
                     return
                 }
+                props.onSave && props.onSave(slides)
+            }
+            if (justSaved.current) {
                 props.onSave && props.onSave(slides)
             }
             props.onClose && props.onClose()

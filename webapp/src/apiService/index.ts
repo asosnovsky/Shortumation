@@ -11,7 +11,6 @@ const baseURL = new URL(
     window.location.origin + (!locationPrefixWeb ? '' : locationPrefixWeb[1])
 );
 export const wsURL = baseURL + "socket"
-console.log({ baseURL, wsURL })
 export const remoteAutoAPI = makeRemoteAPI(
   baseURL + "automations"
 );
