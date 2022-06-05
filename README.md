@@ -2,9 +2,9 @@
 
 [![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml)
  ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/asosnovsky/Shortumation/Manual%20Build) 
-|  | Stable | amd64-edge | i386-edge | armv7-edge | aarch64-edge | armhf-edge |
-| --- | --- | --- | --- | --- | --- | --- |
-| Version | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-amd64?&sort=date&label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-i386?&sort=date&label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-armv7?&sort=date&label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-aarch64?&sort=date&label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-armhf?&sort=date&label=&style=for-the-badge) |
+|  | Stable | Edge 
+| --- | --- | --- 
+| Version | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-amd64?&sort=date&label=&style=for-the-badge) 
 
 A better way to write automations in home-assistant without having to install and run a seperate automation engine!
 
@@ -21,9 +21,9 @@ A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI 
 - [X] See all automations in one common view
 - [X] Automation Manager
 - [X] Tags for automation organization
+- [X] Autocomplete fields for entities/devices
 - [ ] Script Manager
 - [ ] Use secrets and global parameters
-- [ ] Autocomplete fields for entities/devices
 - [ ] Autocomplete fields for template editor 
 - [ ] Autocomplete fields for referencing scripts 
 

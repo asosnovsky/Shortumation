@@ -1,6 +1,15 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
-## [0.1.14] - Material UI + Autocomplete v2
+## [0.1.17] - Websockets
+
+- Connected to HA main websocket -- now we retrieve real-time information about
+    
+    * Device names
+    * Entity names/ids
+
+- Autocomplete for devices and entities
+
+## [0.1.14] - Material UI + Autocomplete
 
 - Brought some Material UI elements for input and text
 - Autocomplete for tags
