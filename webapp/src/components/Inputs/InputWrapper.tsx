@@ -7,7 +7,7 @@ export interface Props {
   labelSize?: 'normal' | 'small';
   noMargin?: boolean;
   className?: string;
-  error?: string;
+  error?: JSX.Element | string;
   children: ReactNode;
 }
 const InputWrapper: FC<Props> = ({ error, label, children, labelSize = 'normal', noMargin = false, className = "" }) => {

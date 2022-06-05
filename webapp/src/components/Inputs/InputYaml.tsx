@@ -1,5 +1,5 @@
 import * as yaml from "js-yaml";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDelayEffect } from 'utils/useDelay';
 
 import CodeMirror from '@uiw/react-codemirror';
@@ -10,18 +10,20 @@ export interface Props<T extends {}> {
   label: string;
   value: T;
   onChange: (v: T) => void;
+  error?: JSX.Element | string,
 }
 export default function InputYaml<T>({
   label,
+  error: incmError,
   value = {} as any,
   onChange,
 }: Props<T>) {
   const [{ text, error }, setState] = useState<{
     text: string,
-    error: undefined | string,
+    error: undefined | JSX.Element | string,
   }>({
     text: yaml.dump(value),
-    error: undefined
+    error: incmError,
   });
   const setText = (t: string) => {
     try {
@@ -31,6 +33,12 @@ export default function InputYaml<T>({
       setState({ text: t, error: "! Invalid Yaml !" })
     }
   }
+  useEffect(() => {
+    setState({
+      text: yaml.dump(value),
+      error: incmError,
+    })
+  }, [value, incmError])
   useDelayEffect(() => {
     if (!error && (yaml.dump(value) !== text)) {
       if (text) {

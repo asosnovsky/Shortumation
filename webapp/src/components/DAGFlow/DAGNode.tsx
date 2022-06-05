@@ -14,6 +14,7 @@ export interface DAGNodeProps {
   label: string;
   hasInput?: boolean;
   accentBackground?: boolean;
+  flipped: boolean;
 }
 export const DAGNode: FC<DAGNodeProps> = ({
   label,
@@ -24,6 +25,7 @@ export const DAGNode: FC<DAGNodeProps> = ({
   color,
   hasInput = false,
   accentBackground = false,
+  flipped,
 }) => {
   const { classes, theme } = useNodeStyles({
     color,
@@ -32,8 +34,8 @@ export const DAGNode: FC<DAGNodeProps> = ({
     accentBackground,
   });
   return <>
-    {hasInput && <Handle type="target" position={Position.Left} />}
-    <Handle type="source" position={Position.Right} />
+    {hasInput && <Handle type="target" position={flipped ? Position.Top : Position.Left} />}
+    <Handle type="source" position={flipped ? Position.Bottom : Position.Right} />
     <div className={classes.root}>
       <div className={classes.inner}>
         <div className={classes.leftEdge} onClick={onXClick}>

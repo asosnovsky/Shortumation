@@ -176,6 +176,7 @@ const addChooseNode = (
             x: position.x + dims.nodeWidth * dims.distanceFactor,
             y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
         }, {
+            flipped: dims.flipped,
             size: dims.circleSize,
             onRemove: createOnRemoveForChooseNode(
                 node,
@@ -241,7 +242,7 @@ const addChooseNode = (
     const elseCircle = makeFlowCircle(`${nodeId}>else`, {
         x: position.x + dims.nodeWidth * dims.distanceFactor,
         y: lastPos.y + dims.nodeHeight * dims.distanceFactor * 2,
-    }, { size: dims.circleSize })
+    }, { size: dims.circleSize, flipped: dims.flipped })
     flowData.nodes.push(elseCircle)
     addEdge(flowData, nodeId, elseCircle.id, true)
     const lastPoint = sequenceToFlow(flowData, node.default ?? [], elseCircle.id, {

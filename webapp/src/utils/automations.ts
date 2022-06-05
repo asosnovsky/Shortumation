@@ -1,9 +1,19 @@
 import * as v from "types/validators";
 import { AutomationNode, AutomationNodeMapping, AutomationNodeSubtype, AutomationNodeTypes } from "types/automations";
-import { AutomationTrigger } from 'types/automations/triggers';
+import { AutomationTrigger, TriggerType } from 'types/automations/triggers';
 import { MiniFailure } from "types/validators/helper";
 import { getFailures } from '../types/validators/helper';
+import { Struct } from "superstruct";
+import { ActionType } from "types/automations/actions";
+import { ConditionType } from "types/automations/conditions";
 
+export const getNodeTypeAndValidate = (node: AutomationNode, allowedTypes: AutomationNodeTypes[]) => {
+    const nodeType = getNodeType(node);
+    if (allowedTypes.includes(nodeType)) {
+        return nodeType
+    }
+    throw new Error(`Detected '${nodeType}' but expected one of {${allowedTypes}}`)
+}
 
 export const getNodeType = (node: AutomationNode): AutomationNodeTypes => {
     if ('condition' in node) {
@@ -107,72 +117,75 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
     }
 }
 
+const TriggerValidators: Record<TriggerType, any> = {
+    "homeassistant": v.triggers.AutomationTriggerHA,
+    "device": v.triggers.AutomationTriggerDevice,
+    "event": v.triggers.AutomationTriggerEvent,
+    "mqtt": v.triggers.AutomationTriggerMQTT,
+    'numeric_state': v.triggers.AutomationTriggerNumericState,
+    "state": v.triggers.AutomationTriggerState,
+    "tag": v.triggers.AutomationTriggerTag,
+    "template": v.triggers.AutomationTriggerTemplate,
+    "time": v.triggers.AutomationTriggerTime,
+    "time_pattern": v.triggers.AutomationTriggerTimePattern,
+    "webhook": v.triggers.AutomationTriggerWebhook,
+    "zone": v.triggers.AutomationTriggerZone,
+}
 
-export const validateNode = (node: AutomationNode): MiniFailure[] | null => {
-    const nodeType = getNodeType(node);
-    try {
-        const nodeSubType = getNodeSubType(node);
-        if (nodeType === 'action') {
-            if (nodeSubType === 'service') {
-                return getFailures(node, v.actions.ServiceAction)
-            } else if (nodeSubType === 'repeat') {
-                return getFailures(node, v.actions.RepeatAction)
-            } else if (nodeSubType === 'wait') {
-                return getFailures(node, v.actions.WaitAction)
-            } else if (nodeSubType === 'event') {
-                return getFailures(node, v.actions.FireEventAction)
-            } else if (nodeSubType === 'device') {
-                return getFailures(node, v.actions.DeviceAction)
-            } else if (nodeSubType === 'choose') {
-                return getFailures(node, v.actions.ChooseAction)
-            }
-        } else if (nodeType === 'trigger') {
-            if (nodeSubType === 'event') {
-                return getFailures(node, v.triggers.AutomationTriggerEvent)
-            } else if (nodeSubType === 'homeassistant') {
-                return getFailures(node, v.triggers.AutomationTriggerHA)
-            } else if (nodeSubType === 'mqtt') {
-                return getFailures(node, v.triggers.AutomationTriggerMQTT)
-            } else if (nodeSubType === 'numeric_state') {
-                return getFailures(node, v.triggers.AutomationTriggerNumericState)
-            } else if (nodeSubType === 'state') {
-                return getFailures(node, v.triggers.AutomationTriggerState)
-            } else if (nodeSubType === 'tag') {
-                return getFailures(node, v.triggers.AutomationTriggerTag)
-            } else if (nodeSubType === 'template') {
-                return getFailures(node, v.triggers.AutomationTriggerTemplate)
-            } else if (nodeSubType === 'time') {
-                return getFailures(node, v.triggers.AutomationTriggerTime)
-            } else if (nodeSubType === 'time_pattern') {
-                return getFailures(node, v.triggers.AutomationTriggerTimePattern)
-            } else if (nodeSubType === 'webhook') {
-                return getFailures(node, v.triggers.AutomationTriggerWebhook)
-            } else if (nodeSubType === 'zone') {
-                return getFailures(node, v.triggers.AutomationTriggerZone)
-            } else if (nodeSubType === 'device') {
-                return getFailures(node, v.triggers.AutomationTriggerDevice)
-            }
-        } else if (nodeType === 'condition') {
-            if (['and', 'or', 'not'].includes(nodeSubType)) {
-                return getFailures(node, v.conditions.LogicCondition)
-            } else if (nodeSubType === 'numeric_state') {
-                return getFailures(node, v.conditions.NumericCondition)
-            } else if (nodeSubType === 'state') {
-                return getFailures(node, v.conditions.StateCondition)
-            } else if (nodeSubType === 'template') {
-                return getFailures(node, v.conditions.TemplateCondition)
-            } else if (nodeSubType === 'trigger') {
-                return getFailures(node, v.conditions.TriggerCondition)
-            } else if (nodeSubType === 'time') {
-                return getFailures(node, v.conditions.TimeCondition)
-            } else if (nodeSubType === 'zone') {
-                return getFailures(node, v.conditions.ZoneCondition)
-            }
-        }
-    } catch (err) {
-        console.warn(err)
+const ActionValidators: Record<ActionType, any> = {
+    "choose": v.actions.ChooseAction,
+    "device": v.actions.DeviceAction,
+    "event": v.actions.FireEventAction,
+    "repeat": v.actions.RepeatAction,
+    "service": v.actions.ServiceAction,
+    "wait": v.actions.WaitAction,
+}
+
+const ConditionValidators: Record<ConditionType, any> = {
+    "and": v.conditions.LogicCondition,
+    "or": v.conditions.LogicCondition,
+    "not": v.conditions.LogicCondition,
+    "numeric_state": v.conditions.NumericCondition,
+    "state": v.conditions.StateCondition,
+    "template": v.conditions.TemplateCondition,
+    "time": v.conditions.TimeCondition,
+    "trigger": v.conditions.TriggerCondition,
+    "zone": v.conditions.ZoneCondition,
+}
+
+const AllValidators: Record<AutomationNodeTypes, any> = {
+    "action": ActionValidators,
+    "condition": ConditionValidators,
+    "trigger": TriggerValidators,
+}
+
+export const validateNode = (node: AutomationNode, allowedNodeTypes: AutomationNodeTypes[] = []): MiniFailure[] | null => {
+    let nodeType = getNodeType(node);
+    let errors: MiniFailure[] = []
+    if (allowedNodeTypes.length > 0 && !allowedNodeTypes.includes(nodeType)) {
+        errors.push(
+            { "message": [`Got node of type "${nodeType}" but expected one of {${allowedNodeTypes}}`], path: "" }
+        )
+        nodeType = allowedNodeTypes[0]
     }
-    return [
-        { "message": ["Invalid or unknown " + nodeType], "path": "" },
-    ]
+    let nodeSubType: null | AutomationNodeSubtype = null;
+    try {
+        nodeSubType = getNodeSubType(node);
+
+    } catch (err) {
+        errors.push(
+            { "message": [`Failed to identifiy subtype`], path: "" }
+        )
+    }
+    if (nodeSubType) {
+        const failures = getFailures(node, AllValidators[nodeType][nodeSubType]);
+        if (failures) {
+            errors = errors.concat(failures)
+        }
+    }
+    if (errors.length > 0) {
+        return errors
+    } else {
+        return null
+    }
 }

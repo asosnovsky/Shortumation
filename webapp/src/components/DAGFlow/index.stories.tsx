@@ -92,7 +92,10 @@ Complex.args = {
         {
             "platform": "homeassistant",
             "event": "start",
-        }
+        },
+        {
+            "bad": "node"
+        } as any
     ],
     sequence: [
         {
@@ -119,6 +122,9 @@ Complex.args = {
                 "media_content_id": "Good Morning",
                 "media_content_type": "SPOTIFY"
             }
+        },
+        {
+            "alias": "Bad Node",
         },
         {
             "choose": [
@@ -231,4 +237,16 @@ Errors.args = {
             "choose": {}
         } as any
     ]
+}
+
+
+export const ComplexFlipped = Complex.bind({})
+
+ComplexFlipped.args = {
+    ...Complex.args,
+    dims: {
+        ...dgconst.DEFAULT_DIMS,
+        ...Complex.args.dims,
+        flipped: true,
+    }
 }

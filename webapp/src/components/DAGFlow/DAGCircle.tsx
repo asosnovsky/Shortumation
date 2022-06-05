@@ -12,6 +12,7 @@ export interface DAGCircleProps {
   backgroundColor?: string;
   disableSource?: boolean;
   disableTarget?: boolean;
+  flipped: boolean;
 }
 export const makeFlowCircle = (
   circleId: string,
@@ -32,6 +33,7 @@ export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
     backgroundColor,
     disableSource = false,
     disableTarget = false,
+    flipped,
   }
 }) => {
   const { classes } = useCircleStyles({
@@ -41,8 +43,8 @@ export const DAGCircle: FC<{ data: DAGCircleProps }> = ({
     backgroundColor,
   });
   return <>
-    {!disableSource && <Handle type="source" position={Position.Right} />}
-    {!disableTarget && <Handle type="target" position={Position.Left} />}
+    {!disableSource && <Handle type="source" position={flipped ? Position.Bottom : Position.Right} />}
+    {!disableTarget && <Handle type="target" position={flipped ? Position.Top : Position.Left} />}
     <div className={classes.root}>
       {
         onAdd ?

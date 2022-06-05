@@ -29,7 +29,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   isErrored = false,
 }) => {
   // state
-  const state = useEditorNodeState(node, isErrored);
+  const state = useEditorNodeState(node, isErrored, allowedTypes);
 
   // alias
   const isModified = state.isModified;
@@ -53,7 +53,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
           onChange={state.setNodeType}
         /> : <></>}
         {state.nodeType !== 'condition' ? <InputList
-          label={`${state.nodeType.slice(0, 1).toUpperCase()}${state.nodeType.slice(1)} Type`}
+          label={state.prettyNodeType}
           current={state.subType as any}
           options={state.subTypes}
           onChange={state.setSubType}

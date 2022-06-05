@@ -58,4 +58,9 @@
     max-width: 30em;
     overflow: auto;
     max-height: 10em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0.5em 0 1.5em;
+    margin: 0;
 }

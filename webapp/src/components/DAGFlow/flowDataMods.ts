@@ -7,6 +7,7 @@ export const makeAddButton = (
     position: XYPosition,
     {
         circleSize,
+        flipped,
     }: DAGAutomationFlowDims,
     onAdd: () => void,
     disableTarget: boolean = true,
@@ -14,6 +15,7 @@ export const makeAddButton = (
     id,
     position,
     {
+        flipped,
         size: circleSize,
         onAdd,
         disableSource: true,

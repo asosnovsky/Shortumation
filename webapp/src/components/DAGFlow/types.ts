@@ -15,6 +15,7 @@ export type DAGAutomationFlowDims = {
     conditionHeight: number;
     circleSize: number;
     distanceFactor: number;
+    flipped: boolean;
 }
 
 export type DAGAutomationFlowNode = Node<DAGNodeProps | DAGCircleProps | DAGErrorNodeProps | any>;

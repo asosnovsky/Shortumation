@@ -19,4 +19,5 @@ export const DEFAULT_DIMS = {
     x: PADDING,
     y: PADDING,
   },
+  flipped: false,
 } as DAGAutomationFlowDims
