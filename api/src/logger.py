@@ -14,3 +14,7 @@ else:
     logging.basicConfig(level=logging.NOTSET)
 
 logger = logging.getLogger()
+
+
+def get_logger(name: str):
+    return logging.getLogger(name)
