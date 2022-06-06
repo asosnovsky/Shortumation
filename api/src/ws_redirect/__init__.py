@@ -1,13 +1,12 @@
 import asyncio
 import json
-
 from typing import Callable, Coroutine, Optional
-from src.logger import get_logger
 
-from websockets.client import connect, WebSocketClientProtocol
+from websockets.client import WebSocketClientProtocol, connect
 from websockets.exceptions import ConnectionClosedOK
+
 from src.env import HASSIO_TOKEN, HASSIO_WS
-from src.logger import logger
+from src.logger import get_logger, logger
 
 OnMessage = Callable[[str], Coroutine]
 logger = get_logger(__name__)

@@ -33,7 +33,7 @@ test:
 
 coverage:
 	$(VENV_BIN)/coverage run -m unittest discover tests
-	$(VENV_BIN)/coverage report -m --fail-under=85
+	$(VENV_BIN)/coverage report -m --fail-under=80
 
 clean:
 	rm -rf dist *.sqlite *.egg-info build .mypy_cache .coverage
