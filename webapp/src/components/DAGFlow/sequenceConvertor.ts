@@ -1,6 +1,6 @@
 import { AutomationSequenceNode } from 'types/automations';
 import { DAGAutomationFlowDims, FlowData } from './types';
-import { getDescriptionFromAutomationNode } from 'utils/formatting';
+import { getDescriptionFromAutomationNode, Namer } from 'utils/formatting';
 import { XYPosition } from 'react-flow-renderer';
 import { ChooseAction } from 'types/automations/actions';
 import { makeFlowCircle } from './DAGCircle';
@@ -14,6 +14,7 @@ export const sequenceToFlow = (
     sequence: AutomationSequenceNode[],
     fromPoint: string,
     dims: DAGAutomationFlowDims,
+    namer: Namer,
     updater: SequenceUpdater,
     prefix: string = "",
 ) => {
@@ -45,7 +46,7 @@ export const sequenceToFlow = (
         if (getNodeType(node) === 'action') {
             if ('choose' in node) {
                 try {
-                    const out = addChooseNode(node, position, nodeId, dims, updater, i);
+                    const out = addChooseNode(node, position, nodeId, dims, namer, updater, i);
                     position = out.lastPos
                     flowData = mergeFlowDatas(flowData, out.flowData);
                 } catch (err) {
@@ -55,13 +56,15 @@ export const sequenceToFlow = (
             } else {
                 addSingleNode(flowData, node, position, nodeId, dims, {
                     onEditClick: updater.makeOnModalOpenForNode(i, node),
-                    onXClick: () => updater.removeNode(i)
+                    onXClick: () => updater.removeNode(i),
+                    namer,
                 });
             }
         } else {
             addSingleNode(flowData, node, position, nodeId, dims, {
                 onEditClick: updater.makeOnModalOpenForNode(i, node),
-                onXClick: () => updater.removeNode(i)
+                onXClick: () => updater.removeNode(i),
+                namer,
             });
 
         }
@@ -124,12 +127,13 @@ const addSingleNode = (
     opts: {
         onEditClick: () => void;
         onXClick: () => void;
+        namer: Namer;
     }
 ) => flowData.nodes.push({
     id: nodeId,
     type: 'dagnode',
     data: {
-        label: getDescriptionFromAutomationNode(node),
+        label: getDescriptionFromAutomationNode(node, opts.namer),
         height: nodeHeight,
         width: nodeWidth,
         color: getNodeType(node) === 'action' ? 'green' : 'blue',
@@ -171,6 +175,7 @@ const addChooseNode = (
     position: XYPosition,
     nodeId: string,
     dims: DAGAutomationFlowDims,
+    namer: Namer,
     updater: SequenceUpdater,
     i: number,
 ) => {
@@ -181,6 +186,7 @@ const addChooseNode = (
     addSingleNode(flowData, node, position, nodeId, dims, {
         onEditClick: updater.makeOnModalOpenForNode(i, node),
         onXClick: () => updater.removeNode(i),
+        namer,
     });
     let lastPos: XYPosition = position;
     // conditions
@@ -230,7 +236,7 @@ const addChooseNode = (
                 x: condNode.position.x - (dims.nodeWidth + dims.conditionWidth),
                 y: condNode.position.y - dims.conditionHeight / 2,
             },
-        }, updater.makeChildUpdaterForChooseAction(i, j), `${sequenceId}.`);
+        }, namer, updater.makeChildUpdaterForChooseAction(i, j), `${sequenceId}.`);
         if (lastPoint.position) {
             lastPos = xyApply(lastPos, lastPoint.position, Math.max)
         } else {
@@ -290,7 +296,7 @@ const addChooseNode = (
             x: position.x - dims.nodeWidth,
             y: elseCircle.position.y - dims.circleSize / 4,
         },
-    }, updater.makeChildUpdaterForChooseAction(i, null), `${nodeId}.${totalChildren}.`)
+    }, namer, updater.makeChildUpdaterForChooseAction(i, null), `${nodeId}.${totalChildren}.`)
     if (lastPoint.position) {
         lastPos = xyApply(lastPos, lastPoint.position, Math.max)
     } else {

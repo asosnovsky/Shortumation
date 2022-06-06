@@ -6,7 +6,7 @@ import { getNodeSubType, getSubTypeList, validateNode } from 'utils/automations'
 import InputYaml from 'components/Inputs/InputYaml';
 import InputText from 'components/Inputs/InputText';
 import { getDescriptionFromAutomationNode } from 'utils/formatting';
-import { useHAEntities } from 'haService';
+import { useHA } from 'haService';
 import { Generic } from './Generic';
 import { getNodeTypeAndValidate } from '../../../utils/automations';
 
@@ -19,7 +19,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
     isModified: false,
     ...computeInvalidYaml(originalNode, allowedTypes)
   });
-  const entities = useHAEntities();
+  const { entities, namer } = useHA();
   // aliases
   const { node: currentNode, isModified, yamlMode, invalidManualYaml } = allState;
   // effects
@@ -88,7 +88,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
         aliasEditor = <InputText
           key="alias"
           label="Alias"
-          value={getDescriptionFromAutomationNode(allState.node)}
+          value={getDescriptionFromAutomationNode(allState.node, namer)}
           onChange={alias => setState({
             ...allState.node,
             alias

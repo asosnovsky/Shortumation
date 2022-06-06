@@ -16,7 +16,6 @@ export const triggerToFlow = (
         nodeWidth,
         padding,
         conditionHeight,
-        conditionWidth,
         circleSize,
         flipped,
     } = dims;
@@ -27,7 +26,7 @@ export const triggerToFlow = (
             id: flowId,
             type: 'dagnode',
             data: {
-                label: getDescriptionFromAutomationNode(t),
+                label: getDescriptionFromAutomationNode(t, opts.namer),
                 height: nodeHeight,
                 width: nodeWidth,
                 flipped,

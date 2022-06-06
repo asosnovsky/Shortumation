@@ -5,6 +5,7 @@ import { DAGNodeProps } from './DAGNode';
 import { AutomationTrigger } from 'types/automations/triggers';
 import { MultiNodeEditorProps } from 'components/MultiNodeEditors/types';
 import { DAGErrorNodeProps } from './DAGErrorNode';
+import { Namer } from 'utils/formatting';
 
 
 export type DAGAutomationFlowDims = {
@@ -28,6 +29,7 @@ export type TriggerMakerOptions = {
     onAdd: () => void,
     onEdit: (i: number) => void,
     onDelete: (i: number) => void,
+    namer: Namer,
 }
 
 export type UpdateModalState<T extends AutomationSequenceNode | AutomationTrigger = any> = (

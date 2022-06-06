@@ -1,4 +1,5 @@
 import { entitiesColl, servicesColl } from "home-assistant-js-websocket"
+import { Namer } from "utils/formatting";
 import { deviceRegistryColl } from "./DeviceRegistry";
 import { entityRegistryColl } from "./EntityRegistry";
 import { DeviceRegistryItem } from "./types";
@@ -120,4 +121,27 @@ export const useHAEntityRegistry = () => {
     const dr = useHassCollection(entityRegistryColl)
 
     return dr
+}
+
+export const useHA = () => {
+    const entities = useHAEntities();
+    const devices = useHADeviceRegistry();
+
+    const namer: Namer = {
+        getDeviceName(device_id) {
+            return devices.getLabel(device_id)
+        },
+        getEntityName(entity_id, maxEntities = 1) {
+            if (Array.isArray(entity_id)) {
+                return entity_id.slice(0, maxEntities).map(entities.getLabel).join(', ')
+            }
+            return entities.getLabel(entity_id)
+        },
+    }
+
+    return {
+        entities,
+        devices,
+        namer,
+    }
 }

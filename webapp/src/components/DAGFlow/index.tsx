@@ -16,6 +16,7 @@ import { AutomationCondition } from "types/automations/conditions";
 import { makeConditionPoint } from "./flowDataMods";
 import { convertToFlowNode } from "./helpers";
 import { DAGErrorNode } from "./DAGErrorNode";
+import { useHA } from "haService";
 
 const nodeTypes = {
     'dagnode': convertToFlowNode(DAGNode),
@@ -57,10 +58,9 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
 }) => {
     // state
     const [modalState, setModalState] = useState<ModalState | null>(null);
-
+    const { namer, } = useHA();
     // modal
     let modalBody = <></>
-    console.log(modalState)
     if (modalState) {
         if (modalState.single) {
             modalBody = <NodeEditor
@@ -102,6 +102,7 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         edges: [],
     }
     triggerToFlow(flowData, trigger, condPoint.id, dims, {
+        namer,
         onAdd: () => onTriggerUpdate([
             ...trigger, {
                 platform: 'event',
@@ -136,6 +137,7 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
                 y: dims.padding.y,
             }
         },
+        namer,
         makeSequenceUpdater(sequence, onSequenceUpdate, setModalState),
     );
     // render
