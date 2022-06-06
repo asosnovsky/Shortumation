@@ -1,12 +1,13 @@
 import { FC } from "react";
 import { AutomationCondition, LogicCondition } from "types/automations/conditions";
-import { getDescriptionFromAutomationNode } from "utils/formatting";
+import { getDescriptionFromAutomationNode, Namer } from "utils/formatting";
 import { ConditionNode } from "./ConditionNode";
 import { genUpdateMethods } from "./nestedUpdater";
 
 
 interface Viewer<C extends AutomationCondition> extends FC<{
   condition: C;
+  namer: Namer;
   onChange: (condition: C) => void;
 }> { }
 
@@ -23,9 +24,10 @@ export const getViewer = (condition: AutomationCondition): Viewer<any> => {
 
 export const GenericViewer: Viewer<AutomationCondition> = ({
   condition,
+  namer,
 }) => {
   return <>
-    {getDescriptionFromAutomationNode(condition)}
+    {getDescriptionFromAutomationNode(condition, namer)}
   </>
 }
 

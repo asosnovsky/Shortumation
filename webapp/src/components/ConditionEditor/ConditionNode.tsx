@@ -9,6 +9,7 @@ import { getEditor } from "./editorRender";
 import { useStyles } from "./style";
 import { getViewer } from "./viewRender";
 import useWindowSize from "utils/useWindowSize";
+import { useHA } from "haService";
 
 
 
@@ -33,6 +34,7 @@ export const ConditionNode: FC<{
     const [internalDisplayMode, setInternalDisplayMode] = useState(displayMode);
     const [yamlMode, setYamlMode] = useState(false);
     const { isMobile } = useWindowSize();
+    const { namer } = useHA();
     // alias
     const effectiveDM = internalDisplayMode || yamlMode;
     // effect
@@ -64,7 +66,7 @@ export const ConditionNode: FC<{
     let childrenConditions: JSX.Element;
     if (effectiveDM) {
       const Viewer = getViewer(condition);
-      childrenConditions = <Viewer condition={condition} onChange={onUpdate} />
+      childrenConditions = <Viewer condition={condition} onChange={onUpdate} namer={namer} />
     } else {
       const Editor = getEditor(condition);
       childrenConditions = <Editor condition={condition} onChange={onUpdate} />
