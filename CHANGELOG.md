@@ -1,5 +1,9 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.1.19] - Vertical mobile mode
+
+- in mobile mode we draw the graphs vertically now
+
 ## [0.1.17] - Websockets
 
 - Connected to HA main websocket -- now we retrieve real-time information about
