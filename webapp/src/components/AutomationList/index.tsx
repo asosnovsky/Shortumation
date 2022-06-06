@@ -67,7 +67,10 @@ export const AutomationList: FC<AutomationListParams> = ({
       {currentAuto ? <AutomationEditor
         automation={currentAuto}
         onUpdate={a => onUpdate(current, a)}
-        dims={dims}
+        dims={{
+          ...dims,
+          flipped: isMobile
+        }}
         tagDB={tagDB}
       /> : <></>}
     </div>

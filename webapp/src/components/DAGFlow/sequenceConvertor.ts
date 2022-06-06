@@ -25,12 +25,18 @@ export const sequenceToFlow = (
         const nodeId = `${prefix}n-${i}`;
         let position: XYPosition;
         if (lasPos) {
-            position = {
+            position = dims.flipped ? {
+                y: lasPos.y + dims.nodeHeight * dims.distanceFactor,
+                x: dims.padding.x
+            } : {
                 x: lasPos.x + dims.nodeWidth * dims.distanceFactor,
                 y: dims.padding.y
             }
         } else {
-            position = {
+            position = dims.flipped ? {
+                y: dims.padding.y + dims.nodeHeight * dims.distanceFactor * (i + 2),
+                x: dims.padding.x
+            } : {
                 x: dims.padding.x + dims.nodeWidth * dims.distanceFactor * (i + 2),
                 y: dims.padding.y
             };
@@ -67,7 +73,14 @@ export const sequenceToFlow = (
     // add button
     const addCircle = makeAddButton(
         `${prefix}-+`,
-        {
+        dims.flipped ? {
+            y: (
+                lasPos === null ?
+                    dims.padding.y + dims.nodeHeight * dims.distanceFactor * (sequence.length + 1) :
+                    lasPos.y
+            ) + dims.nodeHeight * dims.distanceFactor,
+            x: dims.padding.x + dims.circleSize * 1.5
+        } : {
             x: (
                 lasPos === null ?
                     dims.padding.x + dims.nodeWidth * dims.distanceFactor * (sequence.length + 1) :
@@ -104,6 +117,7 @@ const addSingleNode = (
     position: XYPosition,
     nodeId: string,
     {
+        flipped,
         nodeHeight,
         nodeWidth,
     }: DAGAutomationFlowDims,
@@ -120,6 +134,7 @@ const addSingleNode = (
         width: nodeWidth,
         color: getNodeType(node) === 'action' ? 'green' : 'blue',
         hasInput: true,
+        flipped,
         ...opts,
     },
     position,
@@ -172,7 +187,10 @@ const addChooseNode = (
     node.choose.forEach(({ sequence, conditions }, j) => {
         const sequenceId = `${nodeId}.${j}`;
         // edit/delete circle
-        const circle = makeFlowCircle(`${sequenceId}>delete`, {
+        const circle = makeFlowCircle(`${sequenceId}>delete`, dims.flipped ? {
+            y: position.y + dims.nodeHeight * dims.distanceFactor,
+            x: lastPos.x + dims.nodeWidth * dims.distanceFactor,
+        } : {
             x: position.x + dims.nodeWidth * dims.distanceFactor,
             y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
         }, {
@@ -188,7 +206,10 @@ const addChooseNode = (
         addEdge(flowData, nodeId, circle.id, true)
         const condNode = makeConditionPoint(
             `${sequenceId}>cond`,
-            {
+            dims.flipped ? {
+                y: circle.position.y + dims.circleSize * dims.distanceFactor,
+                x: circle.position.x - dims.circleSize,
+            } : {
                 x: circle.position.x + dims.circleSize * dims.distanceFactor,
                 y: circle.position.y + dims.circleSize / 8,
             },
@@ -202,7 +223,10 @@ const addChooseNode = (
         // actual sub sequence
         const lastPoint = sequenceToFlow(flowData, sequence, condNode.id, {
             ...dims,
-            padding: {
+            padding: dims.flipped ? {
+                y: condNode.position.y - dims.nodeHeight * dims.distanceFactor,
+                x: condNode.position.x - dims.conditionHeight / 2,
+            } : {
                 x: condNode.position.x - (dims.nodeWidth + dims.conditionWidth),
                 y: condNode.position.y - dims.conditionHeight / 2,
             },
@@ -210,7 +234,13 @@ const addChooseNode = (
         if (lastPoint.position) {
             lastPos = xyApply(lastPos, lastPoint.position, Math.max)
         } else {
-            lastPos = xyApply(lastPos, { x: lastPos.x, y: lastPos.y + dims.nodeHeight * dims.distanceFactor }, Math.max)
+            lastPos = xyApply(lastPos, dims.flipped ? {
+                y: lastPos.y,
+                x: lastPos.x + dims.nodeWidth * dims.distanceFactor
+            } : {
+                x: lastPos.x,
+                y: lastPos.y + dims.nodeHeight * dims.distanceFactor
+            }, Math.max)
         }
     })
     const totalChildren = node.choose.length;
@@ -218,7 +248,10 @@ const addChooseNode = (
     // add button
     const addCirlce = makeAddButton(
         `${nodeId}>add`,
-        {
+        dims.flipped ? {
+            y: position.y + dims.nodeHeight * dims.distanceFactor,
+            x: lastPos.x + dims.nodeWidth * dims.distanceFactor,
+        } : {
             x: position.x + dims.nodeWidth * dims.distanceFactor,
             y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
         },
@@ -239,7 +272,10 @@ const addChooseNode = (
     addEdge(flowData, nodeId, addCirlce.id, true)
 
     // else
-    const elseCircle = makeFlowCircle(`${nodeId}>else`, {
+    const elseCircle = makeFlowCircle(`${nodeId}>else`, dims.flipped ? {
+        y: position.y + dims.nodeHeight * dims.distanceFactor,
+        x: lastPos.x + dims.nodeWidth * dims.distanceFactor * 2,
+    } : {
         x: position.x + dims.nodeWidth * dims.distanceFactor,
         y: lastPos.y + dims.nodeHeight * dims.distanceFactor * 2,
     }, { size: dims.circleSize, flipped: dims.flipped })
@@ -247,7 +283,10 @@ const addChooseNode = (
     addEdge(flowData, nodeId, elseCircle.id, true)
     const lastPoint = sequenceToFlow(flowData, node.default ?? [], elseCircle.id, {
         ...dims,
-        padding: {
+        padding: dims.flipped ? {
+            y: position.y,
+            x: elseCircle.position.x - 1.4 * dims.circleSize,
+        } : {
             x: position.x - dims.nodeWidth,
             y: elseCircle.position.y - dims.circleSize / 4,
         },

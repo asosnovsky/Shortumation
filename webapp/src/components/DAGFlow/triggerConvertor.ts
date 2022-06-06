@@ -16,6 +16,9 @@ export const triggerToFlow = (
         nodeWidth,
         padding,
         conditionHeight,
+        conditionWidth,
+        circleSize,
+        flipped,
     } = dims;
     // convert all triggers to dag nodes
     trigger.forEach((t, i) => {
@@ -27,11 +30,18 @@ export const triggerToFlow = (
                 label: getDescriptionFromAutomationNode(t),
                 height: nodeHeight,
                 width: nodeWidth,
+                flipped,
                 color: 'red',
                 onEditClick: () => opts.onEdit(i),
                 onXClick: () => opts.onDelete(i),
             },
-            position: { x: padding.x, y: padding.y + nodeHeight * distanceFactor * i }
+            position: flipped ? {
+                y: padding.y,
+                x: padding.x + nodeWidth * distanceFactor * i
+            } : {
+                x: padding.x,
+                y: padding.y + nodeHeight * distanceFactor * i
+            }
         })
         flowData.edges.push({
             id: `e(${flowId})-(${toPoint})`,
@@ -43,7 +53,10 @@ export const triggerToFlow = (
     // create a 'add button'
     flowData.nodes.push(makeAddButton(
         'trigger-add',
-        {
+        flipped ? {
+            y: padding.y + circleSize / 4,
+            x: padding.x + nodeWidth * distanceFactor * trigger.length,
+        } : {
             x: padding.x + nodeWidth * 0.4,
             y: padding.y + conditionHeight / 2 + nodeHeight * distanceFactor * trigger.length,
         },

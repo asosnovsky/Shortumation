@@ -85,7 +85,11 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
     }
 
     // convert automation to flow data
-    const condPoint = makeConditionPoint('c', {
+    const condPoint = makeConditionPoint(
+        'c', dims.flipped ? {
+            y: dims.padding.y + dims.nodeHeight * dims.distanceFactor,
+            x: dims.padding.x + dims.nodeWidth * 0.25
+        } : {
         x: dims.padding.x + dims.nodeWidth * dims.distanceFactor,
         y: dims.padding.y + dims.nodeHeight * 0.25
     }, dims, condition.length, makeOnEditAutomationConditions(
@@ -124,7 +128,10 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         sequence,
         condPoint.id,
         {
-            ...dims, padding: {
+            ...dims, padding: dims.flipped ? {
+                y: condPoint.position.y - dims.nodeHeight - dims.conditionHeight,
+                x: dims.padding.x,
+            } : {
                 x: condPoint.position.x - dims.nodeWidth - dims.conditionWidth,
                 y: dims.padding.y,
             }

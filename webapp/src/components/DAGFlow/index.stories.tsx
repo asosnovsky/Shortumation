@@ -250,3 +250,14 @@ ComplexFlipped.args = {
         flipped: true,
     }
 }
+
+export const SimpleFlipped = Simple.bind({})
+
+SimpleFlipped.args = {
+    ...Simple.args,
+    dims: {
+        ...dgconst.DEFAULT_DIMS,
+        ...Complex.args.dims,
+        flipped: true,
+    }
+}
