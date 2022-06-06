@@ -6,6 +6,7 @@ import InputText from "components/Inputs/InputText";
 import { Button } from "components/Inputs/Button";
 import { makeGrouping } from "./automationGrouper";
 import { AutomationListBoxGroup } from "./AutomationListBoxGroup";
+import { useCookies } from "react-cookie";
 
 
 export type Props = {
@@ -14,6 +15,33 @@ export type Props = {
     onSelectAutomation: (i: number) => void;
     onRemove: (i: number) => void;
     onAdd: () => void;
+}
+
+const useAutomationListBoxState = () => {
+    const [cookies, setCookies, _] = useCookies(['albSearchText', 'albSelected']);
+    let initialSelected = [];
+    try {
+        initialSelected = JSON.parse(cookies.albSelected)
+        if (!Array.isArray(initialSelected)) {
+            initialSelected = [initialSelected]
+        }
+        initialSelected = initialSelected.map(Number)
+    } catch (_) { }
+    const [searchText, setSearchText] = useState(cookies.albSearchText ?? "");
+    const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>(initialSelected);
+
+    return {
+        searchText,
+        setSearchText(v: string) {
+            setSearchText(v)
+            setCookies('albSearchText', v)
+        },
+        setSelectedTagIdx(n: number[]) {
+            setSelectedTagIdx(n)
+            setCookies('albSelected', JSON.stringify(n))
+        },
+        selectedTagIdx,
+    }
 }
 
 export const AutomationListBox: FC<Props> = ({
@@ -25,9 +53,13 @@ export const AutomationListBox: FC<Props> = ({
 }) => {
 
     const tags = getTagList(automations);
-    const [searchText, setSearchText] = useState('');
-    const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>([]);
-    const filteredAutomations = filterAutomations(automations, searchText, selectedTagIdx, tags);
+    const {
+        searchText,
+        setSearchText,
+        selectedTagIdx,
+        setSelectedTagIdx,
+    } = useAutomationListBoxState();
+    const filteredAutomations = filterAutomations(automations, searchText.toLowerCase(), selectedTagIdx, tags);
     const grouping = makeGrouping(
         filteredAutomations.map(([a, _]) => a),
         selectedTagIdx.map(i => tags[i]),

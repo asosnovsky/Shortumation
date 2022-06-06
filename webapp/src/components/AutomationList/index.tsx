@@ -13,6 +13,7 @@ import useWindowSize from "utils/useWindowSize";
 import { makeTagDB } from "./TagDB";
 import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useCookies } from 'react-cookie';
 
 
 interface AutomationListParams {
@@ -24,6 +25,27 @@ interface AutomationListParams {
   children?: ReactNode;
 }
 
+export const useAutomationListState = () => {
+  const [cookies, setCookies, _] = useCookies(['alCurrent']);
+  let initialCurrent = 0;
+  try {
+    initialCurrent = Number(cookies.alCurrent ?? '0');
+  } catch (_) { }
+
+  const [hideList, setHideList] = useState(false);
+  const [current, setCurrent] = useState(initialCurrent);
+
+  return {
+    hideList,
+    setHideList,
+    current,
+    setCurrent(i: number) {
+      setCurrent(i)
+      setCookies('alCurrent', String(i))
+    }
+  }
+}
+
 export const AutomationList: FC<AutomationListParams> = ({
   automations,
   onUpdate,
@@ -33,8 +55,7 @@ export const AutomationList: FC<AutomationListParams> = ({
   children,
 }) => {
   // state
-  const [hideList, setHideList] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const { hideList, setHideList, current, setCurrent } = useAutomationListState();
   const { isMobile } = useWindowSize();
   // alias
   const currentAuto = automations.length > 0 ? automations[current] : null;
