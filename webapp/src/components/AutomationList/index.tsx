@@ -30,6 +30,7 @@ export const useAutomationListState = () => {
   let initialCurrent = 0;
   try {
     initialCurrent = Number(cookies.alCurrent ?? '0');
+    // eslint-disable-next-line
   } catch (_) { }
 
   const [hideList, setHideList] = useState(false);

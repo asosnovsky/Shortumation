@@ -3,7 +3,6 @@ import { AutomationNode, AutomationNodeMapping, AutomationNodeSubtype, Automatio
 import { AutomationTrigger, TriggerType } from 'types/automations/triggers';
 import { MiniFailure } from "types/validators/helper";
 import { getFailures } from '../types/validators/helper';
-import { Struct } from "superstruct";
 import { ActionType } from "types/automations/actions";
 import { ConditionType } from "types/automations/conditions";
 

@@ -4,7 +4,6 @@ import { Option } from 'haService';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { prettyName } from "utils/formatting";
 import { Badge } from "@mui/material";
 import { SearchItem } from "./extras";
 

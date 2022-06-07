@@ -1,5 +1,4 @@
 import { InputService } from "components/Inputs/InputService";
-import InputText from "components/Inputs/InputText";
 import InputYaml from 'components/Inputs/InputYaml';
 import { ServiceAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from './OptionManager';

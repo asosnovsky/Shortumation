@@ -26,6 +26,7 @@ const useAutomationListBoxState = () => {
             initialSelected = [initialSelected]
         }
         initialSelected = initialSelected.map(Number)
+        // eslint-disable-next-line
     } catch (_) { }
     const [searchText, setSearchText] = useState(cookies.albSearchText ?? "");
     const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>(initialSelected);
