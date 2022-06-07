@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { ServiceOption, useHAServices } from 'haService';
+import { useHAServices } from 'haService';
 import { InputAutoComplete, InputAutoCompletePropsBase } from './InputAutoComplete';
 import { prettyName } from 'utils/formatting';
 
