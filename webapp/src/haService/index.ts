@@ -74,10 +74,48 @@ export const useHAEntities = () => {
     }
 }
 
+export type ServiceOption = Option<{ domain: string, action: string, description: string }>;
 export const useHAServices = () => {
     const services = useHassCollection(servicesColl);
+    const methods = {
+        getOptions(): ServiceOption[] {
+            if (!services.ready) {
+                return []
+            }
+            return Object.keys(services.collection.state).reduce<ServiceOption[]>((all, domain) => {
+                const opts = Object.keys(services.collection.state[domain]).map<ServiceOption>(
+                    action => ({
+                        id: `${domain}.${action}`,
+                        label: services.collection.state[domain][action].name ?? `${domain}.${action}`,
+                        description: services.collection.state[domain][action].description ?? "",
+                        domain,
+                        action,
+                    })
+                )
+                return all.concat(opts);
+            }, [])
+        },
+        getLabel: (opt: ServiceOption): string => {
+            if (typeof opt === 'string') {
+                if (services.ready) {
+                    try {
+                        const [domain, action] = opt.split('.');
+                        return services.collection.state[domain][action].name ?? opt;
+                    } catch (_) { }
+                }
+                return opt
+            }
+            return opt.label ?? opt.id
+        },
+        getID: (opt: DeviceRegistryOption): string => {
+            if (typeof opt === 'string') {
+                return opt
+            }
+            return opt.id
+        }
+    }
 
-    return services
+    return { ...services, ...methods }
 }
 
 export type DeviceRegistryOption = Option<{ manufacturer: string }>;
@@ -126,6 +164,7 @@ export const useHAEntityRegistry = () => {
 export const useHA = () => {
     const entities = useHAEntities();
     const devices = useHADeviceRegistry();
+    const services = useHAServices();
 
     const namer: Namer = {
         getDeviceName(device_id) {
@@ -137,11 +176,15 @@ export const useHA = () => {
             }
             return entities.getLabel(entity_id)
         },
+        getServiceName(service) {
+            return services.getLabel(service)
+        },
     }
 
     return {
         entities,
         devices,
+        services,
         namer,
     }
 }

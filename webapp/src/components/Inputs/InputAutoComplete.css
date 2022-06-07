@@ -1,26 +1,26 @@
-.input-entities .BaseBadge-root {
+.input-autocomplete .BaseBadge-root {
     max-width: 100%;
 }
 
-.input-entities--chip>span {
+.input-autocomplete--chip>span {
     display: flex;
     flex-direction: row;
     gap: 0.15em;
 }
 
-.input-entities--chip>span>small::before {
+.input-autocomplete--chip>span>small::before {
     content: "/ ";
 }
 
-.input-entities--chip>span>small {
+.input-autocomplete--chip>span>small {
     size: 0.15em;
 }
 
-.input-entities--errors {
+.input-autocomplete--errors {
     margin-top: 0.75em;
 }
 
-.input-entities--errors ul {
+.input-autocomplete--errors ul {
     padding: 0 0 0 1em;
     margin: 0;
     max-height: 2.5em;
@@ -28,7 +28,7 @@
     overflow-x: hidden;
 }
 
-.input-entities--tags {
+.input-autocomplete--tags {
     max-height: 5em;
     max-width: 100%;
     overflow: auto;

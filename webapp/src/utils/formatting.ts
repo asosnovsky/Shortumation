@@ -5,6 +5,7 @@ import { AutomationTime } from "types/automations/common";
 export interface Namer {
     getEntityName(entity_id: string | string[], maxEntities?: number): string;
     getDeviceName(device_id: string): string;
+    getServiceName(service: string): string;
 }
 
 export const convertTimeToString = (t: AutomationTime) => {
@@ -101,7 +102,7 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
         }
     }
     if ('service' in node) {
-        return node.service
+        return namer.getServiceName(node.service)
     }
     if ('repeat' in node) {
         return 'Repeat ' + node.repeat.count

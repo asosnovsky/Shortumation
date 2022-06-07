@@ -84,3 +84,14 @@ export const InAModal: ComponentStory<typeof NodeEditor> = props => {
     </Modal>
   </Page>
 };
+
+
+export const ServiceExample = Action.bind({})
+ServiceExample.args = {
+  ...ServiceExample.args,
+  node: {
+    "target": {},
+    "data": {},
+    "service": "",
+  },
+}

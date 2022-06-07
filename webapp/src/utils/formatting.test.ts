@@ -5,6 +5,9 @@ const dummyNamer: Namer = {
     getDeviceName(device_id) {
         return device_id
     },
+    getServiceName(service) {
+        return service
+    },
     getEntityName(entity_id, maxEntities = 1) {
         if (Array.isArray(entity_id)) {
             return entity_id.slice(0, maxEntities).join(' and ')

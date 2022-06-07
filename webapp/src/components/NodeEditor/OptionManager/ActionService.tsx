@@ -1,3 +1,4 @@
+import { InputService } from "components/Inputs/InputService";
 import InputText from "components/Inputs/InputText";
 import InputYaml from 'components/Inputs/InputYaml';
 import { ServiceAction } from "types/automations/actions";
@@ -19,11 +20,9 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
     const { service, target, data } = state;
     const update = updateActionData(state, setState);
     return <>
-      <InputText
-        textBoxFor="service"
-        label="Service"
+      <InputService
         value={service}
-        onChange={service => update({ service })}
+        onChange={(service: string | null) => update({ service: service ?? "" })}
       />
       <InputYaml
         label="Target"
