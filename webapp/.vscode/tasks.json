@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "tsc",
+            "problemMatcher": [],
+            "label": "npm: tsc",
+            "detail": "tsc -w",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "group": "test"
+        },
+        {
+            "type": "npm",
+            "script": "storybook",
+            "problemMatcher": [],
+            "label": "npm: storybook",
+            "detail": "start-storybook -p 6006 -s public",
+            "group": "build"
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "problemMatcher": [],
+            "label": "npm: build",
+            "detail": "react-scripts build",
+            "group": "build"
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "problemMatcher": [],
+            "label": "npm: start",
+            "detail": "react-scripts start"
+        },
+    ]
+}

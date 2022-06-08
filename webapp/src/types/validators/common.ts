@@ -17,10 +17,24 @@ export const AutomationTimeString = st.refine(st.string(), 'TimeString', (v, c) 
     for (let i = 0; i < bits.length; i++) {
         const b = bits[i];
         const num = Number(b);
-        if (!Number.isInteger(num) || (num < 0) || (num > 23)) {
+        if (Number.isInteger(num)) {
+            let max = 23;
+            if (i > 0) {
+                max = 59;
+            }
+            if ((num < 0) || (num > max)) {
+                return {
+                    "branch": c.branch,
+                    "message": `Time string should contain only positive numbers between 0-${max} as specified in https://www.home-assistant.io/docs/automation/trigger/#time-string`,
+                    "path": c.path.concat(
+                        bits.slice(0, i)
+                    ).concat([`<<${b}>>`])
+                }
+            }
+        } else {
             return {
                 "branch": c.branch,
-                "message": "Time string should contain only positive numbers between 0-23 as specified in https://www.home-assistant.io/docs/automation/trigger/#time-string",
+                "message": `Time string should contain only positive numbers as specified in https://www.home-assistant.io/docs/automation/trigger/#time-string`,
                 "path": c.path.concat(
                     bits.slice(0, i)
                 ).concat([`<<${b}>>`])
