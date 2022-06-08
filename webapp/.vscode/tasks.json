@@ -9,7 +9,7 @@
             "detail": "tsc -w",
             "presentation": {
                 "reveal": "always",
-                "panel": "new"
+                "panel": "shared"
             },
             "runOptions": {
                 "runOn": "folderOpen"
@@ -18,11 +18,26 @@
         },
         {
             "type": "npm",
+            "script": "test",
+            "problemMatcher": [],
+            "label": "npm: test",
+            "detail": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "group": "test",
+        },
+        {
+            "type": "npm",
             "script": "storybook",
             "problemMatcher": [],
             "label": "npm: storybook",
             "detail": "start-storybook -p 6006 -s public",
-            "group": "build"
+            "promptOnClose": true
         },
         {
             "type": "npm",
@@ -37,7 +52,8 @@
             "script": "start",
             "problemMatcher": [],
             "label": "npm: start",
-            "detail": "react-scripts start"
+            "detail": "react-scripts start",
+            "promptOnClose": true
         },
     ]
 }
