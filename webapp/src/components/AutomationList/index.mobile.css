@@ -68,3 +68,11 @@
     background-color: var(--green-opaque);
     z-index: 30;
 }
+
+
+
+.automation-list--root.mobile .automation-editor--flow-wrapper.unchanged>.automation-editor--flow-wrapper--toolbar {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+}

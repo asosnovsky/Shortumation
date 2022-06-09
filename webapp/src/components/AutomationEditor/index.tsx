@@ -1,6 +1,7 @@
 import "./index.css";
+import Icon from '@mui/material/Icon';
 import { ArrowIcon, CheckMarkIcon } from "components/Icons";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AutomationData } from "types/automations";
 import { AutoInfoBox } from "./AutoInfoBox";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
@@ -37,8 +38,15 @@ export const AutomationEditor: FC<Props> = ({
     save,
     saveAndUpdate,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
-
   const [closeInfo, setCloseInfo] = useState(false);
+  const [flipped, setFlipped] = useState(dims.flipped);
+
+  // effect
+  useEffect(() => {
+    if (dims.flipped !== flipped) {
+      setFlipped(dims.flipped)
+    }
+  }, [dims.flipped])
 
   // render
   if (state.status === 'loading') {
@@ -75,6 +83,13 @@ export const AutomationEditor: FC<Props> = ({
 
     <div className={["automation-editor--flow-wrapper", state.status].join(" ")}>
       <div className="automation-editor--flow-wrapper--toolbar">
+        {!dims.flipped && <Button
+          className={"automation-editor--flow-wrapper--toolbar--flip-btn"}
+          onClick={() => setFlipped(!flipped)}
+        >
+          <Icon>{flipped ? 'flip_to_front' : 'flip_to_back'}</Icon>
+          Flip
+        </Button>}
         <Button
           className={"automation-editor--flow-wrapper--toolbar--save-btn"}
           onClick={save}
@@ -91,7 +106,10 @@ export const AutomationEditor: FC<Props> = ({
         onSequenceUpdate={updateSequence}
         onTriggerUpdate={updateTrigger}
         onConditionUpdate={updateCondition}
-        dims={dims}
+        dims={{
+          ...dims,
+          flipped,
+        }}
       />
     </div>
   </div>

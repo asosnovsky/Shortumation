@@ -28,13 +28,9 @@
 .automation-editor--flow-wrapper--toolbar {
     display: flex;
     flex-direction: row;
+    gap: 0.25em;
     justify-content: flex-end;
-}
-
-.automation-editor--flow-wrapper.unchanged>.automation-editor--flow-wrapper--toolbar {
-    height: 0;
-    opacity: 0;
-    overflow: hidden;
+    margin-top: 0.25em;
 }
 
 .automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar * {

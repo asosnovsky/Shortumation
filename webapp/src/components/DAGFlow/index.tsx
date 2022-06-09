@@ -140,6 +140,16 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         namer,
         makeSequenceUpdater(sequence, onSequenceUpdate, setModalState),
     );
+    // this fixes some strange edge drawing issue
+    flowData.edges = flowData.edges.map(e => ({
+        ...e,
+        "source": `${e.source}-${dims.flipped}`,
+        "target": `${e.target}-${dims.flipped}`,
+    }))
+    flowData.nodes = flowData.nodes.map(n => ({
+        ...n,
+        id: `${n.id}-${dims.flipped}`
+    }))
     // render
     return <>
         <Modal open={!!modalState}>
