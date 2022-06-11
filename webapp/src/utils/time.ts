@@ -1,4 +1,4 @@
-import { AutomationTimeObject, AutomationTimeString } from "types/automations/common";
+import { AutomationTime, AutomationTimeObject, AutomationTimeString } from "types/automations/common";
 
 const cleanTime = (t: number) => Math.max(0, Math.floor(t))
 
@@ -28,4 +28,21 @@ export const convertObjectToAutomationTimeString = (t: AutomationTimeObject): Au
         seconds = 0
     } = t
     return [hours, minutes, seconds].map(x => String(x).padStart(2, '0')).join(':')
+}
+
+export const convertAutomationTimeToTimeString = (t: AutomationTime | undefined): AutomationTimeString => {
+    let obj: AutomationTimeObject;
+    if (typeof t === 'string') {
+        obj = convertStringToAutomationTimeObject(t)
+    } else if (!t) {
+        return "00:00:00"
+    } else {
+        obj = t
+    }
+    return convertObjectToAutomationTimeString(obj);
+}
+
+
+export const convertAutomationTimeToTimeObject = (t: AutomationTime | undefined): AutomationTimeObject => {
+    return convertStringToAutomationTimeObject(convertAutomationTimeToTimeString(t))
 }

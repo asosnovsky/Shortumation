@@ -2,7 +2,7 @@ import { OptionManager } from './OptionManager';
 import { AutomationTriggerState } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
 import { InputEntity } from 'components/Inputs/InputEntities';
-import InputTime from 'components/Inputs/InputTime';
+import { InputTime } from 'components/Inputs/InputTime';
 
 
 export const TriggerState: OptionManager<AutomationTriggerState> = {

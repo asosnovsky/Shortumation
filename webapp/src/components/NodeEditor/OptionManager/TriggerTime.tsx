@@ -1,6 +1,6 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerTime } from 'types/automations/triggers';
-import InputTime from 'components/Inputs/InputTime';
+import { InputTime } from 'components/Inputs/InputTime';
 import { convertObjectToAutomationTimeString } from 'utils/time';
 
 

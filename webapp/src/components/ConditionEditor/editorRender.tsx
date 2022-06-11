@@ -5,7 +5,7 @@ import InputText from "components/Inputs/InputText";
 import { InputEntity } from "components/Inputs/InputEntities";
 import { ConditionNode } from "./ConditionNode";
 import { genUpdateMethods } from "./nestedUpdater";
-import InputTime from "components/Inputs/InputTime";
+import { InputTime } from "components/Inputs/InputTime";
 import InputYaml from "components/Inputs/InputYaml";
 
 

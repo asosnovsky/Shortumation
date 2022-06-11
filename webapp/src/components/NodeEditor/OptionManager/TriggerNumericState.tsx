@@ -3,8 +3,7 @@ import { AutomationTriggerNumericState } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
 import { InputEntity } from 'components/Inputs/InputEntities';
 import InputNumber from 'components/Inputs/InputNumber';
-import InputTime from 'components/Inputs/InputTime';
-import InputYaml from 'components/Inputs/InputYaml';
+import { InputTime } from 'components/Inputs/InputTime'; import InputYaml from 'components/Inputs/InputYaml';
 
 
 export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> = {

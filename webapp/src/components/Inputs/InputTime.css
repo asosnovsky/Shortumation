@@ -1,0 +1,9 @@
+.input-time>.input-time--inner {
+    display: flex;
+    gap: 0;
+    flex-direction: row;
+}
+
+.input-time>.input-time--inner>.MuiFormControl-root {
+    width: 4em;
+}

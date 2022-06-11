@@ -1,7 +1,7 @@
 import { OptionManager } from './OptionManager';
 import { AutomationTriggerTemplate } from 'types/automations/triggers';
 import InputText from 'components/Inputs/InputText';
-import InputTime from 'components/Inputs/InputTime';
+import { InputTime } from 'components/Inputs/InputTime';
 
 
 export const TriggerTemplate: OptionManager<AutomationTriggerTemplate> = {
