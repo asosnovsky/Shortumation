@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState, Component } from 'react';
 import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
@@ -108,7 +108,9 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
       }
       return <>
         {aliasEditor}
-        {optionManager.renderOptionList(currentNode, setState, entities)}
+        {('renderOptionList' in optionManager) ?
+          optionManager.renderOptionList(currentNode, setState, entities) :
+          <optionManager.Component state={currentNode} setState={setState} entities={entities} />}
       </>;
     },
     isReady() {

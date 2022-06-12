@@ -1,5 +1,6 @@
 import * as st from 'superstruct'
 import { AutomationTime } from './common';
+import { AutomationTrigger } from './triggers';
 
 
 export const AutomationActionNodeBase = st.type({
@@ -29,9 +30,17 @@ export const RepeatAction = st.intersection([
 export const WaitAction = st.intersection([
     AutomationActionNodeBase,
     st.type({
-        wait_template: st.string(),
         timeout: st.optional(AutomationTime),
         continue_on_timeout: st.optional(st.boolean()),
+        wait_template: st.optional(st.string()),
+        wait_for_trigger: st.optional(st.array(AutomationTrigger)),
+    }),
+]);
+
+export const DelayAction = st.intersection([
+    AutomationActionNodeBase,
+    st.type({
+        delay: AutomationTime
     })
 ]);
 

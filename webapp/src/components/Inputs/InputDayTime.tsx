@@ -24,7 +24,6 @@ export interface Props {
   label: string;
   value?: AutomationTime;
   onChange: (v?: AutomationTimeObject) => void;
-  className?: string;
 }
 export const InputTime: FC<Props> = (props) => {
 
@@ -123,8 +122,8 @@ export const InputTime: FC<Props> = (props) => {
   }, [disabled, displayValue])
 
 
-  return <div className={["input-time", props.className ?? ""].join(" ")}>
-    {/* <InputLabel >{props.label}</InputLabel> */}
+  return <div className="input-time">
+    <InputLabel >{props.label}</InputLabel>
     <div className="input-time--inner">
       {fields.map(name =>
         <TextField

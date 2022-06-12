@@ -1,5 +1,4 @@
 import { AutomationSequenceNode } from ".";
-import { AutomationTime } from "./common";
 import { AutomationCondition } from "./conditions";
 import * as v from "types/validators/actions";
 import * as st from 'superstruct';
@@ -15,6 +14,7 @@ export type RepeatAction = AutomationActionNodeBase<{
     }
 }>
 export type WaitAction = st.Infer<typeof v.WaitAction>;
+export type DelayAction = st.Infer<typeof v.DelayAction>;
 export type FireEventAction = st.Infer<typeof v.FireEventAction>;
 export type DeviceAction = st.Infer<typeof v.DeviceAction>;
 export type ChooseAction = AutomationActionNodeBase<{
@@ -36,6 +36,7 @@ export type ActionType =
     | 'service'
     | 'repeat'
     | 'wait'
+    | 'delay'
     | 'event'
     | 'device'
     | 'choose'

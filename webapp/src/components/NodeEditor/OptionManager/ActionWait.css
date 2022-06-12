@@ -1,0 +1,33 @@
+.node-editor--action-wait {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.node-editor--action-wait .for {
+    flex: 2;
+}
+
+.node-editor--action-wait .for .input-time--inner {
+    justify-content: center;
+}
+
+.node-editor--action-wait .template {
+    margin: 0;
+    flex: 2;
+}
+
+.node-editor--action-wait .triggers {
+    width: 100%;
+}
+
+.node-editor--action-wait .wait-type {
+    flex: 1;
+}
+
+.node-editor--action-wait .wait-options {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}

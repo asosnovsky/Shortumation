@@ -95,3 +95,12 @@ ServiceExample.args = {
     "service": "",
   },
 }
+
+
+export const DelayExample = Action.bind({})
+DelayExample.args = {
+  ...DelayExample.args,
+  node: {
+    "wait_template": "",
+  },
+}

@@ -4,6 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { prettyName } from "utils/formatting";
 
 export interface Props<T extends string> {
   current: T;
@@ -12,25 +13,26 @@ export interface Props<T extends string> {
   label: string;
   id?: string;
   className?: string;
+  prettyOptionLabels?: boolean;
 }
-export const InputList: FC<Props<any>> = ({
+export function InputList<T extends string>({
   current,
   options,
   onChange,
   label,
   id,
   className,
-}) => {
+  prettyOptionLabels,
+}: Props<T>) {
   const invalidCurrent = current && !options.includes(current);
-  return <FormControl variant="filled" sx={{ marginRight: "0.25em", minWidth: `${label.length * 0.75}em` }}>
-    <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
+  return <FormControl className={className} variant="filled" sx={{ marginRight: "0.25em", minWidth: `${label.length * 0.75}em` }}>
+    <InputLabel>{label}</InputLabel>
     <Select
-      className={className}
       autoWidth
       id={id}
       value={current}
       onChange={(e) => {
-        onChange(e.target.value)
+        onChange(e.target.value as T)
       }}
       label={label}
       variant="filled"
@@ -43,7 +45,7 @@ export const InputList: FC<Props<any>> = ({
           key={i}
           value={t}
         >
-          {t}
+          {prettyOptionLabels ? prettyName(t) : t}
         </MenuItem>
       ))}
     </Select>

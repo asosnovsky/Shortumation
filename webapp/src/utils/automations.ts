@@ -31,6 +31,7 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): Auto
                 "service",
                 "repeat",
                 "wait",
+                "delay",
                 "device",
                 "choose",
             ] as any
@@ -111,6 +112,8 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
         return 'device' as any
     } else if ('choose' in node) {
         return 'choose' as any
+    } else if ('delay' in node) {
+        return 'delay' as any
     } else {
         throw new Error("Invalid node type!")
     }
@@ -138,6 +141,7 @@ const ActionValidators: Record<ActionType, any> = {
     "repeat": v.actions.RepeatAction,
     "service": v.actions.ServiceAction,
     "wait": v.actions.WaitAction,
+    "delay": v.actions.DelayAction,
 }
 
 const ConditionValidators: Record<ConditionType, any> = {

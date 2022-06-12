@@ -11,12 +11,14 @@ export interface Props<T extends {}> {
   value: T;
   onChange: (v: T) => void;
   error?: JSX.Element | string,
+  className?: string;
 }
-export default function InputYaml<T>({
+export default function InputYaml<T extends {}>({
   label,
   error: incmError,
   value = {} as any,
   onChange,
+  className,
 }: Props<T>) {
   const [{ text, error }, setState] = useState<{
     text: string,
@@ -50,7 +52,7 @@ export default function InputYaml<T>({
       }
     }
   }, [text], 1000)
-  return <InputWrapper label={label} error={error}>
+  return <InputWrapper className={className} label={label} error={error}>
     <CodeMirror
       theme={"dark"}
       value={text}
