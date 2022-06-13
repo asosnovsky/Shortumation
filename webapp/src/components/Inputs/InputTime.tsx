@@ -5,13 +5,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton"
 import { AutomationTime, AutomationTimeObject } from "types/automations/common";
-import { convertAutomationTimeToTimeObject, convertObjectToAutomationTimeString, milisecondsToObject } from "utils/time";
-import { convertStringToAutomationTimeObject, convertAutomationTimeToTimeString } from 'utils/time';
+import { convertAutomationTimeToTimeObject, convertObjectToAutomationTimeString, convertAutomationTimeToTimeString } from 'utils/time';
 import { prettyName } from "utils/formatting";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from '@mui/material/InputLabel';
-import Input from "@mui/material/Input";
-import FormHelperText from '@mui/material/FormHelperText';
 
 // constants
 const fields: Array<keyof AutomationTimeObject> = [
@@ -120,6 +115,7 @@ export const InputTime: FC<Props> = (props) => {
         props.onChange(displayValue)
       }
     }
+    // eslint-disable-next-line
   }, [disabled, displayValue])
 
 

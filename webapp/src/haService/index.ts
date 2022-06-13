@@ -4,6 +4,8 @@ import { deviceRegistryColl } from "./DeviceRegistry";
 import { entityRegistryColl } from "./EntityRegistry";
 import { DeviceRegistryItem } from "./types";
 import { useHassCollection } from "./useHassCollection"
+import { useHAConnection } from './connection';
+import { useSnackbar } from "notistack";
 
 export type Option<T = {}> = string | ({
     id: string,
@@ -165,6 +167,48 @@ export const useHA = () => {
     const entities = useHAEntities();
     const devices = useHADeviceRegistry();
     const services = useHAServices();
+    const conn = useHAConnection();
+    const { enqueueSnackbar } = useSnackbar();
+
+    const callService = async (
+        domain: string,
+        service: string,
+        data: any = {},
+        target: any = {},
+    ) => {
+        if (conn.status === 'loaded') {
+            try {
+                const result = await conn.connection.sendMessagePromise({
+                    "type": "call_service",
+                    domain,
+                    service,
+                    target,
+                    service_data: data
+                })
+                enqueueSnackbar(`Successfully called ${domain}.${service}`, {
+                    "variant": "success",
+                })
+                return result
+            } catch (err: any) {
+                let msg = JSON.stringify(err)
+                if ('message' in err) {
+                    msg = err.message
+                }
+                enqueueSnackbar(`Failed to call ${domain}.${service} because '${msg}'`, {
+                    "variant": "error",
+                })
+                return
+            }
+        } if (conn.status === 'error') {
+            enqueueSnackbar(`Failed to call service because connection is '${conn.status}' -- ${conn.error}`, {
+                "variant": "error"
+            })
+        } else {
+            enqueueSnackbar(`Failed to call service because connection is '${conn.status}'`, {
+                "variant": "error"
+            })
+        }
+    }
 
     const namer: Namer = {
         getDeviceName(device_id) {
@@ -186,5 +230,7 @@ export const useHA = () => {
         devices,
         services,
         namer,
+        callService,
+        reloadAutomations: () => callService("automation", "reload")
     }
 }

@@ -18,7 +18,12 @@ export type Props = {
 }
 
 const useAutomationListBoxState = () => {
-    const [cookies, setCookies, _] = useCookies(['albSearchText', 'albSelected']);
+    const [
+        cookies,
+        setCookies,
+        // eslint-disable-next-line
+        _
+    ] = useCookies(['albSearchText', 'albSelected']);
     let initialSelected = [];
     try {
         initialSelected = JSON.parse(cookies.albSelected)

@@ -5,7 +5,7 @@ import { AutomationAPI } from './automations';
 
 
 export const useDefaultApiState = () => useState<ApiState>({
-  automations: {ready: false},
+  automations: { ready: false },
 });
 
 export const makeReloadAutomations = (
@@ -21,8 +21,8 @@ export const makeReloadAutomations = (
     const resp = await automationAPI.list(params);
     setState({
       ...state, automations: {
-          ready: true,
-          ...resp,
+        ready: true,
+        ...resp,
       }
     });
   }

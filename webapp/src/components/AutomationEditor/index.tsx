@@ -46,6 +46,7 @@ export const AutomationEditor: FC<Props> = ({
     if (dims.flipped !== flipped) {
       setFlipped(dims.flipped)
     }
+    // eslint-disable-next-line
   }, [dims.flipped])
 
   // render

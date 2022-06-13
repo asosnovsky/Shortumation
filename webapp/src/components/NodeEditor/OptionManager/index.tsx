@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, Component } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AutomationNode, AutomationNodeTypes } from 'types/automations';
 import { AutomationNodeSubtype } from 'types/automations';
 import { getOptionManager } from './getOptionManager';
@@ -8,8 +8,7 @@ import InputText from 'components/Inputs/InputText';
 import { getDescriptionFromAutomationNode } from 'utils/formatting';
 import { useHA } from 'haService';
 import { Generic } from './Generic';
-import { getNodeTypeAndValidate } from '../../../utils/automations';
-import InputBoolean from 'components/Inputs/InputBoolean';
+import { getNodeTypeAndValidate } from 'utils/automations';
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
 

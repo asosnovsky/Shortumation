@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Page } from "components/Page";
-import { useHAServices } from "haService";
+import { useHA } from "haService";
 import InputYaml from "components/Inputs/InputYaml";
 import { InputList } from "components/Inputs/InputList";
+import { Button } from "components/Inputs/Button";
 
 const Test: FC = () => {
-    const services = useHAServices();
+    const { services, callService } = useHA();
 
     const data = services.collection?.state ?? {};
     const options = Object.keys(data).sort();
@@ -62,19 +63,26 @@ const Test: FC = () => {
         )
     )
 
-    const [current, setCurrent] = useState(options[0] ?? "");
+    const [domain, setDomain] = useState(options[0] ?? "");
 
-    const suboptions = Object.keys(data[current] ?? "").sort();
+    const domains = Object.keys(data[domain] ?? "").sort();
 
-    const [secCurrent, setSecCurrent] = useState(suboptions[0] ?? "");
+    const [service, setService] = useState(domains[0] ?? "");
 
     useEffect(() => {
-        setSecCurrent(suboptions[0] ?? "")
-    }, [current, setSecCurrent])
+        setService(domains[0] ?? "")
+    }, [domain, setService])
 
 
     return <div style={{ overflow: 'auto', maxHeight: '100vh' }}>
-        <ul>
+        <InputList label="Domains" current={domain} onChange={setDomain} options={options} />
+        <InputList label="Services" current={service} onChange={setService} options={domains} />
+        <Button onClick={() => callService(domain, service)}>Call</Button>
+        <InputYaml label="Service Data" value={(data[domain] ?? {})[service] ?? {}} onChange={() => { }} />
+        <ul style={{
+            maxHeight: '20vh',
+            overflow: 'auto',
+        }}>
             {Object.keys(summary).map(k => <li key={k}>
                 <b>{k}</b> <ul>
                     {Object.keys(summary[k]).map(t => <li key={k + t}>
@@ -89,7 +97,10 @@ const Test: FC = () => {
             </li>)}
         </ul>
         <h1>Fields</h1>
-        <ul>
+        <ul style={{
+            maxHeight: '20vh',
+            overflow: 'auto',
+        }}>
             {Object.keys(fields).map(k => <li key={k}>
                 <b>{k}</b> <ul>
                     {Object.keys(fields[k]).map(t => <li key={k + t}>
@@ -104,7 +115,10 @@ const Test: FC = () => {
             </li>)}
         </ul>
         <h1>Targets</h1>
-        <ul>
+        <ul style={{
+            maxHeight: '20vh',
+            overflow: 'auto',
+        }}>
             {Object.keys(target).map(k => <li key={k}>
                 <b>{k}</b> <ul>
                     {Object.keys(target[k]).map(t => <li key={k + t}>
@@ -118,9 +132,6 @@ const Test: FC = () => {
                 </ul>
             </li>)}
         </ul>
-        <InputList label="Services" current={current} onChange={setCurrent} options={options} />
-        <InputList label="Domain" current={secCurrent} onChange={setSecCurrent} options={suboptions} />
-        <InputYaml label="Service Data" value={(data[current] ?? {})[secCurrent] ?? {}} onChange={() => { }} />
     </div>
 }
 

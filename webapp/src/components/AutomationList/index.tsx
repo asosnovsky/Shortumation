@@ -14,6 +14,7 @@ import { makeTagDB } from "./TagDB";
 import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useCookies } from 'react-cookie';
+import { useHA } from "haService";
 
 
 interface AutomationListParams {
@@ -26,11 +27,15 @@ interface AutomationListParams {
 }
 
 export const useAutomationListState = () => {
-  const [cookies, setCookies, _] = useCookies(['alCurrent']);
+  const [
+    cookies,
+    setCookies,
+    // eslint-disable-next-line
+    _
+  ] = useCookies(['alCurrent']);
   let initialCurrent = 0;
   try {
     initialCurrent = Number(cookies.alCurrent ?? '0');
-    // eslint-disable-next-line
   } catch (_) { }
 
   const [hideList, setHideList] = useState(false);
@@ -109,11 +114,21 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
     state: {
       automations,
     },
-    removeAutomation,
-    updateAutomation,
+    ...methods
   },
   dims
 }) => {
+  const { reloadAutomations } = useHA();
+  const removeAutomation = async (args: any) => {
+    const resp = await methods.removeAutomation(args)
+    await reloadAutomations();
+    return resp
+  }
+  const updateAutomation = async (args: any) => {
+    const resp = await methods.updateAutomation(args)
+    await reloadAutomations();
+    return resp
+  }
   if (!automations.ready) {
     return <div className="automation-list--root loading">
       <LinearProgress />
