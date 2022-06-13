@@ -28,6 +28,7 @@ export type AutomationAction =
     | ServiceAction
     | RepeatAction
     | WaitAction
+    | DelayAction
     | FireEventAction
     | DeviceAction
     | ChooseAction
@@ -36,7 +37,6 @@ export type ActionType =
     | 'service'
     | 'repeat'
     | 'wait'
-    | 'delay'
     | 'event'
     | 'device'
     | 'choose'

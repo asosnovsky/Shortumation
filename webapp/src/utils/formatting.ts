@@ -107,6 +107,9 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
     if ('repeat' in node) {
         return 'Repeat ' + node.repeat.count
     }
+    if ('delay' in node) {
+        return `Wait for ${convertTimeToString(node.delay)}`
+    }
     if ('wait_template' in node) {
         let out = 'Wait on ' + node.wait_template;
         if (node.timeout) {

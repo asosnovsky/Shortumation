@@ -5,6 +5,7 @@ import { MiniFailure } from "types/validators/helper";
 import { getFailures } from '../types/validators/helper';
 import { ActionType } from "types/automations/actions";
 import { ConditionType } from "types/automations/conditions";
+import * as st from 'superstruct';
 
 export const getNodeTypeAndValidate = (node: AutomationNode, allowedTypes: AutomationNodeTypes[]) => {
     const nodeType = getNodeType(node);
@@ -31,7 +32,6 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T): Auto
                 "service",
                 "repeat",
                 "wait",
-                "delay",
                 "device",
                 "choose",
             ] as any
@@ -113,7 +113,7 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
     } else if ('choose' in node) {
         return 'choose' as any
     } else if ('delay' in node) {
-        return 'delay' as any
+        return 'wait' as any
     } else {
         throw new Error("Invalid node type!")
     }
@@ -140,8 +140,10 @@ const ActionValidators: Record<ActionType, any> = {
     "event": v.actions.FireEventAction,
     "repeat": v.actions.RepeatAction,
     "service": v.actions.ServiceAction,
-    "wait": v.actions.WaitAction,
-    "delay": v.actions.DelayAction,
+    "wait": st.union([
+        v.actions.DelayAction,
+        v.actions.WaitAction
+    ]),
 }
 
 const ConditionValidators: Record<ConditionType, any> = {

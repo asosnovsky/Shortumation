@@ -7,13 +7,12 @@ import { InputTime } from "components/Inputs/InputTime";
 import { useState } from "react";
 import { DelayAction, WaitAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from './OptionManager';
-import { getNodeSubType } from 'utils/automations';
 import InputYaml from "components/Inputs/InputYaml";
 
 type ThisAction = WaitAction | DelayAction;
 type Option = 'delay' | 'template' | 'trigger'
 const getCurrentOption = (node: ThisAction): Option => {
-  if (getNodeSubType(node) === 'delay') {
+  if ('delay' in node) {
     return 'delay'
   } else {
     return 'template'

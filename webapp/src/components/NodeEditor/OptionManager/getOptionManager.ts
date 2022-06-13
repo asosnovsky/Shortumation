@@ -40,6 +40,8 @@ export const getOptionManager = <T extends AutomationNodeTypes>(
         return ActionCallServiceState;
       case "wait":
         return ActionWaitState;
+      case "delay":
+        return ActionWaitState;
     }
   }
   if (nodeType === 'condition') {
