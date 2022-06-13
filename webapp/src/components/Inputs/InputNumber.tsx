@@ -1,5 +1,8 @@
-import InputWrapper from "./InputWrapper";
-import { useInputNumberStyles } from "./styles";
+import Close from "@mui/icons-material/Close";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Edit from "@mui/icons-material/Edit";
 
 export interface Props {
   label: string;
@@ -17,27 +20,24 @@ export default function InputNumber({
   className = "",
   min, max, step,
 }: Props) {
-  const { classes } = useInputNumberStyles({});
-  return <InputWrapper className={className} label={label} labelSize={value !== undefined ? 'small' : 'normal'}>
-    <input
-      className={classes.input}
-      type="number"
-      value={value ?? ""}
-      onChange={e => {
-        e.preventDefault();
-        let v = Number(e.target.value);
-        if (max) {
-          v = Math.min(v, max)
-        }
-        if (min) {
-          v = Math.max(v, min)
-        }
-        onChange(v)
-      }}
-      step={step}
-      min={min}
-      max={max}
-    />
-    {value && <button className={classes.deleteIcon} onClick={() => onChange(undefined)}>X</button>}
-  </InputWrapper>
+  const disabled = (value === undefined) || (value === null);
+  return <TextField
+    variant="filled"
+    label={label}
+    value={value}
+    defaultValue={value}
+    onChange={e => onChange(Number(e.target.value ?? 0))}
+    disabled={disabled}
+    className={className}
+    InputProps={{
+      endAdornment: <InputAdornment position="end">
+        <IconButton onClick={() => onChange(disabled ? 0 : undefined)}>
+          {disabled ? <Edit /> : <Close />}
+        </IconButton>
+      </InputAdornment>,
+      inputProps: {
+        min, max, type: 'number'
+      }
+    }}
+  />
 }

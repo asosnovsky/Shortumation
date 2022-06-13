@@ -15,23 +15,32 @@ export type OptionManager<T> = {
   }>
 })
 
+export const cleanUpUndefined = (data: Record<string, any>): any => {
+  const clean: any = {};
+  Object.keys(data).forEach(k => {
+    if ((data[k] !== undefined) && (data[k] !== null)) {
+      clean[k] = data[k]
+    }
+  })
+  return clean;
+}
 
 export const updateConditionData = <T extends AutomationCondition>(
   setState: (s: T) => void
 ) => (
   state: T,
   data: Partial<T>,
-) => setState({
+) => setState(cleanUpUndefined({
   ...state,
   ...data,
-})
+}))
 
 export const updateActionData = <T extends AutomationAction>(
   state: T,
   setState: (s: T) => void
 ) => (
   data: Partial<T>,
-) => setState({
+) => setState(cleanUpUndefined({
   ...state,
   ...data,
-})
+}))

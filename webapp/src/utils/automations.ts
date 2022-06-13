@@ -104,7 +104,7 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
         return 'service' as any
     } else if ('repeat' in node) {
         return 'repeat' as any
-    } else if ('wait_template' in node) {
+    } else if (('wait_template' in node) || ('wait_for_trigger' in node)) {
         return 'wait' as any
     } else if ('event' in node) {
         return 'event' as any

@@ -30,6 +30,30 @@ export const ActionWaitState: OptionManager<ThisAction> = {
     const update = updateActionData(state, setState);
     const [current, _setCurrent] = useState(getCurrentOption(state));
     const setCurrent = (opt: Option) => {
+      const base: any = {
+        alias: state.alias,
+        variables: state.variables,
+      }
+      if (opt === 'delay') {
+        setState({
+          ...base,
+          delay: (state as any).delay ?? "",
+        })
+      } else {
+        base.timeout = (state as any).timeout
+        base.continue_on_timeout = (state as any).continue_on_timeout
+        if (opt === 'template') {
+          setState({
+            ...base,
+            wait_template: (state as any).wait_template ?? "",
+          })
+        } else {
+          setState({
+            ...base,
+            wait_for_trigger: (state as any).wait_for_trigger ?? "",
+          })
+        }
+      }
       _setCurrent(opt)
     }
 
@@ -72,8 +96,8 @@ export const ActionWaitState: OptionManager<ThisAction> = {
       {current !== 'delay' ? <div className="wait-options">
         <InputNumber
           label="Timeout"
-          value={(state as any).timeout ? Number((state as any).timeout) : 0}
-          onChange={(timeout = 0) => update({ timeout: String(timeout) })}
+          value={(state as any).timeout ? Number((state as any).timeout) : undefined}
+          onChange={timeout => update({ timeout: timeout === undefined ? undefined : String(timeout) })}
         />
         <InputBoolean
           label="Continue on Timeout"
