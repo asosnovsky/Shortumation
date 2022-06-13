@@ -1,5 +1,13 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.1.20] - UI Bugfixes
+
+- Using MUI elements for input time
+- Added delay action / wait_on_triggers action
+- Added enabled/disabled flag in node editor
+- Optional flip vertical during desktop mode
+- Fixed up modal clipping
+
 ## [0.1.19] - Vertical mobile mode
 
 - in mobile mode we draw the graphs vertically now
