@@ -7,14 +7,16 @@ export interface Props {
   value: boolean;
   onChange: (v: boolean) => void;
   disabled?: boolean;
+  className?: string;
 }
 export default function InputBoolean({
   label,
   value = false,
   onChange,
   disabled = false,
+  className,
 }: Props) {
-  return <FormGroup>
+  return <FormGroup className={className}>
     <FormControlLabel disabled={disabled} control={<Checkbox checked={value} onChange={() => onChange(!value)} />} label={label} />
   </FormGroup>
 }

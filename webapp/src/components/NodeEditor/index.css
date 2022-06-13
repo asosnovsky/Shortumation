@@ -8,6 +8,14 @@
     margin-top: 0.5em;
 }
 
+.node-editor--root.disabled {
+    background-color: var(--secondary);
+}
+
+.node-editor--root.disabled .enabled-flag {
+    color: var(--secondary-accent);
+}
+
 .node-editor--root.modded {
     border: 1px solid var(--change);
     border-radius: 5px;
@@ -67,4 +75,16 @@
 
 .node-editor--error>li {
     text-align: left;
+}
+
+.node-editor--body-flags {
+    padding-left: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.node-editor--body-flags .MuiCheckbox-root {
+    margin: 0;
+    padding: 0 0 0 0;
 }

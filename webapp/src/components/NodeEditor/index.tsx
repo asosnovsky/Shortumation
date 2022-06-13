@@ -43,7 +43,12 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   // events
   onFlags(isReady, isModified);
   // render
-  return <div className={["node-editor--root", isModified ? "modded" : "", (!isReady && isModified) ? 'not-ready' : ''].join(" ")}>
+  return <div className={[
+    "node-editor--root",
+    isModified ? "modded" : "",
+    (!isReady && isModified) ? 'not-ready' : '',
+    state.data.enabled === false ? 'disabled' : 'enabled'
+  ].join(" ")}>
     <div className="node-editor--body">
       <div className="node-editor--body-title">
         {allowedTypes.length > 1 ? <InputList
@@ -58,7 +63,10 @@ export const NodeEditor: FC<NodeEditorProps> = ({
           options={state.subTypes}
           onChange={state.setSubType}
         /> : <></>}
-        <InputBoolean label="Yaml" onChange={state.setYamlMode} value={state.yamlMode} disabled={state.isErrored} />
+        <div className="node-editor--body-flags">
+          <InputBoolean label="Yaml" onChange={state.setYamlMode} value={state.yamlMode} disabled={state.isErrored} />
+          <InputBoolean className="enabled-flag" label='Enabled' value={state.data.enabled ?? true} onChange={state.setEnabled} />
+        </div>
       </div>
       {state.renderOptionList()}
     </div>

@@ -9,6 +9,7 @@ import { getDescriptionFromAutomationNode } from 'utils/formatting';
 import { useHA } from 'haService';
 import { Generic } from './Generic';
 import { getNodeTypeAndValidate } from '../../../utils/automations';
+import InputBoolean from 'components/Inputs/InputBoolean';
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
 
@@ -70,8 +71,13 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
     get data() {
       return currentNode
     },
+    setEnabled(enabled: boolean) {
+      setState({
+        ...currentNode,
+        enabled,
+      })
+    },
     renderOptionList() {
-      console.log('rendering option list')
       let aliasEditor = <></>
       if (nodeType === 'trigger') {
         aliasEditor = <InputText
