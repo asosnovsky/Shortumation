@@ -6,11 +6,13 @@ import { DeviceRegistryItem } from "./types";
 import { useHassCollection } from "./useHassCollection"
 import { useHAConnection } from './connection';
 import { useSnackbar } from "notistack";
+import { TypedHassService } from "./fieldTypes";
 
-export type Option<T = {}> = string | ({
+export type BaseOption<T = {}> = {
     id: string,
     label: string,
-} & T)
+} & T
+export type Option<T = {}> = string | BaseOption<T>;
 export type EntityOption = Option<{ domain: string; }>
 export type HAEntitiesState = ReturnType<typeof useHAEntities>;
 export const useHAEntities = () => {
@@ -76,10 +78,33 @@ export const useHAEntities = () => {
     }
 }
 
-export type ServiceOption = Option<{ domain: string, action: string, description: string }>;
+export type ServiceOption = Option<{ 
+    domain: string, 
+    action: string, 
+    description: string,
+    data: TypedHassService,
+}>;
+export type HAServicesState = ReturnType<typeof useHAServices>;
 export const useHAServices = () => {
     const services = useHassCollection(servicesColl);
     const methods = {
+        getOption(name: string): TypedHassService | null {
+            if (!services.ready) {
+                return null;
+            }
+            try {
+                const [domain, action] = name.split('.');
+            return {
+                name: services.collection.state[domain][action].name ?? `${domain}.${action}`,
+                description: services.collection.state[domain][action].description ?? "",
+                target: services.collection.state[domain][action].target,
+                fields: services.collection.state[domain][action].fields,
+            }
+            }catch(err: any) {
+                console.warn(err)
+                return null
+            }
+        },
         getOptions(): ServiceOption[] {
             if (!services.ready) {
                 return []
@@ -92,6 +117,12 @@ export const useHAServices = () => {
                         description: services.collection.state[domain][action].description ?? "",
                         domain,
                         action,
+                        data: {
+                            name: services.collection.state[domain][action].name ?? `${domain}.${action}`,
+                            description: services.collection.state[domain][action].description ?? "",
+                            target: services.collection.state[domain][action].target,
+                            fields: services.collection.state[domain][action].fields,
+                    }
                     })
                 )
                 return all.concat(opts);
@@ -109,7 +140,7 @@ export const useHAServices = () => {
             }
             return opt.label ?? opt.id
         },
-        getID: (opt: DeviceRegistryOption): string => {
+        getID: (opt: ServiceOption): string => {
             if (typeof opt === 'string') {
                 return opt
             }

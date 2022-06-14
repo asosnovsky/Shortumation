@@ -1,4 +1,4 @@
-import { HAEntitiesState } from 'haService';
+import { HAEntitiesState, HAServicesState } from 'haService';
 import { FC } from 'react';
 import { AutomationAction } from 'types/automations/actions';
 import { AutomationCondition } from 'types/automations/conditions';
@@ -12,6 +12,7 @@ export type OptionManager<T> = {
     state: T,
     setState: (s: T) => void,
     entities: HAEntitiesState,
+    services: HAServicesState,
   }>
 })
 

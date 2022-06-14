@@ -1,0 +1,31 @@
+.service-editor {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-editor h4 {
+    margin: 0;
+    padding: 0;
+}
+
+.service-editor--name {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-editor--name span {
+    font-size: 0.75em;
+    text-overflow: clip;
+    margin-left: 0.25em;
+}
+
+.service-editor--add {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.service-editor--add--list {
+    flex: 1;
+}

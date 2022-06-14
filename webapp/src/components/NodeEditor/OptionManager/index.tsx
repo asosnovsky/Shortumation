@@ -1,44 +1,61 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { AutomationNode, AutomationNodeTypes } from 'types/automations';
-import { AutomationNodeSubtype } from 'types/automations';
-import { getOptionManager } from './getOptionManager';
-import { getNodeSubType, getSubTypeList, validateNode } from 'utils/automations';
-import InputYaml from 'components/Inputs/InputYaml';
-import InputText from 'components/Inputs/InputText';
-import { getDescriptionFromAutomationNode } from 'utils/formatting';
-import { useHA } from 'haService';
-import { Generic } from './Generic';
-import { getNodeTypeAndValidate } from 'utils/automations';
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { AutomationNode, AutomationNodeTypes } from "types/automations";
+import { AutomationNodeSubtype } from "types/automations";
+import { getOptionManager } from "./getOptionManager";
+import {
+  getNodeSubType,
+  getSubTypeList,
+  validateNode,
+} from "utils/automations";
+import InputYaml from "components/Inputs/InputYaml";
+import InputText from "components/Inputs/InputText";
+import { getDescriptionFromAutomationNode } from "utils/formatting";
+import { useHA } from "haService";
+import { Generic } from "./Generic";
+import { getNodeTypeAndValidate } from "utils/automations";
 
-type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>]
+type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>];
 
-export const useEditorNodeState = (originalNode: AutomationNode, isErrored: boolean, allowedTypes: AutomationNodeTypes[], uState: UseState = useState) => {
+export const useEditorNodeState = (
+  originalNode: AutomationNode,
+  isErrored: boolean,
+  allowedTypes: AutomationNodeTypes[],
+  uState: UseState = useState
+) => {
   // state
   const [allState, setAllState] = uState({
     yamlMode: false,
     isModified: false,
-    ...computeInvalidYaml(originalNode, allowedTypes)
+    ...computeInvalidYaml(originalNode, allowedTypes),
   });
-  const { entities, namer } = useHA();
+  const { entities, namer, services } = useHA();
   // aliases
-  const { node: currentNode, isModified, yamlMode, invalidManualYaml } = allState;
+  const {
+    node: currentNode,
+    isModified,
+    yamlMode,
+    invalidManualYaml,
+  } = allState;
   // effects
   useEffect(() => {
-    setAllState({ ...allState, node: originalNode, isModified: false, })
+    setAllState({ ...allState, node: originalNode, isModified: false });
     // eslint-disable-next-line
-  }, [originalNode])
+  }, [originalNode]);
   // function aliases
-  const setState = (node: AutomationNode) => setAllState(({
-    ...allState, node,
-    isModified: JSON.stringify(node) !== JSON.stringify(originalNode),
-  }));
-  const setYamlMode = (yamlMode: boolean) => setAllState({ ...allState, yamlMode, });
+  const setState = (node: AutomationNode) =>
+    setAllState({
+      ...allState,
+      node,
+      isModified: JSON.stringify(node) !== JSON.stringify(originalNode),
+    });
+  const setYamlMode = (yamlMode: boolean) =>
+    setAllState({ ...allState, yamlMode });
   const setStateForManualYaml = (yaml: any) => {
     setAllState({
       ...allState,
-      ...computeInvalidYaml(yaml, allowedTypes)
-    })
-  }
+      ...computeInvalidYaml(yaml, allowedTypes),
+    });
+  };
   // value aliases
   const {
     originalNodeType,
@@ -47,7 +64,7 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
     subType,
     subTypes,
     optionManager,
-  } = createData(originalNode, currentNode, allowedTypes)
+  } = createData(originalNode, currentNode, allowedTypes);
   // publuc
   return {
     nodeType,
@@ -59,91 +76,119 @@ export const useEditorNodeState = (originalNode: AutomationNode, isErrored: bool
     isErrored: allState.isErrored,
     get prettyNodeType() {
       if (nodeType) {
-        return `${nodeType.slice(0, 1).toUpperCase()}${nodeType.slice(1)} Type`
+        return `${nodeType.slice(0, 1).toUpperCase()}${nodeType.slice(1)} Type`;
       } else {
-        return 'n/a'
+        return "n/a";
       }
     },
     get yamlMode() {
-      return allState.isErrored || yamlMode
+      return allState.isErrored || yamlMode;
     },
     get data() {
-      return currentNode
+      return currentNode;
     },
     setEnabled(enabled: boolean) {
       setState({
         ...currentNode,
         enabled,
-      })
+      });
     },
     renderOptionList() {
-      let aliasEditor = <></>
-      if (nodeType === 'trigger') {
-        aliasEditor = <InputText
-          key="alias"
-          label="Trigger ID"
-          value={(allState.node as any).id}
-          onChange={id => setState({
-            ...allState.node,
-            id
-          } as any)}
-        />
+      let aliasEditor = <></>;
+      if (nodeType === "trigger") {
+        aliasEditor = (
+          <InputText
+            key="alias"
+            label="Trigger ID"
+            value={(allState.node as any).id}
+            onChange={(id) =>
+              setState({
+                ...allState.node,
+                id,
+              } as any)
+            }
+          />
+        );
       }
-      if (nodeType === 'action') {
-        aliasEditor = <InputText
-          key="alias"
-          label="Alias"
-          value={getDescriptionFromAutomationNode(allState.node, namer)}
-          onChange={alias => setState({
-            ...allState.node,
-            alias
-          } as any)}
-        />
+      if (nodeType === "action") {
+        aliasEditor = (
+          <InputText
+            key="alias"
+            label="Alias"
+            value={getDescriptionFromAutomationNode(allState.node, namer)}
+            onChange={(alias) =>
+              setState({
+                ...allState.node,
+                alias,
+              } as any)
+            }
+          />
+        );
       }
       if (yamlMode || allState.isErrored) {
-        return <>
-          {aliasEditor}
-          <InputYaml
-            label=''
-            value={currentNode}
-            onChange={setStateForManualYaml}
-            error={invalidManualYaml}
-          />
-        </>
+        return (
+          <>
+            {aliasEditor}
+            <InputYaml
+              label=""
+              value={currentNode}
+              onChange={setStateForManualYaml}
+              error={invalidManualYaml}
+            />
+          </>
+        );
       }
-      return <>
-        {aliasEditor}
-        {('renderOptionList' in optionManager) ?
-          optionManager.renderOptionList(currentNode, setState, entities) :
-          <optionManager.Component state={currentNode} setState={setState} entities={entities} />}
-      </>;
+      return (
+        <>
+          {aliasEditor}
+          {"renderOptionList" in optionManager ? (
+            optionManager.renderOptionList(currentNode, setState, entities)
+          ) : (
+            <optionManager.Component
+              state={currentNode}
+              setState={setState}
+              entities={entities}
+              services={services}
+            />
+          )}
+        </>
+      );
     },
     isReady() {
       return optionManager.isReady(currentNode);
     },
     setNodeType(newType: AutomationNodeTypes) {
       if (newType === originalNodeType) {
-        setState(originalNode)
+        setState(originalNode);
       } else {
-        setState(getOptionManager(newType, getSubTypeList(newType)[0]).defaultState())
+        setState(
+          getOptionManager(newType, getSubTypeList(newType)[0]).defaultState()
+        );
       }
     },
     setSubType(newSubType: AutomationNodeSubtype) {
       if (newSubType === originalNodeSubType) {
-        setState(originalNode)
+        setState(originalNode);
       } else {
         if (nodeType) {
-          setState(getOptionManager(nodeType, newSubType as any).defaultState())
+          setState(
+            getOptionManager(nodeType, newSubType as any).defaultState()
+          );
         } else {
-          setState(getOptionManager(allowedTypes[0], newSubType as any).defaultState())
+          setState(
+            getOptionManager(allowedTypes[0], newSubType as any).defaultState()
+          );
         }
       }
-    }
-  }
-}
+    },
+  };
+};
 
-
-const createData = (originalNode: AutomationNode, currentNode: AutomationNode, allowedTypes: AutomationNodeTypes[]) => {
+const createData = (
+  originalNode: AutomationNode,
+  currentNode: AutomationNode,
+  allowedTypes: AutomationNodeTypes[]
+) => {
   let originalNodeType: AutomationNodeTypes = allowedTypes[0];
   let originalNodeSubType: AutomationNodeSubtype | null = null;
   let nodeType: AutomationNodeTypes = originalNodeType;
@@ -155,15 +200,15 @@ const createData = (originalNode: AutomationNode, currentNode: AutomationNode, a
     originalNodeType = getNodeTypeAndValidate(originalNode, allowedTypes);
     originalNodeSubType = getNodeSubType(originalNode);
   } catch (err) {
-    console.error(`ORIGINAL NODE ERROR ${JSON.stringify(originalNode)}`)
+    console.error(`ORIGINAL NODE ERROR ${JSON.stringify(originalNode)}`);
   }
   try {
     nodeType = getNodeTypeAndValidate(currentNode, allowedTypes);
     subType = getNodeSubType(currentNode);
-    subTypes = getSubTypeList(nodeType)
+    subTypes = getSubTypeList(nodeType);
     optionManager = getOptionManager(nodeType, subType as any);
   } catch (err) {
-    console.error(`CURRENT NODE ERROR ${JSON.stringify(currentNode)}`)
+    console.error(`CURRENT NODE ERROR ${JSON.stringify(currentNode)}`);
   }
   return {
     originalNodeType,
@@ -172,27 +217,34 @@ const createData = (originalNode: AutomationNode, currentNode: AutomationNode, a
     subType,
     subTypes,
     optionManager,
-  }
-}
+  };
+};
 
-const computeInvalidYaml = (node: AutomationNode, allowedNodeTypes: AutomationNodeTypes[]) => {
+const computeInvalidYaml = (
+  node: AutomationNode,
+  allowedNodeTypes: AutomationNodeTypes[]
+) => {
   const errors = validateNode(node, allowedNodeTypes);
   if (errors) {
-    console.log({ errors })
+    console.log({ errors });
     return {
       node,
       isErrored: true,
-      invalidManualYaml: <ul key={'error'} className="node-editor--error">
-        {errors.map(({ message, path }, i) => <li key={i}>
-          <b>{path}</b>: {message}
-        </li>)}
-      </ul>
-    }
+      invalidManualYaml: (
+        <ul key={"error"} className="node-editor--error">
+          {errors.map(({ message, path }, i) => (
+            <li key={i}>
+              <b>{path}</b>: {message}
+            </li>
+          ))}
+        </ul>
+      ),
+    };
   } else {
     return {
       node,
       isErrored: false,
-      invalidManualYaml: <></>
-    }
+      invalidManualYaml: <></>,
+    };
   }
-}
+};

@@ -1,8 +1,7 @@
 import { InputService } from "components/Inputs/InputService";
-import InputYaml from 'components/Inputs/InputYaml';
+import { ServiceEditor } from "components/ServiceEditor";
 import { ServiceAction } from "types/automations/actions";
-import { OptionManager, updateActionData } from './OptionManager';
-
+import { OptionManager, updateActionData } from "./OptionManager";
 
 export const ActionCallServiceState: OptionManager<ServiceAction> = {
   defaultState: () => ({
@@ -10,29 +9,34 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
     target: {},
     data: {},
   }),
-  isReady: ({
-    service,
-  }) => (
-    service !== ''
-  ),
-  renderOptionList: (state, setState) => {
+  isReady: ({ service }) => service !== "",
+  Component: ({ state, setState, services }) => {
     const { service, target, data } = state;
     const update = updateActionData(state, setState);
-    return <>
-      <InputService
-        value={service}
-        onChange={(service: string | null) => update({ service: service ?? "" })}
-      />
-      <InputYaml
-        label="Target"
-        value={target}
-        onChange={target => update({ target })}
-      />
-      <InputYaml
-        label="Data"
-        value={data}
-        onChange={data => update({ data })}
-      />
-    </>
-  }
-}
+    const serviceOption = services.getOption(service);
+    return (
+      <>
+        <InputService
+          value={service}
+          onChange={(service: string | null) =>
+            update({ service: service ?? "" })
+          }
+        />
+        {serviceOption && (
+          <ServiceEditor
+            key={service}
+            serviceId={service}
+            service={serviceOption}
+            data={{ target, field: data }}
+            onUpdate={({ target, field }) =>
+              update({
+                target,
+                data: field,
+              })
+            }
+          />
+        )}
+      </>
+    );
+  },
+};
