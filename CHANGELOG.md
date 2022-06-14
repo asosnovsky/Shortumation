@@ -1,5 +1,10 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.1.21] - Service Editor
+
+- first version of service editor 
+- reloading automations on save
+
 ## [0.1.20] - UI Bugfixes
 
 - Using MUI elements for input time
