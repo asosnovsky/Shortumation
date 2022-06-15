@@ -1,6 +1,11 @@
-import { BaseOption, Option } from "haService";
+import { BaseOption } from "haService";
 import { FieldData, TargetData, TypedHassService } from "haService/fieldTypes";
 import { prettyName } from "utils/formatting";
+
+export type ServiceEditorData = {
+  field: Record<string, any>;
+  target: Record<string, any>;
+};
 export type ServiceEditorOption = BaseOption<
   | {
       type: "field";
@@ -32,21 +37,22 @@ export const convertTargetToOption = (id: string, data: TargetData): ServiceEdit
   },
 })
   
-export const splitUpOptions = (service: TypedHassService) => {
+export const splitUpOptions = (service: TypedHassService, data: ServiceEditorData) => {
   const required: ServiceEditorOption[] = [];
   const additional: ServiceEditorOption[] = [];
+  const incmFields: string[] = [];
   Object.keys(service.fields ?? {}).forEach((key) => {
     const serviceData = service.fields[key];
     const opt = convertFieldToOption(key, serviceData);
     if (serviceData.required) {
       required.push(opt);
     } else {
-      additional.push(opt);
+      if (data.field[opt.id]) {
+        incmFields.push(opt.id)
+      } else {
+        additional.push(opt);
+      }
     }
   });
-  Object.keys(service.target ?? {}).forEach((key) =>{
-    const serviceData = (service.target ?? ({} as any))[key];
-    additional.push(convertTargetToOption(key, serviceData))
-  });
-  return { required, additional };
+  return { required, additional, incmFields };
 };

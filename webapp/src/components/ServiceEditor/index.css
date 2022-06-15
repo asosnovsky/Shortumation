@@ -1,6 +1,19 @@
 .service-editor {
     display: flex;
     flex-direction: column;
+    padding: 0.5em 1em;
+    margin: 0.5em 1em;
+    border-color: var(--primary-accent);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    background-color: var(--secondary);
+}
+
+.service-editor hr {
+    width: 90%;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
 }
 
 .service-editor h4 {

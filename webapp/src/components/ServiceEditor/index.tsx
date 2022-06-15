@@ -1,6 +1,5 @@
 import "./index.css";
 
-import { InputList } from "components/Inputs/InputList";
 import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
 import { TypedHassService } from "haService/fieldTypes";
 import { FC, useState } from "react";
@@ -9,14 +8,11 @@ import {
   splitUpOptions,
   convertFieldToOption,
   convertTargetToOption,
+  ServiceEditorData,
 } from "./options";
 import { ServiceEditorField } from "./ServiceEditorField";
 import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 
-export type ServiceEditorData = {
-  field: Record<string, any>;
-  target: Record<string, any>;
-};
 export type ServiceEditorProps = {
   serviceId: string;
   service: TypedHassService;
@@ -29,23 +25,25 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
   data,
   onUpdate,
 }) => {
-  const options = splitUpOptions(service);
+  const options = splitUpOptions(service, data);
+  console.log(service);
   const [additionalFields, setAdditionalFields] = useState<{
     field: string[];
-    target: string[];
     optionalList: ServiceEditorOption[];
   }>({
-    field: [],
-    target: [],
+    field: options.incmFields,
     optionalList: options.additional,
   });
 
   // aliases
   const hasRequired = options.required.length > 0;
-  const hasOptional =
-    additionalFields.field.length + additionalFields.target.length > 0;
+  const hasTargets = !!service.target && Object.keys(service.target).length > 0;
+  const hasOptional = additionalFields.field.length > 0;
   const hasNothing =
-    !hasRequired && !hasOptional && additionalFields.optionalList.length === 0;
+    !hasRequired &&
+    !hasOptional &&
+    !hasTargets &&
+    additionalFields.optionalList.length === 0;
 
   // render
   return (
@@ -76,6 +74,30 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
               }
             />
           ))}
+          {hasTargets && (
+            <div className="service-editor--target">
+              {Object.keys(service.target ?? {}).map((key) => {
+                const targetData = (service.target as any)[key];
+                const option = convertTargetToOption(key, targetData);
+                return (
+                  <ServiceEditorField
+                    key={"fields-" + key}
+                    option={option}
+                    value={data.target[key] ?? ""}
+                    onChange={(v) =>
+                      onUpdate({
+                        ...data,
+                        target: {
+                          ...data.target,
+                          [key]: v,
+                        },
+                      })
+                    }
+                  />
+                );
+              })}
+            </div>
+          )}
           <div className="service-editor--used">
             {additionalFields.field.map((key) => {
               const serviceData = service.fields[key];
@@ -112,45 +134,10 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
                 />
               );
             })}
-            {additionalFields.target.map((key) => {
-              const targetData = (service.target as any)[key];
-              const option = convertTargetToOption(key, targetData);
-              return (
-                <ServiceEditorField
-                  key={"fields-" + key}
-                  option={option}
-                  value={data.target[key] ?? ""}
-                  onRemove={() => {
-                    setAdditionalFields({
-                      ...additionalFields,
-                      target: additionalFields.target.filter((k) => k !== key),
-                      optionalList:
-                        additionalFields.optionalList.concat(option),
-                    });
-                    onUpdate({
-                      ...data,
-                      target: cleanUpUndefined({
-                        ...data.target,
-                        [key]: undefined,
-                      }),
-                    });
-                  }}
-                  onChange={(v) =>
-                    onUpdate({
-                      ...data,
-                      target: {
-                        ...data.target,
-                        [key]: v,
-                      },
-                    })
-                  }
-                />
-              );
-            })}
           </div>
         </>
       )}
-      <hr style={{ width: "90%" }} />
+      <hr />
       {additionalFields.optionalList.length > 0 && (
         <div className="service-editor--add">
           <InputAutoComplete

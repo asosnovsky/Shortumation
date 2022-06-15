@@ -60,9 +60,11 @@ export function InputAutoComplete<T extends Option>(
     ? [props.value]
     : [];
   const errors = props.validateOption ? props.validateOption(value) : null;
-  const options = props.options.sort((a, b) => {
-    return getID(a) > getID(b) ? 1 : -1;
-  });
+  const options = props.options
+    .filter((opt) => !value.includes(getID(opt)))
+    .sort((a, b) => {
+      return getID(a) > getID(b) ? 1 : -1;
+    });
 
   // processing of errors
   let helperText = props.helperText ?? <></>;
@@ -104,7 +106,6 @@ export function InputAutoComplete<T extends Option>(
       props.onChange(cleanValue[cleanValue.length - 1]);
     }
   };
-
   return (
     <Autocomplete
       className={["input-autocomplete", props.className ?? ""].join(" ")}

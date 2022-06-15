@@ -1,106 +1,116 @@
 import React from "react";
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { NodeEditor } from ".";
 
 import { AutomationCondition } from "types/automations/conditions";
 import { Button } from "components/Inputs/Button";
-import { useState } from 'react';
+import { useState } from "react";
 import { Modal } from "components/Modal";
 import { Page } from "components/Page";
 
-
 export default {
-  title: 'NodeEditor',
+  title: "NodeEditor",
   component: NodeEditor,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
+  parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
     node: {
-      'data': {},
-      'service': '',
-      'target': '',
-    }
-  }
-} as ComponentMeta<typeof NodeEditor>
+      data: {},
+      service: "",
+      target: "",
+    },
+  },
+} as ComponentMeta<typeof NodeEditor>;
 
-const Base: ComponentStory<typeof NodeEditor> = props => {
-
-  return <Page>
-    <NodeEditor {...props} />
-  </Page>
+const Base: ComponentStory<typeof NodeEditor> = (props) => {
+  return (
+    <Page>
+      <NodeEditor {...props} />
+    </Page>
+  );
 };
-export const Action = Base.bind({})
-export const SingleOption = Action.bind({})
+export const Action = Base.bind({});
+export const SingleOption = Action.bind({});
 SingleOption.args = {
   ...SingleOption.args,
-  allowedTypes: ['action'],
-}
-export const Condition = Action.bind({})
+  allowedTypes: ["action"],
+};
+export const Condition = Action.bind({});
 Condition.args = {
   ...Condition.args,
   node: {
-    "condition": "and",
-    "conditions": [
+    condition: "and",
+    conditions: [
       {
-        "condition": "numeric_state",
-        "entity_id": [
-          "sensor.kitchen_humidity"
-        ],
-        "conditions": [],
-        "above": "40"
+        condition: "numeric_state",
+        entity_id: ["sensor.kitchen_humidity"],
+        conditions: [],
+        above: "40",
       },
       {
-        "condition": "template",
-        "value_template": "states('switch.kitchen') == 'on'"
-      }
-    ]
+        condition: "template",
+        value_template: "states('switch.kitchen') == 'on'",
+      },
+    ],
   } as AutomationCondition,
-}
+};
 
-export const UnSupported = Action.bind({})
+export const UnSupported = Action.bind({});
 UnSupported.args = {
   ...UnSupported.args,
   node: {
-    "condition": "bargs",
-    "platform": "rouge"
+    condition: "bargs",
+    platform: "rouge",
   } as any,
-}
+};
 
-export const DeviceTriggerExample = Action.bind({})
+export const DeviceTriggerExample = Action.bind({});
 DeviceTriggerExample.args = {
   ...DeviceTriggerExample.args,
   node: {
-    "platform": 'device',
+    platform: "device",
   },
-}
-
-
-export const InAModal: ComponentStory<typeof NodeEditor> = props => {
-
-  const [open, setOpen] = useState(false);
-  return <Page>
-    <Button onClick={() => setOpen(!open)}>Open Editor</Button>
-    <Modal open={open}>
-      <NodeEditor {...props} onClose={() => setOpen(!open)} />
-    </Modal>
-  </Page>
 };
 
+export const InAModal: ComponentStory<typeof NodeEditor> = (props) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Page>
+      <Button onClick={() => setOpen(!open)}>Open Editor</Button>
+      <Modal open={open}>
+        <NodeEditor {...props} onClose={() => setOpen(!open)} />
+      </Modal>
+    </Page>
+  );
+};
 
-export const ServiceExample = Action.bind({})
+export const ServiceExample = Action.bind({});
 ServiceExample.args = {
   ...ServiceExample.args,
   node: {
-    "target": {},
-    "data": {},
-    "service": "",
+    target: {},
+    data: {},
+    service: "",
   },
-}
+};
 
+export const ServiceWithDataExample = Action.bind({});
+ServiceWithDataExample.args = {
+  ...ServiceWithDataExample.args,
+  node: {
+    target: {
+      entity: "light.switch_baby",
+    },
+    data: {
+      color_name: "red",
+    },
+    service: "light.turn_on",
+  },
+};
 
-export const DelayExample = Action.bind({})
+export const DelayExample = Action.bind({});
 DelayExample.args = {
   ...DelayExample.args,
   node: {
-    "wait_template": "",
+    wait_template: "",
   },
-}
+};

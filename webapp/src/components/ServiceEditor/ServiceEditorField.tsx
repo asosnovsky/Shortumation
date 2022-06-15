@@ -5,6 +5,7 @@ import InputText from "components/Inputs/InputText";
 import InputNumber from "components/Inputs/InputNumber";
 import { IconButton } from "@mui/material";
 import { RemoveCircle } from "@mui/icons-material";
+import { InputEntity } from "components/Inputs/InputEntities";
 
 export type ServiceEditorFieldProps = {
   option: ServiceEditorOption;
@@ -71,6 +72,21 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
         endAdornment={removeIcon}
       />
     );
+  } else {
+    if ("domain" in option.data) {
+      if (option.id === "entity") {
+        return (
+          <InputEntity
+            value={value}
+            onChange={onChange}
+            multiple
+            restrictToDomain={
+              option.data.domain ? [option.data.domain] : undefined
+            }
+          />
+        );
+      }
+    }
   }
 
   return input;
