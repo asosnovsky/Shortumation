@@ -6,6 +6,10 @@ import InputNumber from "components/Inputs/InputNumber";
 import { IconButton } from "@mui/material";
 import { RemoveCircle } from "@mui/icons-material";
 import { InputEntity } from "components/Inputs/InputEntities";
+import InputAutoText from "components/Inputs/InputAutoText";
+import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+import { Option } from "haService";
+import { prettyName } from "utils/formatting";
 
 export type ServiceEditorFieldProps = {
   option: ServiceEditorOption;
@@ -59,6 +63,37 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
         />
       );
     }
+    if (option.data.selector?.select) {
+      return (
+        <InputAutoComplete
+          className="service-editor--field"
+          label={label}
+          value={value}
+          onChange={onChange}
+          endAdornment={removeIcon}
+          required={isRequired}
+          options={option.data.selector.select.options.map<Option>((opt) => {
+            if (typeof opt === "string") {
+              return {
+                id: opt,
+                label: prettyName(opt),
+              };
+            }
+            return {
+              id: opt.value,
+              label: opt.label,
+            };
+          })}
+          getLabel={(opt) => {
+            if (typeof opt === "string") {
+              return prettyName(opt);
+            }
+            return opt.label;
+          }}
+          onlyShowLabel
+        />
+      );
+    }
     return (
       <InputText
         className="service-editor--field"
@@ -79,6 +114,7 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
           <InputEntity
             value={value}
             onChange={onChange}
+            className="service-editor--field"
             multiple
             restrictToDomain={
               option.data.domain ? [option.data.domain] : undefined

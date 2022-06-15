@@ -5,19 +5,23 @@ import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import { Badge } from "@mui/material";
 import { SearchItem } from "./extras";
+import { ReactNode } from "react";
 
 export type InputAutoCompleteProps<T extends Option<any>> = {
-  className?: string;
   validateOption?: (v: string[]) => string[] | null;
   groupBy?: (opt: T) => string;
   options: T[];
   getLabel?: (opt: T) => string;
   getID?: (opt: T) => string;
   helperText?: string;
+  endAdornment?: ReactNode;
+  required?: boolean;
+  onlyShowLabel?: boolean;
 } & InputAutoCompletePropsBase;
 
 export type InputAutoCompletePropsBase = {
   label?: string;
+  className?: string;
 } & (
   | {
       value: string | null;
@@ -155,6 +159,7 @@ export function InputAutoComplete<T extends Option>(
             id={id}
             label={label}
             searchTerm={inputValue}
+            onlyShowLabel={props.onlyShowLabel}
           />
         );
       }}
@@ -162,6 +167,7 @@ export function InputAutoComplete<T extends Option>(
         <TextField
           {...params}
           variant="filled"
+          required={props.required}
           label={props.label ?? "Entity ID"}
           helperText={helperText}
           error={error}
@@ -181,7 +187,9 @@ export function InputAutoComplete<T extends Option>(
                   label={
                     <>
                       {id === label ? <span>{label}</span> : <b>{label}</b>}
-                      {id !== label && <small>{id}</small>}
+                      {id !== label && !props.onlyShowLabel && (
+                        <small>{id}</small>
+                      )}
                     </>
                   }
                   {...tagProps}
