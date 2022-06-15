@@ -73,8 +73,8 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
       />
     );
   } else {
-    if ("domain" in option.data) {
-      if (option.id === "entity") {
+    if (option.id === "entity") {
+      if ("domain" in option.data) {
         return (
           <InputEntity
             value={value}

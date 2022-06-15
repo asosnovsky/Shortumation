@@ -48,21 +48,13 @@ interface SelectorColorTemp {
 interface SelectorNumber {
     min: number;
     max: number;
-    unit_of_measurement?: UnitOfMeasurement;
+    unit_of_measurement?: string;
     mode?: Mode;
     step?: number;
 }
 
 enum Mode {
     Box = "box",
-}
-
-enum UnitOfMeasurement {
-    Days = "days",
-    Empty = "%",
-    K = "K",
-    Seconds = "seconds",
-    Times = "times",
 }
 
 interface SelectorSelect {

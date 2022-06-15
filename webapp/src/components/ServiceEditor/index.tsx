@@ -152,9 +152,7 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
               if (newField) {
                 setAdditionalFields({
                   ...additionalFields,
-                  [newField.type]: additionalFields[newField.type].concat([
-                    newField.id,
-                  ]),
+                  field: additionalFields.field.concat([newField.id]),
                   optionalList: additionalFields.optionalList.filter(
                     (opt) =>
                       !(opt.type === newField.type && opt.id === newField.id)
