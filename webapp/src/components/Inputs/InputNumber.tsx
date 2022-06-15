@@ -29,21 +29,33 @@ export default function InputNumber({
   required,
 }: Props) {
   const disabled = value === undefined || value === null;
+  let labelElm = <></>;
+  let unitElm = <></>;
+  if (label) {
+    labelElm = <span>{label}</span>;
+  }
+  if (unit) {
+    unitElm = <small>({unit})</small>;
+  }
+
   return (
     <TextField
       variant="filled"
-      label={label}
+      label={
+        <div className="input-number--label">
+          {labelElm} {unitElm}
+        </div>
+      }
       value={value}
-      defaultValue={value}
       onChange={(e) => onChange(Number(e.target.value ?? 0))}
       disabled={disabled}
       className={className}
       placeholder={placeholder}
       required={required}
+      fullWidth
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            {unit}
             <IconButton onClick={() => onChange(disabled ? 0 : undefined)}>
               {disabled ? <Edit /> : <Close />}
             </IconButton>
