@@ -1,8 +1,8 @@
 export type EntityRegisteryItem = {
-    area_id: string | null;
-    config_entry_id: string | null;
-    device_id: string | null;
-    disabled_by:
+    area_id:         null | string;
+    config_entry_id: null | string;
+    device_id:       null | string;
+    disabled_by:     
     | "integration"
     | "user"
     | "config_entry"
@@ -21,9 +21,10 @@ export type EntityRegisteryItem = {
     | string
     | null
     ;
-    icon: string | null;
-    name: string | null;
-    platform: string | null;
+    entity_id:       string;
+    icon:            null | string;
+    name:            null | string;
+    platform:        string;
 }
 
 export type DeviceRegistryItem = {

@@ -1,5 +1,4 @@
 import "./InputAutoComplete.css";
-import { Option } from "haService";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
@@ -7,6 +6,11 @@ import { Badge } from "@mui/material";
 import { SearchItem } from "./extras";
 import { ReactNode } from "react";
 
+export type BaseOption<T = {}> = {
+  id: string;
+  label: string;
+} & T;
+export type Option<T = {}> = string | BaseOption<T>;
 export type InputAutoCompleteProps<T extends Option<any>> = {
   validateOption?: (v: string[]) => string[] | null;
   groupBy?: (opt: T) => string;
@@ -18,7 +22,6 @@ export type InputAutoCompleteProps<T extends Option<any>> = {
   required?: boolean;
   onlyShowLabel?: boolean;
 } & InputAutoCompletePropsBase;
-
 export type InputAutoCompletePropsBase = {
   label?: string;
   className?: string;
@@ -34,6 +37,25 @@ export type InputAutoCompletePropsBase = {
       onChange: (v: string[]) => void;
     }
 );
+
+export function computeSimilarity(
+  text: string,
+  optId: string,
+  optLabel: string
+) {
+  let similarityScore = 0;
+  const lowCaseId = optId.toLocaleLowerCase();
+  const lowCaseLabel = optLabel.toLocaleLowerCase();
+  for (const segment of text.toLocaleLowerCase().split(" ")) {
+    if (lowCaseId.includes(segment)) {
+      similarityScore += lowCaseId.length / lowCaseId.length;
+    }
+    if (lowCaseId.includes(segment)) {
+      similarityScore += lowCaseLabel.length / lowCaseLabel.length;
+    }
+  }
+  return similarityScore;
+}
 
 export function InputAutoComplete<T extends Option>(
   props: InputAutoCompleteProps<T>
@@ -120,32 +142,26 @@ export function InputAutoComplete<T extends Option>(
       onChange={onChange}
       getOptionLabel={getLabel as any}
       filterOptions={(opts, s) => {
-        const searchTerm = s.inputValue.toLocaleLowerCase().trim();
+        const searchTerm = s.inputValue;
         if (!searchTerm) {
           return opts;
         }
         return opts
           .map((opt) => {
-            let similarityScore = 0;
-            const eid = getID(opt);
-            if (eid.toLocaleLowerCase().includes(searchTerm)) {
-              similarityScore = Math.abs(eid.length - searchTerm.length);
-            }
-            const name = getLabel(opt);
-            if (name.toLocaleLowerCase().includes(searchTerm)) {
-              similarityScore = Math.abs(eid.length - searchTerm.length);
-            }
             return {
-              label: name,
-              id: eid,
-              domain: typeof opt === "string" ? "" : (opt as any).domain,
-              similarityScore,
+              opt,
+              similarityScore: computeSimilarity(
+                searchTerm,
+                getID(opt),
+                getLabel(opt)
+              ),
             };
           })
           .filter((opt) => opt.similarityScore > 0)
           .sort((a, b) => {
-            return a.similarityScore > b.similarityScore ? 1 : -1;
-          }) as any;
+            return a.similarityScore < b.similarityScore ? 1 : -1;
+          })
+          .map(({ opt }) => opt);
       }}
       groupBy={props.groupBy}
       renderOption={(listProps, option, { inputValue }) => {
@@ -153,14 +169,16 @@ export function InputAutoComplete<T extends Option>(
         const id = getID(option);
 
         return (
-          <SearchItem
-            key={label + id}
-            listProps={listProps}
-            id={id}
-            label={label}
-            searchTerm={inputValue}
-            onlyShowLabel={props.onlyShowLabel}
-          />
+          <>
+            <SearchItem
+              key={label + id}
+              listProps={listProps}
+              id={id}
+              label={label}
+              searchTerm={inputValue}
+              onlyShowLabel={props.onlyShowLabel}
+            />
+          </>
         );
       }}
       renderInput={(params) => (

@@ -33,3 +33,9 @@
     max-width: 100%;
     overflow: auto;
 }
+
+.input-autocomplete--chip small {
+    max-width: 7em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

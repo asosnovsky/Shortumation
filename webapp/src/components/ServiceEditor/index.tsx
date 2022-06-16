@@ -7,11 +7,11 @@ import {
   ServiceEditorOption,
   splitUpOptions,
   convertFieldToOption,
-  convertTargetToOption,
   ServiceEditorData,
 } from "./options";
 import { ServiceEditorField } from "./ServiceEditorField";
 import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+import { ServiceEditorTarget } from "./ServiceEditorTarget";
 
 export type ServiceEditorProps = {
   serviceId: string;
@@ -26,7 +26,6 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
   onUpdate,
 }) => {
   const options = splitUpOptions(service, data);
-  console.log(service);
   const [additionalFields, setAdditionalFields] = useState<{
     field: string[];
     optionalList: ServiceEditorOption[];
@@ -60,14 +59,14 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
         <>
           {options.required.map((opt) => (
             <ServiceEditorField
-              key={opt.type + opt.id}
+              key={"field-" + opt.id}
               option={opt}
-              value={data[opt.type][opt.id]}
+              value={data.field[opt.id]}
               onChange={(v) =>
                 onUpdate({
                   ...data,
-                  [opt.type]: {
-                    ...data[opt.type],
+                  field: {
+                    ...data.field,
                     [opt.id]: v,
                   },
                 })
@@ -75,28 +74,17 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
             />
           ))}
           {hasTargets && (
-            <div className="service-editor--target">
-              {Object.keys(service.target ?? {}).map((key) => {
-                const targetData = (service.target as any)[key];
-                const option = convertTargetToOption(key, targetData);
-                return (
-                  <ServiceEditorField
-                    key={"fields-" + key}
-                    option={option}
-                    value={data.target[key] ?? ""}
-                    onChange={(v) =>
-                      onUpdate({
-                        ...data,
-                        target: {
-                          ...data.target,
-                          [key]: v,
-                        },
-                      })
-                    }
-                  />
-                );
-              })}
-            </div>
+            <ServiceEditorTarget
+              key={"target-" + serviceId}
+              defn={service.target ?? {}}
+              value={data.target}
+              onChange={(target) =>
+                onUpdate({
+                  ...data,
+                  target,
+                })
+              }
+            />
           )}
           <div className="service-editor--used">
             {additionalFields.field.map((key) => {
@@ -154,8 +142,7 @@ export const ServiceEditor: FC<ServiceEditorProps> = ({
                   ...additionalFields,
                   field: additionalFields.field.concat([newField.id]),
                   optionalList: additionalFields.optionalList.filter(
-                    (opt) =>
-                      !(opt.type === newField.type && opt.id === newField.id)
+                    (opt) => !(opt.id === newField.id)
                   ),
                 });
               }

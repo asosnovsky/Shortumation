@@ -226,7 +226,7 @@ const computeInvalidYaml = (
 ) => {
   const errors = validateNode(node, allowedNodeTypes);
   if (errors) {
-    console.log({ errors });
+    console.warn({ errors });
     return {
       node,
       isErrored: true,

@@ -22,7 +22,6 @@ export default function InputAutoText({
   endAdornment,
   error,
 }: InputAutoTextProps) {
-  console.log(options);
   return (
     <Autocomplete
       freeSolo
