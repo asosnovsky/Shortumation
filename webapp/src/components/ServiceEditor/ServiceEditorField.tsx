@@ -31,17 +31,6 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
       <RemoveCircle />
     </IconButton>
   );
-
-  let input = (
-    <InputText
-      className="service-editor--field"
-      label={label}
-      value={value}
-      onChange={onChange}
-      endAdornment={removeIcon}
-      required={isRequired}
-    />
-  );
   example = option.data.example ? `Example: ${option.data.example}` : "";
   if (option.data.selector?.number) {
     return (
@@ -103,6 +92,4 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
       endAdornment={removeIcon}
     />
   );
-
-  return input;
 };
