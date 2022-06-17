@@ -66,7 +66,7 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
             <InputText
               key={"extra" + state.device_id + field.name}
               label={prettyName(field.name)}
-              value={state[field.name] ?? ""}
+              value={(state as any)[field.name] ?? ""}
               onChange={(v) =>
                 update({
                   [field.name]: v,

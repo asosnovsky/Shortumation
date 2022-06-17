@@ -60,7 +60,6 @@ export const DeviceAction = st.intersection([
     entity_id: st.optional(st.string()),
     domain: st.optional(st.string()),
   }),
-  st.record(st.string(), st.any()),
 ]);
 
 export const ChooseAction = st.intersection([

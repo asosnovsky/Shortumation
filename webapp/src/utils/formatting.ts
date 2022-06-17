@@ -58,11 +58,20 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
       return out;
     }
     if (node.platform === "device") {
-      return node.device_id
-        ? namer.getDeviceName(node.device_id)
-        : node.entity_id
-        ? namer.getEntityName(node.entity_id)
-        : node.platform;
+      let out = "";
+      if (node.device_id) {
+        out = namer.getDeviceName(node.device_id);
+      }
+      if (!out && node.entity_id) {
+        out = namer.getEntityName(node.entity_id);
+      }
+      if (node.type) {
+        out += node.type;
+      }
+      if (!out) {
+        out = node.platform;
+      }
+      return out;
     }
     return node.platform;
   }
