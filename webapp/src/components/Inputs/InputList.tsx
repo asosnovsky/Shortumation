@@ -27,7 +27,7 @@ export function InputList<T extends string | Object>({
   label,
   id,
   className,
-  prettyOptionLabels,
+  prettyOptionLabels = true,
   getKey = String,
   placeholder,
   title,
