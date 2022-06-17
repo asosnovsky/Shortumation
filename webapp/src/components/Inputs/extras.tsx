@@ -2,7 +2,6 @@ import "./extras.css";
 import { FC } from "react";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
-import { prettyName } from "utils/formatting";
 
 export const HighlightElm: FC<{
   text: string;

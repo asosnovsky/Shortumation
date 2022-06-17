@@ -6,7 +6,6 @@ import { Badge, Popper } from "@mui/material";
 import { SearchItem } from "./extras";
 import { ReactNode } from "react";
 import { prettyName } from "utils/formatting";
-import { ModalStyleProps } from "../Modal/index";
 
 export type BaseOption<T = {}> = {
   id: string;
