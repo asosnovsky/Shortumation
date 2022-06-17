@@ -1,5 +1,14 @@
 import { FC } from "react";
-import { AutomationCondition, LogicCondition, NumericCondition, StateCondition, TemplateCondition, TimeCondition, TriggerCondition, ZoneCondition } from 'types/automations/conditions';
+import {
+  AutomationCondition,
+  LogicCondition,
+  NumericCondition,
+  StateCondition,
+  TemplateCondition,
+  TimeCondition,
+  TriggerCondition,
+  ZoneCondition,
+} from "types/automations/conditions";
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
 import { InputEntity } from "components/Inputs/InputEntities";
@@ -8,209 +17,273 @@ import { genUpdateMethods } from "./nestedUpdater";
 import { InputTime } from "components/Inputs/InputTime";
 import InputYaml from "components/Inputs/InputYaml";
 
-
-interface Editor<C extends AutomationCondition> extends FC<{
-  condition: C,
-  onChange: (condition: C) => void;
-}> { }
-
+interface Editor<C extends AutomationCondition>
+  extends FC<{
+    condition: C;
+    onChange: (condition: C) => void;
+  }> {}
 
 export const getEditor = (condition: AutomationCondition): Editor<any> => {
   switch (condition.condition) {
-    case 'template':
+    case "template":
       return TemplateEditor;
-    case 'and':
+    case "and":
       return LogicViewer;
-    case 'or':
+    case "or":
       return LogicViewer;
-    case 'not':
+    case "not":
       return LogicViewer;
-    case 'numeric_state':
+    case "numeric_state":
       return NumericStateEditor;
-    case 'state':
+    case "state":
       return StateEditor;
-    case 'time':
+    case "time":
       return TimeEditor;
-    case 'trigger':
+    case "trigger":
       return TriggerEditor;
-    case 'zone':
+    case "zone":
       return ZoneEditor;
     default:
-      return () => <div>Not Ready</div>
+      return () => <div>Not Ready</div>;
   }
-}
+};
 
 export const TemplateEditor: Editor<TemplateCondition> = ({
   onChange,
   condition,
 }) => {
-  return <>
-    <InputYaml label="Template" value={condition.value_template} onChange={value_template => onChange({
-      ...condition,
-      value_template
-    })} />
-  </>
-}
-
+  return (
+    <>
+      <InputYaml
+        label="Template"
+        value={condition.value_template}
+        onChange={(value_template) =>
+          onChange({
+            ...condition,
+            value_template,
+          })
+        }
+      />
+    </>
+  );
+};
 
 export const NumericStateEditor: Editor<NumericCondition> = ({
   onChange,
   condition,
 }) => {
-  return <>
-    <InputEntity
-      value={condition.entity_id}
-      multiple
-      onChange={entity_id => onChange({
-        ...condition,
-        entity_id
-      })}
-    />
-    <InputText label="Attribute" value={condition.attribute ?? ""} onChange={attribute => onChange({
-      ...condition,
-      attribute
-    })} />
-    <InputNumber
-      label="Above"
-      value={condition.above ? Number(condition.above) : undefined}
-      onChange={above => onChange({
-        ...condition,
-        above: above ? String(above) : undefined,
-      })}
-    />
-    <InputNumber
-      label="Below"
-      value={condition.below ? Number(condition.below) : undefined}
-      onChange={below => onChange({
-        ...condition,
-        below: below ? String(below) : undefined,
-      })}
-    />
-    <InputYaml label="Template" value={condition.value_template ?? ""} onChange={value_template => onChange({
-      ...condition,
-      value_template
-    })} />
-  </>
-}
-
+  return (
+    <>
+      <InputEntity
+        value={condition.entity_id}
+        multiple
+        onChange={(entity_id) =>
+          onChange({
+            ...condition,
+            entity_id,
+          })
+        }
+      />
+      <InputText
+        label="Attribute"
+        value={condition.attribute ?? ""}
+        onChange={(attribute) =>
+          onChange({
+            ...condition,
+            attribute,
+          })
+        }
+      />
+      <InputNumber
+        label="Above"
+        value={condition.above ? Number(condition.above) : undefined}
+        onChange={(above) =>
+          onChange({
+            ...condition,
+            above: above ? String(above) : undefined,
+          })
+        }
+      />
+      <InputNumber
+        label="Below"
+        value={condition.below ? Number(condition.below) : undefined}
+        onChange={(below) =>
+          onChange({
+            ...condition,
+            below: below ? String(below) : undefined,
+          })
+        }
+      />
+      <InputYaml
+        label="Template"
+        value={condition.value_template ?? ""}
+        onChange={(value_template) =>
+          onChange({
+            ...condition,
+            value_template,
+          })
+        }
+      />
+    </>
+  );
+};
 
 export const LogicViewer: Editor<LogicCondition> = ({
   condition,
   onChange,
 }) => {
-
-  return <>
-    {condition.conditions.map((c, i) => {
-      return <ConditionNode
-        key={i}
-        condition={c}
-        displayMode={false}
-        {...genUpdateMethods(condition, onChange)(i)}
-        showDelete
-      />
-    })}
-  </>
-}
-
-
+  return (
+    <>
+      {condition.conditions.map((c, i) => {
+        return (
+          <ConditionNode
+            key={i}
+            condition={c}
+            displayMode={false}
+            {...genUpdateMethods(condition, onChange)(i)}
+            showDelete
+          />
+        );
+      })}
+    </>
+  );
+};
 
 export const StateEditor: Editor<StateCondition> = ({
   onChange,
   condition,
 }) => {
-  return <>
-    <InputEntity
-      value={condition.entity_id}
-      multiple
-      onChange={entity_id => onChange({
-        ...condition,
-        entity_id
-      })}
-    />
-    <InputText label="Attribute" value={condition.attribute ?? ""} onChange={attribute => onChange({
-      ...condition,
-      attribute
-    })} />
-    <InputText
-      label="State"
-      value={String(condition.state)}
-      onChange={state => onChange({
-        ...condition,
-        state,
-      })}
-    />
-    <InputTime
-      label="For"
-      value={condition.for}
-      onChange={_for => onChange({
-        ...condition,
-        for: _for,
-      })}
-    />
-  </>
-}
+  return (
+    <>
+      <InputEntity
+        value={condition.entity_id}
+        multiple
+        onChange={(entity_id) =>
+          onChange({
+            ...condition,
+            entity_id,
+          })
+        }
+      />
+      <InputText
+        label="Attribute"
+        value={condition.attribute ?? ""}
+        onChange={(attribute) =>
+          onChange({
+            ...condition,
+            attribute,
+          })
+        }
+      />
+      <InputText
+        label="State"
+        value={String(condition.state)}
+        onChange={(state) =>
+          onChange({
+            ...condition,
+            state,
+          })
+        }
+      />
+      <InputTime
+        label="For"
+        value={condition.for}
+        onChange={(_for) =>
+          onChange({
+            ...condition,
+            for: _for,
+          })
+        }
+      />
+    </>
+  );
+};
 
-export const TimeEditor: Editor<TimeCondition> = ({
-  onChange,
-  condition,
-}) => {
-  return <>
-    <InputTime
-      label="After"
-      value={condition.after}
-      onChange={after => onChange({
-        ...condition,
-        after,
-      })}
-    />
-    <InputTime
-      label="Before"
-      value={condition.before}
-      onChange={before => onChange({
-        ...condition,
-        before,
-      })}
-    />
-    <b>Weekday not support for no, use yaml for now</b> {condition.weekday}
-  </>
-}
+export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
+  return (
+    <>
+      <InputTime
+        label="After"
+        value={condition.after}
+        onChange={(after) =>
+          onChange({
+            ...condition,
+            after,
+          })
+        }
+      />
+      <InputTime
+        label="Before"
+        value={condition.before}
+        onChange={(before) =>
+          onChange({
+            ...condition,
+            before,
+          })
+        }
+      />
+      <b>Weekday not support for no, use yaml for now</b> {condition.weekday}
+    </>
+  );
+};
 
 export const TriggerEditor: Editor<TriggerCondition> = ({
   onChange,
   condition,
 }) => {
-  return <>
-    <InputText label="Trigger ID" value={condition.id} onChange={id => onChange({
-      ...condition,
-      id
-    })} />
-  </>
-}
+  return (
+    <>
+      <InputText
+        label="Trigger ID"
+        value={condition.id}
+        onChange={(id) =>
+          onChange({
+            ...condition,
+            id,
+          })
+        }
+      />
+    </>
+  );
+};
 
-export const ZoneEditor: Editor<ZoneCondition> = ({
-  onChange,
-  condition,
-}) => {
-  return <>
-    <InputText label="Zone" value={condition.zone} onChange={zone => onChange({
-      ...condition,
-      zone
-    })} />
-    <InputEntity
-      value={condition.entity_id}
-      multiple
-      onChange={entity_id => onChange({
-        ...condition,
-        entity_id
-      })}
-    />
-    <InputText
-      label="State"
-      value={String(condition.state)}
-      onChange={state => onChange({
-        ...condition,
-        state,
-      })}
-    />
-  </>
-}
+export const ZoneEditor: Editor<ZoneCondition> = ({ onChange, condition }) => {
+  return (
+    <>
+      <InputEntity
+        label="Zone"
+        value={condition.zone}
+        multiple={false}
+        onChange={(zone) =>
+          onChange({
+            ...condition,
+            zone: zone ?? "",
+          })
+        }
+        restrictToDomain={["zone"]}
+      />
+      <InputEntity
+        label="Entity with Location"
+        value={condition.entity_id}
+        multiple
+        onChange={(entity_id) =>
+          onChange({
+            ...condition,
+            entity_id,
+          })
+        }
+        restrictToDomain={["person", "device_tracker"]}
+      />
+      <InputText
+        label="State"
+        value={String(condition.state)}
+        onChange={(state) =>
+          onChange({
+            ...condition,
+            state,
+          })
+        }
+      />
+    </>
+  );
+};
