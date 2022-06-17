@@ -214,6 +214,7 @@ export function InputAutoComplete<T extends Option>(
               return (
                 <Chip
                   size="medium"
+                  title={`${label} / ${id}`}
                   label={
                     <>
                       {id === label ? (

@@ -30,8 +30,10 @@
 
 .input-autocomplete--tags {
     max-height: 5em;
+    width: fit-content;
     max-width: 100%;
     overflow: auto;
+    text-overflow: ellipsis;
 }
 
 .input-autocomplete--chip small {
@@ -42,5 +44,4 @@
 
 .input-autocomplete--popper {
     min-width: fit-content;
-    /* max-width: 90vw; */
 }
