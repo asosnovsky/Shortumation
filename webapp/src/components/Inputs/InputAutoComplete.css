@@ -39,3 +39,8 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.input-autocomplete--popper {
+    min-width: fit-content;
+    /* max-width: 90vw; */
+}

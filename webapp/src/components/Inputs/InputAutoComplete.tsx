@@ -2,10 +2,11 @@ import "./InputAutoComplete.css";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
-import { Badge } from "@mui/material";
+import { Badge, Popper } from "@mui/material";
 import { SearchItem } from "./extras";
 import { ReactNode } from "react";
 import { prettyName } from "utils/formatting";
+import { ModalStyleProps } from "../Modal/index";
 
 export type BaseOption<T = {}> = {
   id: string;
@@ -142,6 +143,16 @@ export function InputAutoComplete<T extends Option>(
       options={options}
       onChange={onChange}
       getOptionLabel={getLabel as any}
+      PopperComponent={(props) => {
+        return (
+          <Popper
+            {...props}
+            className={[props.className, "input-autocomplete--popper"].join(
+              " "
+            )}
+          />
+        );
+      }}
       filterOptions={(opts, s) => {
         const searchTerm = s.inputValue;
         if (!searchTerm) {

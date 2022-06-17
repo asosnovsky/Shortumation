@@ -36,34 +36,29 @@ export const SearchItem: FC<{
   searchTerm: string;
   onlyShowLabel?: boolean;
 }> = ({ listProps, label, id, searchTerm, onlyShowLabel = false }) => {
+  const labelElm = (
+    <b className="input-extras--search-item--list--label">
+      <HighlightElm text={label} searchTerm={searchTerm} />
+    </b>
+  );
+  const idElm = (
+    <small className="input-extras--search-item--list--id">
+      <HighlightElm text={id} searchTerm={searchTerm} />
+    </small>
+  );
+
   let inner = (
     <>
-      <b>
-        <HighlightElm text={prettyName(label)} searchTerm={searchTerm} />
-      </b>{" "}
-      <small>
-        <HighlightElm text={id} searchTerm={searchTerm} />
-      </small>
+      {labelElm}
+      {idElm}
     </>
   );
 
   if (onlyShowLabel) {
     if (label) {
-      inner = (
-        <>
-          <b>
-            <HighlightElm text={prettyName(label)} searchTerm={searchTerm} />
-          </b>{" "}
-        </>
-      );
+      inner = labelElm;
     } else {
-      inner = (
-        <>
-          <small>
-            <HighlightElm text={id} searchTerm={searchTerm} />
-          </small>
-        </>
-      );
+      inner = idElm;
     }
   }
 

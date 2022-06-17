@@ -34,7 +34,7 @@ export const ServiceEditorTarget: FC<ServiceEditorTargetProps> = (props) => {
   return (
     <div className="service-editor--targets">
       <InputEntity
-        label="Target Entities"
+        label="Entity"
         value={value.entity_id}
         onChange={(entity_id) =>
           props.onChange({
@@ -46,7 +46,7 @@ export const ServiceEditorTarget: FC<ServiceEditorTargetProps> = (props) => {
         multiple
       />
       <InputDevice
-        label="Target Devices"
+        label="Device"
         value={value.device_id}
         onChange={(device_id) =>
           props.onChange({
@@ -57,7 +57,7 @@ export const ServiceEditorTarget: FC<ServiceEditorTargetProps> = (props) => {
         multiple
       />
       <InputArea
-        label="Target Areas"
+        label="Area"
         value={value.area_id}
         onChange={(area_id) =>
           props.onChange({
