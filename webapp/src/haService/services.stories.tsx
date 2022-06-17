@@ -37,7 +37,7 @@ const Test: FC = () => {
   //     )
   // })
 
-  // console.log(flattened)
+  // console.info(flattened)
 
   // const summary: Record<string, Record<string, { total: number, domains: string[], values: Set<string> }>> = {}
   // const fields: Record<string, Record<string, { total: number, values: Set<string> }>> = {}

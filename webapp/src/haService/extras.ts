@@ -1,3 +1,4 @@
+import { MessageBase } from "home-assistant-js-websocket";
 import { OptionsObject, useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import { HASendMessage } from "./types";
@@ -17,68 +18,79 @@ export type DeviceTypeCapability = {
   }>;
 };
 export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
-  return {
-    useDeviceActions(deviceId?: string) {
-      const lastDeviceId = useRef<string | null>(null);
-      const [options, setOptions] = useState<
-        Array<{
-          type: string;
-          actions: DeviceTypeAction[];
-        }>
-      >([]);
+  const createUseThing = function <Args, HAData, STData>(
+    convertArgsToMessage: (a: Args) => MessageBase,
+    transformHAData: (ha: HAData) => STData,
+    defaultSTData: STData
+  ) {
+    return function useThis(args?: Args) {
+      const lastThing = useRef<string | null>(null);
+      const [stData, setStData] = useState<STData>(defaultSTData);
       useEffect(() => {
-        if (deviceId && lastDeviceId.current !== deviceId) {
-          lastDeviceId.current = deviceId;
-          callHA({
-            type: "device_automation/action/list",
-            device_id: deviceId,
-          }).then((data: any[]) => {
-            if (lastDeviceId.current === deviceId) {
-              const dataMap: Record<string, DeviceTypeAction[]> = data.reduce(
-                (all = {}, opt: any) => {
-                  if (!all[opt.type]) {
-                    all[opt.type] = [];
-                  }
-                  all[opt.type].push(opt);
-                  return all;
-                },
-                {}
-              );
-              setOptions(
-                Object.keys(dataMap).map((type) => ({
-                  type,
-                  actions: dataMap[type],
-                }))
-              );
-            }
-          });
-        }
-      }, [deviceId]);
-      return options;
-    },
-    useDeviceCapalities(action?: DeviceTypeAction) {
-      const snackbr = useSnackbar();
-      const lastAction = useRef<string | null>(null);
-      const [caps, setCaps] = useState<Partial<DeviceTypeCapability>>({});
-      useEffect(() => {
-        const currentAction = JSON.stringify(action);
-        if (action && lastAction.current !== currentAction) {
-          lastAction.current = currentAction;
-          callHA({
-            type: "device_automation/action/capabilities",
-            action,
-          })
-            .then((data: DeviceTypeCapability) => {
-              if (lastAction.current === currentAction) {
-                setCaps(data);
+        const currentThing = JSON.stringify(args);
+        if (args && currentThing && lastThing.current !== currentThing) {
+          lastThing.current = currentThing;
+          const msg = convertArgsToMessage(args);
+          callHA(msg)
+            .then((raw: HAData) => {
+              if (lastThing.current === currentThing) {
+                setStData(transformHAData(raw));
               }
             })
-            .catch((err) => {
-              console.warn(err);
+            .catch((error) => {
+              console.warn({ msg, args, currentThing, error });
             });
+        } else if (lastThing.current !== currentThing) {
+          lastThing.current = currentThing;
+          setStData(defaultSTData);
         }
-      }, [action]);
-      return caps;
-    },
+      }, [args]);
+      return stData;
+    };
+  };
+
+  return {
+    useDeviceActions: createUseThing<
+      { deviceId: string },
+      any[],
+      Array<{
+        type: string;
+        actions: DeviceTypeAction[];
+      }>
+    >(
+      ({ deviceId }) => ({
+        type: "device_automation/action/list",
+        device_id: deviceId,
+      }),
+      (data) => {
+        const dataMap: Record<string, DeviceTypeAction[]> = data.reduce(
+          (all = {}, opt: any) => {
+            if (!all[opt.type]) {
+              all[opt.type] = [];
+            }
+            all[opt.type].push(opt);
+            return all;
+          },
+          {}
+        );
+        return Object.keys(dataMap).map((type) => ({
+          type,
+          actions: dataMap[type],
+        }));
+      },
+      []
+    ),
+    useDeviceCapalities: createUseThing<
+      DeviceTypeAction,
+      DeviceTypeCapability,
+      Partial<DeviceTypeCapability>
+    >(
+      (action) => ({
+        type: "device_automation/action/capabilities",
+        action,
+      }),
+      (data) => data,
+      {}
+    ),
   };
 };

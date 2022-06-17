@@ -13,8 +13,16 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
   isReady: () => true,
   Component: ({ state, setState, ha }) => {
     const update = updateActionData(state, setState);
-    const options = ha.deviceExtras.useDeviceActions(state.device_id);
-    const caps = ha.deviceExtras.useDeviceCapalities(state as any);
+    const options = ha.deviceExtras.useDeviceActions(
+      state.device_id
+        ? {
+            deviceId: state.device_id,
+          }
+        : undefined
+    );
+    const caps = ha.deviceExtras.useDeviceCapalities(
+      state.device_id && state.type && state.domain ? (state as any) : undefined
+    );
     // aliases
     let actions: DeviceAction[] = [];
     if (options.length > 0 && state.type) {
@@ -33,7 +41,7 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
       <>
         <InputDevice
           value={state.device_id ?? ""}
-          onChange={(device_id) => update({ device_id: device_id ?? "" })}
+          onChange={(device_id) => setState({ device_id: device_id ?? "" })}
         />
         {options.length > 0 && (
           <InputList

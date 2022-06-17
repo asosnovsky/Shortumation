@@ -1,3 +1,5 @@
+import { MessageBase } from "home-assistant-js-websocket";
+
 export type EntityRegisteryItem = {
   area_id: null | string;
   config_entry_id: null | string;
@@ -23,6 +25,4 @@ export type DeviceRegistryItem = {
 
 export type HassDevices = Array<DeviceRegistryItem>;
 export type HassEntitiesRegistry = Array<EntityRegisteryItem>;
-export type HASendMessage = (
-  sendMsg: { type: string } & Record<string, any>
-) => Promise<any>;
+export type HASendMessage = (sendMsg: MessageBase) => Promise<any>;
