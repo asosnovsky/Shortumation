@@ -55,18 +55,18 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(
       ] as any;
     case "trigger":
       return [
+        "device",
+        "state",
+        "numeric_state",
+        "time",
+        "time_pattern",
+        "zone",
         "event",
         "homeassistant",
         "mqtt",
-        "numeric_state",
-        "state",
         "tag",
         "template",
-        "time",
-        "time_pattern",
         "webhook",
-        "zone",
-        "device",
       ] as any;
     default:
       return [];
