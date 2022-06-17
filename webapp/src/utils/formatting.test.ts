@@ -126,7 +126,7 @@ test("get device action description", () => {
       },
       dummyNamer
     )
-  ).toEqual("set_value on 12310das01231");
+  ).toEqual("Set Value 12310das01231");
 });
 
 test("get choose action description", () => {
