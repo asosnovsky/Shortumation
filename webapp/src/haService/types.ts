@@ -33,7 +33,10 @@ export type DeviceBaseType = AutomationDeviceState & {
 } & Record<string, any>;
 export type DeviceTypeAction = DeviceBaseType;
 export type DeviceTriggerType = DeviceBaseType & {
-  platform: string;
+  platform: "device";
+};
+export type DeviceConditionType = DeviceBaseType & {
+  condition: "device";
 };
 export type DeviceTypeCapability = {
   extra_fields: Array<{

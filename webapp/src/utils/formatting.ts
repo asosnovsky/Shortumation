@@ -1,5 +1,8 @@
 import { AutomationNode, AutomationNodeTypes } from "types/automations";
-import { AutomationTime } from "types/automations/common";
+import {
+  AutomationDeviceState,
+  AutomationTime,
+} from "types/automations/common";
 
 export interface Namer {
   getEntityName(entity_id: string | string[], maxEntities?: number): string;
@@ -106,8 +109,10 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
           return `${namer.getEntityName(node.entity_id)} is '${node.state}'`;
         case "template":
           return node.value_template;
+        case "device":
+          return getDescriptionForDeviceType(node, namer, true);
         default:
-          return "n/a";
+          return JSON.stringify(node);
       }
     }
   }
@@ -131,24 +136,38 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
     return `Trigger ${node.event}`;
   }
   if ("device_id" in node) {
-    let out = "";
-    if (node.type) {
-      out += `${prettyName(node.type ?? "")} `;
-    }
-    if (node.subtype) {
-      out += node.subtype + " ";
-    }
-    if (node.entity_id) {
-      out += namer.getEntityName(node.entity_id);
-    } else if (node.device_id) {
-      out += namer.getDeviceName(node.device_id);
-    }
-    return out;
+    return getDescriptionForDeviceType(node, namer);
   }
   if ("choose" in node) {
     return "Choose";
   }
   return "n/a";
+};
+
+const getDescriptionForDeviceType = (
+  node: AutomationDeviceState,
+  namer: Namer,
+  actionToEnd: boolean = false
+) => {
+  let out = "";
+  let actionPort = "";
+  if (node.type) {
+    actionPort += `${prettyName(node.type ?? "")} `;
+  }
+  if (node.subtype) {
+    actionPort += node.subtype;
+  }
+  actionPort = actionPort.trim();
+  if (node.entity_id) {
+    out += namer.getEntityName(node.entity_id);
+  } else if (node.device_id) {
+    out += namer.getDeviceName(node.device_id);
+  }
+  out = out.trim();
+  if (actionToEnd) {
+    return out + " " + actionPort;
+  }
+  return actionPort + " " + out;
 };
 
 export const prettyName = (n: string) => {

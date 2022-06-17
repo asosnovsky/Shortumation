@@ -46,8 +46,9 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(
         "or",
         "and",
         "not",
-        "numeric_state",
         "state",
+        "device",
+        "numeric_state",
         "template",
         "time",
         "trigger",
@@ -125,7 +126,7 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
   }
 };
 
-const TriggerValidators: Record<TriggerType, any> = {
+export const TriggerValidators: Record<TriggerType, any> = {
   homeassistant: v.triggers.AutomationTriggerHA,
   device: v.triggers.AutomationTriggerDevice,
   event: v.triggers.AutomationTriggerEvent,
@@ -140,7 +141,7 @@ const TriggerValidators: Record<TriggerType, any> = {
   zone: v.triggers.AutomationTriggerZone,
 };
 
-const ActionValidators: Record<ActionType, any> = {
+export const ActionValidators: Record<ActionType, any> = {
   choose: v.actions.ChooseAction,
   device: v.actions.DeviceAction,
   event: v.actions.FireEventAction,
@@ -149,10 +150,11 @@ const ActionValidators: Record<ActionType, any> = {
   wait: st.union([v.actions.DelayAction, v.actions.WaitAction]),
 };
 
-const ConditionValidators: Record<ConditionType, any> = {
+export const ConditionValidators: Record<ConditionType, any> = {
   and: v.conditions.LogicCondition,
   or: v.conditions.LogicCondition,
   not: v.conditions.LogicCondition,
+  device: v.conditions.DeviceCondition,
   numeric_state: v.conditions.NumericCondition,
   state: v.conditions.StateCondition,
   template: v.conditions.TemplateCondition,
@@ -161,7 +163,7 @@ const ConditionValidators: Record<ConditionType, any> = {
   zone: v.conditions.ZoneCondition,
 };
 
-const AllValidators: Record<AutomationNodeTypes, any> = {
+export const AllValidators: Record<AutomationNodeTypes, any> = {
   action: ActionValidators,
   condition: ConditionValidators,
   trigger: TriggerValidators,

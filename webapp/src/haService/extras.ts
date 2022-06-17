@@ -3,6 +3,7 @@ import { MessageBase } from "home-assistant-js-websocket";
 import { useEffect, useRef, useState } from "react";
 import { prettyName } from "utils/formatting";
 import {
+  DeviceConditionType,
   DeviceTriggerType,
   DeviceTypeAction,
   DeviceTypeCapability,
@@ -109,6 +110,30 @@ export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
     >(
       ({ deviceId }) => ({
         type: "device_automation/trigger/list",
+        device_id: deviceId,
+      }),
+      reduceDeviceThings,
+      {}
+    ),
+    useDeviceConditionCapalities: createUseThing<
+      DeviceTypeAction,
+      DeviceTypeCapability,
+      Partial<DeviceTypeCapability>
+    >(
+      (condition) => ({
+        type: "device_automation/condition/capabilities",
+        condition,
+      }),
+      (data) => data,
+      {}
+    ),
+    useDeviceConditions: createUseThing<
+      { deviceId: string },
+      DeviceConditionType[],
+      Record<string, BaseOption<{ data: DeviceConditionType[] }>>
+    >(
+      ({ deviceId }) => ({
+        type: "device_automation/condition/list",
         device_id: deviceId,
       }),
       reduceDeviceThings,

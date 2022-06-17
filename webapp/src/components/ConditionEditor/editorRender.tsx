@@ -1,6 +1,7 @@
 import { FC } from "react";
 import {
   AutomationCondition,
+  DeviceCondition,
   LogicCondition,
   NumericCondition,
   StateCondition,
@@ -16,11 +17,14 @@ import { ConditionNode } from "./ConditionNode";
 import { genUpdateMethods } from "./nestedUpdater";
 import { InputTime } from "components/Inputs/InputTime";
 import InputYaml from "components/Inputs/InputYaml";
+import { HAService } from "haService";
+import { DeviceEditor } from "components/DeviceEditor";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{
     condition: C;
     onChange: (condition: C) => void;
+    ha: HAService;
   }> {}
 
 export const getEditor = (condition: AutomationCondition): Editor<any> => {
@@ -33,6 +37,8 @@ export const getEditor = (condition: AutomationCondition): Editor<any> => {
       return LogicViewer;
     case "not":
       return LogicViewer;
+    case "device":
+      return DeviceConditionEditor;
     case "numeric_state":
       return NumericStateEditor;
     case "state":
@@ -65,6 +71,35 @@ export const TemplateEditor: Editor<TemplateCondition> = ({
         }
       />
     </>
+  );
+};
+
+export const DeviceConditionEditor: Editor<DeviceCondition> = ({
+  onChange,
+  condition,
+  ha: {
+    deviceExtras: { useDeviceConditionCapalities, useDeviceConditions },
+  },
+}) => {
+  return (
+    <DeviceEditor
+      type="condition"
+      state={condition}
+      setState={(data) =>
+        onChange({
+          condition: "device",
+          ...data,
+        } as any)
+      }
+      options={useDeviceConditions(
+        condition.device_id
+          ? {
+              deviceId: condition.device_id,
+            }
+          : undefined
+      )}
+      caps={useDeviceConditionCapalities(condition as any)}
+    />
   );
 };
 
