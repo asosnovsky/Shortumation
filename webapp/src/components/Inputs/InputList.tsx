@@ -41,6 +41,7 @@ export function InputList<T extends string | Object>({
       className={className}
       variant="filled"
       sx={{ marginRight: "0.25em", minWidth: `${label.length * 0.75}em` }}
+      fullWidth
     >
       <InputLabel>{label}</InputLabel>
       <Select

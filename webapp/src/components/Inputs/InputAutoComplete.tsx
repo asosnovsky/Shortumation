@@ -5,6 +5,7 @@ import Chip from "@mui/material/Chip";
 import { Badge } from "@mui/material";
 import { SearchItem } from "./extras";
 import { ReactNode } from "react";
+import { prettyName } from "utils/formatting";
 
 export type BaseOption<T = {}> = {
   id: string;
@@ -204,7 +205,11 @@ export function InputAutoComplete<T extends Option>(
                   size="medium"
                   label={
                     <>
-                      {id === label ? <span>{label}</span> : <b>{label}</b>}
+                      {id === label ? (
+                        <span>{prettyName(label)}</span>
+                      ) : (
+                        <b>{label}</b>
+                      )}
                       {id !== label && !props.onlyShowLabel && (
                         <small>{id}</small>
                       )}

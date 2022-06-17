@@ -18,6 +18,52 @@ export const useHAEntities = () => {
     ).sort(),
   }));
   const methods = {
+    getStates(inp: string[] | string, attribute?: string): string[] {
+      if (!entities.ready) {
+        return [];
+      }
+      let entityIds: string[] = [];
+      if (typeof inp === "string") {
+        entityIds = [inp];
+      } else if (Array.isArray(inp)) {
+        entityIds = inp;
+      }
+      let state: Set<string> = new Set();
+      entityIds.forEach((entityId) => {
+        if (!attribute) {
+          state.add(entities.collection.state[entityId].state);
+        } else {
+          const val = entities.collection.state[entityId].attributes[attribute];
+          if (val) {
+            state.add(val);
+          }
+        }
+      });
+      return Array.from(state.keys());
+    },
+    getAttributes(inp: string[] | string): string[] {
+      if (!entities.ready) {
+        return [];
+      }
+      let entityIds: string[] = [];
+      if (typeof inp === "string") {
+        entityIds = [inp];
+      } else if (Array.isArray(inp)) {
+        entityIds = inp;
+      }
+      let attributes: Set<string> = new Set();
+      entityIds.forEach((entityId) => {
+        const thisAttrs = new Set(
+          Object.keys(entities.collection.state[entityId].attributes)
+        );
+        if (attributes.size === 0) {
+          attributes = thisAttrs;
+        } else {
+          attributes = new Set([...attributes].filter((a) => thisAttrs.has(a)));
+        }
+      });
+      return Array.from(attributes.keys());
+    },
     getDomainList(): string[] {
       return entities.additional?.domains ?? [];
     },

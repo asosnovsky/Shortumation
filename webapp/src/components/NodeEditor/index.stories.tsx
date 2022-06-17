@@ -114,3 +114,12 @@ DelayExample.args = {
     wait_template: "",
   },
 };
+
+export const StateTriggerExample = Action.bind({});
+StateTriggerExample.args = {
+  ...StateTriggerExample.args,
+  node: {
+    platform: "state",
+    entity_id: "binary_sensor.door_main",
+  },
+};

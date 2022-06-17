@@ -2,6 +2,7 @@ import "./extras.css";
 import { FC } from "react";
 import parse from "autosuggest-highlight/parse";
 import match from "autosuggest-highlight/match";
+import { prettyName } from "utils/formatting";
 
 export const HighlightElm: FC<{
   text: string;
@@ -38,7 +39,7 @@ export const SearchItem: FC<{
   let inner = (
     <>
       <b>
-        <HighlightElm text={label} searchTerm={searchTerm} />
+        <HighlightElm text={prettyName(label)} searchTerm={searchTerm} />
       </b>{" "}
       <small>
         <HighlightElm text={id} searchTerm={searchTerm} />
@@ -51,7 +52,7 @@ export const SearchItem: FC<{
       inner = (
         <>
           <b>
-            <HighlightElm text={label} searchTerm={searchTerm} />
+            <HighlightElm text={prettyName(label)} searchTerm={searchTerm} />
           </b>{" "}
         </>
       );
