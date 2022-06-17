@@ -1,14 +1,26 @@
+import { BaseOption } from "components/Inputs/InputAutoComplete";
 import { MessageBase } from "home-assistant-js-websocket";
-import { OptionsObject, useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
+import { prettyName } from "utils/formatting";
 import { HASendMessage } from "./types";
 
 export type DeviceTypeAction = {
   type: string;
+  subtype?: string;
   entity_id?: string;
   device_id?: string;
   domain: string;
 };
+export type DeviceTypeTrigger = {
+  type: string;
+  subtype?: string;
+  platform: string;
+  device_id: string;
+  entity_id?: string;
+  domain: string;
+  metadata: Record<string, any>;
+} & Record<string, any>;
+
 export type DeviceTypeCapability = {
   extra_fields: Array<{
     name: string;
@@ -48,37 +60,43 @@ export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
       return stData;
     };
   };
+  const reduceDeviceThings = function <
+    Raw extends { type: string; subtype?: string; entity_id?: string }
+  >(raw: Raw[]) {
+    return raw.reduce<Record<string, BaseOption<{ data: Raw[] }>>>(
+      (all, opt: Raw) => {
+        const id = opt.type + (opt.subtype ?? "");
+        if (!all[id]) {
+          return {
+            ...all,
+            [id]: {
+              id,
+              label:
+                prettyName(opt.type) + (opt.subtype ? ` ${opt.subtype}` : ""),
+              data: [opt],
+            },
+          };
+        } else {
+          all[id].data.push(opt);
+          return all;
+        }
+      },
+      {}
+    );
+  };
 
   return {
     useDeviceActions: createUseThing<
       { deviceId: string },
-      any[],
-      Array<{
-        type: string;
-        actions: DeviceTypeAction[];
-      }>
+      DeviceTypeAction[],
+      Record<string, BaseOption<{ data: DeviceTypeAction[] }>>
     >(
       ({ deviceId }) => ({
         type: "device_automation/action/list",
         device_id: deviceId,
       }),
-      (data) => {
-        const dataMap: Record<string, DeviceTypeAction[]> = data.reduce(
-          (all = {}, opt: any) => {
-            if (!all[opt.type]) {
-              all[opt.type] = [];
-            }
-            all[opt.type].push(opt);
-            return all;
-          },
-          {}
-        );
-        return Object.keys(dataMap).map((type) => ({
-          type,
-          actions: dataMap[type],
-        }));
-      },
-      []
+      reduceDeviceThings,
+      {}
     ),
     useDeviceCapalities: createUseThing<
       DeviceTypeAction,
@@ -91,6 +109,18 @@ export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
       }),
       (data) => data,
       {}
+    ),
+    useDeviceTriggers: createUseThing<
+      { deviceId: string },
+      DeviceTypeTrigger[],
+      DeviceTypeTrigger[]
+    >(
+      ({ deviceId }) => ({
+        type: "device_automation/trigger/list",
+        device_id: deviceId,
+      }),
+      (data) => data,
+      []
     ),
   };
 };

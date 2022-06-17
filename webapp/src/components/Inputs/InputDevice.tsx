@@ -10,7 +10,6 @@ export type InputDeviceProps = InputAutoCompletePropsBase;
 export const InputDevice: FC<InputDeviceProps> = (props) => {
   // state
   const dr = useHADeviceRegistry();
-
   return (
     <InputAutoComplete
       {...props}

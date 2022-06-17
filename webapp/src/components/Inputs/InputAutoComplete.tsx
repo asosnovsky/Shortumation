@@ -19,14 +19,15 @@ export type InputAutoCompleteProps<T extends Option<any>> = {
   options: T[];
   getLabel?: (opt: T) => string;
   getID?: (opt: T) => string;
-  helperText?: string;
-  endAdornment?: ReactNode;
-  required?: boolean;
-  onlyShowLabel?: boolean;
 } & InputAutoCompletePropsBase;
 export type InputAutoCompletePropsBase = {
   label?: string;
   className?: string;
+  disabled?: boolean;
+  required?: boolean;
+  onlyShowLabel?: boolean;
+  helperText?: string;
+  endAdornment?: ReactNode;
 } & (
   | {
       value: string | null;
@@ -143,6 +144,7 @@ export function InputAutoComplete<T extends Option>(
       options={options}
       onChange={onChange}
       getOptionLabel={getLabel as any}
+      disabled={props.disabled}
       PopperComponent={(props) => {
         return (
           <Popper
@@ -200,6 +202,7 @@ export function InputAutoComplete<T extends Option>(
           required={props.required}
           label={props.label ?? "Entity ID"}
           helperText={helperText}
+          disabled={props.disabled}
           error={error}
         />
       )}

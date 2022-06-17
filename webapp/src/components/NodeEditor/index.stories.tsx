@@ -124,13 +124,11 @@ StateTriggerExample.args = {
   },
 };
 
-export const DeviceFilledExample = Action.bind({});
-DeviceFilledExample.args = {
-  ...DeviceFilledExample.args,
+export const DeviceActionFilledExample = Action.bind({});
+DeviceActionFilledExample.args = {
+  ...DeviceActionFilledExample.args,
   node: {
     type: "toggle",
-    device_id: "29c3443815620745c4bf4100b11588fd",
-    entity_id: "light.switch_island",
-    domain: "light",
+    device_id: "c9711be86b0301955f72380509285485",
   },
 };

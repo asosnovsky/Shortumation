@@ -1,3 +1,4 @@
+import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 import { InputDevice } from "components/Inputs/InputDevice";
 import { InputEntity } from "components/Inputs/InputEntities";
 import { InputList } from "components/Inputs/InputList";
@@ -24,39 +25,37 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
       state.device_id && state.type && state.domain ? (state as any) : undefined
     );
     // aliases
-    let actions: DeviceAction[] = [];
-    if (options.length > 0 && state.type) {
-      const currentTypeOptions = options.filter(
-        ({ type }) => type === state.type
-      );
-      if (currentTypeOptions.length > 0) {
-        actions = currentTypeOptions[0].actions;
-      }
-    }
-    const entities = actions
+    const actionId = (state.type ?? "") + (state.subtype ?? "");
+    const entities = ((options[actionId] ?? {}).data ?? [])
       .map(({ entity_id }) => entity_id)
       .filter((x) => !!x) as string[];
     // render
     return (
       <>
         <InputDevice
+          label="Device"
           value={state.device_id ?? ""}
           onChange={(device_id) => setState({ device_id: device_id ?? "" })}
         />
-        {options.length > 0 && (
-          <InputList
-            key={"actions" + state.device_id}
-            label="Action"
-            current={state.type}
-            onChange={(type) =>
+        <InputAutoComplete
+          label="Action"
+          multiple={false}
+          value={actionId}
+          options={Object.keys(options).map((k) => options[k])}
+          disabled={Object.keys(options).length === 0}
+          onChange={(key) => {
+            if (key) {
+              const opt = options[key].data[0];
+              const updateObj: any = { ...opt };
+              delete updateObj["metadata"];
+              setState(updateObj);
+            } else {
               setState({
                 device_id: state.device_id,
-                ...options.filter((opt) => type === opt.type)[0].actions[0],
-              })
+              });
             }
-            options={options.map(({ type }) => type)}
-          />
-        )}
+          }}
+        />
         {entities.length > 0 && (
           <InputEntity
             key={"entities" + state.device_id}
@@ -82,7 +81,7 @@ export const ActionDeviceState: OptionManager<DeviceAction> = {
               }
             />
           ))}
-        {actions.length + options.length === 0 && (
+        {Object.keys(options).length + entities.length === 0 && (
           <>This device has no actions.</>
         )}
       </>

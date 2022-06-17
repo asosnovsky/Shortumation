@@ -131,9 +131,19 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
     return `Trigger ${node.event}`;
   }
   if ("device_id" in node) {
-    return `${node.type ?? ""} on ${
-      node.device_id ? namer.getDeviceName(node.device_id) : ""
-    }`;
+    let out = "";
+    if (node.type) {
+      out += `${prettyName(node.type ?? "")} `;
+    }
+    if (node.subtype) {
+      out += node.subtype + " ";
+    }
+    if (node.entity_id) {
+      out += namer.getEntityName(node.entity_id);
+    } else if (node.device_id) {
+      out += namer.getDeviceName(node.device_id);
+    }
+    return out;
   }
   if ("choose" in node) {
     return "Choose";
