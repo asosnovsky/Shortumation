@@ -1,4 +1,5 @@
 import { MessageBase } from "home-assistant-js-websocket";
+import { AutomationDeviceState } from "types/automations/common";
 
 export type EntityRegisteryItem = {
   area_id: null | string;
@@ -26,3 +27,18 @@ export type DeviceRegistryItem = {
 export type HassDevices = Array<DeviceRegistryItem>;
 export type HassEntitiesRegistry = Array<EntityRegisteryItem>;
 export type HASendMessage = (sendMsg: MessageBase) => Promise<any>;
+
+export type DeviceBaseType = AutomationDeviceState & {
+  metadata: Record<string, any>;
+} & Record<string, any>;
+export type DeviceTypeAction = DeviceBaseType;
+export type DeviceTriggerType = DeviceBaseType & {
+  platform: string;
+};
+export type DeviceTypeCapability = {
+  extra_fields: Array<{
+    name: string;
+    required?: true;
+    type: string;
+  }>;
+};

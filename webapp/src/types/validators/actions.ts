@@ -1,5 +1,5 @@
 import * as st from "superstruct";
-import { AutomationTime } from "./common";
+import { AutomationDeviceState, AutomationTime } from "./common";
 import { AutomationTrigger } from "./triggers";
 
 export const AutomationActionNodeBase = st.type({
@@ -54,13 +54,7 @@ export const FireEventAction = st.intersection([
 
 export const DeviceAction = st.intersection([
   AutomationActionNodeBase,
-  st.type({
-    type: st.optional(st.string()),
-    subtype: st.optional(st.string()),
-    device_id: st.optional(st.string()),
-    entity_id: st.optional(st.string()),
-    domain: st.optional(st.string()),
-  }),
+  st.partial(AutomationDeviceState),
 ]);
 
 export const ChooseAction = st.intersection([

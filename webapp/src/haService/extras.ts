@@ -2,33 +2,13 @@ import { BaseOption } from "components/Inputs/InputAutoComplete";
 import { MessageBase } from "home-assistant-js-websocket";
 import { useEffect, useRef, useState } from "react";
 import { prettyName } from "utils/formatting";
-import { HASendMessage } from "./types";
+import {
+  DeviceTriggerType,
+  DeviceTypeAction,
+  DeviceTypeCapability,
+  HASendMessage,
+} from "./types";
 
-export type DeviceTypeAction = {
-  type: string;
-  subtype?: string;
-  entity_id?: string;
-  device_id?: string;
-  domain: string;
-};
-export type DeviceTypeTrigger = {
-  type: string;
-  subtype?: string;
-  platform: string;
-  device_id: string;
-  entity_id?: string;
-  domain: string;
-  metadata: Record<string, any>;
-} & Record<string, any>;
-
-export type DeviceTypeCapability = {
-  extra_fields: Array<{
-    name: string;
-    required?: true;
-    optional?: true;
-    type: string;
-  }>;
-};
 export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
   const createUseThing = function <Args, HAData, STData>(
     convertArgsToMessage: (a: Args) => MessageBase,
@@ -110,17 +90,29 @@ export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
       (data) => data,
       {}
     ),
+    useDeviceTriggerCapalities: createUseThing<
+      DeviceTypeAction,
+      DeviceTypeCapability,
+      Partial<DeviceTypeCapability>
+    >(
+      (trigger) => ({
+        type: "device_automation/trigger/capabilities",
+        trigger,
+      }),
+      (data) => data,
+      {}
+    ),
     useDeviceTriggers: createUseThing<
       { deviceId: string },
-      DeviceTypeTrigger[],
-      DeviceTypeTrigger[]
+      DeviceTriggerType[],
+      Record<string, BaseOption<{ data: DeviceTriggerType[] }>>
     >(
       ({ deviceId }) => ({
         type: "device_automation/trigger/list",
         device_id: deviceId,
       }),
-      (data) => data,
-      []
+      reduceDeviceThings,
+      {}
     ),
   };
 };

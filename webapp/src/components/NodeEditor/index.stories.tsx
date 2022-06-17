@@ -68,6 +68,7 @@ DeviceTriggerExample.args = {
   ...DeviceTriggerExample.args,
   node: {
     platform: "device",
+    device_id: "bd83b10cb1c7aa028c12dade5b4e87d5",
   },
 };
 
