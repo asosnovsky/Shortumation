@@ -28,7 +28,7 @@ export const useEditorNodeState = (
     isModified: false,
     ...computeInvalidYaml(originalNode, allowedTypes),
   });
-  const { entities, namer, services } = useHA();
+  const ha = useHA();
   // aliases
   const {
     node: currentNode,
@@ -115,7 +115,7 @@ export const useEditorNodeState = (
           <InputText
             key="alias"
             label="Alias"
-            value={getDescriptionFromAutomationNode(allState.node, namer)}
+            value={getDescriptionFromAutomationNode(allState.node, ha.namer)}
             onChange={(alias) =>
               setState({
                 ...allState.node,
@@ -142,13 +142,12 @@ export const useEditorNodeState = (
         <>
           {aliasEditor}
           {"renderOptionList" in optionManager ? (
-            optionManager.renderOptionList(currentNode, setState, entities)
+            optionManager.renderOptionList(currentNode, setState, ha.entities)
           ) : (
             <optionManager.Component
               state={currentNode}
               setState={setState}
-              entities={entities}
-              services={services}
+              ha={ha}
             />
           )}
         </>

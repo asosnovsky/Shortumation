@@ -51,7 +51,7 @@ export function computeSimilarity(
     if (lowCaseId.includes(segment)) {
       similarityScore += lowCaseId.length / lowCaseId.length;
     }
-    if (lowCaseId.includes(segment)) {
+    if (lowCaseLabel.includes(segment)) {
       similarityScore += lowCaseLabel.length / lowCaseLabel.length;
     }
   }

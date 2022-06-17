@@ -10,7 +10,7 @@ export const ActionCallServiceState: OptionManager<ServiceAction> = {
     data: {},
   }),
   isReady: ({ service }) => service !== "",
-  Component: ({ state, setState, services }) => {
+  Component: ({ state, setState, ha: { services } }) => {
     const { service, target, data } = state;
     const update = updateActionData(state, setState);
     const serviceOption = services.getOption(service);

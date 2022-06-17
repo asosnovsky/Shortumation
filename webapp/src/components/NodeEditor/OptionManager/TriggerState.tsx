@@ -15,7 +15,7 @@ export const TriggerState: OptionManager<AutomationTriggerState> = {
     entity_id: "",
   }),
   isReady: () => true,
-  Component: ({ state, setState, entities }) => {
+  Component: ({ state, setState, ha: { entities } }) => {
     const attributes = entities.getAttributes(state.entity_id);
     const states = entities.getStates(state.entity_id, state.attribute);
     return (

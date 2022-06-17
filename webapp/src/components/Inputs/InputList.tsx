@@ -19,6 +19,7 @@ export type Props<T extends string | Object> = {
   title?: string;
   helperText?: string;
   endAdornment?: ReactNode;
+  disabled?: boolean;
 };
 export function InputList<T extends string | Object>({
   current,
@@ -33,6 +34,7 @@ export function InputList<T extends string | Object>({
   title,
   helperText,
   endAdornment,
+  disabled,
 }: Props<T>) {
   const invalidCurrent =
     current && !options.map(getKey).includes(getKey(current));
@@ -42,6 +44,7 @@ export function InputList<T extends string | Object>({
       variant="filled"
       sx={{ marginRight: "0.25em", minWidth: `${label.length * 0.75}em` }}
       fullWidth
+      disabled={disabled}
     >
       <InputLabel>{label}</InputLabel>
       <Select
@@ -60,6 +63,7 @@ export function InputList<T extends string | Object>({
         variant="filled"
         error={invalidCurrent}
         fullWidth
+        disabled={disabled}
       >
         {options.map((t, i) => (
           <MenuItem key={i} value={getKey(t)}>

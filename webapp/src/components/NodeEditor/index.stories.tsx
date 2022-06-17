@@ -123,3 +123,14 @@ StateTriggerExample.args = {
     entity_id: "binary_sensor.door_main",
   },
 };
+
+export const DeviceFilledExample = Action.bind({});
+DeviceFilledExample.args = {
+  ...DeviceFilledExample.args,
+  node: {
+    type: "toggle",
+    device_id: "29c3443815620745c4bf4100b11588fd",
+    entity_id: "light.switch_island",
+    domain: "light",
+  },
+};

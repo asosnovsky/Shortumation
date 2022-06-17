@@ -2,12 +2,13 @@ import { entitiesColl, servicesColl } from "home-assistant-js-websocket";
 import { Namer } from "utils/formatting";
 import { deviceRegistryColl } from "./DeviceRegistry";
 import { entityRegistryColl } from "./EntityRegistry";
-import { DeviceRegistryItem } from "./types";
+import { DeviceRegistryItem, HASendMessage } from "./types";
 import { useHassCollection } from "./useHassCollection";
 import { useHAConnection } from "./connection";
 import { useSnackbar } from "notistack";
 import { TypedHassService } from "./fieldTypes";
 import { Option } from "components/Inputs/InputAutoComplete";
+import { getDeviceExtraWsCalls } from "./extras";
 
 export type EntityOption = Option<{ domain: string }>;
 export type HAEntitiesState = ReturnType<typeof useHAEntities>;
@@ -216,6 +217,7 @@ export const useHAServices = () => {
 };
 
 export type DeviceRegistryOption = Option<{ manufacturer: string }>;
+export type HADeviceRegistry = ReturnType<typeof useHADeviceRegistry>;
 export const useHADeviceRegistry = () => {
   const dr = useHassCollection(deviceRegistryColl);
   const getLabelForItem = (item: DeviceRegistryItem) =>
@@ -255,6 +257,7 @@ export const useHAEntityRegistry = () => {
   return dr;
 };
 
+export type HAService = ReturnType<typeof useHA>;
 export const useHA = () => {
   const entities = useHAEntities();
   const devices = useHADeviceRegistry();
@@ -312,6 +315,12 @@ export const useHA = () => {
     }
   };
 
+  const callHA: HASendMessage = async (sendMsg) => {
+    if (conn.status === "loaded") {
+      return await conn.connection.sendMessagePromise(sendMsg);
+    }
+  };
+
   const namer: Namer = {
     getDeviceName(device_id) {
       return devices.getLabel(device_id);
@@ -336,6 +345,8 @@ export const useHA = () => {
     services,
     namer,
     callService,
+    callHA,
+    deviceExtras: getDeviceExtraWsCalls(callHA),
     reloadAutomations: () => callService("automation", "reload"),
   };
 };
