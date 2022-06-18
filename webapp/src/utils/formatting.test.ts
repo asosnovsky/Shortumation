@@ -270,7 +270,7 @@ test("pretty naming", () => {
   expect(prettyName("Baby Name")).toEqual("Baby Name");
 });
 
-test("get descrption for device action", () => {
+test("get descrption for device triggerr", () => {
   expect(
     getDescriptionFromAutomationNode(
       {
