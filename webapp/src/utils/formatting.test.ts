@@ -269,3 +269,18 @@ test("pretty naming", () => {
   expect(prettyName("device_tracker")).toEqual("Device Tracker");
   expect(prettyName("Baby Name")).toEqual("Baby Name");
 });
+
+test("get descrption for device action", () => {
+  expect(
+    getDescriptionFromAutomationNode(
+      {
+        platform: "device",
+        type: "no_motion",
+        device_id: "d148a585c041a9a1b352a670d64e0c58",
+        entity_id: "binary_sensor.motion_office_inv",
+        domain: "binary_sensor",
+      },
+      dummyNamer
+    )
+  ).toEqual("binary_sensor.motion_office_inv No Motion");
+});
