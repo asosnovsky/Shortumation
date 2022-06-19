@@ -1,7 +1,6 @@
 import "./InputYaml.css";
 import * as yaml from "js-yaml";
 import { useEffect, useState, ReactNode } from "react";
-import { useDelayEffect } from "utils/useDelay";
 
 import CodeMirror from "@uiw/react-codemirror";
 import FormControl from "@mui/material/FormControl";

@@ -5,11 +5,9 @@ import {
 import { InputDevice } from "components/Inputs/InputDevice";
 import { InputDeviceCapabilties } from "components/Inputs/InputDeviceCapabilties";
 import { InputEntity } from "components/Inputs/InputEntities";
-import InputText from "components/Inputs/InputText";
 import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
 import { DeviceBaseType, DeviceTypeCapability } from "haService/types";
 import { AutomationDeviceState } from "types/automations/common";
-import { prettyName } from "utils/formatting";
 
 export type DeviceEditorProps<DBT extends DeviceBaseType> = {
   type: "action" | "condition" | "trigger";

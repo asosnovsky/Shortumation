@@ -439,6 +439,22 @@ export const LightTurnOn = makeExample({
   },
 });
 
+export const ZhaLight = makeExample({
+  name: "Turn Light",
+  description: "",
+  fields: {
+    entity: {
+      description: "Light Entity",
+      selector: {
+        entity: {
+          domain: "light",
+          integration: "zha",
+        },
+      },
+    },
+  },
+});
+
 export const UltimateService = makeExample({
   name: "Ultimate Service",
   description: "Show a notification in the frontend.",

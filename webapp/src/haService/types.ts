@@ -107,3 +107,10 @@ export interface HaFormBooleanSchema extends HaFormBaseSchema {
 export interface HaFormTimeSchema extends HaFormBaseSchema {
   type: "positive_time_period_dict";
 }
+
+export interface EntitySource {
+  domain: string;
+  custom_component: boolean;
+  source: "config_entry" | "platform_config";
+  config_entry?: string;
+}

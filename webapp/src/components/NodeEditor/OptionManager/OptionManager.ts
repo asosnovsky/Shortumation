@@ -1,4 +1,5 @@
-import { HAEntitiesState, HAService } from "haService";
+import { HAService } from "haService";
+import { HAEntitiesState } from "haService/HAEntities";
 import { FC } from "react";
 import { AutomationAction } from "types/automations/actions";
 import { AutomationCondition } from "types/automations/conditions";

@@ -1,5 +1,5 @@
 import "./ServiceEditorField.css";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { ServiceEditorOption } from "./options";
 import InputText from "components/Inputs/InputText";
 import InputNumber from "components/Inputs/InputNumber";
@@ -10,6 +10,8 @@ import { prettyName } from "utils/formatting";
 import InputBoolean from "components/Inputs/InputBoolean";
 import { SelectorNumber, SelectorText } from "haService/fieldTypes";
 import InputYaml from "components/Inputs/InputYaml";
+import { useSnackbar } from "notistack";
+import { InputEntity } from "components/Inputs/InputEntities";
 
 export type ServiceEditorFieldProps = {
   option: ServiceEditorOption;
@@ -23,6 +25,8 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
   onChange,
   onRemove,
 }) => {
+  const snackr = useSnackbar();
+  const msgRef = useRef<Record<string, boolean>>({});
   const description = option.data.description ?? "";
   const isRequired = !onRemove;
   const label = option.label;
@@ -97,6 +101,37 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
       return <InputBoolean {...prop} />;
     } else if ("object" in option.data.selector) {
       return <InputYaml {...prop} />;
+    } else if ("entity" in option.data.selector) {
+      const options = option.data.selector.entity ?? {};
+      console.log(options);
+      return (
+        <InputEntity
+          {...prop}
+          multiple={false}
+          restrictToDomain={options.domain ? [options.domain] : undefined}
+          restrictedIntegrations={
+            options.integration ? [options.integration] : undefined
+          }
+        />
+      );
+    }
+  }
+  if (option.data.selector) {
+    if (!msgRef.current[JSON.stringify(option.data.selector)]) {
+      msgRef.current[JSON.stringify(option.data.selector)] = true;
+      snackr.enqueueSnackbar(
+        <span>
+          "{JSON.stringify(Object.keys(option.data.selector))}" is of a
+          unimplemented! <br />
+          Please report this to the maintainers.{" "}
+          <b>For now, we leave you with a generic textbox!</b> <br />
+          DEBUG="{JSON.stringify(option.data.selector)}"
+        </span>,
+        {
+          variant: "warning",
+          persist: true,
+        }
+      );
     }
   }
   return <InputText {...prop} />;

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useHAEntities } from "haService";
+import { useHAEntities } from "haService/HAEntities";
 import {
   InputAutoComplete,
   InputAutoCompletePropsBase,
@@ -8,13 +8,17 @@ import { prettyName } from "utils/formatting";
 
 export type InputEntityProps = InputAutoCompletePropsBase & {
   restrictToDomain?: string[];
+  restrictedIntegrations?: string[];
   preSelectedEntityIds?: string[];
 };
 
 export const InputEntity: FC<InputEntityProps> = (props) => {
   // state
   const entities = useHAEntities();
-  let options = entities.getOptions(props.restrictToDomain);
+  let options = entities.getOptions(
+    props.restrictToDomain,
+    props.restrictedIntegrations
+  );
   if (props.preSelectedEntityIds) {
     options = options.filter((opt) =>
       props.preSelectedEntityIds?.includes(entities.getID(opt))
@@ -29,7 +33,13 @@ export const InputEntity: FC<InputEntityProps> = (props) => {
         }
       });
     }
-    errors.concat(entities.validateOptions(v, props.restrictToDomain) ?? []);
+    errors.concat(
+      entities.validateOptions(
+        v,
+        props.restrictToDomain,
+        props.restrictedIntegrations
+      ) ?? []
+    );
     if (errors.length > 0) {
       return errors;
     }
@@ -42,7 +52,11 @@ export const InputEntity: FC<InputEntityProps> = (props) => {
       options={options}
       getID={entities.getID}
       getLabel={entities.getLabel}
-      groupBy={(opt) => (typeof opt !== "string" ? prettyName(opt.domain) : "")}
+      groupBy={(opt) =>
+        typeof opt !== "string"
+          ? `${prettyName(opt.integration)}/ ${prettyName(opt.domain)}`
+          : ""
+      }
     />
   );
 };

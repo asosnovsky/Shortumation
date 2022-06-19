@@ -10,8 +10,8 @@ import {
   HASendMessage,
 } from "./types";
 
-export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
-  const createUseThing = function <Args, HAData, STData>(
+export const makeCreateUseThing = (callHA: HASendMessage) =>
+  function <Args, HAData, STData>(
     convertArgsToMessage: (a: Args) => MessageBase,
     transformHAData: (ha: HAData) => STData,
     defaultSTData: STData
@@ -41,6 +41,9 @@ export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
       return stData;
     };
   };
+
+export const getDeviceExtraWsCalls = (callHA: HASendMessage) => {
+  const createUseThing = makeCreateUseThing(callHA);
   const reduceDeviceThings = function <
     Raw extends { type: string; subtype?: string; entity_id?: string }
   >(raw: Raw[]) {
