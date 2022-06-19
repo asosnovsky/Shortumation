@@ -98,6 +98,8 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
           return node.value_template;
         case "device":
           return getDescriptionForDeviceType(node, namer, true);
+        case "trigger":
+          return node.id;
         default:
           return JSON.stringify(node);
       }

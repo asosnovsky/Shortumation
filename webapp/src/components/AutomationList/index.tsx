@@ -3,19 +3,18 @@ import "./index.mobile.css";
 import { AutomationEditor } from "components/AutomationEditor";
 import { FC, ReactNode, useState } from "react";
 import { AutomationData } from "types/automations";
-import { defaultAutomation } from 'utils/defaults';
+import { defaultAutomation } from "utils/defaults";
 import { ArrowIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
-import { DAGAutomationFlowDims } from 'components/DAGFlow/types';
+import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 import useWindowSize from "utils/useWindowSize";
 import { makeTagDB } from "./TagDB";
 import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import { useHA } from "haService";
-
 
 interface AutomationListParams {
   automations: AutomationData[];
@@ -31,12 +30,12 @@ export const useAutomationListState = () => {
     cookies,
     setCookies,
     // eslint-disable-next-line
-    _
-  ] = useCookies(['alCurrent']);
+    _,
+  ] = useCookies(["alCurrent"]);
   let initialCurrent = 0;
   try {
-    initialCurrent = Number(cookies.alCurrent ?? '0');
-  } catch (_) { }
+    initialCurrent = Number(cookies.alCurrent ?? "0");
+  } catch (_) {}
 
   const [hideList, setHideList] = useState(false);
   const [current, setCurrent] = useState(initialCurrent);
@@ -46,11 +45,11 @@ export const useAutomationListState = () => {
     setHideList,
     current,
     setCurrent(i: number) {
-      setCurrent(i)
-      setCookies('alCurrent', String(i))
-    }
-  }
-}
+      setCurrent(i);
+      setCookies("alCurrent", String(i));
+    },
+  };
+};
 
 export const AutomationList: FC<AutomationListParams> = ({
   automations,
@@ -61,49 +60,65 @@ export const AutomationList: FC<AutomationListParams> = ({
   children,
 }) => {
   // state
-  const { hideList, setHideList, current, setCurrent } = useAutomationListState();
+  const { hideList, setHideList, current, setCurrent } =
+    useAutomationListState();
   const { isMobile } = useWindowSize();
   // alias
   const currentAuto = automations.length > 0 ? automations[current] : null;
   const tagDB = makeTagDB(automations);
   // render
-  return <div className={["automation-list--root", isMobile ? 'mobile' : ''].join(' ')}>
-    <div className={["automation-list--list", hideList ? "hide" : "show"].join(' ')}>
-      <AutomationListBox
-        automations={automations}
-        onAdd={() => {
-          onAdd(defaultAutomation(String(Date.now())));
-          setCurrent(automations.length)
-        }}
-        onSelectAutomation={i => {
-          setCurrent(i);
-          if (isMobile) {
-            setHideList(true)
-          }
-        }}
-        selected={current}
-        onRemove={onRemove}
-      />
-      <ButtonIcon
-        onClick={() => setHideList(!hideList)}
-        className="automation-list--list-hide"
-        Icon={ArrowIcon}
-      />
+  return (
+    <div
+      className={["automation-list--root", isMobile ? "mobile" : ""].join(" ")}
+    >
+      <div
+        className={["automation-list--list", hideList ? "hide" : "show"].join(
+          " "
+        )}
+      >
+        <AutomationListBox
+          automations={automations}
+          onAdd={() => {
+            onAdd(defaultAutomation(String(Date.now())));
+            setCurrent(automations.length);
+            if (isMobile) {
+              setHideList(true);
+            }
+          }}
+          onSelectAutomation={(i) => {
+            setCurrent(i);
+            if (isMobile) {
+              setHideList(true);
+            }
+          }}
+          selected={current}
+          onRemove={onRemove}
+        />
+        <ButtonIcon
+          onClick={() => setHideList(!hideList)}
+          className="automation-list--list-hide"
+          Icon={ArrowIcon}
+        />
+      </div>
+      <div className="automation-list--viewer">
+        {currentAuto ? (
+          <AutomationEditor
+            automation={currentAuto}
+            onUpdate={(a) => onUpdate(current, a)}
+            dims={{
+              ...dims,
+              flipped: isMobile,
+            }}
+            tagDB={tagDB}
+          />
+        ) : (
+          <></>
+        )}
+      </div>
+      {children}
     </div>
-    <div className="automation-list--viewer">
-      {currentAuto ? <AutomationEditor
-        automation={currentAuto}
-        onUpdate={a => onUpdate(current, a)}
-        dims={{
-          ...dims,
-          flipped: isMobile
-        }}
-        tagDB={tagDB}
-      /> : <></>}
-    </div>
-    {children}
-  </div>
-}
+  );
+};
 
 interface ConnectedAutomationListParams {
   dims: DAGAutomationFlowDims;
@@ -111,40 +126,44 @@ interface ConnectedAutomationListParams {
 }
 export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
   api: {
-    state: {
-      automations,
-    },
+    state: { automations },
     ...methods
   },
-  dims
+  dims,
 }) => {
   const { reloadAutomations } = useHA();
   const removeAutomation = async (args: any) => {
-    const resp = await methods.removeAutomation(args)
+    const resp = await methods.removeAutomation(args);
     await reloadAutomations();
-    return resp
-  }
+    return resp;
+  };
   const updateAutomation = async (args: any) => {
-    const resp = await methods.updateAutomation(args)
+    const resp = await methods.updateAutomation(args);
     await reloadAutomations();
-    return resp
-  }
+    return resp;
+  };
   if (!automations.ready) {
-    return <div className="automation-list--root loading">
-      <LinearProgress />
-      <div className="automation-list--circle-loader">
-        <CircularProgress />
+    return (
+      <div className="automation-list--root loading">
+        <LinearProgress />
+        <div className="automation-list--circle-loader">
+          <CircularProgress />
+        </div>
       </div>
-    </div>
+    );
   }
   if (!automations.ok) {
-    return <span>Error {automations.error}</span>
+    return <span>Error {automations.error}</span>;
   }
-  return <AutomationList
-    dims={dims}
-    automations={automations.data.data}
-    onAdd={auto => updateAutomation({ auto, index: automations.data.totalItems + 1 })}
-    onRemove={index => removeAutomation({ index })}
-    onUpdate={(index, auto) => updateAutomation({ index, auto })}
-  />
-}
+  return (
+    <AutomationList
+      dims={dims}
+      automations={automations.data.data}
+      onAdd={(auto) =>
+        updateAutomation({ auto, index: automations.data.totalItems + 1 })
+      }
+      onRemove={(index) => removeAutomation({ index })}
+      onUpdate={(index, auto) => updateAutomation({ index, auto })}
+    />
+  );
+};
