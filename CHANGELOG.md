@@ -1,8 +1,15 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.1.22] - Many Visual improvements
+
+- Deprecated several custom components in favor of mui.com
+- Device Editor now has support for 99% of diplay types
+- Condition Device is implemented
+- Improved naming autogen for trigger & choose
+
 ## [0.1.21] - Service Editor
 
-- first version of service editor 
+- first version of service editor
 - reloading automations on save
 
 ## [0.1.20] - UI Bugfixes
@@ -20,9 +27,9 @@
 ## [0.1.17] - Websockets
 
 - Connected to HA main websocket -- now we retrieve real-time information about
-    
-    * Device names
-    * Entity names/ids
+
+  - Device names
+  - Entity names/ids
 
 - Autocomplete for devices and entities
 
@@ -45,7 +52,6 @@
 - Added more node-based errors (this way it's easier to see where validations failed)
 - Made the validators less strict in order to capture more edge cases that HA supports
 - Nicer auto-generated descriptions for some trigger nodes
-
 
 ## [0.1.10] - More Bug Fixes
 
@@ -100,8 +106,7 @@
 ## [0.0.9] - First Working Version
 
 - Instalable verion via github
-- Initial POC done 
-
+- Initial POC done
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
