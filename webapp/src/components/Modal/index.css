@@ -1,0 +1,17 @@
+.modal--root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+}
+
+.modal--root>div {
+    max-width: fit-content;
+    min-width: 100px;
+    padding: 0.25em;
+}

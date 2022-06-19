@@ -2,6 +2,12 @@
     display: flex;
     gap: 0;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-time>.input-time--inner>.icon-button {
+    border: none;
 }
 
 .input-time>.input-time--inner>.MuiFormControl-root {

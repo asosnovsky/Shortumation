@@ -3,7 +3,6 @@ import { FC, useRef } from "react";
 import { ServiceEditorOption } from "./options";
 import InputText from "components/Inputs/InputText";
 import InputNumber from "components/Inputs/InputNumber";
-import { IconButton } from "@mui/material";
 import { RemoveCircle } from "@mui/icons-material";
 import { InputAutoComplete, Option } from "components/Inputs/InputAutoComplete";
 import { prettyName } from "utils/formatting";
@@ -12,6 +11,7 @@ import { SelectorNumber, SelectorText } from "haService/fieldTypes";
 import InputYaml from "components/Inputs/InputYaml";
 import { useSnackbar } from "notistack";
 import { InputEntity } from "components/Inputs/InputEntities";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 export type ServiceEditorFieldProps = {
   option: ServiceEditorOption;
@@ -34,13 +34,12 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
   const removeIcon = !onRemove ? (
     <></>
   ) : (
-    <IconButton
+    <ButtonIcon
       className="service-editor--field--remove"
       onClick={onRemove}
       title={`Remove ${label}`}
-    >
-      <RemoveCircle />
-    </IconButton>
+      icon={<RemoveCircle color="secondary" />}
+    />
   );
   example = option.data.example ? `Example: ${option.data.example}` : "";
   const prop = {

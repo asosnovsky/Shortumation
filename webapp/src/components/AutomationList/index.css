@@ -50,6 +50,7 @@
 
 .automation-list--list.hide>.automation-list--list-hide {
     transform: rotate(180deg);
+    left: 0;
 }
 
 /* list children: normal */
@@ -58,8 +59,10 @@
     border-width: 1px;
 }
 
-.automation-list--list-hide {
+.automation-list--list .automation-list--list-hide {
     position: absolute;
-    bottom: 0.5em;
-    right: 0.5em;
+    bottom: 0em;
+    left: 0.5em;
+    max-width: 1.5em;
+    max-height: 1.5em;
 }

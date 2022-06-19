@@ -25,8 +25,8 @@
 
 .input-yaml .MuiInputAdornment-positionEnd {
     position: absolute;
-    right: 0;
-    top: 55%;
+    right: 0.5em;
+    top: 3.5em;
 }
 
 .input-yaml .input-yaml--placeholder {
@@ -34,4 +34,8 @@
     left: 2em;
     top: 2.5em;
     color: var(--primary-accent);
+}
+
+.input-yaml .MuiButtonBase-root.icon-button[type="button"].icon-button {
+    border-style: none;
 }

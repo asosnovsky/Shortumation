@@ -1,30 +1,24 @@
-import { FC } from 'react';
-import { IconBaseProps } from './base';
-import { createAppUseStyles } from 'styles/theme';
+import "./ButtonIcons.css";
+import { FC, ReactNode } from "react";
+import MuiIconButton, { IconButtonTypeMap } from "@mui/material/IconButton";
 
-export interface ButtonIconStyleProps {
-}
-export interface ButtonIconProps extends IconBaseProps, ButtonIconStyleProps {
-  Icon: FC<IconBaseProps>;
-}
-const useButtonIconStyles = createAppUseStyles(theme => ({
-  buttonIcon: {
-    borderRadius: "100%",
-    borderWidth: 1,
-    borderStyle: "groove",
-    padding: "0.25em",
-    "&:hover": {
-      backgroundColor: theme.secondaryAccent,
-      cursor: 'pointer',
-    }
-  }
-}))
-
-
-export const ButtonIcon: FC<ButtonIconProps> = ({
-  Icon,
-  className,
-  ...props
-}) => <Icon
-    className={`${useButtonIconStyles({}).classes.buttonIcon} ${className}`} {...props}
-  />
+export const ButtonIcon: FC<{
+  icon: ReactNode;
+  onClick?: () => void;
+  className?: string;
+  title?: string;
+  disabled?: boolean;
+  color?: IconButtonTypeMap["props"]["color"];
+}> = (props) => {
+  return (
+    <MuiIconButton
+      className={["icon-button", props.className ?? ""].join(" ")}
+      onClick={props.onClick}
+      title={props.title}
+      color={props.color}
+      disabled={props.disabled}
+    >
+      {props.icon}
+    </MuiIconButton>
+  );
+};

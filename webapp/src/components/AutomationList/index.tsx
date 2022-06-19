@@ -4,7 +4,6 @@ import { AutomationEditor } from "components/AutomationEditor";
 import { FC, ReactNode, useState } from "react";
 import { AutomationData } from "types/automations";
 import { defaultAutomation } from "utils/defaults";
-import { ArrowIcon } from "components/Icons";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
@@ -15,6 +14,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useCookies } from "react-cookie";
 import { useHA } from "haService";
+import { ArrowBack } from "@mui/icons-material";
 
 interface AutomationListParams {
   automations: AutomationData[];
@@ -97,7 +97,7 @@ export const AutomationList: FC<AutomationListParams> = ({
         <ButtonIcon
           onClick={() => setHideList(!hideList)}
           className="automation-list--list-hide"
-          Icon={ArrowIcon}
+          icon={<ArrowBack />}
         />
       </div>
       <div className="automation-list--viewer">

@@ -1,9 +1,10 @@
+import "./InputNumber.css";
 import Close from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Edit from "@mui/icons-material/Edit";
 import { ReactNode } from "react";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 export interface Props {
   label: string | JSX.Element;
@@ -57,7 +58,7 @@ export default function InputNumber({
       value={value}
       onChange={(e) => onChange(Number(e.target.value ?? 0))}
       disabled={disabled}
-      className={className}
+      className={["input-number", className ?? ""].join(" ")}
       placeholder={placeholder}
       required={required}
       fullWidth
@@ -67,9 +68,10 @@ export default function InputNumber({
           endAdornment
         ) : (
           <InputAdornment position="end">
-            <IconButton onClick={() => onChange(disabled ? 0 : undefined)}>
-              {disabled ? <Edit /> : <Close />}
-            </IconButton>
+            <ButtonIcon
+              onClick={() => onChange(disabled ? 0 : undefined)}
+              icon={disabled ? <Edit /> : <Close />}
+            />
           </InputAdornment>
         ),
         inputProps: {

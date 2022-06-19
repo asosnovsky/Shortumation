@@ -39,11 +39,13 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
   return (
     <>
       <InputDevice
+        key="devices"
         label="Device"
         value={state.device_id ?? ""}
         onChange={(device_id) => setState({ device_id: device_id ?? "" })}
       />
       <InputAutoComplete
+        key="action"
         label="Action"
         multiple={false}
         value={actionId}
@@ -76,6 +78,7 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
       )}
       {caps?.extra_fields && (
         <InputDeviceCapabilties
+          key="caps"
           state={state}
           setState={setState}
           defn={caps.extra_fields}

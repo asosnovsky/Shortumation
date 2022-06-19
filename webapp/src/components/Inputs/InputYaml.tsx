@@ -5,8 +5,10 @@ import { useEffect, useState, ReactNode } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { FormHelperText, IconButton, InputAdornment } from "@mui/material";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputAdornment from "@mui/material/InputAdornment";
 import { Save } from "@mui/icons-material";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 export interface Props<T extends {}> {
   label: string;
@@ -94,15 +96,16 @@ export default function InputYaml<T extends {}>({
         {!!text ? "" : placeholder}
       </span>
       <InputAdornment position="end">
-        <IconButton
+        <ButtonIcon
           disabled={!hasChanged}
           onClick={() => onSave()}
           title={!!error ? "Invalid YAML" : hasChanged ? "Save" : ""}
-        >
-          <Save
-            color={hasChanged ? (!!error ? "error" : "success") : "disabled"}
-          />
-        </IconButton>
+          icon={
+            <Save
+              color={hasChanged ? (!!error ? "error" : "success") : "disabled"}
+            />
+          }
+        />
         {endAdornment}
       </InputAdornment>
       <FormHelperText variant="filled" error={!!error}>

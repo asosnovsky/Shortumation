@@ -17,3 +17,7 @@
     width: 100%;
     max-width: 100%;
 }
+
+.service-editor--field .service-editor--field--remove.icon-button.MuiButtonBase-root.icon-button[type="button"] {
+    border-style: none;
+}

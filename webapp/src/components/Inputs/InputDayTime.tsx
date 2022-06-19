@@ -3,7 +3,6 @@ import { useState, useEffect, FC } from "react";
 import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
 import { AutomationTime, AutomationTimeObject } from "types/automations/common";
 import {
   convertAutomationTimeToTimeObject,
@@ -12,6 +11,7 @@ import {
 import { convertAutomationTimeToTimeString } from "utils/time";
 import { prettyName } from "utils/formatting";
 import InputLabel from "@mui/material/InputLabel";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 // constants
 const fields: Array<keyof AutomationTimeObject> = [
@@ -140,9 +140,10 @@ export const InputTime: FC<Props> = (props) => {
             onChange={(e) => updateOne(name)(e.target.value)}
           />
         ))}
-        <IconButton onClick={() => setDisabled(!disabled)}>
-          {disabled ? <EditIcon /> : <CloseIcon />}
-        </IconButton>
+        <ButtonIcon
+          onClick={() => setDisabled(!disabled)}
+          icon={disabled ? <EditIcon /> : <CloseIcon />}
+        />
       </div>
     </div>
   );

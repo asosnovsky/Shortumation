@@ -14,7 +14,7 @@
 
 .automation-list--root.mobile .automation-list--list-hide {
     transform: rotate(90deg);
-    left: 1.25em;
+    left: 0.25em;
 }
 
 .automation-list--root.mobile .automation-editor--info-box {
@@ -33,7 +33,7 @@
 }
 
 .automation-list--root.mobile .automation-editor--info-box--icon {
-    left: 1.25em;
+    left: 0.5em;
     bottom: 0em;
     background-color: var(--primary);
     transform: rotate(90deg);
@@ -50,8 +50,8 @@
 .automation-list--root.mobile .automation-list--list.hide .automation-list--list-hide {
     transform: rotate(270deg);
     position: fixed;
-    top: 0.75em;
-    z-index: 20;
+    top: 0;
+    z-index: 5;
 }
 
 /* info box hide */
@@ -64,9 +64,9 @@
 .automation-list--root.mobile .automation-editor--info-box.hide .automation-editor--info-box--icon {
     transform: rotate(270deg);
     position: fixed;
-    top: 0.75em;
-    background-color: var(--green-opaque);
-    z-index: 30;
+    top: 0em;
+    left: 0.25em;
+    z-index: 10;
 }
 
 

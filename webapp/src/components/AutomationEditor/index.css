@@ -61,16 +61,19 @@
     position: relative;
 }
 
-.automation-editor--info-box--icon {
+.automation-editor .automation-editor--info-box--icon {
     position: absolute;
-    right: 0em;
-    bottom: 0.5em;
+    left: 0.25em;
+    bottom: 0em;
     z-index: 10;
+    max-width: 1.5em;
+    max-height: 1.5em;
 }
 
 .automation-editor--info-box.hide>.automation-editor--info-box--icon {
     transform: rotate(180deg);
     z-index: 2;
+    left: 0.1em;
 }
 
 .automation-editor.loading .mock-list {

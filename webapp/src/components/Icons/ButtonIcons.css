@@ -1,0 +1,6 @@
+.MuiButtonBase-root.icon-button[type="button"] {
+    border-width: 1px;
+    border-style: solid;
+    max-width: 1.5em;
+    max-height: 1.5em;
+}

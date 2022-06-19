@@ -132,7 +132,7 @@ export const useHAEntities = () => {
         label: entities.collection.state[key].attributes.friendly_name ?? key,
         domain: key.split(".")[0] ?? "n/a",
         integration: entitySource.ready
-          ? entitySource.collection.state[key].domain ?? "n/a"
+          ? (entitySource.collection.state[key] ?? {}).domain ?? "n/a"
           : "...",
       }));
     },
