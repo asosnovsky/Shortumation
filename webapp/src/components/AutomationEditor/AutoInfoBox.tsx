@@ -6,7 +6,6 @@ import { FC, ReactNode, useRef, useState } from "react";
 import { AddIcon, TrashIcon } from "components/Icons";
 import InputAutoText from "components/Inputs/InputAutoText";
 import { TagDB } from "components/AutomationList/TagDB";
-import  from "@mui/material/IconButton";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 interface Props {
