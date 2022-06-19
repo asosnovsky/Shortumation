@@ -1,0 +1,37 @@
+.input-yaml {
+    align-items: flex-start;
+    position: relative;
+}
+
+.input-yaml label {
+    position: initial;
+    margin-bottom: 1em;
+}
+
+.input-yaml [lang=yaml] {
+    flex: 1;
+    width: 100%;
+    min-width: 100%;
+}
+
+.input-yaml .MuiFormHelperText-root {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0.25em 0.1em;
+}
+
+.input-yaml .MuiInputAdornment-positionEnd {
+    position: absolute;
+    right: 0;
+    top: 55%;
+}
+
+.input-yaml .input-yaml--placeholder {
+    position: absolute;
+    left: 2em;
+    top: 2.5em;
+    color: var(--primary-accent);
+}

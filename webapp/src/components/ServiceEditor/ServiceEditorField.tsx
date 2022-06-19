@@ -9,6 +9,7 @@ import { InputAutoComplete, Option } from "components/Inputs/InputAutoComplete";
 import { prettyName } from "utils/formatting";
 import InputBoolean from "components/Inputs/InputBoolean";
 import { SelectorNumber, SelectorText } from "haService/fieldTypes";
+import InputYaml from "components/Inputs/InputYaml";
 
 export type ServiceEditorFieldProps = {
   option: ServiceEditorOption;
@@ -90,6 +91,8 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
       return <InputText {...prop} multiline={options.multiline} />;
     } else if ("boolean" in option.data.selector) {
       return <InputBoolean {...prop} />;
+    } else if ("object" in option.data.selector) {
+      return <InputYaml {...prop} />;
     }
   }
   return <InputText {...prop} />;
