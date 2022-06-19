@@ -15,6 +15,7 @@ import { TagDB } from "components/AutomationList/TagDB";
 import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ArrowBack } from "@mui/icons-material";
+import { useCookies } from "react-cookie";
 
 interface Props {
   automation?: AutomationData;
@@ -40,16 +41,15 @@ export const AutomationEditor: FC<Props> = ({
     saveAndUpdate,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
   const [closeInfo, setCloseInfo] = useState(false);
-  const [flipped, setFlipped] = useState(dims.flipped);
-
-  // effect
-  useEffect(() => {
-    if (dims.flipped !== flipped) {
-      setFlipped(dims.flipped);
-    }
+  const [
+    { ckFlipped },
+    setCookies,
     // eslint-disable-next-line
-  }, [dims.flipped]);
-
+    _,
+  ] = useCookies(["ckFlipped"]);
+  // alias
+  const flipped = dims.flipped ? true : ckFlipped === "1";
+  const setFlipped = (v: boolean) => setCookies("ckFlipped", v ? "1" : "0");
   // render
   if (state.status === "loading") {
     return (
