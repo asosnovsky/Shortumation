@@ -14,7 +14,7 @@ export interface Props {
   className?: string;
   placeholder?: any;
   title?: string;
-  helperText?: string;
+  helperText?: ReactNode;
   endAdornment?: ReactNode;
   required?: boolean;
 }

@@ -16,6 +16,8 @@ export interface Props {
   unit?: string;
   placeholder?: any;
   required?: boolean;
+  title?: string;
+  helperText?: ReactNode;
   endAdornment?: ReactNode;
 }
 export default function InputNumber({
@@ -30,6 +32,8 @@ export default function InputNumber({
   placeholder,
   required,
   endAdornment,
+  helperText,
+  title,
 }: Props) {
   const disabled = value === undefined || value === null;
   let labelElm = <></>;
@@ -49,6 +53,7 @@ export default function InputNumber({
           {labelElm} {unitElm}
         </div>
       }
+      title={title}
       value={value}
       onChange={(e) => onChange(Number(e.target.value ?? 0))}
       disabled={disabled}
@@ -56,6 +61,7 @@ export default function InputNumber({
       placeholder={placeholder}
       required={required}
       fullWidth
+      helperText={helperText}
       InputProps={{
         endAdornment: endAdornment ? (
           endAdornment

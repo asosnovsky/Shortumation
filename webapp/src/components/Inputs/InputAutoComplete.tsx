@@ -25,7 +25,7 @@ export type InputAutoCompletePropsBase = {
   disabled?: boolean;
   required?: boolean;
   onlyShowLabel?: boolean;
-  helperText?: string;
+  helperText?: ReactNode;
   endAdornment?: ReactNode;
 } & (
   | {

@@ -8,7 +8,7 @@ export interface Props {
   label: string;
   value: boolean;
   title?: string;
-  helperText?: string;
+  helperText?: ReactNode;
   onChange: (v: boolean) => void;
   disabled?: boolean;
   className?: string;
