@@ -6,7 +6,8 @@ import { useDelayEffect } from "utils/useDelay";
 import CodeMirror from "@uiw/react-codemirror";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { FormHelperText, InputAdornment } from "@mui/material";
+import { FormHelperText, IconButton, InputAdornment } from "@mui/material";
+import { Save } from "@mui/icons-material";
 
 export interface Props<T extends {}> {
   label: string;
@@ -32,42 +33,57 @@ export default function InputYaml<T extends {}>({
   helperText,
   endAdornment,
 }: Props<T>) {
-  const [{ text, error }, setState] = useState<{
+  const [{ text, error, hasChanged }, setState] = useState<{
     text: string;
     error: undefined | JSX.Element | string;
+    hasChanged: boolean;
   }>({
     text: yaml.dump(value),
     error: incmError,
+    hasChanged: false,
   });
   const setText = (t: string) => {
     try {
       yaml.load(t);
-      setState({ text: t, error: undefined });
+      console.log("success!", yaml.load(t));
+      setState({ text: t, error: undefined, hasChanged: true });
     } catch (_) {
-      setState({ text: t, error: "! Invalid Yaml !" });
+      setState({ text: t, error: "! Invalid Yaml !", hasChanged: true });
+    }
+  };
+  const onSave = () => {
+    if (!error && yaml.dump(value) !== text) {
+      if (text) {
+        onChange(yaml.load(text) as any);
+      } else if (Array.isArray(value)) {
+        onChange([] as any);
+      } else {
+        onChange({} as any);
+      }
     }
   };
   useEffect(() => {
     setState({
       text: yaml.dump(value),
       error: incmError,
+      hasChanged: false,
     });
   }, [value, incmError]);
-  useDelayEffect(
-    () => {
-      if (!error && yaml.dump(value) !== text) {
-        if (text) {
-          onChange(yaml.load(text) as any);
-        } else if (Array.isArray(value)) {
-          onChange([] as any);
-        } else {
-          onChange({} as any);
-        }
-      }
-    },
-    [text],
-    1000
-  );
+  // useDelayEffect(
+  //   () => {
+  //     if (!error && yaml.dump(value) !== text) {
+  //       if (text) {
+  //         onChange(yaml.load(text) as any);
+  //       } else if (Array.isArray(value)) {
+  //         onChange([] as any);
+  //       } else {
+  //         onChange({} as any);
+  //       }
+  //     }
+  //   },
+  //   [text],
+  //   1000
+  // );
   return (
     <FormControl
       className={["input-yaml", className ?? ""].join(" ")}
@@ -89,7 +105,18 @@ export default function InputYaml<T extends {}>({
       <span className="input-yaml--placeholder">
         {!!text ? "" : placeholder}
       </span>
-      <InputAdornment position="end">{endAdornment}</InputAdornment>
+      <InputAdornment position="end">
+        <IconButton
+          disabled={!hasChanged}
+          onChange={onSave}
+          title={!!error ? "Invalid YAML" : hasChanged ? "Save" : ""}
+        >
+          <Save
+            color={hasChanged ? (!!error ? "error" : "success") : "disabled"}
+          />
+        </IconButton>
+        {endAdornment}
+      </InputAdornment>
       <FormHelperText variant="filled" error={!!error}>
         {error ? error : helperText}
       </FormHelperText>

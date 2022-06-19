@@ -30,7 +30,11 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
   const removeIcon = !onRemove ? (
     <></>
   ) : (
-    <IconButton className="service-editor--field--remove" onClick={onRemove}>
+    <IconButton
+      className="service-editor--field--remove"
+      onClick={onRemove}
+      title={`Remove ${label}`}
+    >
       <RemoveCircle />
     </IconButton>
   );
