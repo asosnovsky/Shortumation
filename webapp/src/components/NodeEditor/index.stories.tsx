@@ -22,9 +22,17 @@ export default {
 } as ComponentMeta<typeof NodeEditor>;
 
 const Base: ComponentStory<typeof NodeEditor> = (props) => {
+  const [state, setState] = useState(props.node);
   return (
     <Page>
-      <NodeEditor {...props} />
+      <NodeEditor
+        {...props}
+        node={state}
+        onSave={(s) => {
+          setState(s);
+          props.onSave && props.onSave(s);
+        }}
+      />
     </Page>
   );
 };
@@ -132,4 +140,16 @@ DeviceActionFilledExample.args = {
     type: "toggle",
     device_id: "c9711be86b0301955f72380509285485",
   },
+};
+
+export const NotifyPhoneViaDeviceAction = Action.bind({});
+NotifyPhoneViaDeviceAction.args = {
+  ...NotifyPhoneViaDeviceAction.args,
+  node: {
+    device_id: "2a98db84af7526c7ec3cc7aebd1a9e1c",
+    domain: "mobile_app",
+    type: "notify",
+    title: "Hassio Status",
+    message: "Hassio Is turning off...",
+  } as any,
 };

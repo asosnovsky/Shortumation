@@ -52,10 +52,10 @@ export const FireEventAction = st.intersection([
   }),
 ]);
 
-export const DeviceAction = st.intersection([
+export const DeviceAction = st.assign(
   AutomationActionNodeBase,
-  st.partial(AutomationDeviceState),
-]);
+  st.partial(AutomationDeviceState)
+);
 
 export const ChooseAction = st.intersection([
   AutomationActionNodeBase,
