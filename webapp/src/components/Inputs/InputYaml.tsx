@@ -58,6 +58,11 @@ export default function InputYaml<T extends {}>({
       } else {
         onChange({} as any);
       }
+      setState({
+        text,
+        error,
+        hasChanged: false,
+      });
     }
   };
   useEffect(() => {
@@ -67,21 +72,6 @@ export default function InputYaml<T extends {}>({
       hasChanged: false,
     });
   }, [value, incmError]);
-  // useDelayEffect(
-  //   () => {
-  //     if (!error && yaml.dump(value) !== text) {
-  //       if (text) {
-  //         onChange(yaml.load(text) as any);
-  //       } else if (Array.isArray(value)) {
-  //         onChange([] as any);
-  //       } else {
-  //         onChange({} as any);
-  //       }
-  //     }
-  //   },
-  //   [text],
-  //   1000
-  // );
   return (
     <FormControl
       className={["input-yaml", className ?? ""].join(" ")}
@@ -106,7 +96,7 @@ export default function InputYaml<T extends {}>({
       <InputAdornment position="end">
         <IconButton
           disabled={!hasChanged}
-          onChange={onSave}
+          onClick={() => onSave()}
           title={!!error ? "Invalid YAML" : hasChanged ? "Save" : ""}
         >
           <Save
