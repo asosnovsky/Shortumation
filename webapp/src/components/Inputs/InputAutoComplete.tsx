@@ -147,6 +147,7 @@ export function InputAutoComplete<T extends Option>(
       PopperComponent={(props) => {
         return (
           <Popper
+            key={Math.random().toString()}
             {...props}
             className={[props.className, "input-autocomplete--popper"].join(
               " "

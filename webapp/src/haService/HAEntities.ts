@@ -1,7 +1,6 @@
 import { Option } from "components/Inputs/InputAutoComplete";
 import { useHassCollection } from "./useHassCollection";
 import { entitiesColl } from "home-assistant-js-websocket";
-import { useHAConnection } from "./connection";
 import { entitySourceColl } from "./additionalCollections";
 
 export type EntityOption = Option<{ domain: string; integration: string }>;
@@ -121,16 +120,10 @@ export const useHAEntities = () => {
       }
       if (restrictedIntegrations && entitySource.ready) {
         const integrations = restrictedIntegrations.map((x) => x.toLowerCase());
-        console.log(entitySource);
         keys = keys.filter((key) => {
           const integration = (
             entitySource.collection.state[key]?.domain ?? ""
           ).toLowerCase();
-          console.log({
-            [key]: integration,
-            domain: integrations[0],
-            include: integrations.includes(integration),
-          });
           return integrations.includes(integration);
         });
       }

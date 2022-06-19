@@ -76,6 +76,14 @@ export const ServiceEditorTarget: FC<ServiceEditorTargetProps> = (props) => {
             area_id,
           })
         }
+        restrictToDomain={
+          domainRestrictions.length === 0 ? undefined : domainRestrictions
+        }
+        restrictedIntegrations={
+          integrationRestrictions.length === 0
+            ? undefined
+            : integrationRestrictions
+        }
         multiple
       />
     </div>

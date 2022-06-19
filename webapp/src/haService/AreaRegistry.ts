@@ -12,7 +12,8 @@ export interface AreaRegistryItem {
 export type AreaDB = Record<
   string,
   AreaRegistryItem & {
-    entity: Partial<EntityRegisteryItem>;
+    domains: Set<string>;
+    integrations: Set<string>;
   }
 >;
 
@@ -25,18 +26,26 @@ export const fetchAreaRegistry = (conn: Connection) =>
       type: "config/entity_registry/list",
     }),
   ]).then(([areas, er]) => {
-    const areaDB = areas.reduce<AreaDB>((all, item) => {
+    const areaDB: AreaDB = areas.reduce<AreaDB>((all, item) => {
       return {
         ...all,
         [item.area_id]: {
           ...item,
-          entity: {},
+          domains: new Set(),
+          integrations: new Set(),
         },
       };
     }, {});
     er.forEach((eri) => {
       if (eri.area_id) {
-        areaDB[eri.area_id].entity = eri;
+        if (eri.entity_id) {
+          areaDB[eri.area_id].domains.add(
+            eri.entity_id.split(".")[0].toLowerCase()
+          );
+        }
+        if (eri.platform) {
+          areaDB[eri.area_id].domains.add(eri.platform);
+        }
       }
     });
 
@@ -54,36 +63,61 @@ export const useHAAreas = () => {
   const areas = useHassCollection(areaRegistryColl);
 
   const methods = {
-    getAreaEntityDomain(areaId: string): null | string {
+    areaHasEntityDomain(areaId: string, domains: string[]): boolean {
       if (!areas.ready) {
-        return null;
+        return true;
       }
-      const entityId = areas.collection.state[areaId].entity.entity_id;
-      if (entityId) {
-        return entityId.toLowerCase().split(".")[0] ?? null;
+      for (const d of domains) {
+        if (!areas.collection.state[areaId].domains.has(d)) {
+          return false;
+        }
       }
-      return null;
+      return true;
+    },
+    areaHasEntityIntegration(areaId: string, integrations: string[]): boolean {
+      if (!areas.ready) {
+        return true;
+      }
+      for (const d of integrations) {
+        if (!areas.collection.state[areaId].integrations.has(d)) {
+          return false;
+        }
+      }
+      return true;
     },
     validateOptions(
       options: string[],
-      restrictedDomains?: string[]
+      restrictedDomains?: string[],
+      restrictedIntegrations?: string[]
     ): null | string[] {
+      let out = options;
       if (restrictedDomains) {
         const domains = restrictedDomains.map((x) => x.toLowerCase());
         const domainsStr =
           domains.length > 1
             ? `one of "${domains.join(", ")}"`
             : `"${domains[0]}"`;
-        const out = options.reduce<string[]>((all = [], areaId) => {
-          const domain = methods.getAreaEntityDomain(areaId) ?? "";
-          if (!domains.includes(domain)) {
+        out = out.reduce<string[]>((all = [], areaId) => {
+          if (!methods.areaHasEntityDomain(areaId, domains)) {
             return [...all, `${methods.getLabel(areaId)} is not ${domainsStr}`];
           }
           return all;
         }, []);
-        if (out.length > 0) {
-          return out;
-        }
+      } else if (restrictedIntegrations) {
+        const integrations = restrictedIntegrations.map((x) => x.toLowerCase());
+        const domainsStr =
+          integrations.length > 1
+            ? `one of "${integrations.join(", ")}"`
+            : `"${integrations[0]}"`;
+        out = out.reduce<string[]>((all = [], areaId) => {
+          if (!methods.areaHasEntityIntegration(areaId, integrations)) {
+            return [...all, `${methods.getLabel(areaId)} is not ${domainsStr}`];
+          }
+          return all;
+        }, []);
+      }
+      if (out.length > 0) {
+        return out;
       }
       return null;
     },
@@ -100,25 +134,28 @@ export const useHAAreas = () => {
       }
       return opt;
     },
-    getOptions(restrictToDomain?: string[]): AreaOption[] {
+    getOptions(
+      restrictToDomain?: string[],
+      restrictedIntegrations?: string[]
+    ): AreaOption[] {
       if (!areas.ready) {
         return [];
       }
       let keys = Object.keys(areas.collection.state);
       if (restrictToDomain) {
         const domains = restrictToDomain.map((x) => x.toLowerCase());
-        keys = keys.filter((key) => {
-          const domain = methods.getAreaEntityDomain(key);
-          if (domain) {
-            return domains.includes(domain);
-          }
-          return false;
-        });
+        keys = keys.filter((key) => methods.areaHasEntityDomain(key, domains));
+      }
+      if (restrictedIntegrations) {
+        const integrations = restrictedIntegrations.map((x) => x.toLowerCase());
+        keys = keys.filter((key) =>
+          methods.areaHasEntityIntegration(key, integrations)
+        );
       }
       return keys.map((key) => ({
         id: key,
         label: areas.collection.state[key].name ?? prettyName(key),
-        data: areas.collection.state[key].entity,
+        data: areas.collection.state[key],
       }));
     },
     getLabel: (opt: AreaOption): string => {
