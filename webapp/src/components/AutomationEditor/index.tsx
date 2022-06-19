@@ -1,7 +1,7 @@
 import "./index.css";
 import Icon from "@mui/material/Icon";
 import { CheckMarkIcon } from "components/Icons";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { AutomationData } from "types/automations";
 import { AutoInfoBox } from "./AutoInfoBox";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
