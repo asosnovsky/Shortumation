@@ -16,41 +16,52 @@ const Template: ComponentStory<typeof ServiceEditor> = (props) => {
   const [state, setState] = useState(props.data);
   return (
     <Page>
-      <ServiceEditor
-        {...props}
-        data={state}
-        onUpdate={(d) => {
-          setState(d);
-          props.onUpdate(d);
-        }}
-      />
       <div
         style={{
-          maxHeight: "25vh",
+          maxHeight: "99vh",
           overflow: "auto",
         }}
       >
-        <InputYaml label="" value={state} onChange={() => {}} />
-      </div>
-      <div
-        style={{
-          maxHeight: "25vh",
-          overflow: "auto",
-        }}
-      >
-        <InputYaml label="" value={props.service.fields} onChange={() => {}} />
-      </div>
-      <div
-        style={{
-          maxHeight: "25vh",
-          overflow: "auto",
-        }}
-      >
-        <InputYaml
-          label=""
-          value={props.service.target ?? {}}
-          onChange={() => {}}
+        <ServiceEditor
+          {...props}
+          data={state}
+          onUpdate={(d) => {
+            setState(d);
+            props.onUpdate(d);
+          }}
         />
+        <div
+          style={{
+            maxHeight: "25vh",
+            overflow: "auto",
+          }}
+        >
+          <InputYaml label="" value={state} onChange={() => {}} />
+        </div>
+        <div
+          style={{
+            maxHeight: "25vh",
+            overflow: "auto",
+          }}
+        >
+          <InputYaml
+            label=""
+            value={props.service.fields}
+            onChange={() => {}}
+          />
+        </div>
+        <div
+          style={{
+            maxHeight: "25vh",
+            overflow: "auto",
+          }}
+        >
+          <InputYaml
+            label=""
+            value={props.service.target ?? {}}
+            onChange={() => {}}
+          />
+        </div>
       </div>
     </Page>
   );
@@ -423,6 +434,125 @@ export const LightTurnOn = makeExample({
       description: "Light effect.",
       selector: {
         text: null,
+      },
+    },
+  },
+});
+
+export const UltimateService = makeExample({
+  name: "Ultimate Service",
+  description: "Show a notification in the frontend.",
+  fields: {
+    message: {
+      name: "Text",
+      description: "Message body of the notification. [Templates accepted]",
+      example: "Please check your configuration.yaml.",
+      selector: {
+        text: null,
+      },
+    },
+    entity_id: {
+      name: "Entity with domain filter",
+      description: "Name(s) of media player entities.",
+      selector: {
+        entity: {
+          domain: "media_player",
+        },
+      },
+    },
+    level: {
+      name: "Options",
+      description: "Log level.",
+      default: "error",
+      selector: {
+        select: {
+          options: [
+            {
+              label: "Debug",
+              value: "debug",
+            },
+            {
+              label: "Info",
+              value: "info",
+            },
+            {
+              label: "Warning",
+              value: "warning",
+            },
+            {
+              label: "Error",
+              value: "error",
+            },
+            {
+              label: "Critical",
+              value: "critical",
+            },
+          ],
+        },
+      },
+    },
+    format: {
+      name: "String Options",
+      description: "Stream format supported by media player.",
+      default: "hls",
+      selector: {
+        select: {
+          options: ["hls"],
+        },
+      },
+    },
+    keep_days: {
+      name: "Number",
+      description: "Number of history days to keep in database after purge.",
+      selector: {
+        number: {
+          min: 0,
+          max: 365,
+          unit_of_measurement: "days",
+        },
+      },
+    },
+    repack: {
+      name: "Boolean",
+      description:
+        "Attempt to save disk space by rewriting the entire database file.",
+      default: false,
+      selector: {
+        boolean: null,
+      },
+    },
+    domains: {
+      name: "Objects",
+      description:
+        "List the domains that need to be removed from the recorder database.",
+      example: "sun",
+      default: [],
+      selector: {
+        object: null,
+      },
+    },
+    addon: {
+      name: "Add-on",
+      description: "The add-on slug.",
+      example: "core_ssh",
+      selector: {
+        addon: null,
+      },
+    },
+    name: {
+      name: "Theme",
+      description: "Name of a predefined theme",
+      example: "default",
+      selector: {
+        theme: null,
+      },
+    },
+    icon: {
+      name: "Icon",
+      description: "Name of icon for the group.",
+      example: "mdi:camera",
+      selector: {
+        icon: null,
       },
     },
   },

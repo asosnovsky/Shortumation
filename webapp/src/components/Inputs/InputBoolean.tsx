@@ -1,27 +1,41 @@
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { ReactNode } from "react";
+import { FormHelperText, InputAdornment } from "@mui/material";
 
 export interface Props {
   label: string;
   value: boolean;
+  title?: string;
+  helperText?: string;
   onChange: (v: boolean) => void;
   disabled?: boolean;
   className?: string;
   required?: boolean;
   placeholder?: string;
+  endAdornment?: ReactNode;
 }
 export default function InputBoolean({
   label,
   value = false,
+  title,
+  helperText,
   onChange,
   disabled = false,
   className,
   required,
   placeholder,
+  endAdornment,
 }: Props) {
   return (
-    <FormGroup className={className}>
+    <FormGroup
+      className={className}
+      title={title}
+      style={{
+        alignItems: "flex-start",
+      }}
+    >
       <FormControlLabel
         disabled={disabled}
         control={
@@ -32,8 +46,31 @@ export default function InputBoolean({
             placeholder={placeholder}
           />
         }
-        label={label}
+        label={
+          endAdornment ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <span
+                style={{
+                  flex: 1,
+                }}
+              >
+                {label}
+              </span>
+              <InputAdornment position="end">{endAdornment}</InputAdornment>
+            </div>
+          ) : (
+            label
+          )
+        }
       />
+      <FormHelperText>{helperText}</FormHelperText>
     </FormGroup>
   );
 }

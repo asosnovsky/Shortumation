@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Edit from "@mui/icons-material/Edit";
+import { ReactNode } from "react";
 
 export interface Props {
   label: string | JSX.Element;
@@ -15,6 +16,7 @@ export interface Props {
   unit?: string;
   placeholder?: any;
   required?: boolean;
+  endAdornment?: ReactNode;
 }
 export default function InputNumber({
   label,
@@ -27,6 +29,7 @@ export default function InputNumber({
   unit,
   placeholder,
   required,
+  endAdornment,
 }: Props) {
   const disabled = value === undefined || value === null;
   let labelElm = <></>;
@@ -54,7 +57,9 @@ export default function InputNumber({
       required={required}
       fullWidth
       InputProps={{
-        endAdornment: (
+        endAdornment: endAdornment ? (
+          endAdornment
+        ) : (
           <InputAdornment position="end">
             <IconButton onClick={() => onChange(disabled ? 0 : undefined)}>
               {disabled ? <Edit /> : <Close />}

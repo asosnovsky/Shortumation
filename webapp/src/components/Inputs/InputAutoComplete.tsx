@@ -197,6 +197,10 @@ export function InputAutoComplete<T extends Option>(
       renderInput={(params) => (
         <TextField
           {...params}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: props.endAdornment ?? params.InputProps.endAdornment,
+          }}
           variant="filled"
           required={props.required}
           label={props.label ?? "Entity ID"}

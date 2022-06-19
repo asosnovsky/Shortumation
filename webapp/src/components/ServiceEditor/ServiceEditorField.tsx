@@ -7,6 +7,8 @@ import { IconButton } from "@mui/material";
 import { RemoveCircle } from "@mui/icons-material";
 import { InputAutoComplete, Option } from "components/Inputs/InputAutoComplete";
 import { prettyName } from "utils/formatting";
+import InputBoolean from "components/Inputs/InputBoolean";
+import { SelectorNumber, SelectorText } from "haService/fieldTypes";
 
 export type ServiceEditorFieldProps = {
   option: ServiceEditorOption;
@@ -32,64 +34,63 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
     </IconButton>
   );
   example = option.data.example ? `Example: ${option.data.example}` : "";
-  if (option.data.selector?.number) {
-    return (
-      <InputNumber
-        className="service-editor--field"
-        label={label}
-        value={value ?? option.data.default}
-        min={option.data.selector.number.min}
-        max={option.data.selector.number.max}
-        step={option.data.selector.number.step}
-        unit={option.data.selector.number.unit_of_measurement}
-        onChange={onChange}
-        required={isRequired}
-        placeholder={example}
-      />
-    );
-  }
-  if (option.data.selector?.select) {
-    return (
-      <InputAutoComplete
-        className="service-editor--field"
-        label={label}
-        value={value}
-        onChange={onChange}
-        endAdornment={removeIcon}
-        required={isRequired}
-        options={option.data.selector.select.options.map<Option>((opt) => {
-          if (typeof opt === "string") {
+  const prop = {
+    className: "service-editor--field",
+    label,
+    title: description,
+    helperText: (
+      <div className="service-editor--field--description">{description}</div>
+    ),
+    value: value ?? option.data.default,
+    onChange: onChange,
+    required: isRequired,
+    placeholder: example,
+    endAdornment: removeIcon,
+  };
+  if (option.data.selector) {
+    if ("number" in option.data.selector) {
+      const options: Partial<SelectorNumber> =
+        option.data.selector.number ?? {};
+      return (
+        <InputNumber
+          {...prop}
+          min={options.min}
+          max={options.max}
+          step={options.step}
+        />
+      );
+    }
+    if (option.data.selector?.select) {
+      return (
+        <InputAutoComplete
+          {...prop}
+          options={option.data.selector.select.options.map<Option>((opt) => {
+            if (typeof opt === "string") {
+              return {
+                id: opt,
+                label: prettyName(opt),
+              };
+            }
             return {
-              id: opt,
-              label: prettyName(opt),
+              id: opt.value,
+              label: opt.label,
             };
-          }
-          return {
-            id: opt.value,
-            label: opt.label,
-          };
-        })}
-        getLabel={(opt) => {
-          if (typeof opt === "string") {
-            return prettyName(opt);
-          }
-          return opt.label;
-        }}
-        onlyShowLabel
-      />
-    );
+          })}
+          getLabel={(opt) => {
+            if (typeof opt === "string") {
+              return prettyName(opt);
+            }
+            return opt.label;
+          }}
+          onlyShowLabel
+        />
+      );
+    } else if ("text" in option.data.selector) {
+      const options: Partial<SelectorText> = option.data.selector.text ?? {};
+      return <InputText {...prop} multiline={options.multiline} />;
+    } else if ("boolean" in option.data.selector) {
+      return <InputBoolean {...prop} />;
+    }
   }
-  return (
-    <InputText
-      className="service-editor--field"
-      label={label}
-      title={description}
-      helperText={description}
-      value={value ?? option.data.default}
-      onChange={onChange}
-      placeholder={example}
-      required={isRequired}
-      endAdornment={removeIcon}
-    />
-  );
+  return <InputText {...prop} />;
 };

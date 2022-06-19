@@ -3,3 +3,17 @@
     flex-direction: row;
     align-items: center;
 }
+
+.service-editor--field .MuiFormHelperText-contained {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.service-editor--field--description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: break-word;
+    white-space: nowrap;
+    width: 100%;
+    max-width: 100%;
+}
