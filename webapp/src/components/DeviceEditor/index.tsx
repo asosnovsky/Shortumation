@@ -3,6 +3,7 @@ import {
   InputAutoComplete,
 } from "components/Inputs/InputAutoComplete";
 import { InputDevice } from "components/Inputs/InputDevice";
+import { InputDeviceCapabilties } from "components/Inputs/InputDeviceCapabilties";
 import { InputEntity } from "components/Inputs/InputEntities";
 import InputText from "components/Inputs/InputText";
 import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
@@ -75,19 +76,13 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
           preSelectedEntityIds={entities}
         />
       )}
-      {caps?.extra_fields &&
-        caps.extra_fields.map((field) => (
-          <InputText
-            key={"extra" + state.device_id + field.name}
-            label={prettyName(field.name)}
-            value={(state as any)[field.name] ?? ""}
-            onChange={(v) =>
-              update({
-                [field.name]: v,
-              })
-            }
-          />
-        ))}
+      {caps?.extra_fields && (
+        <InputDeviceCapabilties
+          state={state}
+          setState={setState}
+          defn={caps.extra_fields}
+        />
+      )}
       {Object.keys(options).length + entities.length === 0 && (
         <>This device has no {type}s.</>
       )}

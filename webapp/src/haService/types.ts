@@ -39,9 +39,71 @@ export type DeviceConditionType = DeviceBaseType & {
   condition: "device";
 };
 export type DeviceTypeCapability = {
-  extra_fields: Array<{
-    name: string;
-    required?: true;
-    type: string;
-  }>;
+  extra_fields: Array<HaFormSchema>;
 };
+
+export type HaFormSchema =
+  | HaFormConstantSchema
+  | HaFormStringSchema
+  | HaFormIntegerSchema
+  | HaFormFloatSchema
+  | HaFormBooleanSchema
+  | HaFormSelectSchema
+  | HaFormMultiSelectSchema
+  | HaFormTimeSchema
+  | HaFormGridSchema;
+
+export interface HaFormBaseSchema {
+  name: string;
+  default?: any;
+  required?: boolean;
+  description?: {
+    suffix?: string;
+    suggested_value?: any;
+  };
+}
+
+export interface HaFormGridSchema extends HaFormBaseSchema {
+  type: "grid";
+  name: "";
+  column_min_width?: string;
+  schema: HaFormSchema[];
+}
+
+export interface HaFormConstantSchema extends HaFormBaseSchema {
+  type: "constant";
+  value?: string;
+}
+
+export interface HaFormIntegerSchema extends HaFormBaseSchema {
+  type: "integer";
+  valueMin?: number;
+  valueMax?: number;
+}
+
+export interface HaFormSelectSchema extends HaFormBaseSchema {
+  type: "select";
+  options: Array<[string, string]>;
+}
+
+export interface HaFormMultiSelectSchema extends HaFormBaseSchema {
+  type: "multi_select";
+  options: Record<string, string> | string[] | Array<[string, string]>;
+}
+
+export interface HaFormFloatSchema extends HaFormBaseSchema {
+  type: "float";
+}
+
+export interface HaFormStringSchema extends HaFormBaseSchema {
+  type: "string";
+  format?: string;
+}
+
+export interface HaFormBooleanSchema extends HaFormBaseSchema {
+  type: "boolean";
+}
+
+export interface HaFormTimeSchema extends HaFormBaseSchema {
+  type: "positive_time_period_dict";
+}

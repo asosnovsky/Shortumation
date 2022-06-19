@@ -31,12 +31,16 @@ export const useHAEntities = () => {
       }
       let state: Set<string> = new Set();
       entityIds.forEach((entityId) => {
-        if (!attribute) {
-          state.add(entities.collection.state[entityId].state);
-        } else {
-          const val = entities.collection.state[entityId].attributes[attribute];
-          if (val) {
-            state.add(val);
+        if (entities.collection.state[entityId]) {
+          if (!attribute) {
+            state.add(entities.collection.state[entityId].state);
+          } else {
+            const val = (entities.collection.state[entityId]?.attributes ?? {})[
+              attribute
+            ];
+            if (val) {
+              state.add(val);
+            }
           }
         }
       });
@@ -55,7 +59,7 @@ export const useHAEntities = () => {
       let attributes: Set<string> = new Set();
       entityIds.forEach((entityId) => {
         const thisAttrs = new Set(
-          Object.keys(entities.collection.state[entityId].attributes)
+          Object.keys(entities.collection.state[entityId]?.attributes ?? {})
         );
         if (attributes.size === 0) {
           attributes = thisAttrs;
