@@ -146,7 +146,7 @@ test("get choose action description", () => {
       dummyNamer,
       false
     )
-  ).toEqual("Choose");
+  ).toEqual("Switch (choose)");
 });
 
 test("get and/or/not condition description", () => {
