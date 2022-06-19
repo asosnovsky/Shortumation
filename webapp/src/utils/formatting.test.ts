@@ -45,7 +45,8 @@ test("using alias as description", () => {
           media_content_type: "SPOTIFY",
         },
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Start Music In Kitchen");
 });
@@ -63,7 +64,8 @@ test("get service action description", () => {
           media_content_type: "SPOTIFY",
         },
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("media_player.play_media");
 });
@@ -77,7 +79,8 @@ test("get repeat action description", () => {
           sequence: [],
         },
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Repeat 10");
 });
@@ -88,7 +91,8 @@ test("get wait action description", () => {
       {
         wait_template: "states(switch.kitchen_light) == 'on'",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Wait on states(switch.kitchen_light) == 'on'");
   expect(
@@ -99,7 +103,8 @@ test("get wait action description", () => {
           minutes: 1,
         },
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Wait on states(switch.kitchen_light) == 'on' for 00:01:00:00");
 });
@@ -111,7 +116,8 @@ test("get fire event action description", () => {
         event: "test_event",
         event_data: {},
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Trigger test_event");
 });
@@ -124,7 +130,8 @@ test("get device action description", () => {
         domain: "zwave_js",
         type: "set_value",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Set Value 12310das01231");
 });
@@ -136,7 +143,8 @@ test("get choose action description", () => {
         choose: [],
         default: [],
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Choose");
 });
@@ -148,7 +156,8 @@ test("get and/or/not condition description", () => {
         condition: "and",
         conditions: [],
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Logic");
   expect(
@@ -157,7 +166,8 @@ test("get and/or/not condition description", () => {
         condition: "or",
         conditions: [],
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Logic");
   expect(
@@ -166,7 +176,8 @@ test("get and/or/not condition description", () => {
         condition: "not",
         conditions: [],
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Logic");
 });
@@ -178,7 +189,8 @@ test("get Numeric State condition description", () => {
         condition: "numeric_state",
         entity_id: "sensor.temperature",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("sensor.temperature?>?<");
   expect(
@@ -187,7 +199,8 @@ test("get Numeric State condition description", () => {
         condition: "numeric_state",
         entity_id: "",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("Numeric State Condition");
   expect(
@@ -197,7 +210,8 @@ test("get Numeric State condition description", () => {
         entity_id: "sensor.temperature",
         above: "17",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("sensor.temperature > 17");
   expect(
@@ -207,7 +221,8 @@ test("get Numeric State condition description", () => {
         entity_id: "sensor.temperature",
         below: "5",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("sensor.temperature < 5");
   expect(
@@ -218,7 +233,8 @@ test("get Numeric State condition description", () => {
         above: "17",
         below: "20",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("17 < sensor.temperature < 20");
   expect(
@@ -230,7 +246,8 @@ test("get Numeric State condition description", () => {
         below: "20",
         value_template: "{{ float(state.state) + 2 }}",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("17 < sensor.temperature < 20");
   expect(
@@ -245,7 +262,8 @@ test("get Numeric State condition description", () => {
         below: "20",
         value_template: "{{ float(state.state) + 2 }}",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("17 < ... < 20");
 });
@@ -258,7 +276,8 @@ test("get State condition description", () => {
         entity_id: "switch.kitchen_light",
         state: "on",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("switch.kitchen_light is 'on'");
 });
@@ -280,7 +299,8 @@ test("get descrption for device triggerr", () => {
         entity_id: "binary_sensor.motion_office_inv",
         domain: "binary_sensor",
       },
-      dummyNamer
+      dummyNamer,
+      false
     )
   ).toEqual("binary_sensor.motion_office_inv No Motion");
 });

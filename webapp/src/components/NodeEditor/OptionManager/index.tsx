@@ -115,7 +115,11 @@ export const useEditorNodeState = (
           <InputText
             key="alias"
             label="Alias"
-            value={getDescriptionFromAutomationNode(allState.node, ha.namer)}
+            value={getDescriptionFromAutomationNode(
+              allState.node,
+              ha.namer,
+              false
+            )}
             onChange={(alias) =>
               setState({
                 ...allState.node,

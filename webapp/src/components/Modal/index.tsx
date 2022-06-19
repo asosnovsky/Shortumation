@@ -2,18 +2,22 @@ import "./index.css";
 import Paper from "@mui/material/Paper";
 import MuiModal from "@mui/material/Modal";
 import { FC, ReactNode } from "react";
+import { Card, CardActions, CardContent } from "@mui/material";
 
 export interface ModalStyleProps {
   open: boolean;
 }
 export interface Props extends ModalStyleProps {
   children: ReactNode;
+  actions?: ReactNode;
 }
-export const Modal: FC<Props> = ({ children, ...props }) => {
+export const Modal: FC<Props> = ({ children, actions, open }) => {
   return (
-    <MuiModal open={props.open}>
+    <MuiModal open={open}>
       <div className="modal--root">
-        <Paper>{children}</Paper>
+        <Card variant="outlined">
+          <CardContent>{children}</CardContent>
+        </Card>
       </div>
     </MuiModal>
   );

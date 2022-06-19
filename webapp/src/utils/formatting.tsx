@@ -1,4 +1,6 @@
 import { AutomationNode, AutomationNodeTypes } from "types/automations";
+import AltRouteOutlinedIcon from "@mui/icons-material/AltRouteOutlined";
+import { ReactNode } from "react";
 import {
   AutomationDeviceState,
   AutomationTime,
@@ -20,10 +22,14 @@ export const convertTimeToString = (t: AutomationTime) => {
       .join(":");
   }
 };
-export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
+export const getDescriptionFromAutomationNode = <
+  N extends AutomationNodeTypes,
+  AllowJS extends true | false
+>(
   node: AutomationNode<N>,
-  namer: Namer
-): string => {
+  namer: Namer,
+  allowJs: AllowJS
+): AllowJS extends true ? ReactNode : string => {
   if ("alias" in node && node.alias) {
     return node.alias;
   }
@@ -128,7 +134,17 @@ export const getDescriptionFromAutomationNode = <N extends AutomationNodeTypes>(
     return getDescriptionForDeviceType(node as any, namer, false);
   }
   if ("choose" in node) {
-    return "Choose";
+    if (allowJs) {
+      return (
+        <AltRouteOutlinedIcon
+          style={{
+            transform: "rotate(90deg)",
+          }}
+          color="secondary"
+        />
+      ) as any;
+    }
+    return "Switch (choose)";
   }
   return "n/a";
 };
