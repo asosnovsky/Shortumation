@@ -52,11 +52,7 @@ export const InputEntity: FC<InputEntityProps> = (props) => {
       options={options}
       getID={entities.getID}
       getLabel={entities.getLabel}
-      groupBy={(opt) =>
-        typeof opt !== "string"
-          ? `${prettyName(opt.integration)}/ ${prettyName(opt.domain)}`
-          : ""
-      }
+      groupBy={(opt) => (typeof opt !== "string" ? prettyName(opt.domain) : "")}
     />
   );
 };

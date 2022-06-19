@@ -24,10 +24,14 @@ export type ServiceEditorTargetProps = {
 export const ServiceEditorTarget: FC<ServiceEditorTargetProps> = (props) => {
   const value = cleanUpValue(props.value ?? {});
   const domainRestrictions: string[] = [];
+  const integrationRestrictions: string[] = [];
 
   if (props.defn.entity) {
     if (typeof props.defn.entity.domain === "string") {
       domainRestrictions.push(props.defn.entity.domain);
+    }
+    if (typeof props.defn.entity.integration === "string") {
+      integrationRestrictions.push(props.defn.entity.integration);
     }
   }
 
@@ -42,7 +46,14 @@ export const ServiceEditorTarget: FC<ServiceEditorTargetProps> = (props) => {
             entity_id,
           })
         }
-        restrictToDomain={domainRestrictions}
+        restrictToDomain={
+          domainRestrictions.length === 0 ? undefined : domainRestrictions
+        }
+        restrictedIntegrations={
+          integrationRestrictions.length === 0
+            ? undefined
+            : integrationRestrictions
+        }
         multiple
       />
       <InputDevice
