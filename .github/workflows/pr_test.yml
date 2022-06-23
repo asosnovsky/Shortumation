@@ -1,10 +1,8 @@
-name: Test
-env:
-  MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
+name: PR Test
 on:
   workflow_dispatch:
-  push:
-    branch: [main]
+  pull_request:
+    branches: [main]
 jobs:
   metadata:
     runs-on: ubuntu-latest
@@ -59,6 +57,7 @@ jobs:
       matrix:
         action:
           - "test:ci"
+          - "build"
           - "tsc:ci"
     steps:
       - uses: actions/checkout@v3
@@ -71,33 +70,3 @@ jobs:
         run: cd webapp && yarn install
       - name: ${{ needs.metadata.outputs.version }} / ${{ matrix.action }}
         run: cd webapp && yarn ${{ matrix.action }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    name: Build & Publish ${{ matrix.arch }}
-    needs:
-      - metadata
-      - nodejs
-      - python
-    strategy:
-      matrix:
-        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2.0.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: home-assistant/builder@2022.03.1
-        with:
-          args: |
-            --${{ matrix.arch }} \
-            --no-latest \
-            --version ${{ needs.metadata.outputs.version }} \
-            --target .
