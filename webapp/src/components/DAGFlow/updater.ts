@@ -3,6 +3,8 @@ import { ChooseAction } from "types/automations/actions";
 import { AutomationCondition } from "types/automations/conditions";
 import { UpdateModalState } from "./types";
 import { getNodeType } from "../../utils/automations";
+import { DAGNodeOnMoveEvents } from "./DAGNode";
+import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
 
 export type SequenceUpdater = ReturnType<typeof makeSequenceUpdater>;
 
@@ -120,6 +122,39 @@ export const makeSequenceUpdater = (
         allowedTypes: [getNodeType(node)],
         update: (n) => this.updateNode(i, n),
       });
+  },
+  makeOnMoveEvents(i: number, flipped: boolean): DAGNodeOnMoveEvents {
+    const moveBack =
+      i > 0
+        ? () =>
+            onChange([
+              ...sequence.slice(0, i - 1),
+              sequence[i],
+              sequence[i - 1],
+              ...sequence.slice(i + 1),
+            ])
+        : undefined;
+    const moveForward =
+      i < sequence.length - 1
+        ? () =>
+            onChange([
+              ...sequence.slice(0, i),
+              sequence[i + 1],
+              sequence[i],
+              ...sequence.slice(i + 2),
+            ])
+        : undefined;
+    if (flipped) {
+      return cleanUpUndefined({
+        up: moveBack,
+        down: moveForward,
+      });
+    } else {
+      return cleanUpUndefined({
+        right: moveForward,
+        left: moveBack,
+      });
+    }
   },
 });
 

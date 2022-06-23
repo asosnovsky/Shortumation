@@ -4,7 +4,7 @@ import ReactFlow, { Controls } from "react-flow-renderer";
 import { AutomationSequenceNode } from "types/automations";
 import { AutomationTrigger } from "types/automations/triggers";
 import { triggerToFlow } from "./triggerConvertor";
-import { DAGNode } from "./DAGNode";
+import { DAGNode, makeConditionPoint } from "./DAGNode";
 import {
   DAGAutomationFlowDims,
   FlowData,
@@ -18,7 +18,6 @@ import { NodeEditor } from "components/NodeEditor";
 import { MultiNodeEditor } from "components/MultiNodeEditors";
 import { Modal } from "components/Modal";
 import { AutomationCondition } from "types/automations/conditions";
-import { makeConditionPoint } from "./flowDataMods";
 import { convertToFlowNode } from "./helpers";
 import { DAGErrorNode } from "./DAGErrorNode";
 import { useHA } from "haService";
@@ -108,9 +107,15 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
           x: dims.padding.x + dims.nodeWidth * dims.distanceFactor,
           y: dims.padding.y + dims.nodeHeight * 0.25,
         },
-    dims,
-    condition.length,
-    makeOnEditAutomationConditions(condition, onConditionUpdate, setModalState)
+    {
+      totalConditions: condition.length,
+      onEditClick: makeOnEditAutomationConditions(
+        condition,
+        onConditionUpdate,
+        setModalState
+      ),
+    },
+    dims
   );
   const flowData: FlowData = {
     nodes: [condPoint],

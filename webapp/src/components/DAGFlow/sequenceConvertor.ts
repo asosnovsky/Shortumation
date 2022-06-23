@@ -6,7 +6,12 @@ import { ChooseAction } from "types/automations/actions";
 import { makeFlowCircle } from "./DAGCircle";
 import { createOnRemoveForChooseNode, SequenceUpdater } from "./updater";
 import { getNodeType } from "utils/automations";
-import { makeAddButton, makeConditionPoint } from "./flowDataMods";
+import { makeAddButton } from "./flowDataMods";
+import {
+  makeActionPoint,
+  makeConditionPoint,
+  DAGNodeOnMoveEvents,
+} from "./DAGNode";
 
 export const sequenceToFlow = (
   flowData: FlowData,
@@ -75,6 +80,7 @@ export const sequenceToFlow = (
         addSingleNode(flowData, node, position, nodeId, dims, {
           onEditClick: updater.makeOnModalOpenForNode(i, node),
           onXClick: () => updater.removeNode(i),
+          onMove: updater.makeOnMoveEvents(i, dims.flipped),
           namer,
         });
       }
@@ -82,6 +88,7 @@ export const sequenceToFlow = (
       addSingleNode(flowData, node, position, nodeId, dims, {
         onEditClick: updater.makeOnModalOpenForNode(i, node),
         onXClick: () => updater.removeNode(i),
+        onMove: updater.makeOnMoveEvents(i, dims.flipped),
         namer,
       });
     }
@@ -151,27 +158,27 @@ const addSingleNode = (
   node: AutomationSequenceNode,
   position: XYPosition,
   nodeId: string,
-  { flipped, nodeHeight, nodeWidth }: DAGAutomationFlowDims,
+  dims: DAGAutomationFlowDims,
   opts: {
     onEditClick: () => void;
     onXClick: () => void;
     namer: Namer;
+    onMove: DAGNodeOnMoveEvents;
   }
 ) =>
-  flowData.nodes.push({
-    id: nodeId,
-    type: "dagnode",
-    data: {
-      label: getDescriptionFromAutomationNode(node, opts.namer, true),
-      height: nodeHeight,
-      width: nodeWidth,
-      color: getNodeType(node) === "action" ? "green" : "blue",
-      hasInput: true,
-      flipped,
-      ...opts,
-    },
-    position,
-  });
+  flowData.nodes.push(
+    makeActionPoint(
+      nodeId,
+      position,
+      {
+        label: getDescriptionFromAutomationNode(node, opts.namer, true),
+        color: getNodeType(node) === "action" ? "green" : "blue",
+        hasInput: true,
+        ...opts,
+      },
+      dims
+    )
+  );
 
 const addErrorNode = (
   flowData: FlowData,
@@ -212,6 +219,7 @@ const addChooseNode = (
     onEditClick: updater.makeOnModalOpenForNode(i, node),
     onXClick: () => updater.removeNode(i),
     namer,
+    onMove: updater.makeOnMoveEvents(i, dims.flipped),
   });
   let lastPos: XYPosition = position;
   // conditions
@@ -252,9 +260,11 @@ const addChooseNode = (
             x: circle.position.x + dims.circleSize * dims.distanceFactor,
             y: circle.position.y + dims.circleSize / 8,
           },
-      dims,
-      conditions.length,
-      updater.makeOnEditConditionsForChooseNode(i, j)
+      {
+        totalConditions: conditions.length,
+        onEditClick: updater.makeOnEditConditionsForChooseNode(i, j),
+      },
+      dims
     );
     flowData.nodes.push(condNode);
     addEdge(flowData, circle.id, condNode.id, true);
