@@ -93,7 +93,7 @@
     "jest-environment-jsdom": "28.1.0",
     "ts-node": "10.8.0",
     "webpack": "5.72.1",
-    "webpack-dev-server": "4.9.0"
+    "webpack-dev-server": "4.9.2"
   },
   "moduleDirectories": [
     "node_modules",
