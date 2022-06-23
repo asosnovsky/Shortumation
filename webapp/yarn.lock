@@ -12755,10 +12755,10 @@ react-fast-compare@^3.0.1:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-flow-renderer@^10.1.2:
-  version "10.3.4"
-  resolved "https://registry.yarnpkg.com/react-flow-renderer/-/react-flow-renderer-10.3.4.tgz#b4be43252501234bac3633fe7f418de976889354"
-  integrity sha512-unuHgPs9ibXXl7JxGSCte2Ni/9/HAoQFLQM2EjgIr4q8bn3jZ34ph6UiLbVFqhcyvA+KppLi/yZBgxxhVXlGCw==
+react-flow-renderer@10.3.8:
+  version "10.3.8"
+  resolved "https://registry.yarnpkg.com/react-flow-renderer/-/react-flow-renderer-10.3.8.tgz#23525887ef707e6cd540777a4d2329e91311856d"
+  integrity sha512-owtDCSK6rATiZipew2OYSPPu2sd0VM/QCydN9S+ivrMVwR0vNSSwtsWKqJSq8DL5wXtIEed5gPi4yJqXJA7tLQ==
   dependencies:
     "@babel/runtime" "^7.18.0"
     classcat "^5.0.3"
