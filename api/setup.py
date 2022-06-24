@@ -18,7 +18,7 @@ setuptools.setup(
             "bandit==1.7.4",
             "isort==5.10.1",
             "coverage==5.5",
-            "pre-commit==2.13.0",
+            "pre-commit==2.19.0",
             "vulture==2.3",
             "types-requests==2.25.6",
             "types-PyYAML==6.0.8",
