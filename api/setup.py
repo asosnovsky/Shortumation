@@ -19,7 +19,7 @@ setuptools.setup(
             "isort==5.10.1",
             "coverage==5.5",
             "pre-commit==2.19.0",
-            "vulture==2.3",
+            "vulture==2.4",
             "types-requests==2.25.6",
             "types-PyYAML==6.0.8",
             "requests==2.27.0",
