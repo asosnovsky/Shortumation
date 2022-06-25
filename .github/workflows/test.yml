@@ -1,10 +1,8 @@
-name: Test
-env:
-  MONITORED_FILES: "apparmor.txt build.yaml config.yaml Dockerfile data rootfs"
+name: Main Branch Tests
 on:
-  workflow_dispatch:
   push:
-    branch: [main]
+    branch: 
+      - main
 jobs:
   metadata:
     runs-on: ubuntu-latest
