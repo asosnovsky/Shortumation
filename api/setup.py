@@ -6,7 +6,7 @@ setuptools.setup(
     install_requires=[
         "PyYAML==6.0",
         "fastapi==0.78.0",
-        "pydantic==1.8.2",
+        "pydantic==1.9.1",
         "uvicorn[standard]==0.18.1",
         "python-decouple==3.5",
     ],
