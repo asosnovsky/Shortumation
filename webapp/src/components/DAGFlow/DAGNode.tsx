@@ -109,7 +109,10 @@ export const DAGNode: FC<DAGNodeProps> = ({
                 ].join(" ")}
               >
                 <IconButton onClick={onXClick} size="small">
-                  <DeleteForeverIcon fontSize="inherit" />
+                  <DeleteForeverIcon fontSize="inherit" color="warning" />
+                </IconButton>
+                <IconButton onClick={onEditClick} size="small">
+                  <PencilIcon color={theme.green} size={0.8} />
                 </IconButton>
                 {Object.entries(onMove).map(([key, action]) => (
                   <IconButton
@@ -127,11 +130,7 @@ export const DAGNode: FC<DAGNodeProps> = ({
           <div className={classes.textWrap}>
             <span className={classes.text}>{label}</span>
           </div>
-          <div className={classes.rightEdge} onClick={onEditClick}>
-            <button className={classes.buttonEdit}>
-              <PencilIcon size={1.1} color={theme.green} />
-            </button>
-          </div>
+          <div className={classes.rightEdge} onClick={onEditClick}></div>
         </div>
       </div>
     </>
