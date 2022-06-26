@@ -1,5 +1,8 @@
 class AutomationLoaderException(Exception):
-    pass
+    def __init__(self, *args: object, **kwargs) -> None:
+        super().__init__(
+            "".join(args) + ",".join((f"{k}={v}" for k, v in kwargs.items())),
+        )
 
 
 class InvalidAutomationFile(AutomationLoaderException):

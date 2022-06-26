@@ -1,6 +1,6 @@
 from typing import Iterator, List, Optional
 
-from src.automations.errors import FailedDeletion
+from src.automations.errors import FailedDeletion, InvalidAutomationFile
 from src.automations.types import AutomationData, ExtenededAutomationData
 from src.hass_config.loader import HassConfig
 
@@ -22,29 +22,32 @@ class AutomationManager:
                 continue
             if i >= offset + limit:
                 break
-            yield from load_automation(auto, tags.get(i, {}))
+            yield from load_automation(auto, tags.get(auto.get("id", ""), {}))
 
     def get(self, index: int) -> Optional[AutomationData]:
         tags = self.hass_config.automation_tags
         if index >= 0:
             for i, auto in enumerate(self.hass_config.automations):
+                if not isinstance(auto, dict):
+                    raise InvalidAutomationFile(automation_index=i)
                 if i == index:
-                    return next(load_automation(auto, tags.get(i, {})))
+                    return next(load_automation(auto, tags.get(auto.get("id", ""), {})))
         return None
 
     def update(self, index: int, automation: ExtenededAutomationData):
         tags = self.hass_config.automation_tags
         automations: List[dict] = []
-        updated = False
+        updated_index: Optional[int] = None
         for i, orig_auto in enumerate(self.hass_config.automations):
             if i == index:
                 automations.append(automation.to_primitive())
-                updated = True
+                updated_index = i
             else:
                 automations.append(orig_auto)
-        if not updated:
+        if updated_index is None:
             automations.append(automation.to_primitive())
-        tags[index] = automation.tags
+            updated_index = len(automations) - 1
+        tags[updated_index] = automation.tags
         self.hass_config.save_automations(automations)
         self.hass_config.save_tags(tags)
 
