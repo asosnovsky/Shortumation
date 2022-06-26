@@ -8,9 +8,8 @@ export interface ModalStyleProps {
 }
 export interface Props extends ModalStyleProps {
   children: ReactNode;
-  actions?: ReactNode;
 }
-export const Modal: FC<Props> = ({ children, actions, open }) => {
+export const Modal: FC<Props> = ({ children, open }) => {
   return (
     <MuiModal open={open}>
       <div className="modal--root">
