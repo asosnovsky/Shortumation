@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & Push to Dockerhub
-        uses: home-assistant/builder@2022.03.1
+        uses: home-assistant/builder@2022.06.2
         with:
           args: |
             --${{ matrix.arch }} \
