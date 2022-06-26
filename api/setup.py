@@ -22,7 +22,7 @@ setuptools.setup(
             "vulture==2.4",
             "types-requests==2.28.0",
             "types-PyYAML==6.0.8",
-            "requests==2.27.0",
+            "requests==2.28.0",
         ],
     },
 )
