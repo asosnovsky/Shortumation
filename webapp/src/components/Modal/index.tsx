@@ -1,8 +1,7 @@
 import "./index.css";
-import Paper from "@mui/material/Paper";
 import MuiModal from "@mui/material/Modal";
 import { FC, ReactNode } from "react";
-import { Card, CardActions, CardContent } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 
 export interface ModalStyleProps {
   open: boolean;
