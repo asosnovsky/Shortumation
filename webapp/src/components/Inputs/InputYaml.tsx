@@ -34,21 +34,21 @@ export default function InputYaml<T extends {}>({
   helperText,
   endAdornment,
 }: Props<T>) {
-  const [{ text, error, hasChanged }, setState] = useState<{
+  const originalText = yaml.dump(value);
+  const [{ text, error }, setState] = useState<{
     text: string;
     error: undefined | JSX.Element | string;
-    hasChanged: boolean;
   }>({
-    text: yaml.dump(value),
+    text: originalText,
     error: incmError,
-    hasChanged: false,
   });
+  const hasChanged = text !== originalText;
   const setText = (t: string) => {
     try {
       yaml.load(t);
-      setState({ text: t, error: undefined, hasChanged: true });
+      setState({ text: t, error: undefined });
     } catch (_) {
-      setState({ text: t, error: "! Invalid Yaml !", hasChanged: true });
+      setState({ text: t, error: "! Invalid Yaml !" });
     }
   };
   const onSave = () => {
@@ -60,18 +60,12 @@ export default function InputYaml<T extends {}>({
       } else {
         onChange({} as any);
       }
-      setState({
-        text,
-        error,
-        hasChanged: false,
-      });
     }
   };
   useEffect(() => {
     setState({
       text: yaml.dump(value),
       error: incmError,
-      hasChanged: false,
     });
   }, [value, incmError]);
   return (
@@ -90,6 +84,7 @@ export default function InputYaml<T extends {}>({
         onChange={setText}
         maxWidth="100%"
         width="100%"
+        minHeight="3.5em"
         minWidth="100%"
       />
       <span className="input-yaml--placeholder">

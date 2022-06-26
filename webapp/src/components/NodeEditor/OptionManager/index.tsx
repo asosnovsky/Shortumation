@@ -54,6 +54,7 @@ export const useEditorNodeState = (
     setAllState({
       ...allState,
       ...computeInvalidYaml(yaml, allowedTypes),
+      isModified: true,
     });
   };
   // value aliases
