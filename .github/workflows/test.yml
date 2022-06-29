@@ -3,6 +3,9 @@ on:
   push:
     branch: 
       - main
+  pull_request:
+    branch: 
+      - main
 jobs:
   metadata:
     runs-on: ubuntu-latest
@@ -73,6 +76,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Build & Publish ${{ matrix.arch }}
+    if: github.event_name != 'pull_request'
     needs:
       - metadata
       - nodejs
@@ -82,6 +86,12 @@ jobs:
         arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
 
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          all_but_latest: true
+          access_token: ${{ github.token }}
+          
       - name: Check out repository
         uses: actions/checkout@v3
 
