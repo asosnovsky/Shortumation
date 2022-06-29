@@ -1,4 +1,4 @@
-name: Main Branch Tests
+name: Tests
 on:
   push:
     branch: 
@@ -91,7 +91,7 @@ jobs:
         with:
           all_but_latest: true
           access_token: ${{ github.token }}
-          
+
       - name: Check out repository
         uses: actions/checkout@v3
 
