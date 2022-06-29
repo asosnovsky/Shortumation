@@ -18,7 +18,7 @@ import { NodeEditor } from "components/NodeEditor";
 import { MultiNodeEditor } from "components/MultiNodeEditors";
 import { Modal } from "components/Modal";
 import { AutomationCondition } from "types/automations/conditions";
-import { convertToFlowNode } from "./helpers";
+import { convertToFlowNode, makeOnEditAutomationConditions } from "./helpers";
 import { DAGErrorNode } from "./DAGErrorNode";
 import { useHA } from "haService";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
@@ -28,20 +28,6 @@ const nodeTypes = {
   errornode: convertToFlowNode(DAGErrorNode),
   dagcircle: DAGCircle,
 };
-
-const makeOnEditAutomationConditions =
-  (
-    conditions: AutomationCondition[],
-    updateConditions: (c: AutomationCondition[]) => void,
-    openModal: UpdateModalState
-  ) =>
-  () =>
-    openModal({
-      single: false,
-      node: conditions,
-      allowedTypes: ["condition"],
-      update: (c) => updateConditions(c as any),
-    });
 
 export interface DAGAutomationFlowProps {
   className?: string;

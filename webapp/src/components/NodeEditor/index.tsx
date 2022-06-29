@@ -96,7 +96,9 @@ export const NodeEditor: FC<NodeEditorProps> = ({
             />
           </div>
         </div>
-        {state.renderOptionList()}
+        <div className="node-editor--body--options">
+          {state.renderOptionList()}
+        </div>
       </div>
       <div className="node-editor--footer">
         <Button

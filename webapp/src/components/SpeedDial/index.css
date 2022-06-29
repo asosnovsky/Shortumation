@@ -18,6 +18,7 @@
 .speed-dial--list.close {
     width: 0;
     opacity: 0;
+    display: none;
 }
 
 .speed-dial--list {
@@ -29,17 +30,15 @@
     border-radius: 10px;
 }
 
-.speed-dial--list.row {
+.speed-dial--list.open {
     display: flex;
     flex-direction: row;
-    top: 0;
-    left: 2em;
 }
 
-.speed-dial--list.column {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25em;
-    top: 2em;
-    left: 0.25em;
+.speed-dial--list.right {
+    left: 2em
+}
+
+.speed-dial--list.left {
+    right: 3em
 }

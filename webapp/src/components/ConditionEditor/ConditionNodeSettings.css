@@ -1,3 +1,7 @@
+.condition-node--settings {
+    width: 3em;
+}
+
 .condition-node--settings--icons {
     display: inline-block;
     max-width: 5em;
@@ -15,4 +19,16 @@
 
 .condition-node--settings button.Mui-disabled {
     cursor: not-allowed;
+}
+
+
+.condition-node--settings .speed-dial--button {
+    max-width: 4em;
+    max-height: 4em;
+    height: 4em;
+    width: 4em;
+}
+
+.condition-node--settings .speed-dial--button:hover button {
+    background-color: var(--secondary-accent);
 }
