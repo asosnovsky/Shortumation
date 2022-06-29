@@ -4,7 +4,7 @@ import {
   LogicCondition,
 } from "types/automations/conditions";
 import { getDescriptionFromAutomationNode, Namer } from "utils/formatting";
-import { ConditionNode } from "./ConditionNode";
+import { ConditionNodeBase } from "./ConditionNodeBase";
 import { genUpdateMethods } from "./nestedUpdater";
 
 interface Viewer<C extends AutomationCondition>
@@ -40,10 +40,10 @@ export const LogicViewer: Viewer<LogicCondition> = ({
     <>
       {condition.conditions.map((c, i) => {
         return (
-          <ConditionNode
+          <ConditionNodeBase
             key={i}
             condition={c}
-            displayMode
+            // displayMode
             {...genUpdateMethods(condition, onChange)(i)}
           />
         );

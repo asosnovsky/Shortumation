@@ -2,14 +2,15 @@ import "./ButtonIcons.css";
 import { FC, ReactNode } from "react";
 import MuiIconButton, { IconButtonTypeMap } from "@mui/material/IconButton";
 
-export const ButtonIcon: FC<{
+export type ButtonIconProps = {
   icon: ReactNode;
   onClick?: () => void;
   className?: string;
   title?: string;
   disabled?: boolean;
   color?: IconButtonTypeMap["props"]["color"];
-}> = (props) => {
+};
+export const ButtonIcon: FC<ButtonIconProps> = (props) => {
   return (
     <MuiIconButton
       className={["icon-button", props.className ?? ""].join(" ")}

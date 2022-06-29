@@ -24,9 +24,21 @@
     bottom: -3em;
     left: 0em;
     background: var(--secondary);
+    z-index: 10;
+    height: fit-content;
+    padding: 0.1em;
+    border-radius: 10px;
 }
 
 .speed-dial--list.open.row {
     display: flex;
     flex-direction: row;
+}
+
+.speed-dial--list.open.column {
+    display: flex;
+    top: 2em;
+    flex-direction: column;
+    gap: 0.25em;
+    left: 0.25em;
 }

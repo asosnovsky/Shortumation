@@ -13,12 +13,14 @@ import {
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
 import { InputEntity } from "components/Inputs/InputEntities";
-import { ConditionNode } from "./ConditionNode";
+import { ConditionNodeBase } from "./ConditionNodeBase";
 import { genUpdateMethods } from "./nestedUpdater";
 import { InputTime } from "components/Inputs/InputTime";
 import InputYaml from "components/Inputs/InputYaml";
 import { HAService } from "haService";
 import { DeviceEditor } from "components/DeviceEditor";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
+import AddIcon from "@mui/icons-material/Add";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{
@@ -171,15 +173,33 @@ export const LogicViewer: Editor<LogicCondition> = ({
     <>
       {condition.conditions.map((c, i) => {
         return (
-          <ConditionNode
+          <ConditionNodeBase
             key={i}
             condition={c}
-            displayMode={false}
             {...genUpdateMethods(condition, onChange)(i)}
-            showDelete
+            disableDelete={false}
           />
         );
       })}
+      <div className="condition-node--logic-viewer--add">
+        <ButtonIcon
+          icon={<AddIcon />}
+          onClick={() =>
+            onChange({
+              condition: condition.condition,
+              conditions: [
+                ...(condition.conditions ?? []),
+                {
+                  condition: "device",
+                  device_id: "",
+                  domain: "",
+                  type: "",
+                },
+              ],
+            })
+          }
+        />
+      </div>
     </>
   );
 };

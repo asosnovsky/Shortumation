@@ -1,0 +1,19 @@
+.condition-node-base.mobile {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.condition-node-base.mobile .condition-node-base--list {
+    flex-direction: row;
+    display: flex;
+    min-width: 100%;
+}
+
+.condition-node-base.mobile .condition-node-base--body {
+    min-height: 3em;
+    max-width: 100%;
+}
+
+.condition-node-base.mobile .condition-node-base--body.edit {
+    max-height: 500px;
+}

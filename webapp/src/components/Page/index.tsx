@@ -65,6 +65,30 @@ export const InternalPage: FC<{
         background: theme.palette.background.default,
       }}
     >
+      {/* <style>
+        {`:root {
+            --primary: ${theme.palette.primary.main};
+            --secondary: ${theme.palette.secondary.main};
+            --secondary: ${theme.palette..main};
+            --primary-accent: #bbb;
+            --primary-accent-light: #eee;
+            --secondary-accent: #929191;
+            --green: #1f1;
+            --green-opaque: #1f15;
+            --green-light: #6f5;
+            --error: #c55;
+            --error-light: #f77;
+            --error-dark: #5c2323;
+            --error-opaque: #c555;
+            --error-accent: #9f3a3a;
+            --change: #0f9;
+            --condition-primary: #447;
+            --condition-accent: #8af;
+            --condition-primary-opaque: #4476;
+            touch-action: pan-x pan-y;
+            height: 100%;
+        }`}
+      </style> */}
       <VersionBox />
       {children}
     </main>

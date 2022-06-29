@@ -1,0 +1,18 @@
+.condition-node--settings--icons {
+    display: inline-block;
+    max-width: 5em;
+    max-height: 5em;
+}
+
+.condition-node--settings--wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 5em;
+    min-height: 5em;
+}
+
+.condition-node--settings button.Mui-disabled {
+    cursor: not-allowed;
+}
