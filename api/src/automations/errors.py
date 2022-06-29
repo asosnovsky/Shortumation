@@ -1,7 +1,7 @@
 class AutomationLoaderException(Exception):
     def __init__(self, *args: object, **kwargs) -> None:
         super().__init__(
-            "".join(args) + ",".join((f"{k}={v}" for k, v in kwargs.items())),
+            "".join(map(str, args)) + ",".join((f"{k}={v}" for k, v in kwargs.items())),
         )
 
 

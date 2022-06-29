@@ -47,7 +47,7 @@ class AutomationManager:
         if updated_index is None:
             automations.append(automation.to_primitive())
             updated_index = len(automations) - 1
-        tags[updated_index] = automation.tags
+        tags[automation.metadata.id] = automation.tags
         self.hass_config.save_automations(automations)
         self.hass_config.save_tags(tags)
 
