@@ -12,6 +12,7 @@ import { createToNodeMakerFunction } from "./helpers";
 import { SpeedDial } from "components/SpeedDial";
 import Edit from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material";
+import InputBoolean from "components/Inputs/InputBoolean";
 
 export type DAGNodeOnMove<Direction extends string> = Record<
   Direction,
@@ -23,10 +24,12 @@ export type DAGNodeOnMoveEvents = Partial<
 export interface DAGNodeDataProps {
   onXClick?: () => void;
   onEditClick?: () => void;
+  onSetEnabled?: () => void;
   onMove?: DAGNodeOnMoveEvents;
   color: NodeColor;
   label: ReactNode;
   hasInput?: boolean;
+  enabled: boolean;
 }
 export interface DAGNodeProps extends DAGNodeDataProps {
   height: number;
@@ -42,12 +45,12 @@ export const makeConditionPoint = createToNodeMakerFunction<
   DAGNodeProps
 >((pre, { conditionWidth, conditionHeight, flipped }) => ({
   color: "lblue",
-  label: pre.label,
   height: conditionHeight,
   width: conditionWidth,
   hasInput: true,
-  onEditClick: pre.onEditClick,
+  enabled: true,
   flipped,
+  ...pre,
 }));
 
 export const makeActionPoint = createToNodeMakerFunction<
@@ -70,12 +73,18 @@ export const DAGNode: FC<DAGNodeProps> = ({
   color,
   hasInput = false,
   flipped,
+  enabled,
+  onSetEnabled,
 }) => {
   const theme = useTheme();
   return (
     <>
       <div
-        className={["dagnode", flipped ? "flipped" : ""].join(" ")}
+        className={[
+          "dagnode",
+          flipped ? "flipped" : "",
+          enabled ? "enabled" : "disabled",
+        ].join(" ")}
         style={{
           height,
           width,
@@ -100,7 +109,9 @@ export const DAGNode: FC<DAGNodeProps> = ({
                 : color === "red"
                 ? theme.palette.error.dark
                 : "none",
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: enabled
+              ? theme.palette.background.default
+              : theme.palette.grey[600],
           }}
         >
           <SpeedDial
@@ -108,9 +119,6 @@ export const DAGNode: FC<DAGNodeProps> = ({
           >
             <IconButton onClick={onEditClick} size="small">
               <Edit color="success" fontSize="inherit" />
-            </IconButton>
-            <IconButton onClick={onXClick} size="small">
-              <DeleteForeverIcon fontSize="inherit" color="error" />
             </IconButton>
             {Object.entries(onMove).map(([key, action]) => (
               <IconButton
@@ -122,7 +130,19 @@ export const DAGNode: FC<DAGNodeProps> = ({
                 <ArrowBackIcon fontSize="inherit" />
               </IconButton>
             ))}
+            <IconButton onClick={onXClick} size="small">
+              <DeleteForeverIcon fontSize="inherit" color="error" />
+            </IconButton>
           </SpeedDial>
+          {!!onSetEnabled && (
+            <InputBoolean
+              key="enabled-flag"
+              className="dagnode--enabled-flag"
+              label=""
+              value={enabled}
+              onChange={onSetEnabled}
+            />
+          )}
 
           {hasInput && (
             <Handle

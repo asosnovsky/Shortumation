@@ -82,6 +82,11 @@ export const sequenceToFlow = (
           onXClick: () => updater.removeNode(i),
           onMove: updater.makeOnMoveEvents(i, dims.flipped),
           namer,
+          onSetEnabled: () =>
+            updater.updateNode(i, {
+              ...node,
+              enabled: !(node.enabled ?? true),
+            }),
         });
       }
     } else {
@@ -90,6 +95,11 @@ export const sequenceToFlow = (
         onXClick: () => updater.removeNode(i),
         onMove: updater.makeOnMoveEvents(i, dims.flipped),
         namer,
+        onSetEnabled: () =>
+          updater.updateNode(i, {
+            ...node,
+            enabled: !(node.enabled ?? true),
+          }),
       });
     }
     addEdge(flowData, lastPointId, nodeId, false);
@@ -164,6 +174,7 @@ const addSingleNode = (
     onXClick: () => void;
     namer: Namer;
     onMove: DAGNodeOnMoveEvents;
+    onSetEnabled: () => void;
   }
 ) =>
   flowData.nodes.push(
@@ -174,6 +185,7 @@ const addSingleNode = (
         label: getDescriptionFromAutomationNode(node, opts.namer, true),
         color: getNodeType(node) === "action" ? "green" : "blue",
         hasInput: true,
+        enabled: node.enabled ?? true,
         ...opts,
       },
       dims
@@ -220,6 +232,11 @@ const addChooseNode = (
     onXClick: () => updater.removeNode(i),
     namer,
     onMove: updater.makeOnMoveEvents(i, dims.flipped),
+    onSetEnabled: () =>
+      updater.updateNode(i, {
+        ...node,
+        enabled: !(node.enabled ?? true),
+      }),
   });
   let lastPos: XYPosition = position;
   // conditions

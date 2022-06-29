@@ -139,6 +139,12 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
           onTriggerUpdate([...trigger.slice(0, i), t, ...trigger.slice(i + 1)]),
         allowedTypes: ["trigger"],
       }),
+    onSetEnabled: (i) =>
+      onTriggerUpdate([
+        ...trigger.slice(0, i),
+        { ...trigger[i], enabled: !(trigger[i] ?? true) },
+        ...trigger.slice(i + 1),
+      ]),
   });
   sequenceToFlow(
     flowData,

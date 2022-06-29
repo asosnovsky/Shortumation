@@ -2,6 +2,7 @@ import { AutomationTrigger } from "types/automations/triggers";
 import { DAGAutomationFlowDims, FlowData, TriggerMakerOptions } from "./types";
 import { makeAddButton } from "./flowDataMods";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
+import { makeActionPoint } from "./DAGNode";
 
 export const triggerToFlow = (
   flowData: FlowData,
@@ -22,28 +23,29 @@ export const triggerToFlow = (
   // convert all triggers to dag nodes
   trigger.forEach((t, i) => {
     const flowId = `t-${i}`;
-    flowData.nodes.push({
-      id: flowId,
-      type: "dagnode",
-      data: {
-        label: getDescriptionFromAutomationNode(t, opts.namer, true),
-        height: nodeHeight,
-        width: nodeWidth,
-        flipped,
-        color: "red",
-        onEditClick: () => opts.onEdit(i),
-        onXClick: () => opts.onDelete(i),
-      },
-      position: flipped
-        ? {
-            y: padding.y,
-            x: padding.x + nodeWidth * distanceFactor * i,
-          }
-        : {
-            x: padding.x,
-            y: padding.y + nodeHeight * distanceFactor * i,
-          },
-    });
+    flowData.nodes.push(
+      makeActionPoint(
+        flowId,
+        flipped
+          ? {
+              y: padding.y,
+              x: padding.x + nodeWidth * distanceFactor * i,
+            }
+          : {
+              x: padding.x,
+              y: padding.y + nodeHeight * distanceFactor * i,
+            },
+        {
+          label: getDescriptionFromAutomationNode(t, opts.namer, true),
+          color: "red",
+          onEditClick: () => opts.onEdit(i),
+          onXClick: () => opts.onDelete(i),
+          enabled: t.enabled ?? true,
+          onSetEnabled: () => opts.onSetEnabled(i),
+        },
+        dims
+      )
+    );
     flowData.edges.push({
       id: `e(${flowId})-(${toPoint})`,
       source: flowId,

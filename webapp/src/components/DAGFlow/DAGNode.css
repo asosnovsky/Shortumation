@@ -25,12 +25,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-
-    /* overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word; */
 }
 
 .dagnode--label span {
@@ -38,6 +32,12 @@
     white-space: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.dagnode--enabled-flag {
+    position: absolute;
+    top: -1.5em;
+    right: -2.5em;
 }
 
 .dagnode .dagnode--inner .speed-dial {
