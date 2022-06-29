@@ -21,6 +21,7 @@ import { AutomationCondition } from "types/automations/conditions";
 import { convertToFlowNode } from "./helpers";
 import { DAGErrorNode } from "./DAGErrorNode";
 import { useHA } from "haService";
+import { getDescriptionFromAutomationNode } from "utils/formatting";
 
 const nodeTypes = {
   dagnode: convertToFlowNode(DAGNode),
@@ -101,14 +102,21 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
     dims.flipped
       ? {
           y: dims.padding.y + dims.nodeHeight * dims.distanceFactor,
-          x: dims.padding.x + dims.nodeWidth * 0.25,
+          x: dims.padding.x + (dims.nodeWidth - dims.conditionWidth) / 2,
         }
       : {
           x: dims.padding.x + dims.nodeWidth * dims.distanceFactor,
-          y: dims.padding.y + dims.nodeHeight * 0.25,
+          y: dims.padding.y + (dims.nodeHeight - dims.conditionHeight) / 2,
         },
     {
-      totalConditions: condition.length,
+      label: getDescriptionFromAutomationNode(
+        {
+          condition: "and",
+          conditions: condition,
+        },
+        namer,
+        true
+      ),
       onEditClick: makeOnEditAutomationConditions(
         condition,
         onConditionUpdate,
@@ -154,11 +162,11 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
       ...dims,
       padding: dims.flipped
         ? {
-            y: condPoint.position.y - dims.nodeHeight - dims.conditionHeight,
+            y: condPoint.position.y - dims.nodeHeight,
             x: dims.padding.x,
           }
         : {
-            x: condPoint.position.x - dims.nodeWidth - dims.conditionWidth,
+            x: condPoint.position.x - dims.nodeWidth,
             y: dims.padding.y,
           },
     },

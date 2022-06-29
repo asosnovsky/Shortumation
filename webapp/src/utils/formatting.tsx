@@ -77,7 +77,13 @@ export const getDescriptionFromAutomationNode = <
       node.condition === "or" ||
       node.condition === "not"
     ) {
-      return "Logic";
+      if (node.conditions.length === 0) {
+        return `None`;
+      }
+      const childConditions = node.conditions.map((c) =>
+        getDescriptionFromAutomationNode(c, namer, allowJs)
+      );
+      return childConditions.join(` ${node.condition} `).trim() ?? "None";
     } else {
       switch (node.condition) {
         case "numeric_state":

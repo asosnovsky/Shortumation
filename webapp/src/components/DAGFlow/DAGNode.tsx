@@ -1,16 +1,17 @@
 import "./DAGNode.css";
-import { PencilIcon } from "components/Icons";
+import "./DAGNode.flipped.css";
+
 import { NodeColor } from "types/graphs";
-import { useNodeStyles } from "./styles";
 import { Handle, Position } from "react-flow-renderer";
-import { FC, ReactNode, useState } from "react";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { FC, ReactNode } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createToNodeMakerFunction } from "./helpers";
 import { SpeedDial } from "components/SpeedDial";
+import Edit from "@mui/icons-material/Edit";
+import { useTheme } from "@mui/material";
 
 export type DAGNodeOnMove<Direction extends string> = Record<
   Direction,
@@ -26,7 +27,6 @@ export interface DAGNodeDataProps {
   color: NodeColor;
   label: ReactNode;
   hasInput?: boolean;
-  accentBackground?: boolean;
 }
 export interface DAGNodeProps extends DAGNodeDataProps {
   height: number;
@@ -36,16 +36,13 @@ export interface DAGNodeProps extends DAGNodeDataProps {
 
 export const makeConditionPoint = createToNodeMakerFunction<
   {
-    totalConditions: number;
+    label: ReactNode;
     onEditClick: () => void;
   },
   DAGNodeProps
 >((pre, { conditionWidth, conditionHeight, flipped }) => ({
   color: "lblue",
-  accentBackground: true,
-  label: `${pre.totalConditions} Condition${
-    pre.totalConditions !== 1 ? "s" : ""
-  }`,
+  label: pre.label,
   height: conditionHeight,
   width: conditionWidth,
   hasInput: true,
@@ -72,38 +69,48 @@ export const DAGNode: FC<DAGNodeProps> = ({
   onMove = {},
   color,
   hasInput = false,
-  accentBackground = false,
   flipped,
 }) => {
-  const { classes, theme } = useNodeStyles({
-    color,
-    nodeHeight: height,
-    nodeWidth: width,
-    accentBackground,
-  });
-  const [open, setOpen] = useState(false);
+  const theme = useTheme();
   return (
     <>
-      {hasInput && (
-        <Handle
-          type="target"
-          position={flipped ? Position.Top : Position.Left}
-        />
-      )}
-      <Handle
-        type="source"
-        position={flipped ? Position.Bottom : Position.Right}
-      />
-      <div className={classes.root}>
-        <div className={classes.inner}>
+      <div
+        className={["dagnode", flipped ? "flipped" : ""].join(" ")}
+        style={{
+          height,
+          width,
+        }}
+      >
+        <div
+          className="dagnode--inner"
+          style={{
+            maxHeight: height,
+            maxWidth: width,
+            minWidth: Math.max(width / 2, height / 2),
+            borderBottomColor: theme.palette.grey[500],
+            borderLeftColor: theme.palette.grey[700],
+            borderRightColor: theme.palette.grey[700],
+            borderTopColor:
+              color === "blue"
+                ? theme.palette.info.main
+                : color === "green"
+                ? theme.palette.success.light
+                : color === "lblue"
+                ? theme.palette.info.light
+                : color === "red"
+                ? theme.palette.error.dark
+                : "none",
+            backgroundColor: theme.palette.background.default,
+          }}
+        >
           <SpeedDial
-            icon={<SettingsOutlinedIcon className="dagnode--actions" />}
+            icon={<SettingsOutlinedIcon className="dagnode--actions-btn" />}
           >
-            <IconButton onClick={onXClick} size="small">
-              <DeleteForeverIcon fontSize="inherit" color="warning" />
-            </IconButton>
             <IconButton onClick={onEditClick} size="small">
-              <PencilIcon color={theme.green} size={0.8} />
+              <Edit color="success" fontSize="inherit" />
+            </IconButton>
+            <IconButton onClick={onXClick} size="small">
+              <DeleteForeverIcon fontSize="inherit" color="error" />
             </IconButton>
             {Object.entries(onMove).map(([key, action]) => (
               <IconButton
@@ -116,10 +123,18 @@ export const DAGNode: FC<DAGNodeProps> = ({
               </IconButton>
             ))}
           </SpeedDial>
-          <div className={classes.textWrap}>
-            <span className={classes.text}>{label}</span>
-          </div>
-          <div className={classes.rightEdge} onClick={onEditClick}></div>
+
+          {hasInput && (
+            <Handle
+              type="target"
+              position={flipped ? Position.Top : Position.Left}
+            />
+          )}
+          <Handle
+            type="source"
+            position={flipped ? Position.Bottom : Position.Right}
+          />
+          <div className="dagnode--label">{label}</div>
         </div>
       </div>
     </>

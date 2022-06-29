@@ -231,11 +231,17 @@ const addChooseNode = (
       dims.flipped
         ? {
             y: position.y + dims.nodeHeight * dims.distanceFactor,
-            x: lastPos.x + dims.nodeWidth * dims.distanceFactor,
+            x:
+              lastPos.x +
+              Math.max(dims.nodeWidth, dims.conditionWidth) *
+                dims.distanceFactor,
           }
         : {
             x: position.x + dims.nodeWidth * dims.distanceFactor,
-            y: lastPos.y + dims.nodeHeight * dims.distanceFactor,
+            y:
+              lastPos.y +
+              Math.max(dims.nodeHeight, dims.conditionHeight) *
+                dims.distanceFactor,
           },
       {
         flipped: dims.flipped,
@@ -254,14 +260,21 @@ const addChooseNode = (
       dims.flipped
         ? {
             y: circle.position.y + dims.circleSize * dims.distanceFactor,
-            x: circle.position.x - dims.circleSize,
+            x: circle.position.x - (dims.conditionWidth - dims.circleSize) / 2,
           }
         : {
             x: circle.position.x + dims.circleSize * dims.distanceFactor,
-            y: circle.position.y + dims.circleSize / 8,
+            y: circle.position.y - (dims.conditionHeight - dims.circleSize) / 2,
           },
       {
-        totalConditions: conditions.length,
+        label: getDescriptionFromAutomationNode(
+          {
+            condition: "and",
+            conditions,
+          },
+          namer,
+          true
+        ),
         onEditClick: updater.makeOnEditConditionsForChooseNode(i, j),
       },
       dims
@@ -278,12 +291,16 @@ const addChooseNode = (
         ...dims,
         padding: dims.flipped
           ? {
-              y: condNode.position.y - dims.nodeHeight * dims.distanceFactor,
-              x: condNode.position.x - dims.conditionHeight / 2,
+              y: condNode.position.y - dims.nodeHeight,
+              x:
+                condNode.position.x -
+                (dims.nodeWidth - dims.conditionWidth) / 2,
             }
           : {
-              x: condNode.position.x - (dims.nodeWidth + dims.conditionWidth),
-              y: condNode.position.y - dims.conditionHeight / 2,
+              x: condNode.position.x - dims.nodeWidth,
+              y:
+                condNode.position.y -
+                (dims.nodeHeight - dims.conditionHeight) / 2,
             },
       },
       namer,

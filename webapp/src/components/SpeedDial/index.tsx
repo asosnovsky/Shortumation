@@ -16,9 +16,12 @@ export const SpeedDial: FC<SpeedDialProps> = (props) => {
       <div
         className={["speed-dial", props.className ?? ""].join(" ")}
         onClick={() => setOpen(!open)}
-        onMouseEnter={() => setOpen(true)}
       >
-        <div className="speed-dial--button">{props.icon}</div>
+        <div
+          className={["speed-dial--icon", open ? "open" : "close"].join(" ")}
+        >
+          {props.icon}
+        </div>
         <div
           className={[
             "speed-dial--list",

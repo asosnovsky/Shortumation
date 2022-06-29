@@ -1,7 +1,6 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { DAGAutomationFlow } from ".";
-import { useState } from "react";
 import * as dgconst from "components/DAGFlow/constants";
 import ReactFlow, { Controls } from "react-flow-renderer";
 import { DAGNode } from "./DAGNode";
