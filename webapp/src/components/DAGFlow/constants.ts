@@ -1,8 +1,8 @@
 import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 
-export const NODE_WIDTH = 150 as const;
-export const NODE_HEIGHT = 60 as const;
-export const CONDITION_HEIGHT = 100 as const;
+export const NODE_WIDTH = 170 as const;
+export const NODE_HEIGHT = 70 as const;
+export const CONDITION_HEIGHT = 90 as const;
 export const CONDITION_WIDTH = 200 as const;
 export const CIRCLE_SIZE = 40 as const;
 export const DISTANCE_FACTOR = 1.5 as const;

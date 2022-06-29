@@ -84,8 +84,8 @@ export const DAGNode: FC<DAGNodeProps> = ({
         <div
           className="dagnode--inner"
           style={{
-            maxHeight: height,
-            maxWidth: width,
+            maxHeight: `calc(${height}px - 1em)`,
+            maxWidth: `calc(${width}px - 1em)`,
             minWidth: Math.max(width / 2, height / 2),
             borderBottomColor: theme.palette.grey[500],
             borderLeftColor: theme.palette.grey[700],
@@ -134,7 +134,16 @@ export const DAGNode: FC<DAGNodeProps> = ({
             type="source"
             position={flipped ? Position.Bottom : Position.Right}
           />
-          <div className="dagnode--label">{label}</div>
+          <div
+            className="dagnode--label"
+            style={{
+              maxHeight: `calc(${height}px - 1em)`,
+              maxWidth: `calc(${width}px - 1em)`,
+              minHeight: height / 2,
+            }}
+          >
+            {typeof label === "string" ? <span>{label}</span> : label}
+          </div>
         </div>
       </div>
     </>

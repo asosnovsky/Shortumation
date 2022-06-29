@@ -12,9 +12,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    padding: 1.5em 0.5em;
-    /* width: calc(100% - 0.5em);
-    height: calc(100% - 0.5em); */
+    padding: 0.5em 0.5em;
     border-style: solid;
     border-width: 1px;
     border-radius: 10px;
@@ -24,13 +22,22 @@
 .dagnode--label {
     flex: 1;
     display: flex;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+
+    /* overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word; */
+}
+
+.dagnode--label span {
     text-align: center;
+    white-space: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dagnode .dagnode--inner .speed-dial {
