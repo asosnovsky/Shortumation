@@ -10,6 +10,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createToNodeMakerFunction } from "./helpers";
+import { SpeedDial } from "components/SpeedDial";
 
 export type DAGNodeOnMove<Direction extends string> = Record<
   Direction,
@@ -95,38 +96,26 @@ export const DAGNode: FC<DAGNodeProps> = ({
       />
       <div className={classes.root}>
         <div className={classes.inner}>
-          <ClickAwayListener onClickAway={() => setOpen(false)}>
-            <div
-              className={classes.leftEdge}
-              onClick={() => setOpen(!open)}
-              onMouseEnter={() => setOpen(true)}
-            >
-              <SettingsOutlinedIcon className="dagnode--actions" />
-              <div
-                className={[
-                  "dagnode--actions--list",
-                  open ? "open" : "close",
-                ].join(" ")}
+          <SpeedDial
+            icon={<SettingsOutlinedIcon className="dagnode--actions" />}
+          >
+            <IconButton onClick={onXClick} size="small">
+              <DeleteForeverIcon fontSize="inherit" color="warning" />
+            </IconButton>
+            <IconButton onClick={onEditClick} size="small">
+              <PencilIcon color={theme.green} size={0.8} />
+            </IconButton>
+            {Object.entries(onMove).map(([key, action]) => (
+              <IconButton
+                key={key}
+                onClick={action}
+                size="small"
+                className={["dagnode--actions--move", key].join(" ")}
               >
-                <IconButton onClick={onXClick} size="small">
-                  <DeleteForeverIcon fontSize="inherit" color="warning" />
-                </IconButton>
-                <IconButton onClick={onEditClick} size="small">
-                  <PencilIcon color={theme.green} size={0.8} />
-                </IconButton>
-                {Object.entries(onMove).map(([key, action]) => (
-                  <IconButton
-                    key={key}
-                    onClick={action}
-                    size="small"
-                    className={["dagnode--actions--move", key].join(" ")}
-                  >
-                    <ArrowBackIcon fontSize="inherit" />
-                  </IconButton>
-                ))}
-              </div>
-            </div>
-          </ClickAwayListener>
+                <ArrowBackIcon fontSize="inherit" />
+              </IconButton>
+            ))}
+          </SpeedDial>
           <div className={classes.textWrap}>
             <span className={classes.text}>{label}</span>
           </div>
