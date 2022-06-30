@@ -5,6 +5,7 @@ import { VersionBox } from "components/VersionBox";
 import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { useHAConnection } from "haService/connection";
+import { ConfirmProvider } from "material-ui-confirm";
 
 const theme = createTheme({
   palette: {
@@ -104,18 +105,22 @@ export const Page: FC<{
   };
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        ref={notistackRef}
-        action={(key) => <Button onClick={onClickDismiss(key)}>Dismiss</Button>}
-        dense
-        preventDuplicate
-      >
-        <InternalPage>{children}</InternalPage>
-      </SnackbarProvider>
+      <ConfirmProvider>
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          ref={notistackRef}
+          action={(key) => (
+            <Button onClick={onClickDismiss(key)}>Dismiss</Button>
+          )}
+          dense
+          preventDuplicate
+        >
+          <InternalPage>{children}</InternalPage>
+        </SnackbarProvider>
+      </ConfirmProvider>
     </ThemeProvider>
   );
 };

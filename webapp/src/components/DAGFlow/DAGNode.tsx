@@ -13,6 +13,8 @@ import { SpeedDial } from "components/SpeedDial";
 import Edit from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material";
 import InputBoolean from "components/Inputs/InputBoolean";
+import { useConfirm } from "material-ui-confirm";
+import { useSnackbar } from "notistack";
 
 export type DAGNodeOnMove<Direction extends string> = Record<
   Direction,
@@ -77,6 +79,8 @@ export const DAGNode: FC<DAGNodeProps> = ({
   onSetEnabled,
 }) => {
   const theme = useTheme();
+  const confirm = useConfirm();
+  const snackbr = useSnackbar();
   return (
     <>
       <div
@@ -130,9 +134,29 @@ export const DAGNode: FC<DAGNodeProps> = ({
                 <ArrowBackIcon fontSize="inherit" />
               </IconButton>
             ))}
-            <IconButton onClick={onXClick} size="small">
-              <DeleteForeverIcon fontSize="inherit" color="error" />
-            </IconButton>
+            {onXClick && (
+              <IconButton
+                onClick={() => {
+                  confirm({
+                    description: "Are you sure you want to delete this node?",
+                  })
+                    .then(() => {
+                      onXClick();
+                      snackbr.enqueueSnackbar("Deleted.", {
+                        variant: "info",
+                      });
+                    })
+                    .catch(() =>
+                      snackbr.enqueueSnackbar("Did not delete node.", {
+                        variant: "info",
+                      })
+                    );
+                }}
+                size="small"
+              >
+                <DeleteForeverIcon fontSize="inherit" color="error" />
+              </IconButton>
+            )}
           </SpeedDial>
           {!!onSetEnabled && (
             <InputBoolean

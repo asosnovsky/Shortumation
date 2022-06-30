@@ -239,6 +239,9 @@ const addChooseNode = (
       }),
   });
   let lastPos: XYPosition = position;
+  if (!(node.enabled ?? true)) {
+    return { lastPos, flowData };
+  }
   // conditions
   node.choose.forEach(({ sequence, conditions }, j) => {
     const sequenceId = `${nodeId}.${j}`;
