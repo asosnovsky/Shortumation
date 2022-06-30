@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import {
   AutomationDeviceState,
   AutomationTime,
+  DayOfWeek,
 } from "types/automations/common";
 import { AutomationTriggerZone } from "types/automations/triggers";
 
@@ -116,6 +117,17 @@ export const getDescriptionFromAutomationNode = <
           return getDescriptionForDeviceType(node, namer, true);
         case "trigger":
           return node.id;
+        case "time":
+          const before = node.before
+            ? `before ${convertTimeToString(node.before)}`
+            : "";
+          const after = node.after
+            ? `after ${convertTimeToString(node.after)}`
+            : "";
+          const weekday = node.weekday
+            ? `on ${getDescriptionForWeekDay(node.weekday, "or")}`
+            : "";
+          return [before, after, weekday].filter((x) => x).join(", ");
         default:
           return JSON.stringify(node);
       }
@@ -203,6 +215,34 @@ const getDescriptionForZoneType = (
   }
   out = out.trim();
   return out + " " + actionPort;
+};
+
+export const getDescriptionForWeekDay = (
+  n: DayOfWeek | DayOfWeek[],
+  acc = "and"
+): string => {
+  if (typeof n === "string") {
+    return n;
+  } else {
+    let allWeekends = true;
+    let allWeekdays = true;
+    for (const d of n) {
+      if (!["mon", "tue", "wed", "thu", "fri"].includes(d)) {
+        allWeekdays = false;
+      } else {
+        allWeekends = false;
+      }
+      if (!allWeekdays && !allWeekends) {
+        break;
+      }
+    }
+    if (allWeekends) {
+      return "weekends";
+    } else if (allWeekdays) {
+      return "weekdays";
+    }
+    return n.join(` ${acc.trim()} `);
+  }
 };
 
 export const prettyName = (n: string) => {

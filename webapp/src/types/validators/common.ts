@@ -55,3 +55,12 @@ export const AutomationDeviceState = st.type({
   device_id: st.string(),
   domain: st.string(),
 });
+export const DayOfWeek = st.enums([
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+  "sun",
+]);

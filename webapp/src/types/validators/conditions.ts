@@ -1,5 +1,10 @@
 import * as st from "superstruct";
-import { AutomationDeviceState, AutomationTime, EntityId } from "./common";
+import {
+  AutomationDeviceState,
+  AutomationTime,
+  EntityId,
+  DayOfWeek,
+} from "./common";
 
 export const AutomationConditionNodeBase = st.type({
   enabled: st.optional(st.boolean()),
@@ -59,9 +64,7 @@ export const TimeCondition = st.assign(
     condition: st.literal("time"),
     after: st.optional(AutomationTime),
     before: st.optional(AutomationTime),
-    weekday: st.optional(
-      st.enums(["mon", "tue", "wed", "thu", "fri", "sat", "sun"])
-    ),
+    weekday: st.optional(st.union([DayOfWeek, st.array(DayOfWeek)])),
   })
 );
 export const ZoneCondition = st.assign(
