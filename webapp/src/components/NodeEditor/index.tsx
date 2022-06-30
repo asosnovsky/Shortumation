@@ -6,6 +6,7 @@ import { useEditorNodeState } from "./OptionManager";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Button";
 import InputBoolean from "components/Inputs/InputBoolean";
+import { useConfirm } from "material-ui-confirm";
 
 export interface NodeEditorProps {
   node: AutomationNode;
@@ -30,20 +31,41 @@ export const NodeEditor: FC<NodeEditorProps> = ({
 }) => {
   // state
   const state = useEditorNodeState(node, isErrored, allowedTypes);
+  const confirm = useConfirm();
 
   // alias
   const isModified = state.isModified;
   const isReady = state.isReady();
-  const areYouSureNotReady = (what: string) =>
-    !isReady
-      ? window.confirm(
-          `This node is missing some values, are you sure you want to ${what}?`
-        )
-      : state.isErrored
-      ? window.confirm(
-          `This node contains errors, are you sure you want to ${what}?`
-        )
-      : true;
+  const areYouSureNotReady = async (what: string) => {
+    if (isModified) {
+      try {
+        await confirm({
+          description: `This node is has some unsaved work, are you sure you want to ${what}?`,
+        });
+      } catch (_: any) {
+        return false;
+      }
+    }
+    if (!isReady) {
+      try {
+        await confirm({
+          description: `This node is missing some values, are you sure you want to ${what}?`,
+        });
+      } catch (_: any) {
+        return false;
+      }
+    }
+    if (state.isErrored) {
+      try {
+        await confirm({
+          description: `This node contains errors, are you sure you want to ${what}?`,
+        });
+      } catch (_: any) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   // events
   onFlags(isReady, isModified);
@@ -103,17 +125,17 @@ export const NodeEditor: FC<NodeEditorProps> = ({
       <div className="node-editor--footer">
         <Button
           className="node-editor--footer--close"
-          onClick={() => areYouSureNotReady("close") && onClose()}
+          onClick={() =>
+            areYouSureNotReady("close").then((ok) => ok && onClose())
+          }
         >
           Close
         </Button>
         <Button
           className="node-editor--footer--save"
-          onClick={() => {
-            if (areYouSureNotReady("save")) {
-              onSave(state.data);
-            }
-          }}
+          onClick={() =>
+            areYouSureNotReady("save").then((ok) => ok && onSave(state.data))
+          }
           title={!isReady ? "Some fields have not been properly filled up" : ""}
         >
           {saveBtnCreateText ? "Create" : "Save"}
