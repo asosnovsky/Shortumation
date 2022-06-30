@@ -54,7 +54,7 @@ export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
     childrenConditions = (
       <Viewer
         condition={condition}
-        onChange={props.onUpdate}
+        onChange={updateCondition}
         namer={ha.namer}
       />
     );

@@ -24,9 +24,6 @@ export type ConditionNodeViewMode = "edit" | "yaml" | "view";
 export const ConditionNodeSettings: FC<ConditionNodeSettingsProps> = (
   props
 ) => {
-  // state
-  const { isMobile } = useWindowSize();
-
   //   alias
   const showDelete = !props.disableDelete && !!props.onDelete;
   const createModeSwitch = (m: ConditionNodeViewMode) => () => {
@@ -48,12 +45,6 @@ export const ConditionNodeSettings: FC<ConditionNodeSettingsProps> = (
       onClick: createModeSwitch("yaml"),
       color: "info",
     },
-    {
-      color: "success",
-      icon: <SaveIcon />,
-      disabled: !props.isEdited,
-      onClick: props.onSave,
-    },
   ];
   if (showDelete) {
     buttons.push({
@@ -66,23 +57,27 @@ export const ConditionNodeSettings: FC<ConditionNodeSettingsProps> = (
   return (
     <div
       className={[
-        "condition-node--settings mobile",
+        "condition-node--settings",
         props.isEdited ? "edited" : "",
       ].join(" ")}
     >
       <SpeedDial
-        icon={
-          <ButtonIcon
-            icon={<SettingsApplicationsIcon />}
-            color={props.isEdited ? "success" : "default"}
-          />
-        }
+        icon={<ButtonIcon icon={<SettingsApplicationsIcon />} />}
         direction="left"
       >
         {buttons.map((opt, i) => (
           <ButtonIcon key={i} {...opt} />
         ))}
       </SpeedDial>
+      {props.isEdited && (
+        <ButtonIcon
+          key={"save"}
+          icon={<SaveIcon />}
+          color="success"
+          disabled={!props.isEdited}
+          onClick={props.onSave}
+        />
+      )}
     </div>
   );
 };

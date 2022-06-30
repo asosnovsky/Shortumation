@@ -1,5 +1,10 @@
 .condition-node--settings {
-    width: 3em;
+    width: 4em;
+    display: flex;
+    gap: 0.5em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .condition-node--settings--icons {
@@ -21,6 +26,10 @@
     cursor: not-allowed;
 }
 
+.condition-node--settings .speed-dial, .condition-node--settings .speed-dial--icon {
+    min-height: 2.5em;
+    height: 2.5em;
+}
 
 .condition-node--settings .speed-dial--button {
     max-width: 4em;

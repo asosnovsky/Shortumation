@@ -133,6 +133,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
         </Button>
         <Button
           className="node-editor--footer--save"
+          disabled={!isModified}
           onClick={() =>
             areYouSureNotReady("save").then((ok) => ok && onSave(state.data))
           }
