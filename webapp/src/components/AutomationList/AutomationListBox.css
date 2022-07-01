@@ -64,6 +64,12 @@
     border-color: var(--primary);
 }
 
+.automation-list-box--body--item--tags--add:hover {
+    border-color: var(--primary);
+    color: var(--primary-accent);
+    background-color: var(--secondary);
+}
+
 .automation-list-box--body--item {
     padding-left: 1em;
     cursor: pointer;

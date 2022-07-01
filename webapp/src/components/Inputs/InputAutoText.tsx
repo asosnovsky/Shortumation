@@ -11,12 +11,14 @@ export interface InputAutoTextProps {
   required?: boolean;
   endAdornment?: ReactNode;
   onChange: (v: string) => void;
+  onEnter?: () => void;
 }
 export default function InputAutoText({
   value = "",
   label,
   options = [],
   onChange,
+  onEnter = () => {},
   className,
   required,
   endAdornment,
@@ -40,6 +42,11 @@ export default function InputAutoText({
           fullWidth
           InputProps={{
             endAdornment,
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onEnter();
+            }
           }}
           onChange={(e) => {
             e.preventDefault();

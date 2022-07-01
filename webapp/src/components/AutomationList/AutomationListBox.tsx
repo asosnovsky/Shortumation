@@ -7,6 +7,7 @@ import { Button } from "components/Inputs/Button";
 import { makeGrouping } from "./automationGrouper";
 import { AutomationListBoxGroup } from "./AutomationListBoxGroup";
 import { useCookies } from "react-cookie";
+import { TagDB } from "components/AutomationList/TagDB";
 
 export type Props = {
   automations: AutomationData[];
@@ -14,6 +15,7 @@ export type Props = {
   onSelectAutomation: (i: number) => void;
   onRemove: (i: number) => void;
   onAdd: () => void;
+  tagsDB: TagDB;
 };
 
 const useAutomationListBoxState = () => {
@@ -56,6 +58,7 @@ export const AutomationListBox: FC<Props> = ({
   onSelectAutomation,
   onAdd,
   onRemove,
+  tagsDB,
 }) => {
   const tags = getTagList(automations);
   const { searchText, setSearchText, selectedTagIdx, setSelectedTagIdx } =
@@ -91,6 +94,7 @@ export const AutomationListBox: FC<Props> = ({
           autos={filteredAutomations}
           grouping={grouping}
           selectedAutomationIdx={selected}
+          tagsDB={tagsDB}
         />
       </div>
       <div className="automation-list-box--bottom">

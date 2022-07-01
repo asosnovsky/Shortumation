@@ -15,7 +15,6 @@ import { DAGCircle } from "./DAGCircle";
 import { sequenceToFlow } from "./sequenceConvertor";
 import { makeSequenceUpdater } from "./updater";
 import { NodeEditor } from "components/NodeEditor";
-import { MultiNodeEditor } from "components/MultiNodeEditors";
 import { Modal } from "components/Modal";
 import { AutomationCondition } from "types/automations/conditions";
 import { convertToFlowNode, makeOnEditAutomationConditions } from "./helpers";
@@ -56,30 +55,19 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
   // modal
   let modalBody = <></>;
   if (modalState) {
-    if (modalState.single) {
-      modalBody = (
-        <NodeEditor
-          node={modalState.node}
-          isErrored={modalState.isError}
-          onClose={() => setModalState(null)}
-          onSave={(n) => {
-            modalState.update(n as any);
-            setModalState(null);
-          }}
-          allowedTypes={modalState.allowedTypes}
-          saveBtnCreateText={modalState.saveBtnCreateText}
-        />
-      );
-    } else {
-      modalBody = (
-        <MultiNodeEditor
-          sequence={modalState.node}
-          onClose={() => setModalState(null)}
-          onSave={(n) => modalState.update(n as any)}
-          allowedTypes={["condition"]}
-        />
-      );
-    }
+    modalBody = (
+      <NodeEditor
+        node={modalState.node}
+        isErrored={modalState.isError}
+        onClose={() => setModalState(null)}
+        onSave={(n) => {
+          modalState.update(n as any);
+          setModalState(null);
+        }}
+        allowedTypes={modalState.allowedTypes}
+        saveBtnCreateText={modalState.saveBtnCreateText}
+      />
+    );
   }
 
   // convert automation to flow data
@@ -119,7 +107,6 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
     namer,
     onAdd: () =>
       setModalState({
-        single: true,
         saveBtnCreateText: true,
         node: {
           platform: "device",
@@ -133,7 +120,6 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
       onTriggerUpdate([...trigger.slice(0, i), ...trigger.slice(i + 1)]),
     onEdit: (i) =>
       setModalState({
-        single: true,
         node: trigger[i],
         update: (t) =>
           onTriggerUpdate([...trigger.slice(0, i), t, ...trigger.slice(i + 1)]),

@@ -28,6 +28,8 @@ export type InputAutoCompletePropsBase = {
   onlyShowLabel?: boolean;
   helperText?: ReactNode;
   endAdornment?: ReactNode;
+  onEnter?: () => void;
+  disableChips?: boolean;
 } & (
   | {
       value: string | null;
@@ -203,12 +205,20 @@ export function InputAutoComplete<T extends Option>(
             ...params.InputProps,
             endAdornment: props.endAdornment ?? params.InputProps.endAdornment,
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && props.onEnter) {
+              props.onEnter();
+            }
+          }}
           variant="filled"
           required={props.required}
           label={props.label ?? "Entity ID"}
           helperText={helperText}
           disabled={props.disabled}
           error={error}
+          placeholder={
+            props.disableChips && !props.multiple ? props.value ?? "" : ""
+          }
         />
       )}
       renderTags={(tagValue, getTagProps) => {
@@ -241,6 +251,9 @@ export function InputAutoComplete<T extends Option>(
             })}
           </div>
         );
+        if (props.disableChips) {
+          return <></>;
+        }
         if (props.multiple) {
           return (
             <Badge badgeContent={tagValue.length} color="info">

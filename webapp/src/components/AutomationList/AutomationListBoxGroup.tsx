@@ -4,6 +4,7 @@ import { AutomationData } from "types/automations";
 import { AutomationGrouping } from "./automationGrouper";
 import { FC, useState } from "react";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { TagDB } from "./TagDB";
 
 export type AutomationListBoxEvents = {
   onSelectAutomation: (i: number) => void;
@@ -24,12 +25,14 @@ export type AutomationListBoxGroupProps = {
   grouping: AutomationGrouping;
   autos: Array<[AutomationData, number]>;
   selectedAutomationIdx: number;
+  tagsDB: TagDB;
 };
 export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
   events,
   grouping,
   autos,
   selectedAutomationIdx,
+  tagsDB,
 }) => {
   if (grouping.top.length === 1) {
     return (
@@ -41,7 +44,8 @@ export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
             currentNode: grouping.top[0],
           },
           events,
-          selectedAutomationIdx
+          selectedAutomationIdx,
+          tagsDB
         )}
       </>
     );
@@ -58,6 +62,7 @@ export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
             }}
             events={events}
             selectedAutomationIdx={selectedAutomationIdx}
+            tagsDB={tagsDB}
           />
         ))}
       </>
@@ -69,7 +74,8 @@ export const convertGroupsToItems = (
   autos: Array<[AutomationData, number]>,
   { grouping, currentNode }: AutomationListBoxGroups,
   events: AutomationListBoxEvents,
-  selectedAutomationIdx: number
+  selectedAutomationIdx: number,
+  tagsDB: TagDB
 ) => {
   const automations = grouping.getAutomations(currentNode);
   if (automations.length > 0) {
@@ -79,6 +85,7 @@ export const convertGroupsToItems = (
         events={events}
         auto={autos[autoIndex]}
         isSelected={selectedAutomationIdx === autos[autoIndex][1]}
+        tagsDB={tagsDB}
       />
     ));
   }
@@ -94,6 +101,7 @@ export const convertGroupsToItems = (
         }}
         events={events}
         selectedAutomationIdx={selectedAutomationIdx}
+        tagsDB={tagsDB}
       />
     ));
   }
@@ -105,7 +113,8 @@ export const AutomationListBoxGroupItem: FC<{
   groups: AutomationListBoxGroups;
   autos: Array<[AutomationData, number]>;
   selectedAutomationIdx: number;
-}> = ({ autos, groups, events, selectedAutomationIdx }) => {
+  tagsDB: TagDB;
+}> = ({ autos, groups, events, selectedAutomationIdx, tagsDB }) => {
   const groupData = groups.grouping.getData(groups.currentNode);
   const automations = groups.grouping.getAutomations(groups.currentNode);
   const [open, setOpen] = useState(false);
@@ -131,7 +140,13 @@ export const AutomationListBoxGroupItem: FC<{
         {groupData.name} {openIcon} {total}
       </b>
       {open &&
-        convertGroupsToItems(autos, groups, events, selectedAutomationIdx)}
+        convertGroupsToItems(
+          autos,
+          groups,
+          events,
+          selectedAutomationIdx,
+          tagsDB
+        )}
     </div>
   );
 };
@@ -140,10 +155,12 @@ export const AutomationListBoxItem: FC<{
   auto: [AutomationData, number];
   isSelected: boolean;
   events: AutomationListBoxEvents;
+  tagsDB: TagDB;
 }> = ({
   events: { onRemove, onSelectAutomation },
   auto: [auto, autoIndex],
   isSelected,
+  tagsDB,
 }) => {
   let title = "BadAuto<<Missing Metadata>>";
   if (auto.metadata) {
@@ -159,7 +176,7 @@ export const AutomationListBoxItem: FC<{
       title={title}
       onClick={() => onSelectAutomation(autoIndex)}
     >
-      <MetadataBox metadata={auto.metadata} tags={auto.tags} />
+      <MetadataBox metadata={auto.metadata} tags={auto.tags} tagsDB={tagsDB} />
       <ButtonIcon onClick={() => onRemove(autoIndex)} icon={<TrashIcon />} />
     </div>
   );

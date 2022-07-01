@@ -1,0 +1,47 @@
+.automation-list-box--body--item--tags--item {
+    color: white;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.5em;
+    padding: 0.1em 0.5em;
+
+    display: flex;
+    flex-direction: row;
+    gap: 0.25em;
+    max-width: min-content;
+    align-items: center;
+
+}
+
+.automation-list-box--body--item--tags--item>.text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.automation-list-box--body--item--tags--item>.text {
+    position: relative;
+}
+
+.automation-list-box--body--item--tags--item>.text .MuiFilledInput-root {
+    padding: 0;
+    min-width: 6em;
+    max-width: 10em;
+    background-color: var(--primary);
+}
+
+.automation-list-box--body--item--tags--item>.text .icon {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    cursor: pointer;
+}
+
+.automation-list-box--body--item--tags--item>.text .icon:hover {
+    background-color: var(--primary-accent);
+    border-radius: 20px;
+}
+
+.automation-list-box--body--item--tags--item>.text .icon:hover svg {
+    fill: var(--primary);
+}

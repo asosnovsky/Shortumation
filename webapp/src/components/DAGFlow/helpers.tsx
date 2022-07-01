@@ -36,7 +36,6 @@ export const makeOnEditAutomationConditions =
   ) =>
   () =>
     openModal({
-      single: true,
       node:
         conditions.length > 1
           ? {

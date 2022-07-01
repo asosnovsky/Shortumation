@@ -93,6 +93,7 @@ export const AutomationList: FC<AutomationListParams> = ({
           }}
           selected={current}
           onRemove={onRemove}
+          tagsDB={tagDB}
         />
         <ButtonIcon
           onClick={() => setHideList(!hideList)}

@@ -1,9 +1,8 @@
 import { Edge, Node, XYPosition } from "react-flow-renderer";
-import { AutomationSequenceNode } from "types/automations";
+import { AutomationNodeTypes, AutomationSequenceNode } from "types/automations";
 import { DAGCircleProps } from "./DAGCircle";
 import { DAGNodeProps } from "./DAGNode";
 import { AutomationTrigger } from "types/automations/triggers";
-import { MultiNodeEditorProps } from "components/MultiNodeEditors/types";
 import { DAGErrorNodeProps } from "./DAGErrorNode";
 import { Namer } from "utils/formatting";
 
@@ -40,18 +39,10 @@ export type UpdateModalState<
 
 export type ModalState<
   T extends AutomationSequenceNode | AutomationTrigger = any
-> =
-  | {
-      single: true;
-      isError?: boolean;
-      node: T;
-      update: (n: T) => void;
-      saveBtnCreateText?: boolean;
-      allowedTypes: MultiNodeEditorProps["allowedTypes"];
-    }
-  | {
-      single: false;
-      node: AutomationSequenceNode[];
-      update: (n: AutomationSequenceNode[]) => void;
-      allowedTypes: ["condition"];
-    };
+> = {
+  isError?: boolean;
+  node: T;
+  update: (n: T) => void;
+  saveBtnCreateText?: boolean;
+  allowedTypes: AutomationNodeTypes[];
+};

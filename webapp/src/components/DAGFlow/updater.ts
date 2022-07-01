@@ -21,7 +21,6 @@ export const makeSequenceUpdater = (
   },
   addNode() {
     return openModal({
-      single: true,
       saveBtnCreateText: true,
       node: {
         device_id: "",
@@ -85,7 +84,6 @@ export const makeSequenceUpdater = (
   makeOnModalOpenForNode(i: number, node: AutomationSequenceNode) {
     return () =>
       openModal({
-        single: true,
         node,
         allowedTypes: ["action", "condition"],
         update: (n) => this.updateNode(i, n),
@@ -114,7 +112,6 @@ export const makeSequenceUpdater = (
     const node = sequence[i];
     return () =>
       openModal({
-        single: true,
         isError: true,
         node,
         allowedTypes: [getNodeType(node)],
