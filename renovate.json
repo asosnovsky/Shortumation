@@ -1,6 +1,6 @@
 {
   "extends": ["config:base"],
-  "schedule": ["0 0 12 1 1/1 ? *"],
+  "schedule": ["every month"],
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
