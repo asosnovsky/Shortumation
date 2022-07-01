@@ -91,7 +91,7 @@
     "@types/autosuggest-highlight": "3.2.0",
     "@types/chroma-js": "2.1.3",
     "@types/js-yaml": "4.0.5",
-    "jest-environment-jsdom": "28.1.1",
+    "jest-environment-jsdom": "28.1.2",
     "ts-node": "10.8.1",
     "webpack": "5.73.0",
     "webpack-dev-server": "4.9.2"
