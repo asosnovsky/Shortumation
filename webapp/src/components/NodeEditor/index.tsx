@@ -36,29 +36,30 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   // alias
   const isModified = state.isModified;
   const isReady = state.isReady();
-  const areYouSureNotReady = async (what: string) => {
-    if (isModified) {
-      try {
-        await confirm({
-          description: `This node is has some unsaved work, are you sure you want to ${what}?`,
-        });
-      } catch (_: any) {
-        return false;
-      }
-    }
+  const areYouSureNotReady = async (
+    what: string,
+    checkModified: boolean = false
+  ) => {
+    const notes: string[] = [];
     if (!isReady) {
-      try {
-        await confirm({
-          description: `This node is missing some values, are you sure you want to ${what}?`,
-        });
-      } catch (_: any) {
-        return false;
-      }
+      notes.push("This node is missing some values");
     }
     if (state.isErrored) {
+      notes.push("This node contains errors");
+    }
+    if (checkModified && isModified) {
+      notes.push("This node is has some unsaved work");
+    }
+    if (notes.length > 0) {
       try {
         await confirm({
-          description: `This node contains errors, are you sure you want to ${what}?`,
+          description: (
+            <ul>
+              {notes.map((n, i) => (
+                <li key={i}>{n}</li>
+              ))}
+            </ul>
+          ),
         });
       } catch (_: any) {
         return false;
@@ -126,7 +127,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
         <Button
           className="node-editor--footer--close"
           onClick={() =>
-            areYouSureNotReady("close").then((ok) => ok && onClose())
+            areYouSureNotReady("close", true).then((ok) => ok && onClose())
           }
         >
           Close

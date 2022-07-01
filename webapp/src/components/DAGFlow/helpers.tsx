@@ -37,10 +37,19 @@ export const makeOnEditAutomationConditions =
   () =>
     openModal({
       single: true,
-      node: {
-        condition: "and",
-        conditions,
-      },
+      node:
+        conditions.length > 1
+          ? {
+              condition: "and",
+              conditions,
+            }
+          : conditions.length === 1
+          ? conditions[0]
+          : {
+              condition: "state",
+              entity_id: "",
+              state: "",
+            },
       allowedTypes: ["condition"],
       update: (c: AutomationCondition) => {
         if (c.condition === "and") {
