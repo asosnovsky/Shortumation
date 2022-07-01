@@ -41,13 +41,18 @@
 }
 
 .node-editor--body {
-    overflow: overlay;
+    overflow: hidden;
     padding-left: 1%;
     padding-right: 1%;
 
     min-width: 100%;
     min-height: fit-content;
     max-width: 100%;
+}
+
+.node-editor--body--options {
+    overflow: auto;
+    max-height: 60vh;
 }
 
 .node-editor--footer {

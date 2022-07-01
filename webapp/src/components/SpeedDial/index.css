@@ -1,4 +1,4 @@
-.speed-dial, .speed-dial--button {
+.speed-dial, .speed-dial--icon {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.speed-dial .speed-dial--button {
+.speed-dial .speed-dial--icon {
     max-height: 2em;
     max-width: 2em;
     overflow: hidden;
@@ -16,13 +16,13 @@
 }
 
 .speed-dial--list.close {
+    width: 0;
+    opacity: 0;
     display: none;
 }
 
 .speed-dial--list {
     position: absolute;
-    bottom: -3em;
-    left: 0em;
     background: var(--secondary);
     z-index: 10;
     height: fit-content;
@@ -30,15 +30,15 @@
     border-radius: 10px;
 }
 
-.speed-dial--list.open.row {
+.speed-dial--list.open {
     display: flex;
     flex-direction: row;
 }
 
-.speed-dial--list.open.column {
-    display: flex;
-    top: 2em;
-    flex-direction: column;
-    gap: 0.25em;
-    left: 0.25em;
+.speed-dial--list.right {
+    left: 2em
+}
+
+.speed-dial--list.left {
+    right: 3em
 }

@@ -1,16 +1,20 @@
 import "./DAGNode.css";
-import { PencilIcon } from "components/Icons";
+import "./DAGNode.flipped.css";
+
 import { NodeColor } from "types/graphs";
-import { useNodeStyles } from "./styles";
 import { Handle, Position } from "react-flow-renderer";
-import { FC, ReactNode, useState } from "react";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { FC, ReactNode } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createToNodeMakerFunction } from "./helpers";
 import { SpeedDial } from "components/SpeedDial";
+import Edit from "@mui/icons-material/Edit";
+import { useTheme } from "@mui/material";
+import InputBoolean from "components/Inputs/InputBoolean";
+import { useConfirm } from "material-ui-confirm";
+import { useSnackbar } from "notistack";
 
 export type DAGNodeOnMove<Direction extends string> = Record<
   Direction,
@@ -22,11 +26,12 @@ export type DAGNodeOnMoveEvents = Partial<
 export interface DAGNodeDataProps {
   onXClick?: () => void;
   onEditClick?: () => void;
+  onSetEnabled?: () => void;
   onMove?: DAGNodeOnMoveEvents;
   color: NodeColor;
   label: ReactNode;
   hasInput?: boolean;
-  accentBackground?: boolean;
+  enabled: boolean;
 }
 export interface DAGNodeProps extends DAGNodeDataProps {
   height: number;
@@ -36,21 +41,18 @@ export interface DAGNodeProps extends DAGNodeDataProps {
 
 export const makeConditionPoint = createToNodeMakerFunction<
   {
-    totalConditions: number;
+    label: ReactNode;
     onEditClick: () => void;
   },
   DAGNodeProps
 >((pre, { conditionWidth, conditionHeight, flipped }) => ({
   color: "lblue",
-  accentBackground: true,
-  label: `${pre.totalConditions} Condition${
-    pre.totalConditions !== 1 ? "s" : ""
-  }`,
   height: conditionHeight,
   width: conditionWidth,
   hasInput: true,
-  onEditClick: pre.onEditClick,
+  enabled: true,
   flipped,
+  ...pre,
 }));
 
 export const makeActionPoint = createToNodeMakerFunction<
@@ -72,38 +74,55 @@ export const DAGNode: FC<DAGNodeProps> = ({
   onMove = {},
   color,
   hasInput = false,
-  accentBackground = false,
   flipped,
+  enabled,
+  onSetEnabled,
 }) => {
-  const { classes, theme } = useNodeStyles({
-    color,
-    nodeHeight: height,
-    nodeWidth: width,
-    accentBackground,
-  });
-  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const confirm = useConfirm();
+  const snackbr = useSnackbar();
   return (
     <>
-      {hasInput && (
-        <Handle
-          type="target"
-          position={flipped ? Position.Top : Position.Left}
-        />
-      )}
-      <Handle
-        type="source"
-        position={flipped ? Position.Bottom : Position.Right}
-      />
-      <div className={classes.root}>
-        <div className={classes.inner}>
+      <div
+        className={[
+          "dagnode",
+          flipped ? "flipped" : "",
+          enabled ? "enabled" : "disabled",
+        ].join(" ")}
+        style={{
+          height,
+          width,
+        }}
+      >
+        <div
+          className="dagnode--inner"
+          style={{
+            maxHeight: `calc(${height}px - 1em)`,
+            maxWidth: `calc(${width}px - 1em)`,
+            minWidth: Math.max(width / 2, height / 2),
+            borderBottomColor: theme.palette.grey[500],
+            borderLeftColor: theme.palette.grey[700],
+            borderRightColor: theme.palette.grey[700],
+            borderTopColor:
+              color === "blue"
+                ? theme.palette.info.main
+                : color === "green"
+                ? theme.palette.success.light
+                : color === "lblue"
+                ? theme.palette.info.light
+                : color === "red"
+                ? theme.palette.error.dark
+                : "none",
+            backgroundColor: enabled
+              ? theme.palette.background.default
+              : theme.palette.grey[600],
+          }}
+        >
           <SpeedDial
-            icon={<SettingsOutlinedIcon className="dagnode--actions" />}
+            icon={<SettingsOutlinedIcon className="dagnode--actions-btn" />}
           >
-            <IconButton onClick={onXClick} size="small">
-              <DeleteForeverIcon fontSize="inherit" color="warning" />
-            </IconButton>
             <IconButton onClick={onEditClick} size="small">
-              <PencilIcon color={theme.green} size={0.8} />
+              <Edit color="success" fontSize="inherit" />
             </IconButton>
             {Object.entries(onMove).map(([key, action]) => (
               <IconButton
@@ -115,11 +134,60 @@ export const DAGNode: FC<DAGNodeProps> = ({
                 <ArrowBackIcon fontSize="inherit" />
               </IconButton>
             ))}
+            {onXClick && (
+              <IconButton
+                onClick={() => {
+                  confirm({
+                    description: "Are you sure you want to delete this node?",
+                  })
+                    .then(() => {
+                      onXClick();
+                      snackbr.enqueueSnackbar("Deleted.", {
+                        variant: "info",
+                      });
+                    })
+                    .catch(() =>
+                      snackbr.enqueueSnackbar("Did not delete node.", {
+                        variant: "info",
+                      })
+                    );
+                }}
+                size="small"
+              >
+                <DeleteForeverIcon fontSize="inherit" color="error" />
+              </IconButton>
+            )}
           </SpeedDial>
-          <div className={classes.textWrap}>
-            <span className={classes.text}>{label}</span>
+          {!!onSetEnabled && (
+            <InputBoolean
+              key="enabled-flag"
+              className="dagnode--enabled-flag"
+              label=""
+              value={enabled}
+              onChange={onSetEnabled}
+            />
+          )}
+
+          {hasInput && (
+            <Handle
+              type="target"
+              position={flipped ? Position.Top : Position.Left}
+            />
+          )}
+          <Handle
+            type="source"
+            position={flipped ? Position.Bottom : Position.Right}
+          />
+          <div
+            className="dagnode--label"
+            style={{
+              maxHeight: `calc(${height}px - 1em)`,
+              maxWidth: `calc(${width}px - 1em)`,
+              minHeight: height / 2,
+            }}
+          >
+            {typeof label === "string" ? <span>{label}</span> : label}
           </div>
-          <div className={classes.rightEdge} onClick={onEditClick}></div>
         </div>
       </div>
     </>

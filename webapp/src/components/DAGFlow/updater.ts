@@ -5,6 +5,7 @@ import { UpdateModalState } from "./types";
 import { getNodeType } from "../../utils/automations";
 import { DAGNodeOnMoveEvents } from "./DAGNode";
 import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
+import { makeOnEditAutomationConditions } from "./helpers";
 
 export type SequenceUpdater = ReturnType<typeof makeSequenceUpdater>;
 
@@ -91,26 +92,23 @@ export const makeSequenceUpdater = (
       });
   },
   makeOnEditConditionsForChooseNode(i: number, j: number) {
-    return () => {
-      const node = sequence[i] as ChooseAction;
-      return openModal({
-        single: false,
-        node: node.choose[j].conditions,
-        allowedTypes: ["condition"],
-        update: (conditions) =>
-          this.updateNode(i, {
-            ...node,
-            choose: [
-              ...node.choose.slice(0, j),
-              {
-                sequence: node.choose[j].sequence,
-                conditions: conditions as AutomationCondition[],
-              },
-              ...node.choose.slice(j + 1),
-            ],
-          }),
-      });
-    };
+    const node = sequence[i] as ChooseAction;
+    return makeOnEditAutomationConditions(
+      node.choose[j].conditions,
+      (conditions) =>
+        this.updateNode(i, {
+          ...node,
+          choose: [
+            ...node.choose.slice(0, j),
+            {
+              sequence: node.choose[j].sequence,
+              conditions: conditions as AutomationCondition[],
+            },
+            ...node.choose.slice(j + 1),
+          ],
+        }),
+      openModal
+    );
   },
   makeOnEditForBadNode(i: number) {
     const node = sequence[i];

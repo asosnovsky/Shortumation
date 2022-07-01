@@ -1,3 +1,66 @@
+.dagnode {
+    font-size: 0.9em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+}
+
+.dagnode--inner {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.5em 0.5em;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+}
+
+
+.dagnode--label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.dagnode--label span {
+    text-align: center;
+    white-space: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dagnode--enabled-flag {
+    position: absolute;
+    top: -1.5em;
+    right: -2.5em;
+}
+
+.dagnode .dagnode--inner .speed-dial {
+    height: 2em;
+    width: 2em;
+    min-height: 2em;
+    max-height: 2em;
+    position: absolute;
+    top: -1em;
+    left: -1em;
+    background-color: var(--primary);
+    border-color: var(--primary-accent);
+    border-style: solid;
+    border-width: 0.5px;
+    border-radius: 20px;
+}
+
+.open>.dagnode--actions-btn, .dagnode--actions-btn:hover {
+    color: var(--primary);
+    background-color: var(--primary-accent);
+    border-radius: 20px;
+}
+
 .dagnode--actions--move.right {
     transform: rotate(180deg);
 }

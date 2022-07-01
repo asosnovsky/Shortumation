@@ -16,6 +16,6 @@
 
 @media (max-width: 450px) {
     .service-editor--targets>div {
-        max-width: 38vw;
+        max-width: 90%;
     }
 }

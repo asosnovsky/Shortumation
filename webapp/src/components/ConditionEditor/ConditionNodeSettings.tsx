@@ -1,5 +1,4 @@
 import "./ConditionNodeSettings.css";
-import "./ConditionNodeSettings.mobile.css";
 
 import { ButtonIcon, ButtonIconProps } from "components/Icons/ButtonIcons";
 import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
@@ -64,38 +63,26 @@ export const ConditionNodeSettings: FC<ConditionNodeSettingsProps> = (
     });
   }
   // render
-  if (isMobile) {
-    return (
-      <div
-        className={[
-          "condition-node--settings mobile",
-          props.isEdited ? "edited" : "",
-        ].join(" ")}
+  return (
+    <div
+      className={[
+        "condition-node--settings mobile",
+        props.isEdited ? "edited" : "",
+      ].join(" ")}
+    >
+      <SpeedDial
+        icon={
+          <ButtonIcon
+            icon={<SettingsApplicationsIcon />}
+            color={props.isEdited ? "success" : "default"}
+          />
+        }
+        direction="left"
       >
-        <SpeedDial
-          icon={
-            <ButtonIcon
-              icon={<SettingsApplicationsIcon />}
-              color={props.isEdited ? "success" : "default"}
-            />
-          }
-          direction="column"
-        >
-          {buttons.map((opt, i) => (
-            <ButtonIcon key={i} {...opt} />
-          ))}
-        </SpeedDial>
-      </div>
-    );
-  } else {
-    return (
-      <div className="condition-node--settings--wrap">
-        <div className="condition-node--settings--icons">
-          {buttons.map((opt, i) => (
-            <ButtonIcon key={i} {...opt} />
-          ))}
-        </div>
-      </div>
-    );
-  }
+        {buttons.map((opt, i) => (
+          <ButtonIcon key={i} {...opt} />
+        ))}
+      </SpeedDial>
+    </div>
+  );
 };

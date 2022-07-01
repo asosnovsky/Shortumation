@@ -5,6 +5,7 @@ import {
   AutomationDeviceState,
   AutomationTime,
 } from "types/automations/common";
+import { AutomationTriggerZone } from "types/automations/triggers";
 
 export interface Namer {
   getEntityName(entity_id: string | string[], maxEntities?: number): string;
@@ -51,6 +52,9 @@ export const getDescriptionFromAutomationNode = <
     if (node.platform === "tag") {
       return `Tag = ${node.tag_id}`;
     }
+    if (node.platform === "zone") {
+      return getDescriptionForZoneType(node as any, namer);
+    }
     if (node.platform === "state") {
       let out = "";
       if (typeof node.entity_id === "string") {
@@ -77,7 +81,13 @@ export const getDescriptionFromAutomationNode = <
       node.condition === "or" ||
       node.condition === "not"
     ) {
-      return "Logic";
+      if (node.conditions.length === 0) {
+        return `None`;
+      }
+      const childConditions = node.conditions.map((c) =>
+        getDescriptionFromAutomationNode(c, namer, allowJs)
+      );
+      return childConditions.join(` ${node.condition} `).trim() ?? "None";
     } else {
       switch (node.condition) {
         case "numeric_state":
@@ -173,6 +183,26 @@ const getDescriptionForDeviceType = (
     return out + " " + actionPort;
   }
   return actionPort + " " + out;
+};
+
+const getDescriptionForZoneType = (
+  node: AutomationTriggerZone,
+  namer: Namer
+) => {
+  let out = "";
+  let actionPort = "";
+  if (node.event) {
+    actionPort += node.event + " ";
+  }
+  if (node.zone) {
+    actionPort += prettyName(namer.getEntityName(node.zone));
+  }
+  actionPort = actionPort.trim();
+  if (node.entity_id) {
+    out += namer.getEntityName(node.entity_id);
+  }
+  out = out.trim();
+  return out + " " + actionPort;
 };
 
 export const prettyName = (n: string) => {
