@@ -15,7 +15,7 @@
     "@types/react-dom": "18.0.5",
     "@types/ws": "8.5.3",
     "@uiw/react-codemirror": "4.9.4",
-    "autosuggest-highlight": "3.2.1",
+    "autosuggest-highlight": "3.3.0",
     "home-assistant-js-websocket": "7.1.0",
     "jss": "10.9.0",
     "material-ui-confirm": "3.0.4",
