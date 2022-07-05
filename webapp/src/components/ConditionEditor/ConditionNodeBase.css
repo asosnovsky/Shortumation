@@ -23,8 +23,8 @@
     justify-content: center;
     min-height: calc(100% - 1px);
     max-height: calc(100% - 1px);
-    background-color: var(--secondary);
-    border-color: var(--secondary-accent);
+    background-color: var(--mui-secondary-contrastText);
+    border-color: var(--mui-grey-700);
     border-bottom-style: solid;
     border-width: 1px;
 }
@@ -49,7 +49,7 @@
 .condition-node-base.is-edited>.condition-node-base--body {
     max-height: calc(100%-2px-1em);
     max-width: calc(100vw-2px-1em);
-    border-color: var(--green);
+    border-color: var(--mui-success-main);
     border-style: solid;
     border-width: 1px;
     margin: 0.25em;
@@ -62,5 +62,5 @@
     justify-content: center;
     align-items: center;
     padding: 0.5em;
-    background-color: var(--secondary);
+    background-color: var(--mui-secondary-contrastText);
 }

@@ -23,7 +23,7 @@
 
 .speed-dial--list {
     position: absolute;
-    background: var(--secondary);
+    background: var(--mui-secondary-contrastText);
     z-index: 10;
     height: fit-content;
     padding: 0.1em;

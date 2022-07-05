@@ -9,24 +9,24 @@
 }
 
 .node-editor--root.disabled {
-    background-color: var(--secondary);
+    background-color: var(--mui-secondary-contrastText);
 }
 
 .node-editor--root.disabled .enabled-flag {
-    color: var(--secondary-accent);
+    color: var(--mui-grey-700);
 }
 
 .node-editor--root.modded {
-    border: 1px solid var(--change);
+    border: 1px solid var(--mui-success-light);
     border-radius: 5px;
 }
 
 .node-editor--root.modded * {
-    border-color: var(--change);
+    border-color: var(--mui-success-light);
 }
 
 .node-editor--root.not-ready .node-editor--footer--save {
-    color: var(--error)
+    color: var(--mui-error-main)
 }
 
 .node-editor--body-title {
@@ -67,7 +67,7 @@
     min-width: 25vw;
 }
 
-.node-editor--error {
+.node-editor--mui-error-main {
     max-width: 30em;
     overflow: auto;
     max-height: 10em;
@@ -78,7 +78,7 @@
     margin: 0;
 }
 
-.node-editor--error>li {
+.node-editor--mui-error-main>li {
     text-align: left;
 }
 

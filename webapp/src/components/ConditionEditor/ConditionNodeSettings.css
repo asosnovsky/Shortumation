@@ -39,5 +39,5 @@
 }
 
 .condition-node--settings .speed-dial--button:hover button {
-    background-color: var(--secondary-accent);
+    background-color: var(--mui-grey-700);
 }

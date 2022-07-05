@@ -3,11 +3,11 @@
     flex-direction: column;
     padding: 0.5em 0.25em;
     margin: 0.5em 0.25em;
-    border-color: var(--primary-accent);
+    border-color: var(--mui-grey-400);
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
-    background-color: var(--secondary);
+    background-color: var(--mui-secondary-contrastText);
 }
 
 .service-editor hr {

@@ -28,7 +28,7 @@
 
 .automation-editor--info-box--tags {
     padding: 0.25em 0.75em 1em 0.75em;
-    border-color: var(--primary-accent);
+    border-color: var(--mui-grey-400);
     border-width: 1px;
     border-style: ridge;
     border-radius: 5px;

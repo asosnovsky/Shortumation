@@ -235,7 +235,7 @@ const computeInvalidYaml = (
       node,
       isErrored: true,
       invalidManualYaml: (
-        <ul key={"error"} className="node-editor--error">
+        <ul key={"error"} className="node-editor--mui-error-main">
           {errors.map(({ message, path }, i) => (
             <li key={i}>
               <b>{path}</b>: {message}

@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof SearchItem> = (args) => {
         style={{
           width: "15em",
           height: "3em",
-          border: "1px solid var(--primary-accent)",
+          border: "1px solid var(--mui-grey-400)",
         }}
       >
         <SearchItem {...args} />

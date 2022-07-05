@@ -33,7 +33,7 @@
     position: absolute;
     left: 2em;
     top: 2.5em;
-    color: var(--primary-accent);
+    color: var(--mui-grey-400);
 }
 
 .input-yaml .MuiButtonBase-root.icon-button[type="button"].icon-button {

@@ -23,7 +23,7 @@
     gap: 0.5em;
 
     /* shape */
-    background-color: var(--error-dark);
+    background-color: var(--mui-error-dark);
     border-radius: 1em;
     height: 100%;
     max-height: 100%;
@@ -34,18 +34,18 @@
     border-top-style: solid;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    border-top-color: var(--error);
+    border-top-color: var(--mui-error-main);
 }
 
 .dagnode-error--inner:hover {
-    background-color: var(--error-accent);
+    background-color: var(--mui-error-contrastText);
     cursor: default;
 }
 
 .dagnode-error--inner--edit-icon:hover {
     transform: rotate(180deg);
     cursor: pointer;
-    background-color: var(--error);
+    background-color: var(--mui-error-main);
     padding: 0.5em;
     border-radius: 10px;
     height: 0.25em;

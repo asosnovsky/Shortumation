@@ -48,16 +48,16 @@
     position: absolute;
     top: -1em;
     left: -1em;
-    background-color: var(--primary);
-    border-color: var(--primary-accent);
+    background-color: var(--mui-common-black);
+    border-color: var(--mui-grey-400);
     border-style: solid;
     border-width: 0.5px;
     border-radius: 20px;
 }
 
 .open>.dagnode--actions-btn, .dagnode--actions-btn:hover {
-    color: var(--primary);
-    background-color: var(--primary-accent);
+    color: var(--mui-common-black);
+    background-color: var(--mui-grey-400);
     border-radius: 20px;
 }
 

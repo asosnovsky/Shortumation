@@ -35,7 +35,7 @@
 .automation-list--root.mobile .automation-editor--info-box--icon {
     left: 0.5em;
     bottom: 0em;
-    background-color: var(--primary);
+    background-color: var(--mui-common-black);
     transform: rotate(90deg);
 }
 

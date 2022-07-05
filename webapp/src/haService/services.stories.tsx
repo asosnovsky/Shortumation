@@ -108,7 +108,7 @@ const Test: FC = () => {
       serviceEditElm = (
         <div
           style={{
-            border: "1px solid var(--primary-accent)",
+            border: "1px solid var(--mui-grey-400)",
             maxWidth: "100vw",
             padding: "2.5em",
             margin: "2.5em",

@@ -25,15 +25,15 @@
     padding-bottom: 0.5em;
     border-width: 1px;
     border-bottom-style: solid;
-    border-color: var(--primary-accent);
+    border-color: var(--mui-grey-400);
 }
 
 .automation-list-box--body--group.other {
-    border-color: var(--green);
+    border-color: var(--mui-success-main);
 }
 
 .automation-list-box--body--group.other>b {
-    color: var(--change);
+    color: var(--mui-success-light);
 }
 
 .automation-list-box--body--group>.automation-list-box--body--group {
@@ -51,8 +51,8 @@
 
 .automation-list-box--body--group>b:hover,
 .automation-list-box--body--group.selected>b {
-    background-color: var(--secondary-accent);
-    color: var(--secondary);
+    background-color: var(--mui-grey-700);
+    color: var(--mui-secondary-contrastText);
 }
 
 
@@ -67,6 +67,6 @@
 
 .automation-list-box--bottom>button {
     background-color: #070;
-    color: var(--primary-accent);
+    color: var(--mui-grey-400);
     padding: 0.5em 2em;
 }

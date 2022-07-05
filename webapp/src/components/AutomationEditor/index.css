@@ -34,8 +34,8 @@
 }
 
 .automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar * {
-    border-color: var(--change);
-    color: var(--change)
+    border-color: var(--mui-success-light);
+    color: var(--mui-success-light)
 }
 
 
@@ -47,12 +47,12 @@
 }
 
 .automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--flow {
-    border-color: var(--change);
+    border-color: var(--mui-success-light);
 }
 
 .automation-editor--flow-wrapper--flow {
     flex: 1;
-    border: 1px solid var(--secondary-accent);
+    border: 1px solid var(--mui-grey-700);
     margin: 0 0 0.5em 0;
     z-index: 1;
 }
