@@ -1,7 +1,7 @@
 import "./index.css";
 import "./index.mobile.css";
 import { AutomationEditor } from "components/AutomationEditor";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useState, useRef, useEffect } from "react";
 import { AutomationData } from "types/automations";
 import { defaultAutomation } from "utils/defaults";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
@@ -15,6 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useCookies } from "react-cookie";
 import { useHA } from "haService";
 import { ArrowBack } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
 
 interface AutomationListParams {
   automations: AutomationData[];
@@ -60,12 +61,21 @@ export const AutomationList: FC<AutomationListParams> = ({
   children,
 }) => {
   // state
+  const snackbr = useSnackbar();
   const { hideList, setHideList, current, setCurrent } =
     useAutomationListState();
   const { isMobile } = useWindowSize();
+  const firstRender = useRef(true);
   // alias
   const currentAuto = automations.length > 0 ? automations[current] : null;
   const tagDB = makeTagDB(automations);
+  // effect
+  useEffect(() => {
+    if (firstRender.current) {
+      snackbr.enqueueSnackbar("Saved.", { variant: "info" });
+    }
+    firstRender.current = true;
+  }, [automations]);
   // render
   return (
     <div
@@ -78,6 +88,7 @@ export const AutomationList: FC<AutomationListParams> = ({
       >
         <AutomationListBox
           automations={automations}
+          onUpdate={(a, i) => onUpdate(i, a)}
           onAdd={() => {
             onAdd(defaultAutomation(String(Date.now())));
             setCurrent(automations.length);

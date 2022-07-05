@@ -1,0 +1,50 @@
+.automation-list-box--body--item:hover, .automation-list-box--body--item.selected {
+    outline-color: var(--primary-accent);
+    outline-style: solid;
+    outline-width: 1px;
+    background-color: var(--secondary);
+}
+
+.automation-list-box--body--item:hover>.automation-list-box--body--item--tags>span {
+    border-color: var(--primary);
+}
+
+.automation-list-box--body--item--tags--add:hover {
+    border-color: var(--primary);
+    color: var(--primary-accent);
+    background-color: var(--secondary);
+}
+
+.automation-list-box--body--item {
+    padding-left: 1em;
+    cursor: pointer;
+    display: flex;
+    gap: 1em;
+}
+
+.automation-list-box--body--item::before {
+    content: "⊚ ";
+}
+
+.automation-list-box--body--item--buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap: 0.25em;
+    margin: 0.5em
+}
+
+.automation-list-box--body--item--buttons>button {
+    padding: 0.25em;
+    margin: 0;
+}
+
+.automation-list-box--body--item--buttons .save {
+    color: var(--green-light)
+}
+
+.automation-list-box--body--item--buttons .save:hover {
+    color: var(--green)
+}

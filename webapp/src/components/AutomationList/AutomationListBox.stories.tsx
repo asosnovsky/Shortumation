@@ -4,6 +4,7 @@ import { AutomationListBox } from "./AutomationListBox";
 import { createMockAuto } from "utils/mocks";
 import { Page } from "components/Page";
 import { CookiesProvider } from "react-cookie";
+import { makeTagDB } from "./TagDB";
 
 export default {
   title: "App/AutomationList/Box",
@@ -19,6 +20,7 @@ const Template: ComponentStory<typeof AutomationListBox> = (args) => {
       <CookiesProvider>
         <AutomationListBox
           {...args}
+          tagsDB={makeTagDB(args.automations)}
           automations={args.automations}
           selected={selected}
           onSelectAutomation={(i) => {

@@ -1,10 +1,13 @@
+import "./AutomationListBoxGroup.css";
+
 import { TrashIcon } from "components/Icons";
 import { MetadataBox } from "./AutomationMetadataBox";
 import { AutomationData } from "types/automations";
 import { AutomationGrouping } from "./automationGrouper";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { TagDB } from "./TagDB";
+import Save from "@mui/icons-material/Save";
 
 export type AutomationListBoxEvents = {
   onSelectAutomation: (i: number) => void;
@@ -26,6 +29,7 @@ export type AutomationListBoxGroupProps = {
   autos: Array<[AutomationData, number]>;
   selectedAutomationIdx: number;
   tagsDB: TagDB;
+  onSave: (a: AutomationData, i: number) => void;
 };
 export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
   events,
@@ -33,6 +37,7 @@ export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
   autos,
   selectedAutomationIdx,
   tagsDB,
+  onSave,
 }) => {
   if (grouping.top.length === 1) {
     return (
@@ -45,7 +50,8 @@ export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
           },
           events,
           selectedAutomationIdx,
-          tagsDB
+          tagsDB,
+          onSave
         )}
       </>
     );
@@ -63,6 +69,7 @@ export const AutomationListBoxGroup: FC<AutomationListBoxGroupProps> = ({
             events={events}
             selectedAutomationIdx={selectedAutomationIdx}
             tagsDB={tagsDB}
+            onSave={onSave}
           />
         ))}
       </>
@@ -75,7 +82,8 @@ export const convertGroupsToItems = (
   { grouping, currentNode }: AutomationListBoxGroups,
   events: AutomationListBoxEvents,
   selectedAutomationIdx: number,
-  tagsDB: TagDB
+  tagsDB: TagDB,
+  onSave: (a: AutomationData, i: number) => void
 ) => {
   const automations = grouping.getAutomations(currentNode);
   if (automations.length > 0) {
@@ -86,6 +94,7 @@ export const convertGroupsToItems = (
         auto={autos[autoIndex]}
         isSelected={selectedAutomationIdx === autos[autoIndex][1]}
         tagsDB={tagsDB}
+        onSave={(a) => onSave(a, autoIndex)}
       />
     ));
   }
@@ -102,6 +111,7 @@ export const convertGroupsToItems = (
         events={events}
         selectedAutomationIdx={selectedAutomationIdx}
         tagsDB={tagsDB}
+        onSave={onSave}
       />
     ));
   }
@@ -114,7 +124,8 @@ export const AutomationListBoxGroupItem: FC<{
   autos: Array<[AutomationData, number]>;
   selectedAutomationIdx: number;
   tagsDB: TagDB;
-}> = ({ autos, groups, events, selectedAutomationIdx, tagsDB }) => {
+  onSave: (a: AutomationData, i: number) => void;
+}> = ({ autos, groups, events, selectedAutomationIdx, tagsDB, onSave }) => {
   const groupData = groups.grouping.getData(groups.currentNode);
   const automations = groups.grouping.getAutomations(groups.currentNode);
   const [open, setOpen] = useState(false);
@@ -145,7 +156,8 @@ export const AutomationListBoxGroupItem: FC<{
           groups,
           events,
           selectedAutomationIdx,
-          tagsDB
+          tagsDB,
+          onSave
         )}
     </div>
   );
@@ -156,28 +168,73 @@ export const AutomationListBoxItem: FC<{
   isSelected: boolean;
   events: AutomationListBoxEvents;
   tagsDB: TagDB;
+  onSave: (a: AutomationData) => void;
 }> = ({
   events: { onRemove, onSelectAutomation },
   auto: [auto, autoIndex],
   isSelected,
   tagsDB,
+  onSave,
 }) => {
+  // state
+  const [{ tags, isModified }, setState] = useState({
+    isModified: false,
+    tags: Object.entries(auto.tags),
+  });
+
+  // effects
+  useEffect(() => {
+    setState({
+      isModified: false,
+      tags: Object.entries(auto.tags),
+    });
+  }, [auto]);
+
+  // alias
+  const setTags = (t: [string, string][]) =>
+    setState({
+      isModified: true,
+      tags: t,
+    });
+  // sub elements
   let title = "BadAuto<<Missing Metadata>>";
   if (auto.metadata) {
     title = `Name = ${auto.metadata.alias}\nID = ${auto.metadata.id}\nDescription = ${auto.metadata.description}`;
   }
+
+  // render
   return (
     <div
       key={autoIndex}
       className={[
         "automation-list-box--body--item",
         isSelected ? "selected" : "",
+        isModified ? "modded" : "",
       ].join(" ")}
       title={title}
       onClick={() => onSelectAutomation(autoIndex)}
     >
-      <MetadataBox metadata={auto.metadata} tags={auto.tags} tagsDB={tagsDB} />
-      <ButtonIcon onClick={() => onRemove(autoIndex)} icon={<TrashIcon />} />
+      <MetadataBox
+        metadata={auto.metadata}
+        tags={tags}
+        tagsDB={tagsDB}
+        onUpdate={setTags}
+      />
+      <div className="automation-list-box--body--item--buttons">
+        {isModified && (
+          <ButtonIcon
+            className="save"
+            icon={<Save />}
+            onClick={() =>
+              onSave({
+                ...auto,
+                tags: Object.fromEntries(tags),
+              })
+            }
+          />
+        )}
+        <ButtonIcon onClick={() => onRemove(autoIndex)} icon={<TrashIcon />} />
+      </div>
     </div>
   );
 };
