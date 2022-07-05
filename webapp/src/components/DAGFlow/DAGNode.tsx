@@ -183,7 +183,7 @@ export const DAGNode: FC<DAGNodeProps> = ({
             style={{
               maxHeight: `calc(${height}px - 1em)`,
               maxWidth: `calc(${width}px - 1em)`,
-              minHeight: height / 2,
+              minHeight: `1em`,
             }}
           >
             {typeof label === "string" ? <span>{label}</span> : label}
