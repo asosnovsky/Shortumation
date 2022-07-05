@@ -2,9 +2,7 @@
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 
 :root {
-    --primary-light-opaque: #3335;
     --green-opaque: #1f15;
-    --error-opaque: #c555;
     --condition-primary-opaque: #4476;
     touch-action: pan-x pan-y;
     height: 100%;

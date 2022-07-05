@@ -13,7 +13,6 @@ export const {
   createContext({
     primary: "var(--mui-common-black)",
     primaryLight: "var(--mui-grey-600)",
-    primaryLightOpaque: "var(--primary-light-opaque)",
     secondary: "var(--mui-secondary-contrastText)",
     secondaryOpaque: "var(--mui-secondary-contrastText)",
     primaryAccent: "var(--mui-grey-400)",
@@ -28,7 +27,6 @@ export const {
     greenLight: "var(--mui-success-light)",
     greenOpaque: "var(--green-opaque)",
     red: "var(--mui-error-main)",
-    redOpaque: "var(--error-opaque)",
     redAccent: "var(--mui-error-contrastText)",
     redLight: "var(--mui-error-light)",
   })
