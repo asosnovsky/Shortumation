@@ -1,11 +1,18 @@
 import "./index.css";
 import { createRef, FC, ReactNode, useEffect, useRef } from "react";
-import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import {
+  createTheme,
+  Palette,
+  PaletteColor,
+  ThemeProvider,
+  useTheme,
+} from "@mui/material/styles";
 import { VersionBox } from "components/VersionBox";
 import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { useHAConnection } from "haService/connection";
 import { ConfirmProvider } from "material-ui-confirm";
+import { Color } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -66,30 +73,11 @@ export const InternalPage: FC<{
         background: theme.palette.background.default,
       }}
     >
-      {/* <style>
+      <style>
         {`:root {
-            --primary: ${theme.palette.primary.main};
-            --secondary: ${theme.palette.secondary.main};
-            --secondary: ${theme.palette..main};
-            --primary-accent: #bbb;
-            --primary-accent-light: #eee;
-            --secondary-accent: #929191;
-            --green: #1f1;
-            --green-opaque: #1f15;
-            --green-light: #6f5;
-            --error: #c55;
-            --error-light: #f77;
-            --error-dark: #5c2323;
-            --error-opaque: #c555;
-            --error-accent: #9f3a3a;
-            --change: #0f9;
-            --condition-primary: #447;
-            --condition-accent: #8af;
-            --condition-primary-opaque: #4476;
-            touch-action: pan-x pan-y;
-            height: 100%;
+            ${convertPaletteToCss(theme.palette)}
         }`}
-      </style> */}
+      </style>
       <VersionBox />
       {children}
     </main>
@@ -123,4 +111,27 @@ export const Page: FC<{
       </ConfirmProvider>
     </ThemeProvider>
   );
+};
+
+export const convertPaletteToCss = (p: Palette): string => {
+  let out = ``;
+  for (const k of [
+    "primary",
+    "secondary",
+    "error",
+    "warning",
+    "info",
+    "success",
+    "grey",
+    "text",
+    "action",
+    "background",
+    "common",
+  ]) {
+    const pc = p[k as keyof Palette] as PaletteColor | Color;
+    Object.entries(pc).forEach(([n, v]) => {
+      out += `\n --mui-${k}-${n}: ${v};`;
+    });
+  }
+  return out;
 };
