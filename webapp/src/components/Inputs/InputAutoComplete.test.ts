@@ -12,7 +12,7 @@ test("similarity score", () => {
   expect(searchTerms).toStrictEqual(searchTerms.sort());
 });
 
-test("similarity score", () => {
+test("similarity score #2", () => {
   expect(
     computeSimilarity(
       "li",
