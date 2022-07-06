@@ -21,6 +21,7 @@ import { convertToFlowNode, makeOnEditAutomationConditions } from "./helpers";
 import { DAGErrorNode } from "./DAGErrorNode";
 import { useHA } from "haService";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
+import { DagFlowUpdateBaseArgs, makeDagFlowUpdate } from "./DAGFlowUpdater";
 
 const nodeTypes = {
   dagnode: convertToFlowNode(DAGNode),
@@ -28,30 +29,21 @@ const nodeTypes = {
   dagcircle: DAGCircle,
 };
 
-export interface DAGAutomationFlowProps {
+export type DAGAutomationFlowProps = DagFlowUpdateBaseArgs & {
   className?: string;
-  trigger: AutomationTrigger[];
-  condition: AutomationCondition[];
-  sequence: AutomationSequenceNode[];
   dims: DAGAutomationFlowDims;
-  onTriggerUpdate: (t: AutomationTrigger[]) => void;
-  onSequenceUpdate: (s: AutomationSequenceNode[]) => void;
-  onConditionUpdate: (s: AutomationCondition[]) => void;
-}
+};
 
-export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
-  className,
-  trigger,
-  condition,
-  sequence,
-  onTriggerUpdate,
-  onSequenceUpdate,
-  onConditionUpdate,
-  dims,
-}) => {
+export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = (props) => {
   // state
   const [modalState, setModalState] = useState<ModalState | null>(null);
   const { namer } = useHA();
+  const dagUpdater = makeDagFlowUpdate({
+    ...props,
+    openModal: setModalState,
+  });
+  // alias
+  const { className, dims, sequence, condition, trigger } = props;
   // modal
   let modalBody = <></>;
   if (modalState) {
@@ -91,11 +83,8 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
         namer,
         true
       ),
-      onEditClick: makeOnEditAutomationConditions(
-        condition,
-        onConditionUpdate,
-        setModalState
-      ),
+      onEditClick: dagUpdater.onEditAutomationConditions,
+      onAddNode: () => dagUpdater.addNode(0, "sequence"),
     },
     dims
   );
@@ -103,35 +92,13 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
     nodes: [condPoint],
     edges: [],
   };
-  triggerToFlow(flowData, trigger, condPoint.id, dims, {
-    namer,
-    onAdd: () =>
-      setModalState({
-        saveBtnCreateText: true,
-        node: {
-          platform: "device",
-        },
-        update: (n) => {
-          onTriggerUpdate([...trigger, n]);
-        },
-        allowedTypes: ["trigger"],
-      }),
-    onDelete: (i) =>
-      onTriggerUpdate([...trigger.slice(0, i), ...trigger.slice(i + 1)]),
-    onEdit: (i) =>
-      setModalState({
-        node: trigger[i],
-        update: (t) =>
-          onTriggerUpdate([...trigger.slice(0, i), t, ...trigger.slice(i + 1)]),
-        allowedTypes: ["trigger"],
-      }),
-    onSetEnabled: (i) =>
-      onTriggerUpdate([
-        ...trigger.slice(0, i),
-        { ...trigger[i], enabled: !(trigger[i].enabled ?? true) },
-        ...trigger.slice(i + 1),
-      ]),
-  });
+  triggerToFlow(
+    flowData,
+    trigger,
+    condPoint.id,
+    dims,
+    dagUpdater.makeTriggerMakerOptions(namer)
+  );
   sequenceToFlow(
     flowData,
     sequence,
@@ -149,7 +116,7 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = ({
           },
     },
     namer,
-    makeSequenceUpdater(sequence, onSequenceUpdate, setModalState)
+    dagUpdater.sequenceUpdater
   );
   // this fixes some strange edge drawing issue
   flowData.edges = flowData.edges.map((e) => ({

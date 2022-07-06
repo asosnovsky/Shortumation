@@ -15,6 +15,8 @@ import { useTheme } from "@mui/material";
 import InputBoolean from "components/Inputs/InputBoolean";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
+import Add from "@mui/icons-material/Add";
 
 export type DAGNodeOnMove<Direction extends string> = Record<
   Direction,
@@ -27,6 +29,7 @@ export interface DAGNodeDataProps {
   onXClick?: () => void;
   onEditClick?: () => void;
   onSetEnabled?: () => void;
+  onAddNode?: () => void;
   onMove?: DAGNodeOnMoveEvents;
   color: NodeColor;
   label: ReactNode;
@@ -43,6 +46,7 @@ export const makeConditionPoint = createToNodeMakerFunction<
   {
     label: ReactNode;
     onEditClick: () => void;
+    onAddNode: () => void;
   },
   DAGNodeProps
 >((pre, { conditionWidth, conditionHeight, flipped }) => ({
@@ -71,6 +75,7 @@ export const DAGNode: FC<DAGNodeProps> = ({
   width,
   onXClick,
   onEditClick = () => {},
+  onAddNode,
   onMove = {},
   color,
   hasInput = false,
@@ -81,6 +86,16 @@ export const DAGNode: FC<DAGNodeProps> = ({
   const theme = useTheme();
   const confirm = useConfirm();
   const snackbr = useSnackbar();
+  const nodeColor =
+    color === "blue"
+      ? theme.palette.info.main
+      : color === "green"
+      ? theme.palette.success.light
+      : color === "lblue"
+      ? theme.palette.info.light
+      : color === "red"
+      ? theme.palette.error.dark
+      : "none";
   return (
     <>
       <div
@@ -103,16 +118,7 @@ export const DAGNode: FC<DAGNodeProps> = ({
             borderBottomColor: theme.palette.grey[500],
             borderLeftColor: theme.palette.grey[700],
             borderRightColor: theme.palette.grey[700],
-            borderTopColor:
-              color === "blue"
-                ? theme.palette.info.main
-                : color === "green"
-                ? theme.palette.success.light
-                : color === "lblue"
-                ? theme.palette.info.light
-                : color === "red"
-                ? theme.palette.error.dark
-                : "none",
+            borderTopColor: nodeColor,
             backgroundColor: enabled
               ? theme.palette.background.default
               : theme.palette.grey[600],
@@ -167,7 +173,7 @@ export const DAGNode: FC<DAGNodeProps> = ({
               onChange={onSetEnabled}
             />
           )}
-
+          {/* <Info className="dagnode--info-icon" style={{ color: nodeColor }} /> */}
           {hasInput && (
             <Handle
               type="target"
@@ -189,6 +195,11 @@ export const DAGNode: FC<DAGNodeProps> = ({
             {typeof label === "string" ? <span>{label}</span> : label}
           </div>
         </div>
+        {onAddNode && (
+          <div className="dagnode--midway-options">
+            <ButtonIcon icon={<Add />} onClick={onAddNode} />
+          </div>
+        )}
       </div>
     </>
   );

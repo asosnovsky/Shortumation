@@ -82,6 +82,7 @@ export const sequenceToFlow = (
           onXClick: () => updater.removeNode(i),
           onMove: updater.makeOnMoveEvents(i, dims.flipped),
           namer,
+          onAddNode: () => updater.addNode(i + 1),
           onSetEnabled: () =>
             updater.updateNode(i, {
               ...node,
@@ -95,6 +96,7 @@ export const sequenceToFlow = (
         onXClick: () => updater.removeNode(i),
         onMove: updater.makeOnMoveEvents(i, dims.flipped),
         namer,
+        onAddNode: () => updater.addNode(i + 1),
         onSetEnabled: () =>
           updater.updateNode(i, {
             ...node,
@@ -107,34 +109,6 @@ export const sequenceToFlow = (
     lasPos = position;
   }
 
-  // add button
-  const addCircle = makeAddButton(
-    `${prefix}-+`,
-    dims.flipped
-      ? {
-          y:
-            (lasPos === null
-              ? dims.padding.y +
-                dims.nodeHeight * dims.distanceFactor * (sequence.length + 1)
-              : lasPos.y) +
-            dims.nodeHeight * dims.distanceFactor,
-          x: dims.padding.x + dims.circleSize * 1.5,
-        }
-      : {
-          x:
-            (lasPos === null
-              ? dims.padding.x +
-                dims.nodeWidth * dims.distanceFactor * (sequence.length + 1)
-              : lasPos.x) +
-            dims.nodeWidth * dims.distanceFactor,
-          y: dims.padding.y + dims.circleSize / 4,
-        },
-    dims,
-    updater.addNode,
-    false
-  );
-  flowData.nodes.push(addCircle);
-  addEdge(flowData, lastPointId, addCircle.id, false);
   return {
     position: lasPos,
     pointId: lastPointId,
@@ -172,6 +146,7 @@ const addSingleNode = (
   opts: {
     onEditClick: () => void;
     onXClick: () => void;
+    onAddNode: () => void;
     namer: Namer;
     onMove: DAGNodeOnMoveEvents;
     onSetEnabled: () => void;
@@ -232,6 +207,7 @@ const addChooseNode = (
     onXClick: () => updater.removeNode(i),
     namer,
     onMove: updater.makeOnMoveEvents(i, dims.flipped),
+    onAddNode: () => updater.addNode(i + 1),
     onSetEnabled: () =>
       updater.updateNode(i, {
         ...node,
@@ -245,6 +221,7 @@ const addChooseNode = (
   // conditions
   node.choose.forEach(({ sequence, conditions }, j) => {
     const sequenceId = `${nodeId}.${j}`;
+    const childUpdater = updater.makeChildUpdaterForChooseAction(i, j);
     // edit/delete circle
     const circle = makeFlowCircle(
       `${sequenceId}>delete`,
@@ -296,6 +273,7 @@ const addChooseNode = (
           true
         ),
         onEditClick: updater.makeOnEditConditionsForChooseNode(i, j),
+        onAddNode: () => childUpdater.addNode(0),
       },
       dims
     );
@@ -324,7 +302,7 @@ const addChooseNode = (
             },
       },
       namer,
-      updater.makeChildUpdaterForChooseAction(i, j),
+      childUpdater,
       `${sequenceId}.`
     );
     if (lastPoint.position) {

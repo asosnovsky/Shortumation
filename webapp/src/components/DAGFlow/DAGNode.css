@@ -42,6 +42,25 @@
     right: -2.5em;
 }
 
+
+.dagnode--midway-options {
+    position: absolute;
+    bottom: -2.5em;
+    left: calc(50%-0.5em);
+    z-index: 10;
+}
+
+.dagnode--midway-options button {
+    padding: 0;
+    color: var(--mui-primary-main);
+    background-color: var(--mui-primary-contrastText);
+}
+
+.dagnode--midway-options button:hover {
+    color: var(--mui-primary-dark);
+    background-color: var(--mui-primary-contrastText);
+}
+
 .dagnode .dagnode--inner .speed-dial {
     height: 2em;
     width: 2em;

@@ -19,14 +19,23 @@ export const makeSequenceUpdater = (
   removeNode(i: number) {
     return onChange([...sequence.slice(0, i), ...sequence.slice(i + 1)]);
   },
-  addNode() {
+
+  addNode(afterIndex: number | null = null) {
     return openModal({
       saveBtnCreateText: true,
       node: {
         device_id: "",
       },
       update: (n) => {
-        onChange([...sequence, n]);
+        if (afterIndex !== null) {
+          onChange([
+            ...sequence.slice(0, afterIndex),
+            n,
+            ...sequence.slice(afterIndex),
+          ]);
+        } else {
+          onChange([...sequence, n]);
+        }
       },
       allowedTypes: ["action", "condition"],
     });
