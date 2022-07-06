@@ -102,7 +102,6 @@ export const ServiceEditorField: FC<ServiceEditorFieldProps> = ({
       return <InputYaml {...prop} />;
     } else if ("entity" in option.data.selector) {
       const options = option.data.selector.entity ?? {};
-      console.log(options);
       return (
         <InputEntity
           {...prop}

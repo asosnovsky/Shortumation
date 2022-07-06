@@ -159,7 +159,7 @@ test("get and/or/not condition description", () => {
       dummyNamer,
       false
     )
-  ).toEqual("Logic");
+  ).toEqual("None");
   expect(
     getDescriptionFromAutomationNode(
       {
@@ -169,7 +169,7 @@ test("get and/or/not condition description", () => {
       dummyNamer,
       false
     )
-  ).toEqual("Logic");
+  ).toEqual("None");
   expect(
     getDescriptionFromAutomationNode(
       {
@@ -179,7 +179,7 @@ test("get and/or/not condition description", () => {
       dummyNamer,
       false
     )
-  ).toEqual("Logic");
+  ).toEqual("None");
 });
 
 test("get Numeric State condition description", () => {

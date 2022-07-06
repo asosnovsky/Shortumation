@@ -41,7 +41,6 @@ export const makeDagFlowUpdate = (args: DagFlowUpdateArgs) => {
                 conditions: [],
               },
         update: (n) => {
-          console.log({ afterIndex, n });
           if (afterIndex !== null) {
             args.onSequenceUpdate([
               ...args.sequence.slice(0, afterIndex),

@@ -13,7 +13,6 @@ export type InputAreaProps = InputAutoCompletePropsBase & {
 export const InputArea: FC<InputAreaProps> = (props) => {
   // state
   const areas = useHAAreas();
-  console.log(areas);
   return (
     <InputAutoComplete
       {...props}
