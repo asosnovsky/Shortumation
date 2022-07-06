@@ -8,7 +8,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditOffIcon from "@mui/icons-material/EditOff";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
-import useWindowSize from "utils/useWindowSize";
 import { FC } from "react";
 import { SpeedDial } from "components/SpeedDial";
 

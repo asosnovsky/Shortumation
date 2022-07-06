@@ -129,6 +129,7 @@ export const convertPaletteToCss = (p: Palette): string => {
     "common",
   ]) {
     const pc = p[k as keyof Palette] as PaletteColor | Color;
+    // eslint-disable-next-line
     Object.entries(pc).forEach(([n, v]) => {
       out += `\n --mui-${k}-${n}: ${v};`;
     });

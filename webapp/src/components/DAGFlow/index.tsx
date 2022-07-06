@@ -1,23 +1,14 @@
 import { FC, useState } from "react";
 
 import ReactFlow, { Controls } from "react-flow-renderer";
-import { AutomationSequenceNode } from "types/automations";
-import { AutomationTrigger } from "types/automations/triggers";
 import { triggerToFlow } from "./triggerConvertor";
 import { DAGNode, makeConditionPoint } from "./DAGNode";
-import {
-  DAGAutomationFlowDims,
-  FlowData,
-  ModalState,
-  UpdateModalState,
-} from "./types";
+import { DAGAutomationFlowDims, FlowData, ModalState } from "./types";
 import { DAGCircle } from "./DAGCircle";
 import { sequenceToFlow } from "./sequenceConvertor";
-import { makeSequenceUpdater } from "./updater";
 import { NodeEditor } from "components/NodeEditor";
 import { Modal } from "components/Modal";
-import { AutomationCondition } from "types/automations/conditions";
-import { convertToFlowNode, makeOnEditAutomationConditions } from "./helpers";
+import { convertToFlowNode } from "./helpers";
 import { DAGErrorNode } from "./DAGErrorNode";
 import { useHA } from "haService";
 import { getDescriptionFromAutomationNode } from "utils/formatting";

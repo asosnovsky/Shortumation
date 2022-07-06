@@ -75,6 +75,7 @@ export const AutomationList: FC<AutomationListParams> = ({
       snackbr.enqueueSnackbar("Saved.", { variant: "info" });
     }
     firstRender.current = true;
+    // eslint-disable-next-line
   }, [automations]);
   // render
   return (
