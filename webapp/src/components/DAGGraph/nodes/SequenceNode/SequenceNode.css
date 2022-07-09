@@ -1,0 +1,95 @@
+.sequence-node {
+    font-size: 0.9em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+}
+
+.sequence-node--inner {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25em 0.75em 0.5em 0.75em;
+    border-style: solid;
+    border-top-width: 0.25em;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-radius: 10px;
+}
+
+
+.sequence-node--label {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.sequence-node--label span {
+    text-align: center;
+    white-space: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sequence-node--enabled-flag {
+    position: absolute;
+    top: -1.5em;
+    right: -2.5em;
+}
+
+
+.sequence-node--midway-options {
+    position: absolute;
+    bottom: -2.5em;
+    left: calc(50%-0.5em);
+    z-index: 10;
+}
+
+.sequence-node--midway-options button {
+    padding: 0;
+    color: var(--mui-primary-main);
+    background-color: var(--mui-primary-contrastText);
+}
+
+.sequence-node--midway-options button:hover {
+    color: var(--mui-primary-dark);
+    background-color: var(--mui-primary-contrastText);
+}
+
+.sequence-node .sequence-node--inner .speed-dial {
+    height: 2em;
+    width: 2em;
+    min-height: 2em;
+    max-height: 2em;
+    position: absolute;
+    top: -1em;
+    left: -1em;
+    background-color: var(--mui-common-black);
+    border-color: var(--mui-grey-400);
+    border-style: solid;
+    border-width: 0.5px;
+    border-radius: 20px;
+}
+
+.open>.sequence-node--actions-btn, .sequence-node--actions-btn:hover {
+    color: var(--mui-common-black);
+    background-color: var(--mui-grey-400);
+    border-radius: 20px;
+}
+
+.sequence-node--actions--move.right {
+    transform: rotate(180deg);
+}
+
+.sequence-node--actions--move.up {
+    transform: rotate(90deg);
+}
+
+.sequence-node--actions--move.down {
+    transform: rotate(270deg);
+}
