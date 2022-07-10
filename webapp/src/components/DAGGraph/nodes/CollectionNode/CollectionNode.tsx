@@ -22,37 +22,37 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
 
   return (
     <div
-      className="collection-nodes"
+      className="collection-nodes--wrap"
       style={
         {
           "--node-color": nodeColor,
-          minHeight: `calc(${height}px - 2*var(--padding))`,
-          minWidth: `calc(${width}px - 2*var(--padding))`,
-          maxHeight: `calc(${height}px - 2*var(--padding))`,
-          maxWidth: `calc(${width}px - 2*var(--padding))`,
+          "--node-height": `calc(${height}px - 2*var(--padding))`,
+          "--node-width": `calc(${width}px - 2*var(--padding))`,
         } as any
       }
     >
-      {nodes.map((n, i) => (
-        <SequenceNodeElement
-          {...n}
-          {...sequenceNode}
-          key={i}
-          color={color}
-          flipped={flipped}
-        />
-      ))}
-      <ButtonIcon icon={<Add />} onClick={onAddNode} />
-      <Handle
-        type="source"
-        position={flipped ? Position.Bottom : Position.Right}
-      />
-      {hasInput && (
+      <div className="collection-nodes">
+        {nodes.map((n, i) => (
+          <SequenceNodeElement
+            {...n}
+            {...sequenceNode}
+            key={i}
+            color={color}
+            flipped={flipped}
+          />
+        ))}
+        <ButtonIcon icon={<Add />} onClick={onAddNode} />
         <Handle
-          type="target"
-          position={flipped ? Position.Top : Position.Left}
+          type="source"
+          position={flipped ? Position.Bottom : Position.Right}
         />
-      )}
+        {hasInput && (
+          <Handle
+            type="target"
+            position={flipped ? Position.Top : Position.Left}
+          />
+        )}
+      </div>
     </div>
   );
 };

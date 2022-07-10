@@ -121,3 +121,156 @@ Conditions.args = {
     sequence: [],
   },
 };
+
+export const FullAuto = Template.bind({});
+FullAuto.args = {
+  ...FullAuto.args,
+  automation: {
+    condition: [
+      {
+        condition: "and",
+        conditions: [
+          {
+            condition: "numeric_state",
+            entity_id: "sensor.temperature_kitchen",
+            below: "15",
+          },
+          {
+            condition: "template",
+            value_template: 'states(switch.kitchen_light) == "on"',
+          },
+        ],
+      },
+
+      {
+        condition: "numeric_state",
+        entity_id: "sensor.temperature_kitchen",
+        below: "15",
+      },
+    ],
+    trigger: [
+      {
+        platform: "numeric_state",
+        entity_id: "test",
+      },
+      {
+        platform: "homeassistant",
+        event: "start",
+      },
+      {
+        bad: "node",
+      } as any,
+    ],
+    sequence: [
+      {
+        condition: "and",
+        conditions: [
+          {
+            condition: "numeric_state",
+            entity_id: "sensor.temperature_kitchen",
+            below: "15",
+          },
+          {
+            condition: "template",
+            value_template: 'states(switch.kitchen_light) == "on"',
+          },
+        ],
+      },
+      {
+        alias: "Start Music In Kitchen",
+        service: "media_player.play_media",
+        target: {
+          entity_id: "media_player.kitchen_dot",
+        },
+        data: {
+          media_content_id: "Good Morning",
+          media_content_type: "SPOTIFY",
+        },
+      },
+      {
+        alias: "Bad Node",
+      },
+      {
+        choose: [
+          {
+            conditions: [
+              {
+                condition: "state",
+                entity_id: "lights.bathroom",
+                state: "off",
+              },
+            ],
+            sequence: [
+              {
+                service: "light.turn_on",
+                target: {
+                  entity_id: "lights.bathroom",
+                },
+                data: {},
+              },
+              {
+                alias: "Turn off bedroom",
+                service: "light.turn_off",
+                target: {
+                  entity_id: "lights.bedroom",
+                },
+                data: {},
+              },
+            ],
+          },
+          {
+            conditions: [
+              {
+                condition: "state",
+                entity_id: "lights.bedroom",
+                state: "off",
+              },
+            ],
+            sequence: [
+              {
+                alias: "Turn on bedroom",
+                service: "light.turn_on",
+                target: {
+                  entity_id: "lights.bedroom",
+                },
+                data: {},
+              },
+              {
+                choose: [
+                  {
+                    conditions: [],
+                    sequence: [
+                      {
+                        choose: [],
+                        default: [],
+                      },
+                    ],
+                  },
+                ],
+                default: [
+                  {
+                    choose: [],
+                    default: [],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        default: [
+          {
+            service: "light.turn_off",
+            target: {
+              entity_id: "lights.bathroom",
+            },
+            data: {},
+          },
+        ],
+      },
+      {
+        condition: "and",
+        conditions: [],
+      },
+    ],
+  },
+};

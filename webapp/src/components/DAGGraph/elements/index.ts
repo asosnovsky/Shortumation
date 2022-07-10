@@ -7,7 +7,10 @@ import {
 import { AutomationTrigger } from "types/automations/triggers";
 import * as distance from "./distance";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
-import { AutomationActionData } from "types/automations";
+import {
+  AutomationActionData,
+  AutomationSequenceNode,
+} from "types/automations";
 import { AutomationCondition } from "types/automations/conditions";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
 
@@ -26,7 +29,7 @@ export const makeAutomationNodes = (
     nodeIndex: 0,
   });
 
-  const condOut = makeConditionNodes(automation.condition, {
+  state = makeConditionNodes(automation.condition, {
     ...args,
     elementData: state.elementData,
     position: distance.moveFromTo(
@@ -40,7 +43,21 @@ export const makeAutomationNodes = (
     lastNodeId: state.lastNode.nodeId,
   });
 
-  return condOut.elementData;
+  state = makeSequenceNodes(automation.sequence, {
+    ...args,
+    elementData: state.elementData,
+    position: distance.moveFromTo(
+      "condition",
+      "node",
+      state.lastNode.pos,
+      args.dims
+    ),
+    nodeId: `${args.dims.flipped}-sequence`,
+    nodeIndex: 2,
+    lastNodeId: state.lastNode.nodeId,
+  });
+
+  return state.elementData;
 };
 
 export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
@@ -73,16 +90,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
 
 export const makeConditionNodes: ElementMaker<AutomationCondition> = (
   nodes,
-  {
-    elementData,
-    nodeId,
-    stateUpdater,
-    position,
-    dims,
-    namer,
-    openModal,
-    lastNodeId,
-  }
+  { elementData, nodeId, stateUpdater, position, dims, namer, lastNodeId }
 ) => {
   elementData.nodes.push(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
@@ -103,6 +111,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
     elementData.edges.push({
       source: lastNodeId,
       target: elementData.nodes[elementData.nodes.length - 1].id,
+      animated: true,
       id: `${lastNodeId}->${
         elementData.nodes[elementData.nodes.length - 1].id
       }`,
@@ -113,7 +122,21 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
     lastNode: {
       nodeId,
       pos: elementData.nodes[elementData.nodes.length - 1].position,
-      size: dims.trigger,
+      size: dims.condition,
+    },
+  };
+};
+
+export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
+  nodes,
+  { nodeId, elementData, dims }
+) => {
+  return {
+    elementData,
+    lastNode: {
+      nodeId,
+      pos: elementData.nodes[elementData.nodes.length - 1].position,
+      size: dims.node,
     },
   };
 };

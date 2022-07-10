@@ -1,11 +1,26 @@
-.collection-nodes {
+.collection-nodes--wrap {
     --padding: 1.5em;
-    /* outline: 1px dotted white; */
+
+    min-width: var(--node-width);
+    min-height: var(--node-height);
+    max-width: var(--node-width);
+    max-height: var(--node-height);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.collection-nodes {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
     gap: 1.5em;
+    max-width: var(--node-width);
+    max-height: var(--node-height);
 
     border-color: var(--node-color);
     border-style: solid;
@@ -13,4 +28,8 @@
     border-radius: 10px;
     overflow: auto;
     padding: var(--padding);
+}
+
+.collection-nodes .react-flow__handle {
+    opacity: 0;
 }
