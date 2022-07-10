@@ -1,5 +1,6 @@
 import {
   Bbox,
+  DAGDims,
   ElementMaker,
   ElementMakerBaseProps,
   ElementMakerOutput,
@@ -21,41 +22,60 @@ export const makeAutomationNodes = (
   automation: AutomationActionData,
   args: ElementMakerBaseProps
 ) => {
+  const dims: DAGDims = {
+    ...args.dims,
+    // think of a better to do this
+    // condition: args.dims.flipped
+    //   ? args.dims.condition
+    //   : {
+    //       height: args.dims.condition.width,
+    //       width: args.dims.condition.height,
+    //     },
+    // trigger: args.dims.flipped
+    //   ? args.dims.trigger
+    //   : {
+    //       height: args.dims.trigger.width,
+    //       width: args.dims.trigger.height,
+    //     },
+  };
   let state: ElementMakerOutput = makeTriggerNodes(automation.trigger, {
     ...args,
+    dims,
     elementData: {
       nodes: [],
       edges: [],
     },
-    position: args.dims.position,
-    nodeId: `${args.dims.flipped}-trigger`,
+    position: dims.position,
+    nodeId: `${dims.flipped}-trigger`,
     nodeIndex: 0,
   });
 
   state = makeConditionNodes(automation.condition, {
     ...args,
+    dims,
     elementData: state.elementData,
     position: distance.moveFromTo(
       "trigger",
       "condition",
       state.lastNode.pos,
-      args.dims
+      dims
     ),
-    nodeId: `${args.dims.flipped}-condition`,
+    nodeId: `${dims.flipped}-condition`,
     nodeIndex: 1,
     lastNodeId: state.lastNode.nodeId,
   });
 
   state = makeSequenceNodes(automation.sequence, {
     ...args,
+    dims,
     elementData: state.elementData,
     position: distance.moveFromTo(
       "condition",
       "node",
       state.lastNode.pos,
-      args.dims
+      dims
     ),
-    nodeId: `${args.dims.flipped}-sequence`,
+    nodeId: `${dims.flipped}-sequence`,
     nodeIndex: 2,
     lastNodeId: state.lastNode.nodeId,
   });
@@ -138,7 +158,8 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   nodes.forEach((node, nodeIndex) => {
     const element = SequenceNodeMaker.makeElement(
       {
-        id: `${nodeId}-${nodeIndex}`,
+        // the JSON.stringify is hack to make the edges render nicely
+        id: `${nodeId}-${nodeIndex}-${JSON.stringify(node)}`,
         position: distance.moveAlong("node", position, nodeIndex, dims),
       },
       dims,
