@@ -18,8 +18,8 @@ type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>];
 
 export const useEditorNodeState = (
   originalNode: AutomationNode,
-  isErrored: boolean,
   allowedTypes: AutomationNodeTypes[],
+  createMode: boolean,
   uState: UseState = useState
 ) => {
   // state
@@ -153,6 +153,7 @@ export const useEditorNodeState = (
               state={currentNode}
               setState={setState}
               ha={ha}
+              createMode={createMode}
             />
           )}
         </>

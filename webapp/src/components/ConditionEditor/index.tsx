@@ -1,12 +1,14 @@
 import { FC } from "react";
 import { AutomationCondition } from "types/automations/conditions";
 import { ConditionNodeBase } from "./ConditionNodeBase";
+import { ConditionNodeViewMode } from "./ConditionNodeSettings";
 
 export const ConditionEditor: FC<{
   condition: AutomationCondition;
   onDelete: () => void;
   onUpdate: (data: AutomationCondition) => void;
-}> = ({ condition, onDelete, onUpdate }) => {
+  initialViewMode?: ConditionNodeViewMode;
+}> = ({ condition, onDelete, onUpdate, initialViewMode }) => {
   // state
   return (
     <ConditionNodeBase
@@ -16,6 +18,7 @@ export const ConditionEditor: FC<{
         onUpdate(update);
       }}
       disableDelete={true}
+      initialViewMode={initialViewMode}
     />
   );
 };

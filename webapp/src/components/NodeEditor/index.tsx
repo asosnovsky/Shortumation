@@ -15,7 +15,6 @@ export interface NodeEditorProps {
   onSave?: (n: AutomationNode) => void;
   onFlags?: (isReady: boolean, isModified: boolean) => void;
   saveBtnCreateText?: boolean;
-  isErrored?: boolean;
   children?: ReactNode;
 }
 
@@ -27,10 +26,9 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   onFlags = () => {},
   saveBtnCreateText = false,
   children,
-  isErrored = false,
 }) => {
   // state
-  const state = useEditorNodeState(node, isErrored, allowedTypes);
+  const state = useEditorNodeState(node, allowedTypes, saveBtnCreateText);
   const confirm = useConfirm();
 
   // alias

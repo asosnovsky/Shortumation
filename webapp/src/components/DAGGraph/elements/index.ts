@@ -5,13 +5,11 @@ import {
   ElementMakerOutput,
 } from "./types";
 import { AutomationTrigger } from "types/automations/triggers";
-import { SequenceNodeMaker } from "../nodes/SequenceNode";
 import * as distance from "./distance";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import { AutomationActionData } from "types/automations";
 import { AutomationCondition } from "types/automations/conditions";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
-import { LastNode } from "./types";
 
 export const makeAutomationNodes = (
   automation: AutomationActionData,
@@ -24,22 +22,20 @@ export const makeAutomationNodes = (
       edges: [],
     },
     position: args.dims.position,
-    nodeId: "trigger",
+    nodeId: `${args.dims.flipped}-trigger`,
     nodeIndex: 0,
   });
 
   const condOut = makeConditionNodes(automation.condition, {
     ...args,
     elementData: state.elementData,
-    position: {
-      x:
-        state.lastNode.pos.x +
-        args.dims.trigger.width * args.dims.distanceFactor,
-      y:
-        state.lastNode.pos.y +
-        (args.dims.trigger.height - args.dims.condition.height) / 2,
-    },
-    nodeId: "condition",
+    position: distance.moveFromTo(
+      "trigger",
+      "condition",
+      state.lastNode.pos,
+      args.dims
+    ),
+    nodeId: `${args.dims.flipped}-condition`,
     nodeIndex: 1,
     lastNodeId: state.lastNode.nodeId,
   });

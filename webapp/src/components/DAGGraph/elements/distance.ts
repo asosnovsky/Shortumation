@@ -23,6 +23,25 @@ export const moveAlong = (
   }
 };
 
+export const moveFromTo = (
+  from: keyof DAGEntities,
+  to: keyof DAGEntities,
+  startPoint: XYPosition,
+  dims: DAGDims
+): XYPosition => {
+  if (!dims.flipped) {
+    return {
+      x: startPoint.x + dims[from].width * dims.distanceFactor,
+      y: startPoint.y + (dims[from].height - dims[to].height) / 2,
+    };
+  } else {
+    return {
+      y: startPoint.y + dims[from].height * dims.distanceFactor,
+      x: startPoint.x + (dims[from].width - dims[to].width) / 2,
+    };
+  }
+};
+
 export const computeSize = (
   by: keyof DAGEntities,
   dims: DAGDims,

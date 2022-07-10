@@ -18,6 +18,7 @@ export type ConditionNodeBaseProps = {
   onDelete?: () => void;
   onUpdate: (data: AutomationCondition) => void;
   disableDelete?: boolean;
+  initialViewMode?: ConditionNodeBaseViewMode;
 };
 export type ConditionNodeBaseViewMode = "edit" | "yaml" | "view";
 export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
@@ -31,7 +32,9 @@ export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
     isEdited: false,
     condition: props.condition,
   });
-  const [mode, setMode] = useState<ConditionNodeBaseViewMode>("view");
+  const [mode, setMode] = useState<ConditionNodeBaseViewMode>(
+    props.initialViewMode ?? "view"
+  );
   //   alias
   const updateCondition = (data: any) =>
     setCondition({

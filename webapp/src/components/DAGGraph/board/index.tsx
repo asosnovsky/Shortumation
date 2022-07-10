@@ -34,7 +34,6 @@ export const DAGGraphBoard: FC<DAGGraphBoardProps> = ({
     modalBody = (
       <NodeEditor
         node={modalState.node}
-        isErrored={modalState.isError}
         onClose={closeModal}
         onSave={(n) => {
           modalState.update(n as any);

@@ -19,6 +19,7 @@ export type OptionManager<T> = {
         state: T;
         setState: (s: T) => void;
         ha: HAService;
+        createMode: boolean;
       }>;
     }
 );

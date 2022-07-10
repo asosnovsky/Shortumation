@@ -41,7 +41,6 @@ export const DAGAutomationFlow: FC<DAGAutomationFlowProps> = (props) => {
     modalBody = (
       <NodeEditor
         node={modalState.node}
-        isErrored={modalState.isError}
         onClose={() => setModalState(null)}
         onSave={(n) => {
           modalState.update(n as any);
