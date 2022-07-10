@@ -91,4 +91,10 @@ OnMoveAllDirections.args = {
     left: console.log,
     right: console.log,
   },
+  onAdd: {
+    up: console.log,
+    down: console.log,
+    left: console.log,
+    right: console.log,
+  },
 };

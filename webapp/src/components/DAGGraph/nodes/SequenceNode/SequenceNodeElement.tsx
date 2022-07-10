@@ -17,6 +17,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { SpeedDial } from "components/SpeedDial";
 import { SequenceNodeElementProps } from "./types";
 import { useSequenceNodeColor } from "./util";
+import { AddOutlined } from "@mui/icons-material";
 
 export const SequenceNodeElement: FC<
   PropsWithChildren<SequenceNodeElementProps>
@@ -26,7 +27,7 @@ export const SequenceNodeElement: FC<
   width,
   onXClick,
   onEditClick = () => {},
-  onAddNode,
+  onAdd = {},
   onMove = {},
   color,
   flipped,
@@ -38,6 +39,7 @@ export const SequenceNodeElement: FC<
   const confirm = useConfirm();
   const snackbr = useSnackbar();
   const nodeColor = useSequenceNodeColor(color);
+  console.log({ onAdd });
   return (
     <>
       <div
@@ -76,12 +78,23 @@ export const SequenceNodeElement: FC<
             </IconButton>
             {Object.entries(onMove).map(([key, action]) => (
               <IconButton
-                key={key}
+                key={"move" + key}
                 onClick={action}
                 size="small"
                 className={["sequence-node--actions--move", key].join(" ")}
               >
-                <ArrowBackIcon fontSize="inherit" />
+                <ArrowBackIcon className="icon" fontSize="inherit" />
+              </IconButton>
+            ))}
+            {Object.entries(onAdd).map(([key, action]) => (
+              <IconButton
+                key={"add" + key}
+                onClick={action}
+                size="small"
+                className={["sequence-node--actions--move", key].join(" ")}
+              >
+                <ArrowBackIcon className="icon" fontSize="inherit" />
+                <AddOutlined className="icon-2" fontSize="inherit" />
               </IconButton>
             ))}
             {onXClick && (
@@ -129,11 +142,11 @@ export const SequenceNodeElement: FC<
             {typeof label === "string" ? <span>{label}</span> : label}
           </div>
         </div>
-        {onAddNode && (
+        {/* {onAddNode && (
           <div className="sequence-node--midway-options">
             <ButtonIcon icon={<Add />} onClick={onAddNode} />
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

@@ -84,6 +84,13 @@
     border-radius: 20px;
 }
 
+.sequence-node--actions--move .icon-2 {
+    position: absolute;
+    bottom: 10%;
+    left: 60%;
+    font-size: 0.75em;
+}
+
 .sequence-node--actions--move.right {
     transform: rotate(180deg);
 }

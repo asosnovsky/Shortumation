@@ -11,6 +11,7 @@ export type SequenceNodeActions = {
   onSetEnabled: () => void;
   onAddNode: () => void;
   onMove: SequenceNodeOnMoveEvents;
+  onAdd: SequenceNodeOnMoveEvents;
 };
 export type SequenceNodeOnMoveEvents = Partial<
   SequenceNodeOnMove<"up" | "down" | "left" | "right">

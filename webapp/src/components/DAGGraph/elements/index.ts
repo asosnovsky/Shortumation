@@ -15,6 +15,7 @@ import {
 import { AutomationCondition } from "types/automations/conditions";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
 import { SequenceNodeMaker } from "../nodes/SequenceNode";
+import { getNodeType } from "utils/automations";
 
 export const makeAutomationNodes = (
   automation: AutomationActionData,
@@ -70,7 +71,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.trigger,
       color: "red",
-      onAddNode: () => stateUpdater.basic.trigger.addNode(),
+      onAddNode: () => stateUpdater.basic.trigger.addNode(null),
       nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
         label: getDescriptionFromAutomationNode(node, namer, true),
@@ -97,7 +98,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
       ...dims.condition,
       color: "blue",
       hasInput: !!lastNodeId,
-      onAddNode: stateUpdater.basic.condition.addNode,
+      onAddNode: () => stateUpdater.basic.condition.addNode(null),
       nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
         label: getDescriptionFromAutomationNode(node, namer, true),
@@ -142,7 +143,7 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
       },
       dims,
       {
-        color: "green",
+        color: getNodeType(node) === "action" ? "green" : "blue",
         enabled: node.enabled ?? true,
         hasInput: true,
         label: getDescriptionFromAutomationNode(node, namer, true),

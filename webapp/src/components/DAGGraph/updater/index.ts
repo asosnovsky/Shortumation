@@ -36,12 +36,22 @@ export const createBasicUpdater =
           ...args[k].data.slice(i + 1),
         ]),
 
-      addNode: () =>
+      addNode: (afterIndex: number | null) =>
         args.openModal({
           allowedTypes: mapAutoActionKeyToNodeType(k),
           saveBtnCreateText: true,
           node: JSON.parse(JSON.stringify(defaultNode)),
-          update: (n) => args[k].onUpdate([...args[k].data, n]),
+          update: (n) => {
+            if (afterIndex !== null) {
+              args[k].onUpdate([
+                ...args[k].data.slice(0, afterIndex),
+                n,
+                ...args[k].data.slice(afterIndex),
+              ]);
+            } else {
+              args[k].onUpdate([...args[k].data, n]);
+            }
+          },
         }),
       onMove: (i: number, direction: "back" | "forward") => {
         if (direction === "back" && i > 0) {
@@ -121,9 +131,15 @@ export const createUpdater = (
         }
       }
       // build add
-      let onAddNode: (() => void) | undefined = undefined;
+      let onAdd: SequenceNodeActions["onAdd"] = {};
       if (flags.includeAdd) {
-        onAddNode = basic[k].addNode;
+        if (!flags.flipped) {
+          onAdd["left"] = () => basic[k].addNode(i);
+          onAdd["right"] = () => basic[k].addNode(i + 1);
+        } else {
+          onAdd["up"] = () => basic[k].addNode(i);
+          onAdd["down"] = () => basic[k].addNode(i + 1);
+        }
       }
 
       return {
@@ -136,7 +152,7 @@ export const createUpdater = (
           }),
         onXClick: () => basic[k].deleteNode(i),
         onSetEnabled: () => basic[k].setEnabled(i),
-        onAddNode,
+        onAdd,
         onMove,
       };
     },

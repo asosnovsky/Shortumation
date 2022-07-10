@@ -22,7 +22,7 @@ export const DEFAULT_DIMS: DAGDims = {
     width: CIRCLE_SIZE,
   },
   distanceFactor: {
-    node: 2,
+    node: 1.5,
     collection: 1.25,
   },
   position: {
