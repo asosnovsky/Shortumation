@@ -3,6 +3,7 @@ import {
   ElementMaker,
   ElementMakerBaseProps,
   ElementMakerOutput,
+  LastNode,
 } from "./types";
 import { AutomationTrigger } from "types/automations/triggers";
 import * as distance from "./distance";
@@ -13,6 +14,7 @@ import {
 } from "types/automations";
 import { AutomationCondition } from "types/automations/conditions";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
+import { SequenceNodeMaker } from "../nodes/SequenceNode";
 
 export const makeAutomationNodes = (
   automation: AutomationActionData,
@@ -72,9 +74,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
       nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
         label: getDescriptionFromAutomationNode(node, namer, true),
-        ...stateUpdater.createNodeActions("trigger", index, {
-          flipped: dims.flipped,
-        }),
+        ...stateUpdater.createNodeActions("trigger", index, {}),
       })),
     })
   );
@@ -101,9 +101,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
       nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
         label: getDescriptionFromAutomationNode(node, namer, true),
-        ...stateUpdater.createNodeActions("condition", index, {
-          flipped: dims.flipped,
-        }),
+        ...stateUpdater.createNodeActions("condition", index, {}),
       })),
     })
   );
@@ -129,14 +127,46 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
 
 export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   nodes,
-  { nodeId, elementData, dims }
+  { nodeId, lastNodeId, elementData, dims, position, namer, stateUpdater }
 ) => {
+  let lastNode: LastNode = {
+    nodeId: lastNodeId ?? nodeId,
+    pos: elementData.nodes[elementData.nodes.length - 1].position,
+    size: dims.node,
+  };
+  nodes.forEach((node, nodeIndex) => {
+    const element = SequenceNodeMaker.makeElement(
+      {
+        id: `${nodeId}-${nodeIndex}`,
+        position: distance.moveAlong("node", position, nodeIndex, dims),
+      },
+      dims,
+      {
+        color: "green",
+        enabled: node.enabled ?? true,
+        hasInput: true,
+        label: getDescriptionFromAutomationNode(node, namer, true),
+        ...stateUpdater.createNodeActions("sequence", nodeIndex, {
+          includeAdd: true,
+          flipped: dims.flipped,
+        }),
+      }
+    );
+    elementData.nodes.push(element);
+    elementData.edges.push({
+      id: `${lastNode.nodeId}->${element.id}`,
+      target: element.id,
+      source: lastNode.nodeId,
+    });
+    lastNode = {
+      nodeId: element.id,
+      pos: element.position,
+      size: dims.node,
+    };
+  });
+
   return {
     elementData,
-    lastNode: {
-      nodeId,
-      pos: elementData.nodes[elementData.nodes.length - 1].position,
-      size: dims.node,
-    },
+    lastNode,
   };
 };

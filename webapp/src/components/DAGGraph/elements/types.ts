@@ -20,7 +20,10 @@ export type DAGEntities = {
 };
 export type DAGDims = DAGEntities & {
   position: XYPosition;
-  distanceFactor: number;
+  distanceFactor: {
+    node: number;
+    collection: number;
+  };
   flipped: boolean;
 };
 export type ElementMakerBaseProps = {

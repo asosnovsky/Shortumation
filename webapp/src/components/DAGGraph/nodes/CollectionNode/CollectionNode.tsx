@@ -26,8 +26,8 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
       style={
         {
           "--node-color": nodeColor,
-          "--node-height": `calc(${height}px - 2*var(--padding))`,
-          "--node-width": `calc(${width}px - 2*var(--padding))`,
+          "--node-height": `${height}px`,
+          "--node-width": `${width}px`,
         } as any
       }
     >

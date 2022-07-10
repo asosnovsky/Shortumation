@@ -1,9 +1,8 @@
 import { DAGDims } from "./types";
 
-export const NODE_WIDTH = 170 as const;
-export const NODE_HEIGHT = 70 as const;
+export const NODE_WIDTH = 200 as const;
+export const NODE_HEIGHT = 80 as const;
 export const CIRCLE_SIZE = 40 as const;
-export const DISTANCE_FACTOR = 1.25 as const;
 
 export const DEFAULT_DIMS: DAGDims = {
   trigger: {
@@ -22,7 +21,10 @@ export const DEFAULT_DIMS: DAGDims = {
     height: CIRCLE_SIZE,
     width: CIRCLE_SIZE,
   },
-  distanceFactor: DISTANCE_FACTOR,
+  distanceFactor: {
+    node: 2,
+    collection: 1.25,
+  },
   position: {
     x: 50,
     y: 50,

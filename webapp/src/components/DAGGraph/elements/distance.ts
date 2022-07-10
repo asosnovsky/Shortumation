@@ -5,22 +5,17 @@ export const moveAlong = (
   by: keyof DAGEntities,
   startPoint: XYPosition,
   increment: number,
-  dims: DAGDims,
-  direction: "under" | "next" = "next"
+  dims: DAGDims
 ): XYPosition => {
   const moveOnY = {
-    y: startPoint.y + dims[by].height * dims.distanceFactor * increment,
+    y: startPoint.y + dims[by].height * dims.distanceFactor.node * increment,
     x: startPoint.x,
   };
   const moveOnX = {
-    x: startPoint.x + dims[by].width * dims.distanceFactor * increment,
+    x: startPoint.x + dims[by].width * dims.distanceFactor.node * increment,
     y: startPoint.y,
   };
-  if (direction === "next") {
-    return dims.flipped ? moveOnX : moveOnY;
-  } else {
-    return !dims.flipped ? moveOnX : moveOnY;
-  }
+  return !dims.flipped ? moveOnX : moveOnY;
 };
 
 export const moveFromTo = (
@@ -31,34 +26,13 @@ export const moveFromTo = (
 ): XYPosition => {
   if (!dims.flipped) {
     return {
-      x: startPoint.x + dims[from].width * dims.distanceFactor,
+      x: startPoint.x + dims[from].width * dims.distanceFactor.collection,
       y: startPoint.y + (dims[from].height - dims[to].height) / 2,
     };
   } else {
     return {
-      y: startPoint.y + dims[from].height * dims.distanceFactor,
+      y: startPoint.y + dims[from].height * dims.distanceFactor.collection,
       x: startPoint.x + (dims[from].width - dims[to].width) / 2,
     };
-  }
-};
-
-export const computeSize = (
-  by: keyof DAGEntities,
-  dims: DAGDims,
-  count: number,
-  direction: "under" | "next" = "next"
-): Size => {
-  const moveOnY = {
-    height: dims[by].height * count,
-    width: dims[by].width * dims.distanceFactor,
-  };
-  const moveOnX = {
-    width: dims[by].width * count,
-    height: dims[by].height * dims.distanceFactor,
-  };
-  if (direction === "next") {
-    return dims.flipped ? moveOnX : moveOnY;
-  } else {
-    return !dims.flipped ? moveOnX : moveOnY;
   }
 };
