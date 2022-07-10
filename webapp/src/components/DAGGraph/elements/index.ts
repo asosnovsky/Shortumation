@@ -10,127 +10,114 @@ import * as distance from "./distance";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import { AutomationActionData } from "types/automations";
 import { AutomationCondition } from "types/automations/conditions";
-import { pointApply, updateBBox } from "./math";
+import { CollectionNodeMaker } from "../nodes/CollectionNode";
+import { LastNode } from "./types";
 
 export const makeAutomationNodes = (
   automation: AutomationActionData,
   args: ElementMakerBaseProps
 ) => {
-  let state: ElementMakerOutput = {
+  let state: ElementMakerOutput = makeTriggerNodes(automation.trigger, {
+    ...args,
     elementData: {
       nodes: [],
       edges: [],
     },
-    bbox: [
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-    ],
-  };
-  console.log(args);
-  state = makeTriggerNodes(automation.trigger, {
-    ...args,
-    elementData: state.elementData,
-    position: state.bbox[0],
+    position: args.dims.position,
     nodeId: "trigger",
     nodeIndex: 0,
   });
 
-  console.log(state);
-  const conditionStartPoint = pointApply(...state.bbox, (a, b) => (a + b) / 2);
-  if (args.dims.flipped) {
-    conditionStartPoint.y += args.dims.node.height * args.dims.distanceFactor;
-  } else {
-    conditionStartPoint.x += args.dims.node.width * args.dims.distanceFactor;
-  }
-
   const condOut = makeConditionNodes(automation.condition, {
     ...args,
     elementData: state.elementData,
-    position: pointApply(...state.bbox, (a, b) => (a + b) / 2),
+    position: {
+      x:
+        state.lastNode.pos.x +
+        args.dims.trigger.width * args.dims.distanceFactor,
+      y:
+        state.lastNode.pos.y +
+        (args.dims.trigger.height - args.dims.condition.height) / 2,
+    },
     nodeId: "condition",
-    nodeIndex: 0,
+    nodeIndex: 1,
+    lastNodeId: state.lastNode.nodeId,
   });
-
-  console.log(condOut);
 
   return condOut.elementData;
 };
 
 export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
   nodes,
-  {
-    elementData,
-    dims,
-    namer,
-    openModal,
-    stateUpdater,
-    nodeId,
-    nodeIndex,
-    position,
-  }
+  { elementData, dims, namer, openModal, stateUpdater, nodeId, position }
 ) => {
-  let bbox: Bbox = [position, position];
-  nodes.forEach((node, index) => {
-    const element = SequenceNodeMaker.makeElement(
-      {
-        id: `${nodeId}-${nodeIndex}-${index}`,
-        position: distance.moveAlong("node", position, index, dims),
-      },
-      dims,
-      {
-        color: "red",
+  elementData.nodes.push(
+    CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
+      ...dims.trigger,
+      color: "red",
+      onAddNode: () => stateUpdater.basic.trigger.addNode(),
+      nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
         label: getDescriptionFromAutomationNode(node, namer, true),
-        onSetEnabled: () => stateUpdater.basic.trigger.setEnabled(index),
-        onEditClick: () =>
-          openModal({
-            allowedTypes: ["trigger"],
-            node: node,
-            update: (n) => stateUpdater.basic.trigger.updateNode(n, index),
-          }),
-      }
-    );
-    elementData.nodes.push(element);
-    bbox = updateBBox(bbox, element.position, dims.node);
-  });
-
+        ...stateUpdater.createNodeActions("trigger", index, {
+          flipped: dims.flipped,
+        }),
+      })),
+    })
+  );
   return {
     elementData,
-    bbox,
+    lastNode: {
+      nodeId,
+      pos: elementData.nodes[elementData.nodes.length - 1].position,
+      size: dims.trigger,
+    },
   };
 };
 
 export const makeConditionNodes: ElementMaker<AutomationCondition> = (
   nodes,
-  { elementData, nodeId, nodeIndex, position, dims, namer }
+  {
+    elementData,
+    nodeId,
+    stateUpdater,
+    position,
+    dims,
+    namer,
+    openModal,
+    lastNodeId,
+  }
 ) => {
-  let bbox: Bbox = [position, position];
-
-  nodes.forEach((node, index) => {
-    const element = SequenceNodeMaker.makeElement(
-      {
-        id: `${nodeId}-${nodeIndex}-${index}`,
-        position: distance.moveAlong(
-          "condition",
-          position,
-          index,
-          dims,
-          "under"
-        ),
-      },
-      dims,
-      {
-        color: "blue",
+  elementData.nodes.push(
+    CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
+      ...dims.condition,
+      color: "blue",
+      hasInput: !!lastNodeId,
+      onAddNode: stateUpdater.basic.condition.addNode,
+      nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
         label: getDescriptionFromAutomationNode(node, namer, true),
-      }
-    );
-    elementData.nodes.push(element);
-    bbox = updateBBox(bbox, element.position, dims.condition);
-  });
-
+        ...stateUpdater.createNodeActions("condition", index, {
+          flipped: dims.flipped,
+        }),
+      })),
+    })
+  );
+  if (lastNodeId) {
+    elementData.edges.push({
+      source: lastNodeId,
+      target: elementData.nodes[elementData.nodes.length - 1].id,
+      id: `${lastNodeId}->${
+        elementData.nodes[elementData.nodes.length - 1].id
+      }`,
+    });
+  }
   return {
     elementData,
-    bbox,
+    lastNode: {
+      nodeId,
+      pos: elementData.nodes[elementData.nodes.length - 1].position,
+      size: dims.trigger,
+    },
   };
 };

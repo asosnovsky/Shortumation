@@ -2,19 +2,21 @@ import { DAGDims } from "./types";
 
 export const NODE_WIDTH = 170 as const;
 export const NODE_HEIGHT = 70 as const;
-export const CONDITION_HEIGHT = 90 as const;
-export const CONDITION_WIDTH = 200 as const;
 export const CIRCLE_SIZE = 40 as const;
 export const DISTANCE_FACTOR = 1.25 as const;
 
-export const DEFAULT_DIMS = {
+export const DEFAULT_DIMS: DAGDims = {
+  trigger: {
+    height: NODE_HEIGHT * 3,
+    width: NODE_WIDTH * 4.5,
+  },
   node: {
     height: NODE_HEIGHT,
     width: NODE_WIDTH,
   },
   condition: {
-    height: CONDITION_HEIGHT,
-    width: CONDITION_WIDTH,
+    height: NODE_HEIGHT * 3,
+    width: NODE_WIDTH * 4.5,
   },
   circle: {
     height: CIRCLE_SIZE,
@@ -26,4 +28,4 @@ export const DEFAULT_DIMS = {
     y: 50,
   },
   flipped: true,
-} as DAGDims;
+};

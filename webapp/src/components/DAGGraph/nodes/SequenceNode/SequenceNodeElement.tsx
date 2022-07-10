@@ -16,6 +16,7 @@ import InputBoolean from "components/Inputs/InputBoolean";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { SpeedDial } from "components/SpeedDial";
 import { SequenceNodeElementProps } from "./types";
+import { useSequenceNodeColor } from "./util";
 
 export const SequenceNodeElement: FC<
   PropsWithChildren<SequenceNodeElementProps>
@@ -36,16 +37,7 @@ export const SequenceNodeElement: FC<
   const theme = useTheme();
   const confirm = useConfirm();
   const snackbr = useSnackbar();
-  const nodeColor =
-    color === "blue"
-      ? theme.palette.info.main
-      : color === "green"
-      ? theme.palette.success.light
-      : color === "lblue"
-      ? theme.palette.info.light
-      : color === "red"
-      ? theme.palette.error.dark
-      : "none";
+  const nodeColor = useSequenceNodeColor(color);
   return (
     <>
       <div

@@ -10,11 +10,11 @@ export const moveAlong = (
 ): XYPosition => {
   const moveOnY = {
     y: startPoint.y + dims[by].height * dims.distanceFactor * increment,
-    x: startPoint.x + dims[by].width,
+    x: startPoint.x,
   };
   const moveOnX = {
     x: startPoint.x + dims[by].width * dims.distanceFactor * increment,
-    y: startPoint.y + dims[by].height,
+    y: startPoint.y,
   };
   if (direction === "next") {
     return dims.flipped ? moveOnX : moveOnY;

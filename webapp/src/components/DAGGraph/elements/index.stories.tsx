@@ -90,8 +90,10 @@ Conditions.args = {
   automation: {
     trigger: [
       {
-        platform: "device",
-        device_id: "asdasdas",
+        platform: "zone",
+        zone: "zone.home",
+        event: "enter",
+        entity_id: "person.ari",
       },
     ],
     condition: [

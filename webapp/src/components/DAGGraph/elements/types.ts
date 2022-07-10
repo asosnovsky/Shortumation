@@ -34,10 +34,16 @@ export type ElementMakerProps = ElementMakerBaseProps & {
   nodeId: string;
   nodeIndex: number;
   position: XYPosition;
+  lastNodeId?: string;
+};
+export type LastNode = {
+  nodeId: string;
+  pos: XYPosition;
+  size: Size;
 };
 export type ElementMakerOutput = {
   elementData: ElementData;
-  bbox: Bbox;
+  lastNode: LastNode;
 };
 
 export type ElementMaker<A extends AutomationNode = AutomationNode> = (

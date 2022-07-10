@@ -4,6 +4,9 @@
     justify-content: center;
     align-items: center;
     cursor: default;
+    /* outline-width: 1px;
+    outline-style: dotted;
+    outline-color: white; */
 }
 
 .sequence-node--inner {

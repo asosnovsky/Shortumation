@@ -1,9 +1,12 @@
 import {
   AutomationActionData,
+  AutomationNodeTypes,
   AutomationSequenceNode,
 } from "types/automations";
 import { ModalState } from "../board/types";
+import { SequenceNodeActions } from "../nodes/SequenceNode/types";
 import { DAGUpdaterArgs } from "./types";
+import { mapAutoActionKeyToNodeType } from "./util";
 
 export const createBasicUpdater =
   <K extends keyof AutomationActionData, N extends AutomationActionData[K][0]>(
@@ -12,6 +15,9 @@ export const createBasicUpdater =
   ) =>
   (args: DAGUpdaterArgs<K>) => {
     return {
+      get defaultNode() {
+        return JSON.parse(JSON.stringify(defaultNode));
+      },
       setEnabled: (i: number) =>
         args[k].onUpdate([
           ...args[k].data.slice(0, i),
@@ -29,19 +35,39 @@ export const createBasicUpdater =
           ...args[k].data.slice(0, i),
           ...args[k].data.slice(i + 1),
         ]),
+
       addNode: () =>
-        args[k].onUpdate([
-          ...args[k].data,
-          JSON.parse(JSON.stringify(defaultNode)),
-        ]),
+        args.openModal({
+          allowedTypes: mapAutoActionKeyToNodeType(k),
+          saveBtnCreateText: true,
+          node: JSON.parse(JSON.stringify(defaultNode)),
+          update: (n) => args[k].onUpdate([...args[k].data, n]),
+        }),
+      onMove: (i: number, direction: "back" | "forward") => {
+        if (direction === "back" && i > 0) {
+          return args[k].onUpdate([
+            ...args[k].data.slice(0, i - 1),
+            args[k].data[i],
+            args[k].data[i - 1],
+            ...args[k].data.slice(i + 1),
+          ]);
+        } else if (direction === "forward" && i < args[k].data.length - 1) {
+          return args[k].onUpdate([
+            ...args[k].data.slice(0, i),
+            args[k].data[i + 1],
+            args[k].data[i],
+            ...args[k].data.slice(i + 2),
+          ]);
+        }
+      },
     };
   };
 
 export type DAGGraphUpdater = ReturnType<typeof createUpdater>;
 export const createUpdater = (
   args: DAGUpdaterArgs<"sequence" | "condition" | "trigger">
-) => ({
-  basic: {
+) => {
+  const basic = {
     sequence: createBasicUpdater("sequence", {
       device_id: "",
     })({
@@ -63,8 +89,59 @@ export const createUpdater = (
       condition: args.condition,
       openModal: args.openModal,
     } as any),
-  },
-});
+  };
+
+  return {
+    basic,
+    createNodeActions<K extends keyof AutomationActionData>(
+      k: K,
+      i: number,
+      flags: Partial<{
+        includeAdd: boolean;
+        flipped: boolean;
+      }>
+    ): Partial<SequenceNodeActions> {
+      // alias
+      const allowedTypes = mapAutoActionKeyToNodeType(k);
+      // build move
+      const onMove: SequenceNodeActions["onMove"] = {};
+      if (!flags.flipped) {
+        if (i > 0) {
+          onMove["left"] = () => basic[k].onMove(i, "back");
+        }
+        if (i < args[k].data.length - 1) {
+          onMove["right"] = () => basic[k].onMove(i, "forward");
+        }
+      } else {
+        if (i > 0) {
+          onMove["up"] = () => basic[k].onMove(i, "back");
+        }
+        if (i < args[k].data.length - 1) {
+          onMove["down"] = () => basic[k].onMove(i, "forward");
+        }
+      }
+      // build add
+      let onAddNode: (() => void) | undefined = undefined;
+      if (flags.includeAdd) {
+        onAddNode = basic[k].addNode;
+      }
+
+      return {
+        onEditClick: () =>
+          args.openModal({
+            allowedTypes,
+            node: args[k].data[i],
+            saveBtnCreateText: false,
+            update: (n) => basic[k].updateNode(n, i),
+          }),
+        onXClick: () => basic[k].deleteNode(i),
+        onSetEnabled: () => basic[k].setEnabled(i),
+        onAddNode,
+        onMove,
+      };
+    },
+  };
+};
 
 export const createUpdaterFromAutomationData = (
   openModal: (m: ModalState) => void,
