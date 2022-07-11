@@ -52,6 +52,9 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
             position={flipped ? Position.Top : Position.Left}
           />
         )}
+        <span className="collection-nodes--total">
+          {nodes.length} node{nodes.length !== 1 ? "s" : ""}
+        </span>
       </div>
     </div>
   );

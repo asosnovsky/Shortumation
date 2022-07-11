@@ -2,8 +2,7 @@ import React, { FC, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { DAGGraphBoard } from "components/DAGGraph/board";
-import { AutomationTrigger } from "types/automations/triggers";
-import { makeTriggerNodes, makeAutomationNodes } from ".";
+import { makeAutomationNodes } from "./index";
 import { useHA } from "haService";
 import { AutomationActionData } from "types/automations";
 import { createUpdaterFromAutomationData } from "../updater";
@@ -270,6 +269,100 @@ FullAuto.args = {
       {
         condition: "and",
         conditions: [],
+      },
+    ],
+  },
+};
+
+export const ChooseAuto = Template.bind({});
+ChooseAuto.args = {
+  ...ChooseAuto.args,
+  automation: {
+    condition: [],
+    trigger: [],
+    sequence: [
+      {
+        choose: [
+          {
+            conditions: [
+              {
+                condition: "state",
+                entity_id: "lights.bathroom",
+                state: "off",
+              },
+            ],
+            sequence: [
+              {
+                service: "light.turn_on",
+                target: {
+                  entity_id: "lights.bathroom",
+                },
+                data: {},
+              },
+              {
+                alias: "Turn off bedroom",
+                service: "light.turn_off",
+                target: {
+                  entity_id: "lights.bedroom",
+                },
+                data: {},
+              },
+            ],
+          },
+          {
+            conditions: [
+              {
+                condition: "state",
+                entity_id: "lights.bedroom",
+                state: "off",
+              },
+            ],
+            sequence: [
+              {
+                alias: "Turn on bedroom",
+                service: "light.turn_on",
+                target: {
+                  entity_id: "lights.bedroom",
+                },
+                data: {},
+              },
+              {
+                choose: [
+                  {
+                    conditions: [],
+                    sequence: [
+                      {
+                        choose: [],
+                        default: [],
+                      },
+                    ],
+                  },
+                ],
+                default: [
+                  {
+                    choose: [],
+                    default: [],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        default: [
+          {
+            service: "light.turn_off",
+            target: {
+              entity_id: "lights.bathroom",
+            },
+            data: {},
+          },
+        ],
+      },
+      {
+        service: "switch.turn_on",
+        target: {
+          entity_id: "switch.light_balcony",
+        },
       },
     ],
   },

@@ -17,6 +17,7 @@ export default {
     width: dgconst.NODE_WIDTH,
     label: "test",
     hasInput: true,
+    enabled: true,
   },
 } as ComponentMeta<typeof SequenceNode>;
 

@@ -35,11 +35,9 @@ export const SequenceNodeElement: FC<
   onSetEnabled,
   children,
 }) => {
-  const theme = useTheme();
   const confirm = useConfirm();
   const snackbr = useSnackbar();
   const nodeColor = useSequenceNodeColor(color);
-  console.log({ onAdd });
   return (
     <>
       <div
@@ -48,26 +46,15 @@ export const SequenceNodeElement: FC<
           flipped ? "flipped" : "",
           enabled ? "enabled" : "disabled",
         ].join(" ")}
-        style={{
-          height,
-          width,
-        }}
+        style={
+          {
+            "--sequence-node-height": height + "px",
+            "--sequence-node-width": width + "px",
+            "--sequence-node-color": nodeColor,
+          } as any
+        }
       >
-        <div
-          className="sequence-node--inner"
-          style={{
-            maxHeight: `calc(${height}px - 1em)`,
-            maxWidth: `calc(${width}px - 1em)`,
-            minWidth: Math.max(width / 2, height / 2),
-            borderBottomColor: theme.palette.grey[500],
-            borderLeftColor: theme.palette.grey[700],
-            borderRightColor: theme.palette.grey[700],
-            borderTopColor: nodeColor,
-            backgroundColor: enabled
-              ? theme.palette.background.default
-              : theme.palette.grey[600],
-          }}
-        >
+        <div className="sequence-node--inner">
           <SpeedDial
             icon={
               <SettingsOutlinedIcon className="sequence-node--actions-btn" />
@@ -131,22 +118,10 @@ export const SequenceNodeElement: FC<
             />
           )}
           {children}
-          <div
-            className="sequence-node--label"
-            style={{
-              maxHeight: `calc(${height}px - 1em)`,
-              maxWidth: `calc(${width}px - 1em)`,
-              minHeight: `1em`,
-            }}
-          >
+          <div className="sequence-node--label">
             {typeof label === "string" ? <span>{label}</span> : label}
           </div>
         </div>
-        {/* {onAddNode && (
-          <div className="sequence-node--midway-options">
-            <ButtonIcon icon={<Add />} onClick={onAddNode} />
-          </div>
-        )} */}
       </div>
     </>
   );

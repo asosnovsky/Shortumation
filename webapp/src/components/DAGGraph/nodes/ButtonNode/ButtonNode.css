@@ -1,0 +1,14 @@
+.button-node {
+    max-width: var(--button-width);
+    max-height: var(--button-height);
+    min-width: var(--button-width);
+    min-height: var(--button-height);
+    width: var(--button-width);
+    height: var(--button-height);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* outline: 1px dashed white; */
+}

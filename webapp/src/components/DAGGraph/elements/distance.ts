@@ -5,7 +5,8 @@ export const moveAlong = (
   by: keyof DAGEntities,
   startPoint: XYPosition,
   increment: number,
-  dims: DAGDims
+  dims: DAGDims,
+  reversed: boolean = false
 ): XYPosition => {
   const moveOnY = {
     y: startPoint.y + dims[by].height * dims.distanceFactor.node * increment,
@@ -15,6 +16,9 @@ export const moveAlong = (
     x: startPoint.x + dims[by].width * dims.distanceFactor.node * increment,
     y: startPoint.y,
   };
+  if (reversed) {
+    return dims.flipped ? moveOnX : moveOnY;
+  }
   return !dims.flipped ? moveOnX : moveOnY;
 };
 

@@ -2,7 +2,11 @@ import "./index.css";
 
 import { FC } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import ReactFlow, { Controls } from "react-flow-renderer";
+import ReactFlow, {
+  Controls,
+  ReactFlowProvider,
+  useViewport,
+} from "react-flow-renderer";
 
 import { NodeEditor } from "components/NodeEditor";
 import { Modal } from "components/Modal";
@@ -10,11 +14,20 @@ import { Modal } from "components/Modal";
 import { nodeTypes } from "../nodes";
 import { DAGGraphBoardProps } from "./types";
 
-export const DAGGraphBoard: FC<DAGGraphBoardProps> = ({
+export const DAGGraphBoard: FC<DAGGraphBoardProps> = (props) => {
+  return (
+    <ReactFlowProvider>
+      <DAGGraphBoardInner {...props} />
+    </ReactFlowProvider>
+  );
+};
+
+export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
   modalState,
   state,
   closeModal,
 }) => {
+  const { zoom } = useViewport();
   // render unready or errored states
   if (!state.ready) {
     return (
@@ -44,7 +57,20 @@ export const DAGGraphBoard: FC<DAGGraphBoardProps> = ({
       />
     );
   }
-
+  // this hack avoids breakage on when zooming
+  const elements = {
+    nodes: state.data.elements.nodes.map((n) => ({
+      ...n,
+      id: `${zoom}-${n.id}`,
+    })),
+    edges: state.data.elements.edges.map((n) => ({
+      ...n,
+      id: `${zoom}-${n.id}`,
+      source: `${zoom}-${n.source}`,
+      target: `${zoom}-${n.target}`,
+    })),
+  };
+  console.log(elements);
   // main render
   return (
     <>
@@ -56,7 +82,7 @@ export const DAGGraphBoard: FC<DAGGraphBoardProps> = ({
         onlyRenderVisibleElements
         nodesConnectable={false}
         nodesDraggable={false}
-        {...state.data.elements}
+        {...elements}
       >
         <Controls />
       </ReactFlow>
