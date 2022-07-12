@@ -1,6 +1,7 @@
 import { Size } from "components/DAGGraph/elements/types";
 import { ReactNode } from "react";
 import { SequenceNodeActions, SequenceNodeColor } from "../SequenceNode/types";
+import { AutomationActionData } from "types/automations";
 
 export type CollectionNodeChildProps = Partial<SequenceNodeActions> & {
   enabled: boolean;
@@ -9,11 +10,12 @@ export type CollectionNodeChildProps = Partial<SequenceNodeActions> & {
 export type CollectionNodeDataProps = Size & {
   nodes: CollectionNodeChildProps[];
   onAddNode: () => void;
-  color: SequenceNodeColor;
   hasInput?: boolean;
+  collectionType: keyof AutomationActionData;
 };
 
 export type CollectionNodeProps = CollectionNodeDataProps & {
   sequenceNode: Size;
   flipped: boolean;
+  color: SequenceNodeColor;
 };

@@ -7,6 +7,7 @@ import { SequenceNodeElement } from "../SequenceNode/SequenceNodeElement";
 import { CollectionNodeProps } from "./types";
 import { Handle, Position } from "react-flow-renderer";
 import { useSequenceNodeColor } from "../SequenceNode/util";
+import { prettyName } from "utils/formatting";
 
 export const CollectionNode: FC<CollectionNodeProps> = ({
   onAddNode,
@@ -17,6 +18,7 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
   flipped,
   color,
   hasInput = false,
+  collectionType,
 }) => {
   const nodeColor = useSequenceNodeColor(color);
 
@@ -32,22 +34,29 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
       }
     >
       <div className="collection-nodes">
-        {nodes.map((n, i) => (
-          <SequenceNodeElement
-            {...n}
-            {...sequenceNode}
-            key={i}
-            color={color}
-            flipped={flipped}
-          />
-        ))}
-        <ButtonIcon icon={<Add />} onClick={onAddNode} />
+        <span className="collection-nodes--title">
+          {prettyName(collectionType)}s
+        </span>
+        <div className="collection-nodes--inner">
+          {nodes.map((n, i) => (
+            <SequenceNodeElement
+              {...n}
+              {...sequenceNode}
+              key={i}
+              color={color}
+              flipped={flipped}
+            />
+          ))}
+        </div>
+        <ButtonIcon className="add" icon={<Add />} onClick={onAddNode} />
         <Handle
+          key="source"
           type="source"
           position={flipped ? Position.Bottom : Position.Right}
         />
         {hasInput && (
           <Handle
+            key="target"
             type="target"
             position={flipped ? Position.Top : Position.Left}
           />

@@ -97,7 +97,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
   state.addNode(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.trigger,
-      color: "red",
+      collectionType: "trigger",
       onAddNode: () => stateUpdater.basic.trigger.addNode(null),
       nodes: nodes.map((node, index) => ({
         enabled: node.enabled ?? true,
@@ -117,7 +117,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
   state.addNode(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.condition,
-      color: "blue",
+      collectionType: "condition",
       hasInput: !!lastNodeId,
       onAddNode: () => stateUpdater.basic.condition.addNode(null),
       nodes: nodes.map((node, index) => ({
@@ -127,6 +127,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
       })),
     })
   );
+  console.log("pre", { lastNodeId, stateLast: state.lastNodeId });
   if (lastNodeId && state.lastNodeId) {
     state.addEdge(lastNodeId, state.lastNodeId, true);
   }
@@ -227,25 +228,19 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
       ) => {
         let pos = offsetPos;
         let lastNodeId = args.lastNodeId;
-        // if (condition !== null) {
-        //   const conditionState = makeConditionNodes(condition, {
-        //     ...args,
-        //     position: pos,
-        //     lastNodeId,
-        //     nodeIndex: index,
-        //     nodeId: `${args.nodeId}-choose-${index}-condition`,
-        //   });
-        //   // pos.y = conditionState.bbox[1].y;
-        //   state.extend(conditionState);
-        //   if (lastNodeId && conditionState.data.nodes.length > 0) {
-        //     state.addEdge(lastNodeId, conditionState.data.nodes[0].id, true);
-        //   }
-        //   lastNodeId = conditionState.lastNodeId ?? lastNodeId;
-        //   pos = {
-        //     y: conditionState.bbox[1].y,
-        //     x: pos.x,
-        //   };
-        // }
+        if (condition !== null) {
+          const conditionState = makeConditionNodes(condition, {
+            ...args,
+            position: pos,
+            lastNodeId,
+            nodeIndex: index,
+            nodeId: `${args.nodeId}-choose-${nodeIndex}-${index}-condition`,
+          });
+          conditionState.data.edges[0].label = `Condition #${index}`;
+          state.extend(conditionState);
+          pos = distance.moveFromTo("condition", "node", pos, args.dims);
+          lastNodeId = conditionState.lastNodeId;
+        }
         const output = makeSequenceNodes(sequence, {
           ...args,
           position: pos,
@@ -254,21 +249,19 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
           nodeId: `${args.nodeId}-choose-${index}-sequence`,
         });
         if (lastNodeId && output.data.nodes.length > 0) {
-          state.addEdge(lastNodeId, output.data.nodes[0].id, true);
+          state.addEdge(
+            lastNodeId,
+            output.data.nodes[0].id,
+            true,
+            condition === null ? "else" : undefined
+          );
         }
-        offsetPos = args.dims.flipped
-          ? {
-              x:
-                output.bbox[1].x +
-                (args.dims.distanceFactor.node - 1) * args.dims.node.width,
-              y: offsetPos.y,
-            }
-          : {
-              y:
-                output.bbox[1].y +
-                (args.dims.distanceFactor.node - 1) * args.dims.node.height,
-              x: offsetPos.x,
-            };
+        offsetPos = distance.moveAlongRelativeTo(
+          offsetPos,
+          output.bbox[1],
+          args.dims,
+          condition === null ? "node" : "condition"
+        );
         state.extend(output);
       };
 

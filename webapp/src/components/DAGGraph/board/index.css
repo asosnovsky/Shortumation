@@ -12,3 +12,14 @@
     left: 50%;
     top: 50%;
 }
+
+
+.dag-graphboard rect.react-flow__edge-textbg {
+    fill: var(--mui-background-paper);
+    stroke: var(--mui-text-primary);
+    stroke-width: 0.25px;
+}
+
+.dag-graphboard text.react-flow__edge-text {
+    fill: var(--mui-text-primary);
+}

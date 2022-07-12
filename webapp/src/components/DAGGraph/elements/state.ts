@@ -49,11 +49,17 @@ export class DAGElementsState {
     return node;
   }
 
-  public addEdge(from: string, to: string, animated: boolean = false) {
+  public addEdge(
+    from: string,
+    to: string,
+    animated: boolean = false,
+    label: string | undefined = undefined
+  ) {
     this.data.edges.push({
       id: `${from}->${to}`,
       source: from,
       target: to,
+      label,
       animated,
     });
   }

@@ -7,7 +7,7 @@ export const CIRCLE_SIZE = 40 as const;
 export const DEFAULT_DIMS: DAGDims = {
   trigger: {
     height: NODE_HEIGHT * 3,
-    width: NODE_WIDTH * 4.5,
+    width: NODE_WIDTH * 1.5,
   },
   node: {
     height: NODE_HEIGHT,
@@ -15,7 +15,7 @@ export const DEFAULT_DIMS: DAGDims = {
   },
   condition: {
     height: NODE_HEIGHT * 3,
-    width: NODE_WIDTH * 4.5,
+    width: NODE_WIDTH * 1.5,
   },
   circle: {
     height: CIRCLE_SIZE,

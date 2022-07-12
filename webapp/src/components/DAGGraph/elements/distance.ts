@@ -22,6 +22,46 @@ export const moveAlong = (
   return !dims.flipped ? moveOnX : moveOnY;
 };
 
+export const moveAlongOnce = (
+  by: keyof DAGEntities,
+  startPoint: XYPosition,
+  dims: DAGDims,
+  reversed: boolean = false
+): XYPosition => {
+  const moveOnY = {
+    y: startPoint.y + dims[by].height * (dims.distanceFactor.node - 1),
+    x: startPoint.x,
+  };
+  const moveOnX = {
+    x: startPoint.x + dims[by].width * (dims.distanceFactor.node - 1),
+    y: startPoint.y,
+  };
+  if (reversed) {
+    return dims.flipped ? moveOnX : moveOnY;
+  }
+  return !dims.flipped ? moveOnX : moveOnY;
+};
+
+export const moveAlongRelativeTo = (
+  offsetPos: XYPosition,
+  relatedPos: XYPosition,
+  dims: DAGDims,
+  incrementBy: keyof DAGEntities = "condition"
+) =>
+  dims.flipped
+    ? {
+        x:
+          relatedPos.x +
+          (dims.distanceFactor.node - 1) * dims[incrementBy].width,
+        y: offsetPos.y,
+      }
+    : {
+        y:
+          relatedPos.y +
+          (dims.distanceFactor.node - 1) * dims[incrementBy].height,
+        x: offsetPos.x,
+      };
+
 export const moveFromTo = (
   from: keyof DAGEntities,
   to: keyof DAGEntities,

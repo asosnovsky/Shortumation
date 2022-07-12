@@ -1,7 +1,10 @@
 .collection-nodes--wrap {
-    --padding: 1.5em;
-    --child-height: calc(var(--node-height) - 2*var(--padding));
-    --child-width: calc(var(--node-width) - 2*var(--padding));
+    --padding-left: 1.5em;
+    --padding-right: 3em;
+    --padding-top: 2.25em;
+    --padding-bottom: 0.25em;
+    --child-height: calc(var(--node-height) - var(--padding-top) - var(--padding-bottom));
+    --child-width: calc(var(--node-width) - var(--padding-left) - var(--padding-right));
 
     min-width: var(--node-width);
     min-height: var(--node-height);
@@ -18,20 +21,34 @@
 
 .collection-nodes {
     position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    gap: 0em 1em;
-    max-width: var(--child-width);
-    max-height: var(--child-height);
 
     border-color: var(--node-color);
     border-style: solid;
     border-width: 1px;
     border-radius: 10px;
+
+    max-width: max-content;
+    max-height: max-content;
+    padding-right: var(--padding-right);
+}
+
+.collection-nodes--inner {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0 1em;
+    max-width: var(--child-width);
+    max-height: var(--child-height);
+    min-height: calc(var(--child-height) / 4);
+    min-width: var(--child-width);
+
+    padding-left: var(--padding-left);
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+
     overflow: auto;
-    padding: var(--padding);
 }
 
 .collection-nodes .react-flow__handle {
@@ -43,4 +60,16 @@
     bottom: 0.25em;
     right: 0.25em;
     font-size: 0.5em;
+}
+
+.collection-nodes .add {
+    position: absolute;
+    bottom: calc(50% - var(--padding-bottom));
+    right: 0.25em;
+}
+
+.collection-nodes--title {
+    position: absolute;
+    top: 0.5em;
+    left: calc(var(--child-width)/2);
 }
