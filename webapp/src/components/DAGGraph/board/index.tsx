@@ -58,19 +58,19 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
     );
   }
   // this hack avoids breakage on when zooming
+  const prefix = Math.floor((((zoom - 0.5) / (2 - 0.5)) * 10) / 3);
   const elements = {
     nodes: state.data.elements.nodes.map((n) => ({
       ...n,
-      id: `${zoom}-${n.id}`,
+      id: `${prefix}-${n.id}`,
     })),
     edges: state.data.elements.edges.map((n) => ({
       ...n,
-      id: `${zoom}-${n.id}`,
-      source: `${zoom}-${n.source}`,
-      target: `${zoom}-${n.target}`,
+      id: `${prefix}-${n.id}`,
+      source: `${prefix}-${n.source}`,
+      target: `${prefix}-${n.target}`,
     })),
   };
-  console.log(elements);
   // main render
   return (
     <>
