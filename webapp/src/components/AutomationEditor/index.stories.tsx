@@ -1,100 +1,99 @@
 import React from "react";
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { AutomationEditor } from './index';
-import { useState } from 'react';
-import * as dgconst from 'components/DAGFlow/constants';
+import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { AutomationEditor } from "./index";
+import { useState } from "react";
 import { Page } from "components/Page";
 import { makeTagDB } from "components/AutomationList/TagDB";
-
+import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
 
 export default {
-  title: 'App/AutomationList/Editor',
+  title: "App/AutomationList/Editor",
   component: AutomationEditor,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
+  parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
-    dims: dgconst.DEFAULT_DIMS,
-  }
-} as ComponentMeta<typeof AutomationEditor>
+    dims: DEFAULT_DIMS,
+  },
+} as ComponentMeta<typeof AutomationEditor>;
 
-const Template: ComponentStory<typeof AutomationEditor> = args => {
-  const [state, setState] = useState(args.automation)
-  return <Page>
-    <AutomationEditor
-      {...args}
-      tagDB={makeTagDB(state ? [state] : [])}
-      automation={state}
-      onUpdate={s => {
-        window.setTimeout(() => setState(s), 3000)
-      }}
-    />
-  </Page>
-}
+const Template: ComponentStory<typeof AutomationEditor> = (args) => {
+  const [state, setState] = useState(args.automation);
+  return (
+    <Page>
+      <AutomationEditor
+        {...args}
+        tagDB={makeTagDB(state ? [state] : [])}
+        automation={state}
+        onUpdate={(s) => {
+          window.setTimeout(() => setState(s), 3000);
+        }}
+      />
+    </Page>
+  );
+};
 
 export const Loading = Template.bind({});
 
-
-export const Simple = Template.bind({})
+export const Simple = Template.bind({});
 Simple.args = {
   ...Simple.args,
   automation: {
     condition: [],
     tags: {
-      "Room": "Bathroom",
-      "For": "Toliet",
-      "Type": "Smell",
-      "Use": "Flushing"
+      Room: "Bathroom",
+      For: "Toliet",
+      Type: "Smell",
+      Use: "Flushing",
     },
     metadata: {
       id: "random",
       alias: "Random",
       description: "Example Metadata",
       trigger_variables: {
-        'wowo': '!'
+        wowo: "!",
       },
-      mode: 'single',
+      mode: "single",
     },
     trigger: [
       {
-        "platform": "numeric_state",
-        "entity_id": "test",
+        platform: "numeric_state",
+        entity_id: "test",
       },
       {
-        "platform": "homeassistant",
-        "event": "start",
-      }
+        platform: "homeassistant",
+        event: "start",
+      },
     ],
     sequence: [
       {
-        condition: 'and',
+        condition: "and",
         conditions: [
           {
-            condition: 'numeric_state',
-            entity_id: 'sensor.temperature_kitchen',
-            below: '15',
+            condition: "numeric_state",
+            entity_id: "sensor.temperature_kitchen",
+            below: "15",
           },
           {
-            condition: 'template',
-            value_template: 'states(switch.kitchen_light) == "on"'
-          }
-        ]
+            condition: "template",
+            value_template: 'states(switch.kitchen_light) == "on"',
+          },
+        ],
       },
       {
         alias: "Start Music In Kitchen",
-        service: 'media_player.play_media',
+        service: "media_player.play_media",
         target: {
-          entity_id: "media_player.kitchen_dot"
+          entity_id: "media_player.kitchen_dot",
         },
         data: {
           media_content_id: "Good Morning",
           media_content_type: "SPOTIFY",
-        }
-      }
-    ]
-  }
-}
+        },
+      },
+    ],
+  },
+};
 
-
-export const EmptyStart = Template.bind({})
+export const EmptyStart = Template.bind({});
 EmptyStart.args = {
   ...EmptyStart.args,
   automation: {
@@ -105,31 +104,28 @@ EmptyStart.args = {
       alias: "Random",
       description: "Example Metadata",
       trigger_variables: {
-        'wowo': '!'
+        wowo: "!",
       },
-      mode: 'single',
+      mode: "single",
     },
-    trigger: [
-    ],
-    sequence: []
-  }
-}
+    trigger: [],
+    sequence: [],
+  },
+};
 
-export const BadAutomationInvalidMetadata = Template.bind({})
+export const BadAutomationInvalidMetadata = Template.bind({});
 BadAutomationInvalidMetadata.args = {
   ...BadAutomationInvalidMetadata.args,
   automation: {
     condition: [],
     tags: {},
-    metadata: {
-    } as any,
-    trigger: [
-    ],
-    sequence: []
-  }
-}
+    metadata: {} as any,
+    trigger: [],
+    sequence: [],
+  },
+};
 
-export const BadAutomationInvalidTriggers = Template.bind({})
+export const BadAutomationInvalidTriggers = Template.bind({});
 BadAutomationInvalidTriggers.args = {
   ...BadAutomationInvalidTriggers.args,
   automation: {
@@ -140,18 +136,16 @@ BadAutomationInvalidTriggers.args = {
       alias: "Random",
       description: "Example Metadata",
       trigger_variables: {
-        'wowo': '!'
+        wowo: "!",
       },
-      mode: 'single',
+      mode: "single",
     },
-    trigger: [
-      "haha I am a string"
-    ] as any,
-    sequence: []
-  }
-}
+    trigger: ["haha I am a string"] as any,
+    sequence: [],
+  },
+};
 
-export const BadAutomationInvalidSequence = Template.bind({})
+export const BadAutomationInvalidSequence = Template.bind({});
 BadAutomationInvalidSequence.args = {
   ...BadAutomationInvalidSequence.args,
   automation: {
@@ -162,15 +156,15 @@ BadAutomationInvalidSequence.args = {
       alias: "Bad Choose Sequence",
       description: "Example Metadata",
       trigger_variables: {
-        'wowo': '!'
+        wowo: "!",
       },
-      mode: 'single',
+      mode: "single",
     },
     trigger: [],
     sequence: [
       {
-        choose: {}
-      }
-    ] as any
-  }
-}
+        choose: {},
+      },
+    ] as any,
+  },
+};

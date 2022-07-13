@@ -7,8 +7,6 @@ import { AutoInfoBox } from "./AutoInfoBox";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { Button } from "components/Inputs/Button";
 import { useAutomatioEditorState, EditorData } from "./state";
-import { SafeDAGAutomationFlow } from "components/DAGFlow/safe";
-import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 import { MiniFailure } from "types/validators/helper";
 import InputYaml from "components/Inputs/InputYaml";
 import { TagDB } from "components/AutomationList/TagDB";
@@ -16,10 +14,12 @@ import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ArrowBack } from "@mui/icons-material";
 import { useCookies } from "react-cookie";
+import { DAGDims } from "components/DAGGraph/elements/types";
+import { DAGAutomationGraph } from "components/DAGGraph";
 
 interface Props {
   automation?: AutomationData;
-  dims: DAGAutomationFlowDims;
+  dims: DAGDims;
   onUpdate: (auto: AutomationData) => void;
   tagDB: TagDB;
 }
@@ -112,18 +112,14 @@ export const AutomationEditor: FC<Props> = ({
             Save <CheckMarkIcon color="#bf4" />
           </Button>
         </div>
-        <SafeDAGAutomationFlow
-          className="automation-editor--flow-wrapper--flow"
+        <DAGAutomationGraph
           sequence={state.data.sequence}
           trigger={state.data.trigger}
           condition={state.data.condition}
           onSequenceUpdate={updateSequence}
           onTriggerUpdate={updateTrigger}
           onConditionUpdate={updateCondition}
-          dims={{
-            ...dims,
-            flipped,
-          }}
+          isFlipped={flipped}
         />
       </div>
     </div>

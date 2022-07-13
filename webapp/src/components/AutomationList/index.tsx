@@ -7,7 +7,6 @@ import { defaultAutomation } from "utils/defaults";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { ApiService } from "apiService/core";
 import { AutomationListBox } from "./AutomationListBox";
-import { DAGAutomationFlowDims } from "components/DAGFlow/types";
 import useWindowSize from "utils/useWindowSize";
 import { makeTagDB } from "./TagDB";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -16,13 +15,14 @@ import { useCookies } from "react-cookie";
 import { useHA } from "haService";
 import { ArrowBack } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
+import { DAGDims } from "components/DAGGraph/elements/types";
 
 interface AutomationListParams {
   automations: AutomationData[];
   onUpdate: (i: number, auto: AutomationData) => void;
   onAdd: (auto: AutomationData) => void;
   onRemove: (i: number) => void;
-  dims: DAGAutomationFlowDims;
+  dims: DAGDims;
   children?: ReactNode;
 }
 
@@ -134,7 +134,7 @@ export const AutomationList: FC<AutomationListParams> = ({
 };
 
 interface ConnectedAutomationListParams {
-  dims: DAGAutomationFlowDims;
+  dims: DAGDims;
   api: ApiService;
 }
 export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({

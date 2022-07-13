@@ -46,11 +46,11 @@
     padding: 0.25em;
 }
 
-.automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--flow {
+.automation-editor--flow-wrapper.changed>.dag-graphboard {
     border-color: var(--mui-success-light);
 }
 
-.automation-editor--flow-wrapper--flow {
+.dag-graphboard {
     flex: 1;
     border: 1px solid var(--mui-grey-700);
     margin: 0 0 0.5em 0;

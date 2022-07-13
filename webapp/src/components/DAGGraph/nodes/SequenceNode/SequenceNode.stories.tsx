@@ -1,6 +1,5 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import * as dgconst from "components/DAGFlow/constants";
 import { Page } from "components/Page";
 import { SequenceNode } from "./SequenceNode";
 import { DAGGraphBoard } from "components/DAGGraph/board";
@@ -12,9 +11,8 @@ export default {
   component: SequenceNode,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
+    ...DEFAULT_DIMS.node,
     color: "lblue",
-    height: dgconst.NODE_HEIGHT,
-    width: dgconst.NODE_WIDTH,
     label: "test",
     hasInput: true,
     enabled: true,
@@ -67,8 +65,16 @@ export const Colors: ComponentStory<typeof SequenceNode> = (args) => {
                   {
                     id: color,
                     position: {
-                      x: 50 + dgconst.NODE_HEIGHT * dgconst.DISTANCE_FACTOR * i,
-                      y: 50 + dgconst.NODE_HEIGHT * dgconst.DISTANCE_FACTOR * i,
+                      x:
+                        50 +
+                        DEFAULT_DIMS.node.height *
+                          DEFAULT_DIMS.distanceFactor.node *
+                          i,
+                      y:
+                        50 +
+                        DEFAULT_DIMS.node.height *
+                          DEFAULT_DIMS.distanceFactor.node *
+                          i,
                     },
                   },
                   DEFAULT_DIMS,
