@@ -2,7 +2,7 @@ import { DAGAutomationFlowNode } from "../nodes";
 import { addSize, pointApply } from "./math";
 import { Bbox, ElementData, LastNode } from "./types";
 
-export class DAGElementsState {
+export class DAGElementsOutputState {
   public data: ElementData = {
     nodes: [],
     edges: [],
@@ -13,7 +13,10 @@ export class DAGElementsState {
     { x: 0, y: 0 },
   ];
 
-  public extend(other: DAGElementsState, ignoreLastNode: boolean = false) {
+  public extend(
+    other: DAGElementsOutputState,
+    ignoreLastNode: boolean = false
+  ) {
     this.data.nodes = this.data.nodes.concat(other.data.nodes);
     this.data.edges = this.data.edges.concat(other.data.edges);
     this.bbox[0] = pointApply(this.bbox[0], other.bbox[0], Math.min);

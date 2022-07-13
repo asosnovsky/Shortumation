@@ -16,7 +16,7 @@ import { AutomationCondition } from "types/automations/conditions";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
 import { ChooseAction } from "types/automations/actions";
 import { XYPosition } from "react-flow-renderer";
-import { DAGElementsState } from "./state";
+import { DAGElementsOutputState } from "./outputState";
 import { SequenceNodeMaker } from "../nodes/SequenceNode";
 import { getNodeType } from "utils/automations";
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
@@ -28,21 +28,8 @@ export const makeAutomationNodes = (
 ) => {
   const dims: DAGDims = {
     ...args.dims,
-    // think of a better to do this
-    // condition: args.dims.flipped
-    //   ? args.dims.condition
-    //   : {
-    //       height: args.dims.condition.width,
-    //       width: args.dims.condition.height,
-    //     },
-    // trigger: args.dims.flipped
-    //   ? args.dims.trigger
-    //   : {
-    //       height: args.dims.trigger.width,
-    //       width: args.dims.trigger.height,
-    //     },
   };
-  const state = new DAGElementsState();
+  const state = new DAGElementsOutputState();
   state.extend(
     makeTriggerNodes(automation.trigger, {
       ...args,
@@ -92,7 +79,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
   nodes,
   { dims, namer, stateUpdater, nodeId, position }
 ) => {
-  const state = new DAGElementsState();
+  const state = new DAGElementsOutputState();
   state.addNode(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.trigger,
@@ -112,7 +99,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
   nodes,
   { nodeId, stateUpdater, position, dims, namer, lastNodeId }
 ) => {
-  const state = new DAGElementsState();
+  const state = new DAGElementsOutputState();
   state.addNode(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.condition,
@@ -137,7 +124,7 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   nodes,
   args
 ) => {
-  const state = new DAGElementsState();
+  const state = new DAGElementsOutputState();
   const { lastNodeId, nodeId, position, dims, namer, stateUpdater } = args;
   nodes.forEach((node, nodeIndex) => {
     const element = state.addNode(
@@ -202,7 +189,7 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
 };
 
 export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
-  const state = new DAGElementsState();
+  const state = new DAGElementsOutputState();
   if (nodes.length !== 1) {
     throw new Error("makeChooseNodes only access a list of 1");
   }

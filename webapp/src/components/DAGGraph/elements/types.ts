@@ -4,7 +4,7 @@ import { Namer } from "utils/formatting";
 import { ModalState } from "../board/types";
 import { DAGAutomationFlowNode } from "../nodes";
 import { DAGGraphUpdater } from "../updater";
-import { DAGElementsState } from "./state";
+import { DAGElementsOutputState } from "./outputState";
 
 export type Bbox = [XYPosition, XYPosition];
 export type Size = { height: number; width: number };
@@ -47,4 +47,4 @@ export type LastNode = {
 export type ElementMaker<A extends AutomationNode = AutomationNode> = (
   haNodes: A[],
   args: ElementMakerProps
-) => DAGElementsState;
+) => DAGElementsOutputState;
