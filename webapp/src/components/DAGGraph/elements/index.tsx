@@ -19,7 +19,6 @@ import { XYPosition } from "react-flow-renderer";
 import { DAGElementsState } from "./state";
 import { SequenceNodeMaker } from "../nodes/SequenceNode";
 import { getNodeType } from "utils/automations";
-import { pointApply } from "./math";
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { AddIcon } from "components/Icons";
 
@@ -204,76 +203,73 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
 
 export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
   const state = new DAGElementsState();
-
-  nodes.forEach((node, nodeIndex) => {
-    if (node.enabled ?? true) {
-      // offset position
-      let offsetPos: XYPosition = {
-        x:
-          args.position.x +
-          args.dims.distanceFactor.node *
-            args.dims.node.width *
-            (nodeIndex + 1),
-        y:
-          args.position.y +
-          args.dims.distanceFactor.node *
-            args.dims.node.height *
-            (nodeIndex + 1),
-      };
-      // functions
-      const processSequence = (
-        sequence: AutomationSequenceNode[],
-        index: number,
-        condition: AutomationCondition[] | null = null
-      ) => {
-        let pos = offsetPos;
-        let lastNodeId = args.lastNodeId;
-        if (condition !== null) {
-          const conditionState = makeConditionNodes(condition, {
-            ...args,
-            position: pos,
-            lastNodeId,
-            nodeIndex: index,
-            nodeId: `${args.nodeId}-choose-${nodeIndex}-${index}-condition`,
-          });
-          conditionState.data.edges[0].label = `Condition #${index}`;
-          state.extend(conditionState);
-          pos = distance.moveFromTo("condition", "node", pos, args.dims);
-          lastNodeId = conditionState.lastNodeId;
-        }
-        const output = makeSequenceNodes(sequence, {
+  if (nodes.length !== 1) {
+    throw new Error("makeChooseNodes only access a list of 1");
+  }
+  const node = nodes[0];
+  if (node.enabled ?? true) {
+    // offset position
+    let offsetPos: XYPosition = {
+      x: args.position.x + args.dims.distanceFactor.node * args.dims.node.width,
+      y:
+        args.position.y + args.dims.distanceFactor.node * args.dims.node.height,
+    };
+    // functions
+    const processSequence = (j: number | "else") => {
+      const stateUpdater = args.stateUpdater.createChoosNodeUpdater(
+        args.nodeIndex,
+        j
+      );
+      let pos = offsetPos;
+      let lastNodeId = args.lastNodeId;
+      if (j !== "else") {
+        const conditionState = makeConditionNodes(node.choose[j].conditions, {
           ...args,
+          stateUpdater,
           position: pos,
-          lastNodeId: undefined,
-          nodeIndex: index,
-          nodeId: `${args.nodeId}-choose-${index}-sequence`,
+          lastNodeId,
+          nodeIndex: j,
+          nodeId: `${args.nodeId}-choose-${j}-condition`,
         });
-        if (lastNodeId && output.data.nodes.length > 0) {
-          state.addEdge(
-            lastNodeId,
-            output.data.nodes[0].id,
-            true,
-            condition === null ? "else" : undefined
-          );
-        }
-        offsetPos = distance.moveAlongRelativeTo(
-          offsetPos,
-          output.bbox[1],
-          args.dims,
-          condition === null ? "node" : "condition"
-        );
-        state.extend(output);
-      };
-
-      // process options
-      for (let sIndex = 0; sIndex < node.choose.length; sIndex++) {
-        const subSequence = node.choose[sIndex];
-        processSequence(subSequence.sequence, sIndex, subSequence.conditions);
+        conditionState.data.edges[0].label = `Condition #${j}`;
+        state.extend(conditionState);
+        pos = distance.moveFromTo("condition", "node", pos, args.dims);
+        lastNodeId = conditionState.lastNodeId;
       }
-      // else
-      processSequence(node.default ?? [], node.choose.length);
+      const sequence =
+        j === "else" ? node.default ?? [] : node.choose[j].sequence;
+      const output = makeSequenceNodes(sequence, {
+        ...args,
+        stateUpdater,
+        position: pos,
+        lastNodeId: undefined,
+        nodeIndex: j === "else" ? node.choose.length : j,
+        nodeId: `${args.nodeId}-choose-${j}-sequence`,
+      });
+      if (lastNodeId && output.data.nodes.length > 0) {
+        state.addEdge(
+          lastNodeId,
+          output.data.nodes[0].id,
+          true,
+          j === "else" ? "else" : undefined
+        );
+      }
+      offsetPos = distance.moveAlongRelativeTo(
+        offsetPos,
+        output.bbox[1],
+        args.dims,
+        j === "else" ? "node" : "condition"
+      );
+      state.extend(output);
+    };
+
+    // process options
+    for (let sIndex = 0; sIndex < node.choose.length; sIndex++) {
+      processSequence(sIndex);
     }
-  });
+    // else
+    processSequence("else");
+  }
 
   return state;
 };

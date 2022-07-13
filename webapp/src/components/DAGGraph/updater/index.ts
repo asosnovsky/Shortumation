@@ -1,12 +1,13 @@
 import {
   AutomationActionData,
-  AutomationNodeTypes,
   AutomationSequenceNode,
 } from "types/automations";
 import { ModalState } from "../board/types";
 import { SequenceNodeActions } from "../nodes/SequenceNode/types";
 import { DAGUpdaterArgs } from "./types";
 import { mapAutoActionKeyToNodeType } from "./util";
+import { ChooseAction } from "types/automations/actions";
+import { AutomationCondition } from "types/automations/conditions";
 
 export const createBasicUpdater =
   <K extends keyof AutomationActionData, N extends AutomationActionData[K][0]>(
@@ -155,6 +156,77 @@ export const createUpdater = (
         onAdd,
         onMove,
       };
+    },
+    createChoosNodeUpdater(i: number, j: number | "else") {
+      const node = args.sequence.data[i] as ChooseAction;
+      if (j === "else") {
+        return createUpdater({
+          openModal: args.openModal,
+          condition: {
+            data: [],
+            onUpdate: console.warn,
+          },
+          sequence: {
+            data: node.default ?? [],
+            onUpdate: (upd) =>
+              basic.sequence.updateNode(
+                {
+                  ...node,
+                  default: upd,
+                },
+                i
+              ),
+          },
+          trigger: {
+            data: [],
+            onUpdate: console.warn,
+          },
+        });
+      } else {
+        return createUpdater({
+          openModal: args.openModal,
+          condition: {
+            data: node.choose[j].conditions,
+            onUpdate: (upd: any) =>
+              basic.sequence.updateNode(
+                {
+                  ...node,
+                  choose: [
+                    ...node.choose.slice(0, j),
+                    {
+                      ...node.choose[j],
+                      conditions: upd,
+                    },
+                    ...node.choose.slice(j + 1),
+                  ],
+                },
+                i
+              ),
+          },
+          sequence: {
+            data: node.choose[j].sequence,
+            onUpdate: (upd) =>
+              basic.sequence.updateNode(
+                {
+                  ...node,
+                  choose: [
+                    ...node.choose.slice(0, j),
+                    {
+                      ...node.choose[j],
+                      sequence: upd,
+                    },
+                    ...node.choose.slice(j + 1),
+                  ],
+                },
+                i
+              ),
+          },
+          trigger: {
+            data: [],
+            onUpdate: console.warn,
+          },
+        });
+      }
     },
   };
 };
