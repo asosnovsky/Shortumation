@@ -5,6 +5,7 @@ import { ModalState } from "../board/types";
 import { DAGAutomationFlowNode } from "../nodes";
 import { DAGGraphUpdater } from "../updater";
 import { DAGElementsOutputState } from "./outputState";
+import { DAGElementsState } from "./state";
 
 export type Bbox = [XYPosition, XYPosition];
 export type Size = { height: number; width: number };
@@ -38,6 +39,7 @@ export type ElementMakerProps = ElementMakerBaseProps & {
   nodeIndex: number;
   position: XYPosition;
   lastNodeId?: string;
+  state: DAGElementsState;
 };
 export type LastNode = {
   nodeId: string;

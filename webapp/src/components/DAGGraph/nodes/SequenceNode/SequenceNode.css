@@ -46,6 +46,30 @@
     min-width: calc(max(var(--sequence-node-width) / 2, var(--sequence-node-height) / 2));
 }
 
+.sequence-node.closed .sequence-node--label .icon {
+    transform: rotate(180deg);
+    color: var(--mui-primary-main);
+}
+
+.sequence-node.closed:hover .sequence-node--label .icon, .sequence-node.open:hover .sequence-node--label .icon {
+    outline: 1px solid var(--mui-secondary-main);
+    color: var(--mui-secondary-main);
+    border-radius: 50px;
+    transform: scale(0.95, 0.95);
+}
+
+.sequence-node.open:hover .sequence-node--label .icon {
+    transform: rotate(-10deg);
+}
+
+.sequence-node.closed:hover .sequence-node--label .icon {
+    transform: rotate(190deg);
+}
+
+.sequence-node.closed .sequence-node--label, .sequence-node.open .sequence-node--label {
+    cursor: pointer;
+
+}
 
 .sequence-node--label {
     flex: 1;

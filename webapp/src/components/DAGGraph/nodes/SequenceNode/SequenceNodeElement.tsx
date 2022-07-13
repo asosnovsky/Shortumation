@@ -4,20 +4,18 @@ import { FC, PropsWithChildren } from "react";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
 
-import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import Edit from "@mui/icons-material/Edit";
-import Add from "@mui/icons-material/Add";
+import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
+import AddOutlined from "@mui/icons-material/AddOutlined";
 
 import InputBoolean from "components/Inputs/InputBoolean";
-import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { SpeedDial } from "components/SpeedDial";
 import { SequenceNodeElementProps } from "./types";
 import { useSequenceNodeColor } from "./util";
-import { AddOutlined } from "@mui/icons-material";
 
 export const SequenceNodeElement: FC<
   PropsWithChildren<SequenceNodeElementProps>
@@ -34,6 +32,8 @@ export const SequenceNodeElement: FC<
   enabled,
   onSetEnabled,
   children,
+  isClosed,
+  setIsClosed,
 }) => {
   const confirm = useConfirm();
   const snackbr = useSnackbar();
@@ -45,6 +45,7 @@ export const SequenceNodeElement: FC<
           "sequence-node",
           flipped ? "flipped" : "",
           enabled ? "enabled" : "disabled",
+          isClosed === undefined ? "" : isClosed ? "closed" : "open",
         ].join(" ")}
         style={
           {
@@ -118,8 +119,12 @@ export const SequenceNodeElement: FC<
             />
           )}
           {children}
-          <div className="sequence-node--label">
+          <div
+            className="sequence-node--label"
+            onClick={() => setIsClosed && setIsClosed(!isClosed)}
+          >
             {typeof label === "string" ? <span>{label}</span> : label}
+            {!!setIsClosed && <KeyboardArrowDownSharpIcon className="icon" />}
           </div>
         </div>
       </div>

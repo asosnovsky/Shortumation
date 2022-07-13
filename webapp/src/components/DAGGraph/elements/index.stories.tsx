@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { DAGGraphBoard } from "components/DAGGraph/board";
-import { makeAutomationNodes } from "./index";
+import { useAutomationNodes } from "./index";
 import { useHA } from "haService";
 import { AutomationActionData } from "types/automations";
 import { createUpdaterFromAutomationData } from "../updater";
@@ -22,7 +22,7 @@ const Demo: FC<{
     state,
     setState
   );
-  const elementData = makeAutomationNodes(state, {
+  const elementData = useAutomationNodes(state, {
     dims: {
       ...DEFAULT_DIMS,
       flipped: props.flipped,
