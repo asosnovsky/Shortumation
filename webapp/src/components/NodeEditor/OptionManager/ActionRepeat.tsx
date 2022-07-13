@@ -11,7 +11,7 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
       sequence: [],
     },
   }),
-  isReady: ({ alias, repeat }) => alias !== "" && repeat?.sequence.length > 0,
+  isReady: ({}) => true,
   renderOptionList: (state, setState) => {
     const update = updateActionData(state, setState);
     return (

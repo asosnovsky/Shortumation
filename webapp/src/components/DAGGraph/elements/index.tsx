@@ -1,10 +1,4 @@
-import {
-  DAGDims,
-  ElementData,
-  ElementMaker,
-  ElementMakerBaseProps,
-  LastNode,
-} from "./types";
+import { DAGDims, ElementMaker, ElementMakerBaseProps } from "./types";
 import { AutomationTrigger } from "types/automations/triggers";
 import * as distance from "./distance";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
@@ -22,6 +16,7 @@ import { getNodeType } from "utils/automations";
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { AddIcon } from "components/Icons";
 import { useDAGElementsState } from "./state";
+import AddBox from "@mui/icons-material/AddBox";
 
 export const useAutomationNodes = (
   automation: AutomationActionData,
@@ -222,6 +217,39 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
     (node.enabled ?? true) &&
     !args.state.get(args.lastNodeId ?? "").isClosed
   ) {
+    // add new
+    outputState.addNode(
+      ButtonNodeMaker.makeElement(
+        {
+          id: `${args.nodeId}-choose-add-new`,
+          position: distance.moveAlong(
+            "node",
+            outputState.nextPos,
+            0.3,
+            args.dims,
+            true
+          ),
+        },
+        args.dims,
+        {
+          icon: <AddBox />,
+          onClick: () =>
+            args.stateUpdater.basic.sequence.updateNode(
+              {
+                ...node,
+                choose: [
+                  ...node.choose,
+                  {
+                    conditions: [],
+                    sequence: [],
+                  },
+                ],
+              },
+              args.nodeIndex
+            ),
+        }
+      )
+    );
     // offset position
     let offsetPos: XYPosition = {
       x: args.position.x + args.dims.distanceFactor.node * args.dims.node.width,
@@ -245,7 +273,10 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
           nodeIndex: j,
           nodeId: `${args.nodeId}-choose-${j}-condition`,
         });
-        conditionState.data.edges[0].label = `Condition #${j + 1}`;
+        conditionState.data.edges[0].label = `Condition ${j + 1}`;
+        conditionState.data.edges[0].style = {
+          stroke: "var(--mui-info-main)",
+        };
         outputState.extend(conditionState);
         pos = distance.moveFromTo("condition", "node", pos, args.dims);
         lastNodeId = conditionState.lastNodeId;
@@ -264,6 +295,9 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
         outputState.addEdge(lastNodeId, output.data.nodes[0].id, {
           animated: true,
           label: j === "else" ? "else" : undefined,
+          style: {
+            stroke: "var(--mui-error-main)",
+          },
         });
       }
       offsetPos = distance.moveAlongRelativeTo(

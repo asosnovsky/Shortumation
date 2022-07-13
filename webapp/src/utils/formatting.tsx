@@ -137,7 +137,10 @@ export const getDescriptionFromAutomationNode = <
     return namer.getServiceName(node.service);
   }
   if ("repeat" in node) {
-    return "Repeat " + node.repeat.count;
+    return (
+      "Repeat " +
+      (Number.isInteger(node.repeat.count) ? node.repeat.count : "indefintely")
+    );
   }
   if ("delay" in node) {
     return `Wait for ${convertTimeToString(node.delay)}`;
