@@ -51,6 +51,8 @@ export const NodeEditor: FC<NodeEditorProps> = ({
     if (notes.length > 0) {
       try {
         await confirm({
+          confirmationText: "Yes",
+          title: `Are you sure you want to ${what}?`,
           description: (
             <ul>
               {notes.map((n, i) => (

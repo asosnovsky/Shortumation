@@ -1,6 +1,5 @@
 import { ChooseAction } from "types/automations/actions";
-import { OptionManager } from './OptionManager';
-
+import { OptionManager } from "./OptionManager";
 
 export const ActionChooseState: OptionManager<ChooseAction> = {
   defaultState: () => ({
@@ -8,11 +7,8 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
     default: [],
     choose: [],
   }),
-  isReady: ({ alias }) => {
-    return alias !== ''
+  isReady: () => true,
+  Component: () => {
+    return <></>;
   },
-  renderOptionList: () => {
-    return <>
-    </>
-  }
-}
+};
