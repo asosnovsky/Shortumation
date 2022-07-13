@@ -17,7 +17,6 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
   width,
   flipped,
   color,
-  hasInput = false,
   collectionType,
 }) => {
   const nodeColor = useSequenceNodeColor(color);
@@ -54,13 +53,20 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
           type="source"
           position={flipped ? Position.Bottom : Position.Right}
         />
-        {hasInput && (
+        <>
           <Handle
+            id="default"
             key="target"
             type="target"
             position={flipped ? Position.Top : Position.Left}
           />
-        )}
+          <Handle
+            id="return"
+            key="target-return"
+            type="target"
+            position={!flipped ? Position.Top : Position.Right}
+          />
+        </>
         <span className="collection-nodes--total">
           {nodes.length} node{nodes.length !== 1 ? "s" : ""}
         </span>

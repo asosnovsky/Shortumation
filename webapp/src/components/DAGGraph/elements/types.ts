@@ -16,7 +16,6 @@ export type ElementData = {
 export type DAGEntityDim = Size;
 export type DAGEntities = {
   node: DAGEntityDim;
-  circle: DAGEntityDim;
   condition: DAGEntityDim;
   trigger: DAGEntityDim;
 };

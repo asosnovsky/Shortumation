@@ -93,15 +93,15 @@ export const OnMoveAllDirections = Template.bind({});
 OnMoveAllDirections.args = {
   ...OnMoveAllDirections.args,
   onMove: {
-    up: console.log,
-    down: console.log,
-    left: console.log,
-    right: console.log,
+    up: console.info,
+    down: console.info,
+    left: console.info,
+    right: console.info,
   },
   onAdd: {
-    up: console.log,
-    down: console.log,
-    left: console.log,
-    right: console.log,
+    up: console.info,
+    down: console.info,
+    left: console.info,
+    right: console.info,
   },
 };

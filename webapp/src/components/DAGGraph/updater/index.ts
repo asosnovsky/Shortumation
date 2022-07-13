@@ -6,8 +6,7 @@ import { ModalState } from "../board/types";
 import { SequenceNodeActions } from "../nodes/SequenceNode/types";
 import { DAGUpdaterArgs } from "./types";
 import { mapAutoActionKeyToNodeType } from "./util";
-import { ChooseAction } from "types/automations/actions";
-import { AutomationCondition } from "types/automations/conditions";
+import { ChooseAction, RepeatAction } from "types/automations/actions";
 
 export const createBasicUpdater =
   <K extends keyof AutomationActionData, N extends AutomationActionData[K][0]>(
@@ -227,6 +226,42 @@ export const createUpdater = (
           },
         });
       }
+    },
+    createRepeatNodeUpdater(i: number) {
+      const { repeat } = args.sequence.data[i] as RepeatAction;
+      return createUpdater({
+        openModal: args.openModal,
+        condition: {
+          data: repeat.while ?? [],
+          onUpdate: (upd: any) =>
+            basic.sequence.updateNode(
+              {
+                repeat: {
+                  ...repeat,
+                  while: upd,
+                },
+              },
+              i
+            ),
+        },
+        sequence: {
+          data: repeat.sequence ?? [],
+          onUpdate: (upd) =>
+            basic.sequence.updateNode(
+              {
+                repeat: {
+                  ...repeat,
+                  sequence: upd,
+                },
+              },
+              i
+            ),
+        },
+        trigger: {
+          data: [],
+          onUpdate: console.warn,
+        },
+      });
     },
   };
 };

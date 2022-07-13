@@ -14,6 +14,10 @@
 }
 
 
+.dag-graphboard .react-flow__handle {
+    opacity: 0;
+}
+
 .dag-graphboard rect.react-flow__edge-textbg {
     fill: var(--mui-background-paper);
     stroke: var(--mui-text-primary);

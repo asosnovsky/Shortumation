@@ -14,7 +14,7 @@ import {
 } from "types/automations";
 import { AutomationCondition } from "types/automations/conditions";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
-import { ChooseAction } from "types/automations/actions";
+import { ChooseAction, RepeatAction } from "types/automations/actions";
 import { XYPosition } from "react-flow-renderer";
 import { DAGElementsOutputState } from "./outputState";
 import { SequenceNodeMaker } from "../nodes/SequenceNode";
@@ -31,7 +31,7 @@ export const useAutomationNodes = (
     ...args.dims,
   };
   const state = useDAGElementsState();
-  const outputState = new DAGElementsOutputState();
+  const outputState = new DAGElementsOutputState(dims.position, dims);
   outputState.extend(
     makeTriggerNodes(automation.trigger, {
       ...args,
@@ -51,7 +51,7 @@ export const useAutomationNodes = (
       position: distance.moveFromTo(
         "trigger",
         "condition",
-        outputState.lastNodePos,
+        outputState.getLastNodePos(),
         dims
       ),
       nodeId: `${dims.flipped}-condition`,
@@ -68,7 +68,7 @@ export const useAutomationNodes = (
       position: distance.moveFromTo(
         "condition",
         "node",
-        outputState.lastNodePos,
+        outputState.getLastNodePos(),
         dims
       ),
       nodeId: `${dims.flipped}-sequence`,
@@ -84,7 +84,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
   nodes,
   { dims, namer, stateUpdater, nodeId, position }
 ) => {
-  const outputState = new DAGElementsOutputState();
+  const outputState = new DAGElementsOutputState(position, dims);
   outputState.addNode(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.trigger,
@@ -104,7 +104,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
   nodes,
   { nodeId, stateUpdater, position, dims, namer, lastNodeId }
 ) => {
-  const outputState = new DAGElementsOutputState();
+  const outputState = new DAGElementsOutputState(position, dims);
   outputState.addNode(
     CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
       ...dims.condition,
@@ -119,7 +119,7 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
     })
   );
   if (lastNodeId && outputState.lastNodeId) {
-    outputState.addEdge(lastNodeId, outputState.lastNodeId, true);
+    outputState.addEdge(lastNodeId, outputState.lastNodeId, { animated: true });
   }
   return outputState;
 };
@@ -128,18 +128,19 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   nodes,
   args
 ) => {
-  const outputState = new DAGElementsOutputState();
   const { lastNodeId, position, dims, namer, stateUpdater, state } = args;
+  const outputState = new DAGElementsOutputState(position, dims);
   nodes.forEach((node, nodeIndex) => {
     // the JSON.stringify is hack to make the edges render nicely
     const nodeId = `${args.nodeId}-${
       args.nodeIndex
     }-${nodeIndex}-${JSON.stringify(node)}`;
+    outputState.incNextPos("node");
     const element = outputState.addNode(
       SequenceNodeMaker.makeElement(
         {
           id: nodeId,
-          position: distance.moveAlong("node", position, nodeIndex, dims),
+          position: outputState.nextPos,
         },
         dims,
         {
@@ -163,8 +164,20 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
       outputState.extend(
         makeChooseeNodes([node], {
           ...args,
+          nodeId,
           lastNodeId: element.id,
-          position: outputState.lastNodePos,
+          position: outputState.getLastNodePos(),
+          nodeIndex,
+        }),
+        true
+      );
+    } else if ("repeat" in node) {
+      outputState.extend(
+        makeRepeatNodes([node], {
+          ...args,
+          nodeId,
+          lastNodeId: element.id,
+          position: outputState.getLastNodePos(),
           nodeIndex,
         }),
         true
@@ -176,7 +189,12 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
     ButtonNodeMaker.makeElement(
       {
         id: `${args.nodeId}-add-new`,
-        position: distance.moveAlong("node", position, nodes.length, dims),
+        position: distance.moveAlong(
+          "node",
+          outputState.getLastNodePos(position),
+          1,
+          dims
+        ),
       },
       dims,
       {
@@ -195,7 +213,7 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
 };
 
 export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
-  const outputState = new DAGElementsOutputState();
+  const outputState = new DAGElementsOutputState(args.position, args.dims);
   if (nodes.length !== 1) {
     throw new Error("makeChooseNodes only access a list of 1");
   }
@@ -227,7 +245,7 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
           nodeIndex: j,
           nodeId: `${args.nodeId}-choose-${j}-condition`,
         });
-        conditionState.data.edges[0].label = `Condition #${j}`;
+        conditionState.data.edges[0].label = `Condition #${j + 1}`;
         outputState.extend(conditionState);
         pos = distance.moveFromTo("condition", "node", pos, args.dims);
         lastNodeId = conditionState.lastNodeId;
@@ -243,12 +261,10 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
         nodeId: `${args.nodeId}-choose-${j}-sequence`,
       });
       if (lastNodeId && output.data.nodes.length > 0) {
-        outputState.addEdge(
-          lastNodeId,
-          output.data.nodes[0].id,
-          true,
-          j === "else" ? "else" : undefined
-        );
+        outputState.addEdge(lastNodeId, output.data.nodes[0].id, {
+          animated: true,
+          label: j === "else" ? "else" : undefined,
+        });
       }
       offsetPos = distance.moveAlongRelativeTo(
         offsetPos,
@@ -265,6 +281,72 @@ export const makeChooseeNodes: ElementMaker<ChooseAction> = (nodes, args) => {
     }
     // else
     processSequence("else");
+  }
+
+  return outputState;
+};
+
+export const makeRepeatNodes: ElementMaker<RepeatAction> = (nodes, args) => {
+  const outputState = new DAGElementsOutputState(args.position, args.dims);
+  if (nodes.length !== 1) {
+    throw new Error("makeChooseNodes only access a list of 1");
+  }
+  const node = nodes[0];
+  if (
+    (node.enabled ?? true) &&
+    !args.state.get(args.lastNodeId ?? "").isClosed
+  ) {
+    // offset position
+    let offsetPos: XYPosition = {
+      x: args.position.x + args.dims.distanceFactor.node * args.dims.node.width,
+      y:
+        args.position.y + args.dims.distanceFactor.node * args.dims.node.height,
+    };
+    const stateUpdater = args.stateUpdater.createRepeatNodeUpdater(
+      args.nodeIndex
+    );
+    let pos = offsetPos;
+    let lastNodeId = args.lastNodeId;
+    const conditionState = makeConditionNodes(node.repeat.while, {
+      ...args,
+      stateUpdater,
+      position: pos,
+      lastNodeId,
+      nodeIndex: 0,
+      nodeId: `${args.nodeId}-repeat-while`,
+    });
+    conditionState.data.edges[0].label = `While`;
+    outputState.extend(conditionState);
+    pos = distance.moveFromTo("condition", "node", pos, args.dims);
+    lastNodeId = conditionState.lastNodeId;
+    const sequenceState = makeSequenceNodes(node.repeat.sequence, {
+      ...args,
+      stateUpdater,
+      position: pos,
+      lastNodeId: undefined,
+      nodeIndex: 0,
+      nodeId: `${args.nodeId}-repeat-sequence`,
+    });
+    if (lastNodeId && sequenceState.data.nodes.length > 0) {
+      outputState.addEdge(lastNodeId, sequenceState.data.nodes[0].id, {
+        animated: true,
+        label: "do",
+      });
+    }
+    offsetPos = distance.moveAlongRelativeTo(
+      offsetPos,
+      sequenceState.bbox[1],
+      args.dims,
+      "condition"
+    );
+    if (sequenceState.lastNodeId && conditionState.lastNodeId) {
+      outputState.addEdge(sequenceState.lastNodeId, conditionState.lastNodeId, {
+        animated: true,
+        label: "repeat",
+        targetHandle: "return",
+      });
+    }
+    outputState.extend(sequenceState);
   }
 
   return outputState;

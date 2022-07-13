@@ -1,4 +1,4 @@
-import { DAGDims, DAGEntities, Size } from "./types";
+import { DAGDims, DAGEntities } from "./types";
 import { XYPosition } from "react-flow-renderer";
 
 export const moveAlong = (
@@ -14,26 +14,6 @@ export const moveAlong = (
   };
   const moveOnX = {
     x: startPoint.x + dims[by].width * dims.distanceFactor.node * increment,
-    y: startPoint.y,
-  };
-  if (reversed) {
-    return dims.flipped ? moveOnX : moveOnY;
-  }
-  return !dims.flipped ? moveOnX : moveOnY;
-};
-
-export const moveAlongOnce = (
-  by: keyof DAGEntities,
-  startPoint: XYPosition,
-  dims: DAGDims,
-  reversed: boolean = false
-): XYPosition => {
-  const moveOnY = {
-    y: startPoint.y + dims[by].height * (dims.distanceFactor.node - 1),
-    x: startPoint.x,
-  };
-  const moveOnX = {
-    x: startPoint.x + dims[by].width * (dims.distanceFactor.node - 1),
     y: startPoint.y,
   };
   if (reversed) {

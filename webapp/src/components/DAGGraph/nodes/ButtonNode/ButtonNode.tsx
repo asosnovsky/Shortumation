@@ -30,6 +30,10 @@ export const ButtonNode: FC<ButtonNodeProps> = ({
               position={flipped ? Position.Top : Position.Left}
             />
             {icon}
+            <Handle
+              type="source"
+              position={!flipped ? Position.Bottom : Position.Right}
+            />
           </>
         }
         onClick={onClick}

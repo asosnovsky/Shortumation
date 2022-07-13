@@ -51,9 +51,6 @@
     overflow: auto;
 }
 
-.collection-nodes .react-flow__handle {
-    opacity: 0;
-}
 
 .collection-nodes--total {
     position: absolute;

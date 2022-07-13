@@ -7,7 +7,6 @@ export type DAGNodeState = Partial<{
 export type DAGElementsState = ReturnType<typeof useDAGElementsState>;
 export const useDAGElementsState = () => {
   const [data, setData] = useState<Record<string, DAGNodeState>>({});
-  console.log(data);
   return {
     get(nodeId: string): DAGNodeState {
       return data[nodeId] ?? {};
@@ -28,7 +27,7 @@ export const useDAGElementsState = () => {
     },
 
     getIsClosedActions(nodeId: string, node: AutomationNode) {
-      if ("choose" in node) {
+      if ("choose" in node || "repeat" in node) {
         return {
           isClosed: this.get(nodeId).isClosed ?? false,
           setIsClosed: (v: boolean) => this.set(nodeId, "isClosed", v),
