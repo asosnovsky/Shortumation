@@ -21,7 +21,8 @@ export const RepeatAction = st.intersection([
   AutomationActionNodeBase,
   st.type({
     repeat: st.object({
-      count: st.number(),
+      count: st.optional(st.number()),
+      while: st.array(st.object()),
       sequence: st.array(st.object()),
     }),
   }),

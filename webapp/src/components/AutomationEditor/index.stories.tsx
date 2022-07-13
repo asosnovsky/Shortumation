@@ -168,3 +168,77 @@ BadAutomationInvalidSequence.args = {
     ] as any,
   },
 };
+
+export const RepeatExample = Template.bind({});
+RepeatExample.args = {
+  ...RepeatExample.args,
+  automation: {
+    metadata: {
+      id: "1654976151462",
+      alias: "Get out of baby room",
+      description: "",
+      mode: "single",
+    },
+    trigger: [
+      {
+        type: "opened",
+        platform: "device",
+        device_id: "9b33663d2700da8efe0c31c946448f77",
+        entity_id: "binary_sensor.door_baby",
+        domain: "binary_sensor",
+      },
+    ],
+    condition: [],
+    sequence: [
+      {
+        service: "notify.mobile_app_levas_phone",
+        data: {
+          message: "Someone is in Korie’s room!!!",
+        },
+      },
+      {
+        repeat: {
+          while: [
+            {
+              type: "is_open",
+              condition: "device",
+              device_id: "9b33663d2700da8efe0c31c946448f77",
+              entity_id: "binary_sensor.door_baby",
+              domain: "binary_sensor",
+            },
+          ],
+          sequence: [
+            {
+              service: "notify.alexa_media",
+              data: {
+                message:
+                  "Get the fuck out of the baby’s bedroom you sick fuck! This room belongs to Korie! Close the door! I said close. The. Door!",
+                data: null,
+                type: "tts",
+                target: "media_player.baby_bedroom_dot",
+              },
+            },
+            {
+              delay: {
+                hours: 0,
+                minutes: 0,
+                seconds: 7,
+                milliseconds: 0,
+              },
+            },
+          ],
+        },
+      },
+      {
+        service: "light.turn_off",
+        target: {
+          entity_id: ["light.switch_baby"],
+        },
+        data: {
+          flash: "short",
+        },
+      },
+    ],
+    tags: {},
+  },
+};

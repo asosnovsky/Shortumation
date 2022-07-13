@@ -75,6 +75,7 @@ test("get repeat action description", () => {
     getDescriptionFromAutomationNode(
       {
         repeat: {
+          while: [],
           count: 10,
           sequence: [],
         },
