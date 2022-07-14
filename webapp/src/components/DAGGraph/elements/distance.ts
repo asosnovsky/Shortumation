@@ -26,19 +26,15 @@ export const moveAlongRelativeTo = (
   offsetPos: XYPosition,
   relatedPos: XYPosition,
   dims: DAGDims,
-  incrementBy: keyof DAGEntities = "condition"
+  incrementBy: keyof DAGEntities = "collection"
 ) =>
   dims.flipped
     ? {
-        x:
-          relatedPos.x +
-          (dims.distanceFactor.node - 1) * dims[incrementBy].width,
+        x: relatedPos.x + dims.distanceFactor.node * dims[incrementBy].width,
         y: offsetPos.y,
       }
     : {
-        y:
-          relatedPos.y +
-          (dims.distanceFactor.node - 1) * dims[incrementBy].height,
+        y: relatedPos.y + dims.distanceFactor.node * dims[incrementBy].height,
         x: offsetPos.x,
       };
 
@@ -60,3 +56,12 @@ export const moveFromTo = (
     };
   }
 };
+
+export const offsetBy = (
+  by: keyof DAGEntities,
+  position: XYPosition,
+  dims: DAGDims
+): XYPosition => ({
+  x: position.x + dims.distanceFactor[by] * dims[by].width,
+  y: position.y + dims.distanceFactor[by] * dims[by].height,
+});

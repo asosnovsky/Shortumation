@@ -8,6 +8,9 @@ import { CollectionNodeProps } from "./types";
 import { Handle, Position } from "react-flow-renderer";
 import { useSequenceNodeColor } from "../SequenceNode/util";
 import { prettyName } from "utils/formatting";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useConfirm } from "material-ui-confirm";
+import { useSnackbar } from "notistack";
 
 export const CollectionNode: FC<CollectionNodeProps> = ({
   onAddNode,
@@ -18,8 +21,13 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
   flipped,
   color,
   collectionType,
+  onDelete,
+  title,
 }) => {
   const nodeColor = useSequenceNodeColor(color);
+  const confirm = useConfirm();
+  const snackbr = useSnackbar();
+  const trueTile = title ?? collectionType;
 
   return (
     <div
@@ -33,6 +41,30 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
       }
     >
       <div className="collection-nodes">
+        {!!onDelete && (
+          <ButtonIcon
+            className="delete-icon"
+            icon={<DeleteForeverIcon />}
+            onClick={() => {
+              confirm({
+                description: `Are you sure you want to delete ${trueTile}?`,
+              })
+                .then(() => {
+                  onDelete();
+                  snackbr.enqueueSnackbar("Deleted.", {
+                    variant: "info",
+                  });
+                })
+                .catch(() =>
+                  snackbr.enqueueSnackbar(`Did not delete ${trueTile}.`, {
+                    variant: "info",
+                  })
+                );
+            }}
+            borderless
+            color="secondary"
+          />
+        )}
         <span className="collection-nodes--title">
           {prettyName(collectionType)}s
         </span>
@@ -48,23 +80,38 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
           ))}
         </div>
         <ButtonIcon className="add" icon={<Add />} onClick={onAddNode} />
-        <Handle
-          key="source"
-          type="source"
-          position={flipped ? Position.Bottom : Position.Right}
-        />
         <>
           <Handle
             id="default"
-            key="target"
+            key="source-def"
+            type="source"
+            position={flipped ? Position.Bottom : Position.Right}
+          />
+          <Handle
+            id="head"
+            key="source-head"
+            type="source"
+            position={flipped ? Position.Top : Position.Left}
+          />
+        </>
+        <>
+          <Handle
+            id="default"
+            key="target-def"
             type="target"
             position={flipped ? Position.Top : Position.Left}
+          />
+          <Handle
+            id="side"
+            key="target-side"
+            type="target"
+            position={!flipped ? Position.Right : Position.Left}
           />
           <Handle
             id="return"
             key="target-return"
             type="target"
-            position={!flipped ? Position.Top : Position.Right}
+            position={!flipped ? Position.Bottom : Position.Right}
           />
         </>
         <span className="collection-nodes--total">

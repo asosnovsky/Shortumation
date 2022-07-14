@@ -85,3 +85,8 @@ const Template: ComponentStory<typeof ButtonNode> = (args) => {
 };
 
 export const Basic = Template.bind({});
+export const Text = Template.bind({});
+Text.args = {
+  ...Text.args,
+  text: "Option",
+};

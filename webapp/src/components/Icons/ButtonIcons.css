@@ -4,3 +4,7 @@
     max-width: 1.5em;
     max-height: 1.5em;
 }
+
+.MuiButtonBase-root.borderless.icon-button[type="button"] {
+    border-width: 0;
+}

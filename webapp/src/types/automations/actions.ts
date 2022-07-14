@@ -2,6 +2,7 @@ import { AutomationSequenceNode } from ".";
 import { AutomationCondition } from "./conditions";
 import * as v from "types/validators/actions";
 import * as st from "superstruct";
+import { ScriptConditionField } from "./common";
 
 type AutomationActionNodeBase<Data extends Object> = Data &
   st.Infer<typeof v.AutomationActionNodeBase>;
@@ -10,7 +11,8 @@ export type ServiceAction = st.Infer<typeof v.ServiceAction>;
 export type RepeatAction = AutomationActionNodeBase<{
   repeat: {
     count?: number;
-    while: AutomationCondition[];
+    while?: ScriptConditionField;
+    until?: ScriptConditionField;
     sequence: AutomationAction[];
   };
 }>;

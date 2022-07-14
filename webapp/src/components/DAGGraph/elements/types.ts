@@ -16,15 +16,11 @@ export type ElementData = {
 export type DAGEntityDim = Size;
 export type DAGEntities = {
   node: DAGEntityDim;
-  condition: DAGEntityDim;
-  trigger: DAGEntityDim;
+  collection: DAGEntityDim;
 };
 export type DAGDims = DAGEntities & {
   position: XYPosition;
-  distanceFactor: {
-    node: number;
-    collection: number;
-  };
+  distanceFactor: Record<keyof DAGEntities, number>;
   flipped: boolean;
 };
 export type ElementMakerBaseProps = {

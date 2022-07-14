@@ -64,3 +64,7 @@ export const DayOfWeek = st.enums([
   "sat",
   "sun",
 ]);
+export const ScriptConditionField = st.union([
+  st.array(st.object()),
+  st.string(),
+]);

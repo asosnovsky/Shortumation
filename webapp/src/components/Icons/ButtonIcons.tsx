@@ -9,11 +9,16 @@ export type ButtonIconProps = {
   title?: string;
   disabled?: boolean;
   color?: IconButtonTypeMap["props"]["color"];
+  borderless?: boolean;
 };
 export const ButtonIcon: FC<ButtonIconProps> = (props) => {
   return (
     <MuiIconButton
-      className={["icon-button", props.className ?? ""].join(" ")}
+      className={[
+        "icon-button",
+        props.className ?? "",
+        props.borderless ? "borderless" : "",
+      ].join(" ")}
       onClick={props.onClick}
       title={props.title}
       color={props.color}

@@ -1,5 +1,9 @@
 import * as st from "superstruct";
-import { AutomationDeviceState, AutomationTime } from "./common";
+import {
+  AutomationDeviceState,
+  AutomationTime,
+  ScriptConditionField,
+} from "./common";
 import { AutomationTrigger } from "./triggers";
 
 export const AutomationActionNodeBase = st.type({
@@ -22,7 +26,8 @@ export const RepeatAction = st.intersection([
   st.type({
     repeat: st.object({
       count: st.optional(st.number()),
-      while: st.array(st.object()),
+      while: st.optional(ScriptConditionField),
+      until: st.optional(ScriptConditionField),
       sequence: st.array(st.object()),
     }),
   }),

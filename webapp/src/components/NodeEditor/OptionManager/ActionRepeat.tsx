@@ -24,6 +24,13 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
           }
         />
         <InputYaml
+          label="While"
+          value={state.repeat.while ?? []}
+          onChange={(sequence) =>
+            update({ repeat: { ...state.repeat, while: sequence } })
+          }
+        />
+        <InputYaml
           label="Sequence"
           value={state.repeat.sequence ?? []}
           onChange={(sequence) =>
@@ -31,11 +38,9 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
           }
         />
         <InputYaml
-          label="Condition"
-          value={state.repeat.while ?? []}
-          onChange={(sequence) =>
-            update({ repeat: { ...state.repeat, sequence } })
-          }
+          label="Until"
+          value={state.repeat.until ?? []}
+          onChange={(until) => update({ repeat: { ...state.repeat, until } })}
         />
       </>
     );

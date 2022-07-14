@@ -9,8 +9,12 @@ import { AutomationTrigger, TriggerType } from "types/automations/triggers";
 import { MiniFailure } from "types/validators/helper";
 import { getFailures } from "../types/validators/helper";
 import { ActionType } from "types/automations/actions";
-import { ConditionType } from "types/automations/conditions";
+import {
+  ConditionType,
+  AutomationCondition,
+} from "types/automations/conditions";
 import * as st from "superstruct";
+import { ScriptConditionField } from "types/automations/common";
 
 export const getNodeTypeAndValidate = (
   node: AutomationNode,
@@ -234,5 +238,17 @@ export const entityDomainsAreBinary = (domains: string[]): boolean => {
       }
     }
     return true;
+  }
+};
+
+export const convertScriptConditionFieldToAutomationConditions = (
+  field: ScriptConditionField | undefined
+): AutomationCondition[] => {
+  if (!field) {
+    return [];
+  } else if (typeof field === "string") {
+    return [{ condition: "template", value_template: field }];
+  } else {
+    return field;
   }
 };

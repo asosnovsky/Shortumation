@@ -12,3 +12,8 @@
 
     /* outline: 1px dashed white; */
 }
+
+.button-node button {
+    display: flex;
+    gap: 0.25em;
+}

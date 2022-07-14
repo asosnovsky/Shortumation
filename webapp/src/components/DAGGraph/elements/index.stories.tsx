@@ -359,9 +359,70 @@ ChooseAuto.args = {
         ],
       },
       {
+        choose: [],
+        default: [],
+      },
+      {
         service: "switch.turn_on",
         target: {
           entity_id: "switch.light_balcony",
+        },
+      },
+    ],
+  },
+};
+
+export const EmptyChooseAuto = Template.bind({});
+
+EmptyChooseAuto.args = {
+  ...EmptyChooseAuto.args,
+  automation: {
+    condition: [],
+    trigger: [],
+    sequence: [
+      {
+        choose: [],
+        default: [],
+      },
+    ],
+  },
+};
+
+export const RepeatAuto = Template.bind({});
+RepeatAuto.args = {
+  ...RepeatAuto.args,
+  automation: {
+    condition: [],
+    trigger: [],
+    sequence: [
+      {
+        repeat: {
+          while: 'states(lights.switch) == "on"',
+          sequence: [
+            {
+              delay: {
+                minutes: 5,
+              },
+            },
+          ],
+        },
+      },
+      {
+        repeat: {
+          count: 2,
+          until: [
+            {
+              condition: "state",
+              entity_id: "lights.bathroom",
+              state: "off",
+            },
+          ],
+          sequence: [
+            {
+              entity_id: "button.ping_mainboard",
+              service: "button.pres",
+            },
+          ],
         },
       },
     ],

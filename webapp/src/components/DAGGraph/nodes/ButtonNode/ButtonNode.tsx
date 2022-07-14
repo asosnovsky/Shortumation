@@ -4,6 +4,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { FC } from "react";
 import { ButtonNodeProps } from "./types";
 import { Handle, Position } from "react-flow-renderer";
+import { Button } from "components/Inputs/Button";
 
 export const ButtonNode: FC<ButtonNodeProps> = ({
   height,
@@ -11,7 +12,18 @@ export const ButtonNode: FC<ButtonNodeProps> = ({
   icon,
   flipped,
   onClick,
+  text,
 }) => {
+  const inner = (
+    <>
+      <Handle type="target" position={flipped ? Position.Top : Position.Left} />
+      {icon}
+      <Handle
+        type="source"
+        position={!flipped ? Position.Bottom : Position.Right}
+      />
+    </>
+  );
   return (
     <div
       className="button-node"
@@ -22,22 +34,14 @@ export const ButtonNode: FC<ButtonNodeProps> = ({
         } as any
       }
     >
-      <ButtonIcon
-        icon={
-          <>
-            <Handle
-              type="target"
-              position={flipped ? Position.Top : Position.Left}
-            />
-            {icon}
-            <Handle
-              type="source"
-              position={!flipped ? Position.Bottom : Position.Right}
-            />
-          </>
-        }
-        onClick={onClick}
-      />
+      {!text ? (
+        <ButtonIcon icon={inner} onClick={onClick} />
+      ) : (
+        <Button onClick={onClick}>
+          {inner}
+          {text}
+        </Button>
+      )}
     </div>
   );
 };

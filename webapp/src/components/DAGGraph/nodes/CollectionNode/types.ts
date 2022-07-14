@@ -12,6 +12,8 @@ export type CollectionNodeDataProps = Size & {
   onAddNode: () => void;
   hasInput?: boolean;
   collectionType: keyof AutomationActionData;
+  onDelete?: () => void;
+  title?: string;
 };
 
 export type CollectionNodeProps = CollectionNodeDataProps & {

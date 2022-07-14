@@ -4,9 +4,11 @@ import {
 } from "types/automations";
 import { ModalState } from "../board/types";
 import { SequenceNodeActions } from "../nodes/SequenceNode/types";
-import { DAGUpdaterArgs } from "./types";
+import { DAGUpdaterArgs, DAGUpdaterInput } from "./types";
 import { mapAutoActionKeyToNodeType } from "./util";
 import { ChooseAction, RepeatAction } from "types/automations/actions";
+import { ScriptConditionField } from "types/automations/common";
+import { convertScriptConditionFieldToAutomationConditions } from "utils/automations";
 
 export const createBasicUpdater =
   <K extends keyof AutomationActionData, N extends AutomationActionData[K][0]>(
@@ -73,7 +75,16 @@ export const createBasicUpdater =
     };
   };
 
+export const createDummyUpdater = (): DAGUpdaterInput<any> => ({
+  data: [],
+  onUpdate: console.warn,
+});
+// export const createScriptConditionFieldUpdater = (f: ScriptConditionField, )
+
 export type DAGGraphUpdater = ReturnType<typeof createUpdater>;
+export type DAGGraphChooseUpdater = ReturnType<
+  DAGGraphUpdater["createChoosNodeUpdater"]
+>;
 export const createUpdater = (
   args: DAGUpdaterArgs<"sequence" | "condition" | "trigger">
 ) => {
@@ -159,109 +170,153 @@ export const createUpdater = (
     createChoosNodeUpdater(i: number, j: number | "else") {
       const node = args.sequence.data[i] as ChooseAction;
       if (j === "else") {
-        return createUpdater({
-          openModal: args.openModal,
-          condition: {
-            data: [],
-            onUpdate: console.warn,
-          },
-          sequence: {
-            data: node.default ?? [],
-            onUpdate: (upd) =>
-              basic.sequence.updateNode(
-                {
-                  ...node,
-                  default: upd,
-                },
-                i
-              ),
-          },
-          trigger: {
-            data: [],
-            onUpdate: console.warn,
-          },
-        });
+        return {
+          stateUpdater: createUpdater({
+            openModal: args.openModal,
+            condition: {
+              data: [],
+              onUpdate: console.warn,
+            },
+            sequence: {
+              data: node.default ?? [],
+              onUpdate: (upd) =>
+                basic.sequence.updateNode(
+                  {
+                    ...node,
+                    default: upd,
+                  },
+                  i
+                ),
+            },
+            trigger: {
+              data: [],
+              onUpdate: console.warn,
+            },
+          }),
+          onRemove: () => {},
+        };
       } else {
-        return createUpdater({
-          openModal: args.openModal,
-          condition: {
-            data: node.choose[j].conditions,
-            onUpdate: (upd: any) =>
-              basic.sequence.updateNode(
-                {
-                  ...node,
-                  choose: [
-                    ...node.choose.slice(0, j),
-                    {
-                      ...node.choose[j],
-                      conditions: upd,
-                    },
-                    ...node.choose.slice(j + 1),
-                  ],
-                },
-                i
-              ),
-          },
-          sequence: {
-            data: node.choose[j].sequence,
-            onUpdate: (upd) =>
-              basic.sequence.updateNode(
-                {
-                  ...node,
-                  choose: [
-                    ...node.choose.slice(0, j),
-                    {
-                      ...node.choose[j],
-                      sequence: upd,
-                    },
-                    ...node.choose.slice(j + 1),
-                  ],
-                },
-                i
-              ),
-          },
-          trigger: {
-            data: [],
-            onUpdate: console.warn,
-          },
-        });
+        return {
+          onRemove: () =>
+            basic.sequence.updateNode(
+              {
+                ...node,
+                choose: [
+                  ...node.choose.slice(0, j),
+                  ...node.choose.slice(j + 1),
+                ],
+              },
+              i
+            ),
+          stateUpdater: createUpdater({
+            openModal: args.openModal,
+            condition: {
+              data: node.choose[j].conditions,
+              onUpdate: (upd: any) =>
+                basic.sequence.updateNode(
+                  {
+                    ...node,
+                    choose: [
+                      ...node.choose.slice(0, j),
+                      {
+                        ...node.choose[j],
+                        conditions: upd,
+                      },
+                      ...node.choose.slice(j + 1),
+                    ],
+                  },
+                  i
+                ),
+            },
+            sequence: {
+              data: node.choose[j].sequence,
+              onUpdate: (upd) =>
+                basic.sequence.updateNode(
+                  {
+                    ...node,
+                    choose: [
+                      ...node.choose.slice(0, j),
+                      {
+                        ...node.choose[j],
+                        sequence: upd,
+                      },
+                      ...node.choose.slice(j + 1),
+                    ],
+                  },
+                  i
+                ),
+            },
+            trigger: {
+              data: [],
+              onUpdate: console.warn,
+            },
+          }),
+        };
       }
     },
     createRepeatNodeUpdater(i: number) {
       const { repeat } = args.sequence.data[i] as RepeatAction;
-      return createUpdater({
-        openModal: args.openModal,
-        condition: {
-          data: repeat.while ?? [],
-          onUpdate: (upd: any) =>
-            basic.sequence.updateNode(
-              {
-                repeat: {
-                  ...repeat,
-                  while: upd,
+
+      return {
+        sequence: createUpdater({
+          openModal: args.openModal,
+          condition: createDummyUpdater(),
+          sequence: {
+            data: repeat.sequence,
+            onUpdate: (upd) =>
+              basic.sequence.updateNode(
+                {
+                  repeat: {
+                    ...repeat,
+                    sequence: upd,
+                  },
                 },
-              },
-              i
+                i
+              ),
+          },
+          trigger: createDummyUpdater(),
+        }),
+        while: createUpdater({
+          openModal: args.openModal,
+          condition: {
+            data: convertScriptConditionFieldToAutomationConditions(
+              repeat.while
             ),
-        },
-        sequence: {
-          data: repeat.sequence ?? [],
-          onUpdate: (upd) =>
-            basic.sequence.updateNode(
-              {
-                repeat: {
-                  ...repeat,
-                  sequence: upd,
+            onUpdate: (upd: any) =>
+              basic.sequence.updateNode(
+                {
+                  repeat: {
+                    ...repeat,
+                    while: upd,
+                  },
                 },
-              },
-              i
+                i
+              ),
+          },
+          sequence: createDummyUpdater(),
+          trigger: createDummyUpdater(),
+        }),
+        until: createUpdater({
+          openModal: args.openModal,
+          condition: {
+            data: convertScriptConditionFieldToAutomationConditions(
+              repeat.until
             ),
-        },
-        trigger: {
-          data: [],
-          onUpdate: console.warn,
-        },
-      });
+            onUpdate: (upd: any) =>
+              basic.sequence.updateNode(
+                {
+                  repeat: {
+                    ...repeat,
+                    until: upd,
+                  },
+                },
+                i
+              ),
+          },
+          sequence: createDummyUpdater(),
+          trigger: createDummyUpdater(),
+        }),
+      };
     },
   };
 };

@@ -14,6 +14,7 @@ type DemoProps = {
   width: number;
   totalChildNodes: number;
   onAddNode: () => void;
+  hasDelete: boolean;
   enabledChild: boolean;
 };
 const Demo: FC<DemoProps> = (args) => {
@@ -26,7 +27,7 @@ const Demo: FC<DemoProps> = (args) => {
           data: {
             elements: {
               edges: [],
-              nodes: ["trogger", "sequence", "condition"].map(
+              nodes: ["trigger", "sequence", "condition"].map(
                 (collectionType: any, i: number) =>
                   CollectionNodeMaker.makeElement(
                     {
@@ -40,6 +41,7 @@ const Demo: FC<DemoProps> = (args) => {
                     {
                       hasInput: false,
                       onAddNode: args.onAddNode,
+                      onDelete: args.hasDelete ? console.info : undefined,
                       width: args.width,
                       height: args.height,
                       nodes: [
@@ -71,9 +73,10 @@ export default {
   component: Demo,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
-    ...DEFAULT_DIMS.condition,
+    ...DEFAULT_DIMS.collection,
     totalChildNodes: 1,
     enabledChild: true,
+    hasDelete: false,
   },
 } as ComponentMeta<typeof Demo>;
 
@@ -101,6 +104,7 @@ export const Empty: ComponentStory<typeof Demo> = (args) => {
                   DEFAULT_DIMS,
                   {
                     hasInput: false,
+                    onDelete: args.hasDelete ? console.info : undefined,
                     onAddNode: args.onAddNode,
                     width: args.width,
                     height: args.height,
@@ -194,6 +198,7 @@ export const ReturnTarget: ComponentStory<typeof Demo> = (args) => {
                   },
                   DEFAULT_DIMS,
                   {
+                    onDelete: args.hasDelete ? console.info : undefined,
                     onAddNode: args.onAddNode,
                     width: args.width,
                     height: args.height,
@@ -219,4 +224,10 @@ export const ReturnTarget: ComponentStory<typeof Demo> = (args) => {
       />
     </Page>
   );
+};
+
+export const DeleteIconExample = Empty.bind({});
+DeleteIconExample.args = {
+  ...DeleteIconExample.args,
+  hasDelete: true,
 };
