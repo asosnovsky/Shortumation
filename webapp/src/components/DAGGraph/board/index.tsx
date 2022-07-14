@@ -1,12 +1,8 @@
 import "./index.css";
 
-import { FC, useRef } from "react";
+import { FC } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import ReactFlow, {
-  Controls,
-  ReactFlowProvider,
-  useViewport,
-} from "react-flow-renderer";
+import ReactFlow, { Controls, ReactFlowProvider } from "react-flow-renderer";
 
 import { NodeEditor } from "components/NodeEditor";
 import { Modal } from "components/Modal";
@@ -27,8 +23,6 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
   state,
   closeModal,
 }) => {
-  const { zoom } = useViewport();
-  const lastZoom = useRef(zoom);
   // render unready or errored states
   if (!state.ready) {
     return (
@@ -58,8 +52,6 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
       />
     );
   }
-  // this hack avoids breakage on when zooming
-  // const prefix = Date.now();
   const elements = {
     nodes: state.data.elements.nodes,
     edges: state.data.elements.edges,
