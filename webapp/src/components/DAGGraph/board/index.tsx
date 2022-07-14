@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { FC } from "react";
+import { FC, useRef } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReactFlow, {
   Controls,
@@ -28,6 +28,7 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
   closeModal,
 }) => {
   const { zoom } = useViewport();
+  const lastZoom = useRef(zoom);
   // render unready or errored states
   if (!state.ready) {
     return (
@@ -58,18 +59,10 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
     );
   }
   // this hack avoids breakage on when zooming
-  const prefix = zoom;
+  // const prefix = Date.now();
   const elements = {
-    nodes: state.data.elements.nodes.map((n) => ({
-      ...n,
-      id: `${prefix}-${n.id}`,
-    })),
-    edges: state.data.elements.edges.map((n) => ({
-      ...n,
-      id: `${prefix}-${n.id}`,
-      source: `${prefix}-${n.source}`,
-      target: `${prefix}-${n.target}`,
-    })),
+    nodes: state.data.elements.nodes,
+    edges: state.data.elements.edges,
   };
   // main render
   return (
@@ -78,13 +71,13 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
       <ReactFlow
         className="dag-graphboard"
         nodeTypes={nodeTypes}
-        snapToGrid
-        onlyRenderVisibleElements
+        fitView
+        minZoom={0.25}
         nodesConnectable={false}
         nodesDraggable={false}
         {...elements}
       >
-        <Controls />
+        <Controls showInteractive={false} />
       </ReactFlow>
     </>
   );

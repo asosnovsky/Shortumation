@@ -10,6 +10,7 @@ export const AutomationActionNodeBase = st.type({
   alias: st.optional(st.string()),
   variables: st.optional(st.record(st.string(), st.any())),
   enabled: st.optional(st.boolean()),
+  continue_on_error: st.optional(st.boolean()),
 });
 
 export const ServiceAction = st.intersection([

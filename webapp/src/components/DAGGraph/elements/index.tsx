@@ -21,8 +21,6 @@ import { AddIcon } from "components/Icons";
 import { useDAGElementsState } from "./state";
 import AddBox from "@mui/icons-material/AddBox";
 import { DAGGraphChooseUpdater, DAGGraphUpdater } from "../updater";
-import { ReactNode } from "react";
-import DeleteForever from "@mui/icons-material/DeleteForever";
 
 export const useAutomationNodes = (
   automation: AutomationActionData,
