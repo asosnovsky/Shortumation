@@ -6,7 +6,11 @@ import { ModalState } from "../board/types";
 import { SequenceNodeActions } from "../nodes/SequenceNode/types";
 import { DAGUpdaterArgs, DAGUpdaterInput } from "./types";
 import { mapAutoActionKeyToNodeType } from "./util";
-import { ChooseAction, RepeatAction } from "types/automations/actions";
+import {
+  ChooseAction,
+  RepeatAction,
+  ParallelAction,
+} from "types/automations/actions";
 import { ScriptConditionField } from "types/automations/common";
 import { convertScriptConditionFieldToAutomationConditions } from "utils/automations";
 
@@ -255,7 +259,7 @@ export const createUpdater = (
       }
     },
     createRepeatNodeUpdater(i: number) {
-      const { repeat } = args.sequence.data[i] as RepeatAction;
+      const { repeat, ...rest } = args.sequence.data[i] as RepeatAction;
 
       return {
         sequence: createUpdater({
@@ -266,6 +270,7 @@ export const createUpdater = (
             onUpdate: (upd) =>
               basic.sequence.updateNode(
                 {
+                  ...rest,
                   repeat: {
                     ...repeat,
                     sequence: upd,
@@ -285,6 +290,7 @@ export const createUpdater = (
             onUpdate: (upd: any) =>
               basic.sequence.updateNode(
                 {
+                  ...rest,
                   repeat: {
                     ...repeat,
                     while: upd,
@@ -305,6 +311,7 @@ export const createUpdater = (
             onUpdate: (upd: any) =>
               basic.sequence.updateNode(
                 {
+                  ...rest,
                   repeat: {
                     ...repeat,
                     until: upd,
@@ -315,6 +322,42 @@ export const createUpdater = (
           },
           sequence: createDummyUpdater(),
           trigger: createDummyUpdater(),
+        }),
+      };
+    },
+    createParallelNodeUpdater(i: number, j: number) {
+      const { parallel, ...rest } = args.sequence.data[i] as ParallelAction;
+      const child = parallel[j];
+
+      return {
+        onRemove: () =>
+          basic.sequence.updateNode(
+            {
+              ...rest,
+              parallel: [...parallel.slice(0, j), ...parallel.slice(j + 1)],
+            },
+            i
+          ),
+        stateUpdater: createUpdater({
+          openModal: args.openModal,
+          condition: createDummyUpdater(),
+          trigger: createDummyUpdater(),
+          sequence: {
+            data: "sequence" in child ? child.sequence : [child],
+            onUpdate(d) {
+              basic.sequence.updateNode(
+                {
+                  ...rest,
+                  parallel: [
+                    ...parallel.slice(0, j),
+                    { sequence: d },
+                    ...parallel.slice(j + 1),
+                  ],
+                },
+                i
+              );
+            },
+          },
         }),
       };
     },

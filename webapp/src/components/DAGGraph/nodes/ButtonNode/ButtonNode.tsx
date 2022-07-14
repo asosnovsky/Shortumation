@@ -19,8 +19,14 @@ export const ButtonNode: FC<ButtonNodeProps> = ({
       <Handle type="target" position={flipped ? Position.Top : Position.Left} />
       {icon}
       <Handle
+        id="default"
         type="source"
         position={!flipped ? Position.Bottom : Position.Right}
+      />
+      <Handle
+        id="next"
+        type="source"
+        position={!flipped ? Position.Right : Position.Bottom}
       />
     </>
   );

@@ -428,3 +428,33 @@ RepeatAuto.args = {
     ],
   },
 };
+
+export const ParallelAuto = Template.bind({});
+ParallelAuto.args = {
+  ...ParallelAuto.args,
+  automation: {
+    condition: [],
+    trigger: [],
+    sequence: [
+      {
+        parallel: [
+          {
+            sequence: [
+              {
+                delay: {
+                  hours: 1,
+                },
+              },
+              {
+                service: "light.turn_on",
+              },
+            ],
+          },
+          {
+            service: "light.turn_off",
+          },
+        ],
+      },
+    ],
+  },
+};

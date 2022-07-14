@@ -110,9 +110,15 @@ export const makeDefault = (
   }
 };
 
-export const getNodeSubType = <T extends AutomationNodeTypes>(
-  node: AutomationNode<T>
-): AutomationNodeSubtype<T> => {
+export const getNodeSubType = <
+  T extends AutomationNodeTypes,
+  II extends boolean = false
+>(
+  node: AutomationNode<T>,
+  ignoreInvalid: II = false as II
+): II extends false
+  ? AutomationNodeSubtype<T>
+  : AutomationNodeSubtype<T> | "" => {
   if ("condition" in node) {
     return node.condition as any;
   } else if ("platform" in node) {
@@ -135,9 +141,10 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
     return "stop" as any;
   } else if ("parallel" in node) {
     return "parallel" as any;
-  } else {
+  } else if (!ignoreInvalid) {
     throw new Error("Invalid node type!");
   }
+  return "" as any;
 };
 
 export const TriggerValidators: Record<TriggerType, any> = {

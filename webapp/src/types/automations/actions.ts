@@ -30,28 +30,30 @@ export type ChooseAction = AutomationActionNodeBase<{
 }>;
 export type ParallelAction = AutomationActionNodeBase<{
   parallel: Array<
-    | AutomationAction
+    | AutomationSequenceNode
     | {
-        sequence: AutomationAction[];
+        sequence: AutomationSequenceNode[];
       }
   >;
 }>;
+export type ActionTypeMapping = {
+  service: ServiceAction;
+  repeat: RepeatAction;
+  wait: WaitAction | DelayAction;
+  event: FireEventAction;
+  device: DeviceAction;
+  stop: StopAction;
+  choose: ChooseAction;
+  parallel: ParallelAction;
+};
 export type AutomationAction =
-  | ParallelAction
   | ServiceAction
   | RepeatAction
   | WaitAction
-  | DelayAction
   | FireEventAction
   | DeviceAction
   | StopAction
-  | ChooseAction;
-export type ActionType =
-  | "service"
-  | "repeat"
-  | "wait"
-  | "event"
-  | "device"
-  | "stop"
-  | "choose"
-  | "parallel";
+  | ChooseAction
+  | ParallelAction
+  | DelayAction;
+export type ActionType = keyof ActionTypeMapping;
