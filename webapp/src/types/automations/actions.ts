@@ -28,7 +28,16 @@ export type ChooseAction = AutomationActionNodeBase<{
   }>;
   default?: AutomationSequenceNode[];
 }>;
+export type ParallelAction = AutomationActionNodeBase<{
+  parallel: Array<
+    | AutomationAction
+    | {
+        sequence: AutomationAction[];
+      }
+  >;
+}>;
 export type AutomationAction =
+  | ParallelAction
   | ServiceAction
   | RepeatAction
   | WaitAction
@@ -44,4 +53,5 @@ export type ActionType =
   | "event"
   | "device"
   | "stop"
-  | "choose";
+  | "choose"
+  | "parallel";

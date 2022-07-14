@@ -20,6 +20,7 @@ import { TriggerWebhook } from "./TriggerWebhook";
 import { TriggerZone } from "./TriggerZone";
 import { TriggerDevice } from "./TriggerDevice";
 import { ActionStopState } from "./ActionStop";
+import { ActionParallelState } from "./ActionParallel";
 
 export const getOptionManager = <T extends AutomationNodeTypes>(
   nodeType: T,
@@ -43,6 +44,8 @@ export const getOptionManager = <T extends AutomationNodeTypes>(
         return ActionStopState;
       case "delay":
         return ActionWaitState;
+      case "parallel":
+        return ActionParallelState;
     }
   }
   if (nodeType === "condition") {

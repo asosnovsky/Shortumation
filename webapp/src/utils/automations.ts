@@ -49,6 +49,7 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T) => {
         "device",
         "stop",
         "choose",
+        "parallel",
       ] as AutomationNodeSubtype<"action">[];
     case "condition":
       return [
@@ -132,6 +133,8 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
     return "wait" as any;
   } else if ("stop" in node) {
     return "stop" as any;
+  } else if ("parallel" in node) {
+    return "parallel" as any;
   } else {
     throw new Error("Invalid node type!");
   }
@@ -153,6 +156,7 @@ export const TriggerValidators: Record<TriggerType, any> = {
 };
 
 export const ActionValidators: Record<ActionType, any> = {
+  parallel: v.actions.ParallelAction,
   choose: v.actions.ChooseAction,
   device: v.actions.DeviceAction,
   event: v.actions.FireEventAction,

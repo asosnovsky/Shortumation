@@ -83,3 +83,10 @@ export const ChooseAction = st.intersection([
     default: st.optional(st.array(st.object())),
   }),
 ]);
+
+export const ParallelAction = st.intersection([
+  AutomationActionNodeBase,
+  st.type({
+    parallel: st.array(st.object()),
+  }),
+]);

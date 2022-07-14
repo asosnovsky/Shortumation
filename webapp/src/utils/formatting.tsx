@@ -188,6 +188,9 @@ export const getDescriptionFromAutomationNode = <
     }
     return `Stopping due to ${node.stop}`;
   }
+  if ("parallel" in node) {
+    return "Parallel";
+  }
   return "n/a";
 };
 
