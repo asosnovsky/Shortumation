@@ -39,12 +39,17 @@ export const getNodeType = (node: AutomationNode): AutomationNodeTypes => {
   }
 };
 
-export const getSubTypeList = <T extends AutomationNodeTypes>(
-  nodeType: T
-): AutomationNodeSubtype<T>[] => {
+export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T) => {
   switch (nodeType) {
     case "action":
-      return ["service", "repeat", "wait", "device", "choose"] as any;
+      return [
+        "service",
+        "repeat",
+        "wait",
+        "device",
+        "stop",
+        "choose",
+      ] as AutomationNodeSubtype<"action">[];
     case "condition":
       return [
         "or",
@@ -57,7 +62,7 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(
         "time",
         "trigger",
         "zone",
-      ] as any;
+      ] as AutomationNodeSubtype<"condition">[];
     case "trigger":
       return [
         "device",
@@ -72,7 +77,7 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(
         "tag",
         "template",
         "webhook",
-      ] as any;
+      ] as AutomationNodeSubtype<"trigger">[];
     default:
       return [];
   }
@@ -125,6 +130,8 @@ export const getNodeSubType = <T extends AutomationNodeTypes>(
     return "choose" as any;
   } else if ("delay" in node) {
     return "wait" as any;
+  } else if ("stop" in node) {
+    return "stop" as any;
   } else {
     throw new Error("Invalid node type!");
   }
@@ -151,6 +158,7 @@ export const ActionValidators: Record<ActionType, any> = {
   event: v.actions.FireEventAction,
   repeat: v.actions.RepeatAction,
   service: v.actions.ServiceAction,
+  stop: v.actions.StopAction,
   wait: st.union([v.actions.DelayAction, v.actions.WaitAction]),
 };
 

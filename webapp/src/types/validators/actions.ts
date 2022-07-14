@@ -63,6 +63,13 @@ export const DeviceAction = st.assign(
   st.partial(AutomationDeviceState)
 );
 
+export const StopAction = st.assign(
+  AutomationActionNodeBase,
+  st.type({
+    stop: st.string(),
+  })
+);
+
 export const ChooseAction = st.intersection([
   AutomationActionNodeBase,
   st.type({

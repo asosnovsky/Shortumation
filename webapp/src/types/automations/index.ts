@@ -30,11 +30,10 @@ export type AutomationNode<N extends AutomationNodeTypes = any> =
     : N extends "condition"
     ? AutomationCondition
     : never;
+export type AutomationNodeSubTypeMapping = {
+  trigger: TriggerType;
+  action: ActionType;
+  condition: ConditionType;
+};
 export type AutomationNodeSubtype<T extends AutomationNodeTypes = any> =
-  T extends "trigger"
-    ? TriggerType
-    : T extends "action"
-    ? ActionType
-    : T extends "condition"
-    ? ConditionType
-    : never;
+  AutomationNodeSubTypeMapping[T];

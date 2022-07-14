@@ -7,7 +7,7 @@ import {
   DayOfWeek,
 } from "types/automations/common";
 import { AutomationTriggerZone } from "types/automations/triggers";
-
+import StopIcon from "@mui/icons-material/PanToolOutlined";
 export interface Namer {
   getEntityName(entity_id: string | string[], maxEntities?: number): string;
   getDeviceName(device_id: string): string;
@@ -170,6 +170,23 @@ export const getDescriptionFromAutomationNode = <
       ) as any;
     }
     return "Switch (choose)";
+  }
+  if ("stop" in node) {
+    if (allowJs) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5em",
+          }}
+        >
+          <span>{node.stop}</span>
+          <StopIcon />
+        </div>
+      ) as any;
+    }
+    return `Stopping due to ${node.stop}`;
   }
   return "n/a";
 };

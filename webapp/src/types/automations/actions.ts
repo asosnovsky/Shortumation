@@ -20,6 +20,7 @@ export type WaitAction = st.Infer<typeof v.WaitAction>;
 export type DelayAction = st.Infer<typeof v.DelayAction>;
 export type FireEventAction = st.Infer<typeof v.FireEventAction>;
 export type DeviceAction = st.Infer<typeof v.DeviceAction>;
+export type StopAction = st.Infer<typeof v.StopAction>;
 export type ChooseAction = AutomationActionNodeBase<{
   choose: Array<{
     conditions: AutomationCondition[];
@@ -34,6 +35,7 @@ export type AutomationAction =
   | DelayAction
   | FireEventAction
   | DeviceAction
+  | StopAction
   | ChooseAction;
 export type ActionType =
   | "service"
@@ -41,4 +43,5 @@ export type ActionType =
   | "wait"
   | "event"
   | "device"
+  | "stop"
   | "choose";
