@@ -1,5 +1,16 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.3.0] - Complete Refactor of Graphs
+
+- Added visual support for
+  * Repeat Nodes
+  * Parallel Nodes
+
+- Using collections for conditions & triggers
+- Fixed several bugs with improper alerts
+- Fixed graph breakage during zoom
+
+
 ## [0.1.22] - Many Visual improvements
 
 - Deprecated several custom components in favor of mui.com
