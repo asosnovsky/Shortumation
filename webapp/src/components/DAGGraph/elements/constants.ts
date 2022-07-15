@@ -13,8 +13,8 @@ export const DEFAULT_DIMS: DAGDims = {
     width: NODE_WIDTH,
   },
   distanceFactor: {
-    node: 1.5,
-    collection: 1,
+    node: [1.5, 1.5],
+    collection: [1.25, 1.05],
   },
   position: {
     x: 50,

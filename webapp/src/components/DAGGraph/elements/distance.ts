@@ -9,11 +9,11 @@ export const moveAlong = (
   reversed: boolean = false
 ): XYPosition => {
   const moveOnY = {
-    y: startPoint.y + dims[by].height * dims.distanceFactor.node * increment,
+    y: startPoint.y + dims[by].height * dims.distanceFactor[by][0] * increment,
     x: startPoint.x,
   };
   const moveOnX = {
-    x: startPoint.x + dims[by].width * dims.distanceFactor.node * increment,
+    x: startPoint.x + dims[by].width * dims.distanceFactor[by][1] * increment,
     y: startPoint.y,
   };
   if (reversed) {
@@ -30,11 +30,14 @@ export const moveAlongRelativeTo = (
 ) =>
   dims.flipped
     ? {
-        x: relatedPos.x + dims.distanceFactor.node * dims[incrementBy].width,
+        x:
+          relatedPos.x +
+          dims.distanceFactor.node[0] * 1.5 * dims[incrementBy].width,
         y: offsetPos.y,
       }
     : {
-        y: relatedPos.y + dims.distanceFactor.node * dims[incrementBy].height,
+        y:
+          relatedPos.y + dims.distanceFactor.node[1] * dims[incrementBy].height,
         x: offsetPos.x,
       };
 
@@ -46,12 +49,12 @@ export const moveFromTo = (
 ): XYPosition => {
   if (!dims.flipped) {
     return {
-      x: startPoint.x + dims[from].width * dims.distanceFactor.collection,
+      x: startPoint.x + dims[from].width * dims.distanceFactor[to][0],
       y: startPoint.y + (dims[from].height - dims[to].height) / 2,
     };
   } else {
     return {
-      y: startPoint.y + dims[from].height * dims.distanceFactor.collection,
+      y: startPoint.y + dims[from].height * dims.distanceFactor[to][1],
       x: startPoint.x + (dims[from].width - dims[to].width) / 2,
     };
   }
@@ -62,6 +65,6 @@ export const offsetBy = (
   position: XYPosition,
   dims: DAGDims
 ): XYPosition => ({
-  x: position.x + dims.distanceFactor[by] * dims[by].width,
-  y: position.y + dims.distanceFactor[by] * dims[by].height,
+  x: position.x + dims.distanceFactor[by][0] * dims[by].width,
+  y: position.y + dims.distanceFactor[by][1] * dims[by].height,
 });

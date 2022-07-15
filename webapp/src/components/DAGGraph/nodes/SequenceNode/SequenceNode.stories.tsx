@@ -68,12 +68,12 @@ export const Colors: ComponentStory<typeof SequenceNode> = (args) => {
                       x:
                         50 +
                         DEFAULT_DIMS.node.height *
-                          DEFAULT_DIMS.distanceFactor.node *
+                          DEFAULT_DIMS.distanceFactor.node[0] *
                           i,
                       y:
                         50 +
                         DEFAULT_DIMS.node.height *
-                          DEFAULT_DIMS.distanceFactor.node *
+                          DEFAULT_DIMS.distanceFactor.node[1] *
                           i,
                     },
                   },

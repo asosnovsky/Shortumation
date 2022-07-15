@@ -44,7 +44,6 @@ export const useAutomationNodes = (
       nodeIndex: 0,
     })
   );
-
   outputState.extend(
     makeConditionNodes(automation.condition, {
       ...args,
@@ -338,7 +337,7 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
     let addPos = distance.moveAlong(
       "node",
       elseOutput.data.nodes[0].position,
-      1 / args.dims.distanceFactor.node,
+      1 / args.dims.distanceFactor.node[0],
       args.dims,
       true
     );

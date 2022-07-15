@@ -20,7 +20,7 @@ export type DAGEntities = {
 };
 export type DAGDims = DAGEntities & {
   position: XYPosition;
-  distanceFactor: Record<keyof DAGEntities, number>;
+  distanceFactor: Record<keyof DAGEntities, [number, number]>;
   flipped: boolean;
 };
 export type ElementMakerBaseProps = {

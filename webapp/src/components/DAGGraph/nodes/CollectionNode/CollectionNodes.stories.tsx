@@ -179,7 +179,7 @@ export const ReturnTarget: ComponentStory<typeof Demo> = (args) => {
                         50 +
                         args.height *
                           2 *
-                          DEFAULT_DIMS.distanceFactor.collection,
+                          DEFAULT_DIMS.distanceFactor.collection[1],
                     },
                   },
                   DEFAULT_DIMS,

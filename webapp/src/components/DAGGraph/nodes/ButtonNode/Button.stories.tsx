@@ -62,14 +62,14 @@ const Template: ComponentStory<typeof ButtonNode> = (args) => {
                       ? {
                           x:
                             DEFAULT_DIMS.node.width *
-                            DEFAULT_DIMS.distanceFactor.node,
+                            DEFAULT_DIMS.distanceFactor.node[0],
                           y: 0,
                         }
                       : {
                           x: 0,
                           y:
                             DEFAULT_DIMS.node.height *
-                            DEFAULT_DIMS.distanceFactor.node,
+                            DEFAULT_DIMS.distanceFactor.node[1],
                         },
                   },
                   dims,
