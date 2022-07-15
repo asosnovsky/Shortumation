@@ -8,9 +8,13 @@
 
 A better way to write automations in home-assistant without having to install and run a seperate automation engine!
 
-![image](https://user-images.githubusercontent.com/7451445/170770378-122c6722-993d-40ac-801d-387cfaccd41f.png)
+![image](https://user-images.githubusercontent.com/7451445/179136346-cf04a8c0-ac4e-44b2-b9fe-806824864660.png)
 
-![image](https://user-images.githubusercontent.com/7451445/170770572-fd38950a-b6b4-4b49-8c94-fb0a5f3008ce.png)
+![image](https://user-images.githubusercontent.com/7451445/179135734-8d7ca46d-7e6f-4975-abc3-de86a48de0c0.png)
+
+![image](https://user-images.githubusercontent.com/7451445/179135790-a5e77e2b-6d42-4810-a27b-ff4d165e99ec.png)
+
+![image](https://user-images.githubusercontent.com/7451445/179135916-8083aab5-bee1-4d27-b19d-9e000ca012f9.png)
 
 
 A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
@@ -22,10 +26,9 @@ A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI 
 - [X] Automation Manager
 - [X] Tags for automation organization
 - [X] Autocomplete fields for entities/devices
-- [ ] Script Manager
-- [ ] Use secrets and global parameters
-- [ ] Autocomplete fields for template editor 
-- [ ] Autocomplete fields for referencing scripts 
+- [X] Visualize parallel/repeat/choose/if-else nodes
+- [ ] Clean error reporting
+- [ ] Script Editor
 
 See roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1).
 
