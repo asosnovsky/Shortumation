@@ -65,8 +65,20 @@
     align-items: center;
 }
 
-.automation-list-box--bottom>button {
-    background-color: #070;
-    color: var(--mui-grey-400);
+.automation-list-box--bottom>.automation-list-box--bottom--add {
+    background-color: var(--mui-primary-main);
+    color: var(--mui-primary-contrastText);
     padding: 0.5em 2em;
+}
+
+.automation-list-box--bottom>.automation-list-box--bottom--add:hover {
+    color: var(--mui-primary-light);
+}
+
+.automation-list-box--bottom--load svg {
+    color: var(--mui-primary-main);
+}
+
+.automation-list-box--bottom--load.less svg {
+    transform: rotate(180deg);
 }

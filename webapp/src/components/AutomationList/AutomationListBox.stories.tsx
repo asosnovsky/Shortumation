@@ -5,6 +5,7 @@ import { createMockAuto } from "utils/mocks";
 import { Page } from "components/Page";
 import { CookiesProvider } from "react-cookie";
 import { makeTagDB } from "./TagDB";
+import { AutomationData } from "types/automations";
 
 export default {
   title: "App/AutomationList/Box",
@@ -20,7 +21,7 @@ const Template: ComponentStory<typeof AutomationListBox> = (args) => {
       <CookiesProvider>
         <AutomationListBox
           {...args}
-          tagsDB={makeTagDB(args.automations)}
+          tagsDB={makeTagDB(args.automations.data)}
           automations={args.automations}
           selected={selected}
           onSelectAutomation={(i) => {
@@ -33,41 +34,46 @@ const Template: ComponentStory<typeof AutomationListBox> = (args) => {
   );
 };
 
-export const EmptyStart = Template.bind({});
-EmptyStart.args = {
-  ...EmptyStart.args,
-  automations: [],
+const make = (autos: AutomationData[]) => {
+  const NewTemp = Template.bind({});
+  NewTemp.args = {
+    ...NewTemp.args,
+    automations: {
+      data: autos,
+      params: {
+        offset: 0,
+        limit: 100,
+      },
+      totalItems: autos.length,
+    },
+  };
+
+  return NewTemp;
 };
 
-export const FewAutos = Template.bind({});
-FewAutos.args = {
-  ...FewAutos.args,
-  automations: [
-    createMockAuto({
-      Room: "Bathroom",
-      Type: "Lights",
-      NewDevice: "Yes",
-      Remote: "No",
-      Floor: "1",
-    }),
-    createMockAuto({ Room: "Bathroom", Type: "Climate" }),
-    createMockAuto({ Room: "Living Room", Type: "Climate" }),
-    createMockAuto({ Type: "Climate" }),
-    createMockAuto({ Type: "Lights", Routine: "Myself" }),
-    createMockAuto({ Routine: "DNS", Type: "SSL" }),
-    createMockAuto({ Room: "Bedroom", Type: "Lights", Routine: "Baby" }),
-    createMockAuto({ Room: "Office", Type: "Lights" }),
-    createMockAuto({ Room: "Office" }),
-    createMockAuto(),
-  ],
-};
+export const EmptyStart = make([]);
 
-export const OneAuto = Template.bind({});
-OneAuto.args = {
-  ...OneAuto.args,
-  automations: [
-    createMockAuto({
-      Type: "Climate",
-    }),
-  ],
-};
+export const FewAutos = make([
+  createMockAuto({
+    Room: "Bathroom",
+    Type: "Lights",
+    NewDevice: "Yes",
+    Remote: "No",
+    Floor: "1",
+  }),
+  createMockAuto({ Room: "Bathroom", Type: "Climate" }),
+  createMockAuto({ Room: "Living Room", Type: "Climate" }),
+  createMockAuto({ Type: "Climate" }),
+  createMockAuto({ Type: "Lights", Routine: "Myself" }),
+  createMockAuto({ Routine: "DNS", Type: "SSL" }),
+  createMockAuto({ Room: "Bedroom", Type: "Lights", Routine: "Baby" }),
+  createMockAuto({ Room: "Office", Type: "Lights" }),
+  createMockAuto({ Room: "Office" }),
+  createMockAuto(),
+]);
+
+export const OneAuto = make([
+  createMockAuto({
+    Type: "Climate",
+  }),
+]);

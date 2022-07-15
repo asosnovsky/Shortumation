@@ -16,12 +16,14 @@ import { useHA } from "haService";
 import { ArrowBack } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import { DAGDims } from "components/DAGGraph/elements/types";
+import { ListData, ListParams } from "apiService/types";
 
 interface AutomationListParams {
-  automations: AutomationData[];
+  automations: ListData<AutomationData>;
   onUpdate: (i: number, auto: AutomationData) => void;
   onAdd: (auto: AutomationData) => void;
   onRemove: (i: number) => void;
+  onLoadMore: (p: ListParams) => void;
   dims: DAGDims;
   children?: ReactNode;
 }
@@ -54,6 +56,7 @@ export const useAutomationListState = () => {
 
 export const AutomationList: FC<AutomationListParams> = ({
   automations,
+  onLoadMore,
   onUpdate,
   onAdd,
   onRemove,
@@ -67,8 +70,11 @@ export const AutomationList: FC<AutomationListParams> = ({
   const { isMobile } = useWindowSize();
   const firstRender = useRef(true);
   // alias
-  const currentAuto = automations.length > 0 ? automations[current] : null;
-  const tagDB = makeTagDB(automations);
+  const currentAuto =
+    automations.data.length > 0
+      ? automations.data[current - automations.params.offset]
+      : null;
+  const tagDB = makeTagDB(automations.data);
   // effect
   useEffect(() => {
     if (firstRender.current) {
@@ -92,7 +98,7 @@ export const AutomationList: FC<AutomationListParams> = ({
           onUpdate={(a, i) => onUpdate(i, a)}
           onAdd={() => {
             onAdd(defaultAutomation(String(Date.now())));
-            setCurrent(automations.length);
+            setCurrent(automations.data.length);
             if (isMobile) {
               setHideList(true);
             }
@@ -103,6 +109,7 @@ export const AutomationList: FC<AutomationListParams> = ({
               setHideList(true);
             }
           }}
+          onLoadMore={onLoadMore}
           selected={current}
           onRemove={onRemove}
           tagsDB={tagDB}
@@ -171,7 +178,8 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
   return (
     <AutomationList
       dims={dims}
-      automations={automations.data.data}
+      automations={automations.data}
+      onLoadMore={() => {}}
       onAdd={(auto) =>
         updateAutomation({ auto, index: automations.data.totalItems + 1 })
       }

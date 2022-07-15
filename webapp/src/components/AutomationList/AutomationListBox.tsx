@@ -8,14 +8,20 @@ import { makeGrouping } from "./automationGrouper";
 import { AutomationListBoxGroup } from "./AutomationListBoxGroup";
 import { useCookies } from "react-cookie";
 import { TagDB } from "components/AutomationList/TagDB";
+// import { ButtonIcon } from "components/Icons/ButtonIcons";
+// import ReadMoreOutlinedIcon from "@mui/icons-material/ReadMoreOutlined";
+import { ListData, ListParams } from "apiService/types";
+import Chip from "@mui/material/Chip";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export type AutomationListBoxProps = {
-  automations: AutomationData[];
+  automations: ListData<AutomationData>;
   selected: number;
   onSelectAutomation: (i: number) => void;
   onRemove: (i: number) => void;
   onAdd: () => void;
   onUpdate: (a: AutomationData, i: number) => void;
+  onLoadMore: (p: ListParams) => void;
   tagsDB: TagDB;
 };
 
@@ -54,11 +60,16 @@ const useAutomationListBoxState = () => {
 };
 
 export const AutomationListBox: FC<AutomationListBoxProps> = ({
-  automations,
+  automations: {
+    data: automations,
+    params: autoParams,
+    totalItems: totalAutomations,
+  },
   selected,
   onSelectAutomation,
   onAdd,
   onRemove,
+  onLoadMore,
   tagsDB,
   onUpdate,
 }) => {
@@ -101,11 +112,44 @@ export const AutomationListBox: FC<AutomationListBoxProps> = ({
         />
       </div>
       <div className="automation-list-box--bottom">
-        <Button onClick={onAdd}>Add</Button>
-        <span>
-          Showing Automations: {filteredAutomations.length} out of{" "}
-          {automations.length}
-        </span>
+        <Button className="automation-list-box--bottom--add" onClick={onAdd}>
+          Add
+        </Button>
+        {automations.length < totalAutomations ? (
+          <>
+            <Chip
+              label={`Only loaded ${automations.length} out of ${totalAutomations}`}
+              variant="outlined"
+              color="warning"
+              icon={<InfoOutlinedIcon />}
+              onClick={() =>
+                window.open(
+                  "https://github.com/asosnovsky/Shortumation/issues/78",
+                  "_blank"
+                )
+              }
+            />
+            <small>support for more is not yet implemented</small>
+          </>
+        ) : (
+          ""
+        )}
+        {/* {autoParams.offset > 0 && (
+            <ButtonIcon
+              borderless
+              className="automation-list-box--bottom--load less"
+              icon={<ReadMoreOutlinedIcon />}
+              onClick={() => onLoadMore()}
+            />
+          )} */}
+        {/* {filteredAutomations.length} out of {totalAutomations} */}
+        {/* {autoParams.offset + automations.length < totalAutomations && (
+            <ButtonIcon
+              borderless
+              className="automation-list-box--bottom--load more"
+              icon={<ReadMoreOutlinedIcon />}
+            />
+          )} */}
       </div>
     </div>
   );

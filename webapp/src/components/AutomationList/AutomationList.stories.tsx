@@ -5,6 +5,7 @@ import { AutomationList } from ".";
 import { bigMockAutoList } from "utils/mocks";
 import { Page } from "components/Page";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
+import { AutomationData } from "types/automations";
 
 export default {
   title: "App/AutomationList",
@@ -16,12 +17,15 @@ export default {
 } as ComponentMeta<typeof AutomationList>;
 
 const Template: ComponentStory<typeof AutomationList> = (args) => {
-  const [autos, setAutos] = useState(args.automations);
+  const [autos, setAutos] = useState(args.automations.data);
   return (
     <Page>
       <AutomationList
         {...args}
-        automations={autos}
+        automations={{
+          ...args.automations,
+          data: autos,
+        }}
         onAdd={(a) => {
           args.onAdd(a);
           setAutos([...autos, a]);
@@ -39,107 +43,115 @@ const Template: ComponentStory<typeof AutomationList> = (args) => {
   );
 };
 
-export const EmptyStart = Template.bind({});
-EmptyStart.args = {
-  ...EmptyStart.args,
-  automations: [],
+const make = (autos: AutomationData[]) => {
+  const NewTemp = Template.bind({});
+  NewTemp.args = {
+    ...NewTemp.args,
+    automations: {
+      data: autos,
+      params: {
+        offset: 0,
+        limit: 100,
+      },
+      totalItems: autos.length,
+    },
+  };
+
+  return NewTemp;
 };
 
-export const FewAutos = Template.bind({});
-FewAutos.args = {
-  ...FewAutos.args,
-  automations: bigMockAutoList,
-};
+export const EmptyStart = make([]);
 
-export const BadAutmations = Template.bind({});
-BadAutmations.args = {
-  ...BadAutmations.args,
-  automations: [
-    {
-      metadata: {
-        alias: "Set Thermostat to 76 at 8am",
-        description: "",
-        mode: "single",
-      } as any,
-      trigger: [
-        {
-          at: "08:00:00",
-          platform: "time",
+export const FewAutos = make(bigMockAutoList);
+
+export const BadAutmations = make([
+  {
+    metadata: {
+      alias: "Set Thermostat to 76 at 8am",
+      description: "",
+      mode: "single",
+    } as any,
+    trigger: [
+      {
+        at: "08:00:00",
+        platform: "time",
+      },
+    ],
+    condition: [
+      {
+        condition: "state",
+        entity_id: "climate.thermostat",
+        state: "cool",
+      },
+    ],
+    sequence: [
+      {
+        data: {
+          temperature: 76,
         },
-      ],
-      condition: [
-        {
-          condition: "state",
+        service: "climate.set_temperature",
+        target: {
           entity_id: "climate.thermostat",
-          state: "cool",
         },
-      ],
-      sequence: [
-        {
-          data: {
-            temperature: 76,
-          },
-          service: "climate.set_temperature",
-          target: {
-            entity_id: "climate.thermostat",
-          },
-        },
-      ],
-      tags: {},
-    },
-    {
-      condition: [],
-      tags: {},
-      metadata: {
-        id: "Bad Choose Sequence",
-        alias: "Bad Choose",
-        description: "Example Metadata",
-        trigger_variables: {
-          wowo: "!",
-        },
-        mode: "single",
       },
-      trigger: [],
-      sequence: [
-        {
-          choose: {},
-        },
-      ] as any,
-    },
-    {
-      condition: [],
-      tags: {},
-      metadata: {
-        id: "random",
-        alias: "Bad Trigger",
-        description: "Example Metadata",
-        trigger_variables: {
-          wowo: "!",
-        },
-        mode: "single",
+    ],
+    tags: {},
+  },
+  {
+    condition: [],
+    tags: {},
+    metadata: {
+      id: "Bad Choose Sequence",
+      alias: "Bad Choose",
+      description: "Example Metadata",
+      trigger_variables: {
+        wowo: "!",
       },
-      trigger: ["haha I am a string"] as any,
-      sequence: [],
+      mode: "single",
     },
-    {
-      condition: [],
-      tags: {},
-      metadata: {} as any,
-      trigger: [],
-      sequence: [],
+    trigger: [],
+    sequence: [
+      {
+        choose: {},
+      },
+    ] as any,
+  },
+  {
+    condition: [],
+    tags: {},
+    metadata: {
+      id: "random",
+      alias: "Bad Trigger",
+      description: "Example Metadata",
+      trigger_variables: {
+        wowo: "!",
+      },
+      mode: "single",
     },
-  ],
-};
+    trigger: ["haha I am a string"] as any,
+    sequence: [],
+  },
+  {
+    condition: [],
+    tags: {},
+    metadata: {} as any,
+    trigger: [],
+    sequence: [],
+  },
+]);
 
 export const FewAutosWithSlowLoader: ComponentStory<typeof AutomationList> = (
   args
 ) => {
-  const [autos, setAutos] = useState(args.automations);
+  const [autos, setAutos] = useState(args.automations.data);
   return (
     <Page>
       <AutomationList
         {...args}
-        automations={autos}
+        automations={{
+          ...args.automations,
+          data: autos,
+        }}
         onAdd={(a) => {
           window.setTimeout(() => {
             args.onAdd(a);
@@ -164,5 +176,12 @@ export const FewAutosWithSlowLoader: ComponentStory<typeof AutomationList> = (
 };
 FewAutosWithSlowLoader.args = {
   ...FewAutosWithSlowLoader.args,
-  automations: bigMockAutoList,
+  automations: {
+    data: bigMockAutoList,
+    params: {
+      limit: 100,
+      offset: 0,
+    },
+    totalItems: 100,
+  },
 };
