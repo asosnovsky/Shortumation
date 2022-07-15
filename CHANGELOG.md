@@ -9,6 +9,13 @@
 - Using collections for conditions & triggers
 - Fixed several bugs with improper alerts
 - Fixed graph breakage during zoom
+- Support for enable/disable nodes in UI
+
+![image](https://user-images.githubusercontent.com/7451445/179135734-8d7ca46d-7e6f-4975-abc3-de86a48de0c0.png)
+
+![image](https://user-images.githubusercontent.com/7451445/179135790-a5e77e2b-6d42-4810-a27b-ff4d165e99ec.png)
+
+![image](https://user-images.githubusercontent.com/7451445/179135916-8083aab5-bee1-4d27-b19d-9e000ca012f9.png)
 
 
 ## [0.1.22] - Many Visual improvements
