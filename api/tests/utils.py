@@ -13,6 +13,7 @@ THIS_FOLDER = Path(__file__).parent
 SAMPLES_FOLDER = THIS_FOLDER / "samples"
 HA_CONFIG_EXAMPLE = SAMPLES_FOLDER / "config"
 HA_CONFIG2_EXAMPLE = SAMPLES_FOLDER / "config-2"
+HA_CONFIG3_EXAMPLE = SAMPLES_FOLDER / "config-3"
 
 
 def get_example_automation_loader(

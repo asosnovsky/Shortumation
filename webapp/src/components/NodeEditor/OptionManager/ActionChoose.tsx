@@ -8,7 +8,7 @@ export const ActionChooseState: OptionManager<ChooseAction> = {
     choose: [],
   }),
   isReady: () => true,
-  Component: ({}) => {
+  Component: () => {
     return <></>;
   },
 };

@@ -3,7 +3,6 @@ import { NodeTypes } from "react-flow-renderer";
 import { makeNodeMaker } from "./NodeMaker";
 import { DAGDims } from "../elements/types";
 
-export type NodeManager = typeof NodeManager;
 export const NodeManager = (() => {
   const nodeTypes: NodeTypes = {};
   return {

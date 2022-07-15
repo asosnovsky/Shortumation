@@ -8,7 +8,6 @@ import {
 } from "types/automations/common";
 import { AutomationTriggerZone } from "types/automations/triggers";
 import StopIcon from "@mui/icons-material/PanToolOutlined";
-import { RepeatAction } from "types/automations/actions";
 export interface Namer {
   getEntityName(entity_id: string | string[], maxEntities?: number): string;
   getDeviceName(device_id: string): string;

@@ -6,7 +6,7 @@ import { Page } from "components/Page";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
 
 export default {
-  title: "App/AutomationList/Connected",
+  title: "App/AutomationList/MockConnected",
   component: ConnectedAutomationList,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {

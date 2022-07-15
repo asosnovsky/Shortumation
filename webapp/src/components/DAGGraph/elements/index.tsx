@@ -19,7 +19,7 @@ import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { AddIcon } from "components/Icons";
 import { useDAGElementsState } from "./state";
 import AddBox from "@mui/icons-material/AddBox";
-import { DAGGraphChooseUpdater, DAGGraphUpdater } from "../updater";
+import { DAGGraphChooseUpdater } from "../updater";
 import { getSpecialNodeMaker, makeSpecialNodeMaker } from "./specialnodes";
 import { getNodeSubType } from "../../../utils/automations";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";

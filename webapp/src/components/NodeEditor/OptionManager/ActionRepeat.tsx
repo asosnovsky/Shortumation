@@ -1,8 +1,6 @@
 import InputNumber from "components/Inputs/InputNumber";
-import InputYaml from "components/Inputs/InputYaml";
-import { useState } from "react";
 import { RepeatAction } from "types/automations/actions";
-import { OptionManager, updateActionData } from "./OptionManager";
+import { OptionManager } from "./OptionManager";
 import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 
 const determineType = (repeatNode: RepeatAction["repeat"]) =>
@@ -16,7 +14,7 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
       sequence: [],
     },
   }),
-  isReady: ({}) => true,
+  isReady: () => true,
   Component: ({ state, setState }) => {
     const repeatType = determineType(state.repeat);
     return (

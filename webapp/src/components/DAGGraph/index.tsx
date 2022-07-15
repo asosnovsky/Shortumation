@@ -1,8 +1,5 @@
 import { FC, useState } from "react";
-import {
-  AutomationActionData,
-  AutomationSequenceNode,
-} from "types/automations";
+import { AutomationSequenceNode } from "types/automations";
 import { useHA } from "haService";
 import { ModalState } from "./board/types";
 import { createUpdater } from "./updater";

@@ -11,7 +11,6 @@ import {
   RepeatAction,
   ParallelAction,
 } from "types/automations/actions";
-import { ScriptConditionField } from "types/automations/common";
 import { convertScriptConditionFieldToAutomationConditions } from "utils/automations";
 import { AutomationNode } from "types/automations";
 

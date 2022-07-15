@@ -10,9 +10,9 @@ def find_hass_config() -> HassConfig:
     """Try to find HASS config."""
     if config("USE_EXAMPLE_REPO", False, cast=bool):
         print("using USE_EXAMPLE_REPO")
-        from tests.utils import create_copy_of_example_config
+        from tests.utils import create_copy_of_example_config, HA_CONFIG3_EXAMPLE
 
-        path = create_copy_of_example_config()
+        path = create_copy_of_example_config(HA_CONFIG3_EXAMPLE)
         print("|-> ", path)
         return HassConfig(path)
 
