@@ -16,7 +16,11 @@ export const ButtonNode: FC<ButtonNodeProps> = ({
 }) => {
   const inner = (
     <>
-      <Handle type="target" position={flipped ? Position.Top : Position.Left} />
+      <Handle
+        id="default"
+        type="target"
+        position={flipped ? Position.Top : Position.Left}
+      />
       {icon}
       <Handle
         id="default"

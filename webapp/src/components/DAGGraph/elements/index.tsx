@@ -148,7 +148,6 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
         {
           color: getNodeType(node) === "action" ? "green" : "blue",
           enabled: node.enabled ?? true,
-          hasInput: true,
           label: getDescriptionFromAutomationNode(node, namer, true),
           ...state.getIsClosedActions(nodeId, node),
           ...stateUpdater.createNodeActions("sequence", nodeIndex, {
@@ -403,27 +402,37 @@ export const makeRepeatNodes = makeSpecialNodeMaker(
       args.nodeIndex
     );
 
+    let whileState: DAGElementsOutputState | null = null;
+    let untilState: DAGElementsOutputState | null = null;
+
     // while
-    const whileState = makeConditionNodes(
-      convertScriptConditionFieldToAutomationConditions(node.repeat.while),
-      {
-        ...args,
-        stateUpdater: stateUpdater.while,
-        position: offsetPos,
-        lastNodeId,
-        nodeIndex: 0,
-        nodeId: `${args.nodeId}-repeat-while`,
-      }
-    );
-    whileState.data.edges[0].sourceHandle = `side`;
-    whileState.data.edges[0].label = `While`;
-    outputState.extend(whileState);
-    offsetPos = distance.moveFromTo("collection", "node", offsetPos, args.dims);
-    lastNodeId = whileState.lastNodeId;
+    if ("while" in node.repeat) {
+      whileState = makeConditionNodes(
+        convertScriptConditionFieldToAutomationConditions(node.repeat.while),
+        {
+          ...args,
+          stateUpdater: stateUpdater,
+          position: offsetPos,
+          lastNodeId,
+          nodeIndex: 0,
+          nodeId: `${args.nodeId}-repeat-while`,
+        }
+      );
+      whileState.data.edges[0].sourceHandle = `side`;
+      whileState.data.edges[0].label = `While`;
+      outputState.extend(whileState);
+      offsetPos = distance.moveFromTo(
+        "collection",
+        "node",
+        offsetPos,
+        args.dims
+      );
+      lastNodeId = whileState.lastNodeId;
+    }
     // sequence
     const sequenceState = makeSequenceNodes(node.repeat.sequence, {
       ...args,
-      stateUpdater: stateUpdater.sequence,
+      stateUpdater: stateUpdater,
       position: offsetPos,
       lastNodeId: undefined,
       nodeIndex: 0,
@@ -432,7 +441,12 @@ export const makeRepeatNodes = makeSpecialNodeMaker(
     if (lastNodeId && sequenceState.data.nodes.length > 0) {
       outputState.addEdge(lastNodeId, sequenceState.data.nodes[0].id, {
         animated: true,
-        label: "do",
+        label:
+          "count" in node.repeat
+            ? `repeat ${node.repeat.count} time${
+                node.repeat.count !== 1 ? "s" : ""
+              }`
+            : "do",
       });
     }
     lastNodeId = sequenceState.lastNodeId;
@@ -443,28 +457,41 @@ export const makeRepeatNodes = makeSpecialNodeMaker(
       "node"
     );
     // until
-    const untilState = makeConditionNodes(
-      convertScriptConditionFieldToAutomationConditions(node.repeat.until),
-      {
-        ...args,
-        stateUpdater: stateUpdater.until,
-        position: offsetPos,
-        lastNodeId,
-        nodeIndex: 0,
-        nodeId: `${args.nodeId}-repeat-until`,
-      }
-    );
-    untilState.data.edges[0].label = `Until`;
-    untilState.data.edges[0].targetHandle = `side`;
-    outputState.extend(untilState);
-    offsetPos = distance.moveFromTo("collection", "node", offsetPos, args.dims);
-    lastNodeId = untilState.lastNodeId;
+    if ("until" in node.repeat) {
+      untilState = makeConditionNodes(
+        convertScriptConditionFieldToAutomationConditions(node.repeat.until),
+        {
+          ...args,
+          stateUpdater: stateUpdater,
+          position: offsetPos,
+          lastNodeId,
+          nodeIndex: 0,
+          nodeId: `${args.nodeId}-repeat-until`,
+        }
+      );
+      untilState.data.edges[0].label = `Until`;
+      untilState.data.edges[0].targetHandle = `side`;
+      outputState.extend(untilState);
+      offsetPos = distance.moveFromTo(
+        "collection",
+        "node",
+        offsetPos,
+        args.dims
+      );
+      lastNodeId = untilState.lastNodeId;
+    }
     // loop
-    if (untilState.lastNodeId && whileState.lastNodeId) {
-      outputState.addEdge(untilState.lastNodeId, whileState.lastNodeId, {
+    const firstNodeId =
+      whileState === null
+        ? sequenceState.data.nodes[0].id
+        : whileState.lastNodeId;
+    const finalNodeId =
+      untilState === null ? sequenceState.lastNodeId : untilState.lastNodeId;
+    if (finalNodeId && firstNodeId) {
+      outputState.addEdge(finalNodeId, firstNodeId, {
         animated: true,
         label: "repeat",
-        sourceHandle: "head",
+        sourceHandle: untilState === null ? "default" : "head",
         targetHandle: "return",
       });
     }

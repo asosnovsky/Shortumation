@@ -28,9 +28,7 @@ export type SequenceNodeElementProps = SequenceNodeBaseProps & {
   width: number;
   flipped: boolean;
 };
-export type SequenceNodeDataProps = SequenceNodeBaseProps & {
-  hasInput?: boolean;
-};
+export type SequenceNodeDataProps = SequenceNodeBaseProps & {};
 export interface SequenceNodeProps extends SequenceNodeDataProps {
   height: number;
   width: number;

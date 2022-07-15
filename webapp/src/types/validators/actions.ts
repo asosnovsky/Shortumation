@@ -25,12 +25,20 @@ export const ServiceAction = st.intersection([
 export const RepeatAction = st.intersection([
   AutomationActionNodeBase,
   st.type({
-    repeat: st.object({
-      count: st.optional(st.number()),
-      while: st.optional(ScriptConditionField),
-      until: st.optional(ScriptConditionField),
-      sequence: st.array(st.object()),
-    }),
+    repeat: st.union([
+      st.object({
+        count: st.optional(st.number()),
+        sequence: st.array(st.object()),
+      }),
+      st.object({
+        until: st.optional(ScriptConditionField),
+        sequence: st.array(st.object()),
+      }),
+      st.object({
+        while: st.optional(ScriptConditionField),
+        sequence: st.array(st.object()),
+      }),
+    ]),
   }),
 ]);
 

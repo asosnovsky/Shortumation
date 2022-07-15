@@ -8,6 +8,7 @@ import {
 } from "types/automations/common";
 import { AutomationTriggerZone } from "types/automations/triggers";
 import StopIcon from "@mui/icons-material/PanToolOutlined";
+import { RepeatAction } from "types/automations/actions";
 export interface Namer {
   getEntityName(entity_id: string | string[], maxEntities?: number): string;
   getDeviceName(device_id: string): string;
@@ -137,10 +138,14 @@ export const getDescriptionFromAutomationNode = <
     return namer.getServiceName(node.service);
   }
   if ("repeat" in node) {
-    return (
-      "Repeat " +
-      (Number.isInteger(node.repeat.count) ? node.repeat.count : "indefintely")
-    );
+    const repeatNode = node.repeat;
+    if ("count" in repeatNode) {
+      return `Repeat ${repeatNode.count}`;
+    }
+    if ("while" in repeatNode) {
+      return `Repeat While`;
+    }
+    return "Repeat Until";
   }
   if ("delay" in node) {
     return `Wait for ${convertTimeToString(node.delay)}`;

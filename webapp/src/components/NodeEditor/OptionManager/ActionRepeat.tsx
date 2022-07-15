@@ -1,7 +1,12 @@
 import InputNumber from "components/Inputs/InputNumber";
 import InputYaml from "components/Inputs/InputYaml";
+import { useState } from "react";
 import { RepeatAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from "./OptionManager";
+import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+
+const determineType = (repeatNode: RepeatAction["repeat"]) =>
+  "count" in repeatNode ? "count" : "until" in repeatNode ? "until" : "while";
 
 export const ActionRepeatState: OptionManager<RepeatAction> = {
   defaultState: () => ({
@@ -12,36 +17,57 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
     },
   }),
   isReady: ({}) => true,
-  renderOptionList: (state, setState) => {
-    const update = updateActionData(state, setState);
+  Component: ({ state, setState }) => {
+    const repeatType = determineType(state.repeat);
     return (
       <>
-        <InputNumber
-          label="How many times?"
-          value={state.repeat.count}
-          onChange={(count = 1) =>
-            update({ repeat: { ...state.repeat, count } })
-          }
+        <InputAutoComplete
+          label="Type"
+          value={repeatType}
+          options={["while", "until", "count"]}
+          onChange={(v) => {
+            if (v === "while") {
+              setState({
+                ...state,
+                repeat: {
+                  sequence: state.repeat.sequence,
+                  while: "until" in state.repeat ? state.repeat.until : [],
+                },
+              });
+            } else if (v === "until") {
+              setState({
+                ...state,
+                repeat: {
+                  sequence: state.repeat.sequence,
+                  until: "while" in state.repeat ? state.repeat.while : [],
+                },
+              });
+            } else {
+              setState({
+                ...state,
+                repeat: {
+                  sequence: state.repeat.sequence,
+                  count: 1,
+                },
+              });
+            }
+          }}
         />
-        <InputYaml
-          label="While"
-          value={state.repeat.while ?? []}
-          onChange={(sequence) =>
-            update({ repeat: { ...state.repeat, while: sequence } })
-          }
-        />
-        <InputYaml
-          label="Sequence"
-          value={state.repeat.sequence ?? []}
-          onChange={(sequence) =>
-            update({ repeat: { ...state.repeat, sequence } })
-          }
-        />
-        <InputYaml
-          label="Until"
-          value={state.repeat.until ?? []}
-          onChange={(until) => update({ repeat: { ...state.repeat, until } })}
-        />
+        {"count" in state.repeat && (
+          <InputNumber
+            label="How many times?"
+            value={state.repeat.count}
+            onChange={(count = 1) =>
+              setState({
+                ...state,
+                repeat: {
+                  sequence: state.repeat.sequence,
+                  count,
+                },
+              })
+            }
+          />
+        )}
       </>
     );
   },

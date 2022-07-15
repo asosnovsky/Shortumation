@@ -409,7 +409,6 @@ RepeatAuto.args = {
       },
       {
         repeat: {
-          count: 2,
           until: [
             {
               condition: "state",
@@ -417,6 +416,17 @@ RepeatAuto.args = {
               state: "off",
             },
           ],
+          sequence: [
+            {
+              entity_id: "button.ping_mainboard",
+              service: "button.pres",
+            },
+          ],
+        },
+      },
+      {
+        repeat: {
+          count: 2,
           sequence: [
             {
               entity_id: "button.ping_mainboard",

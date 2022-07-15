@@ -9,12 +9,19 @@ type AutomationActionNodeBase<Data extends Object> = Data &
 
 export type ServiceAction = st.Infer<typeof v.ServiceAction>;
 export type RepeatAction = AutomationActionNodeBase<{
-  repeat: {
-    count?: number;
-    while?: ScriptConditionField;
-    until?: ScriptConditionField;
-    sequence: AutomationAction[];
-  };
+  repeat:
+    | {
+        sequence: AutomationAction[];
+        count: number;
+      }
+    | {
+        sequence: AutomationAction[];
+        until: ScriptConditionField;
+      }
+    | {
+        sequence: AutomationAction[];
+        while: ScriptConditionField;
+      };
 }>;
 export type WaitAction = st.Infer<typeof v.WaitAction>;
 export type DelayAction = st.Infer<typeof v.DelayAction>;

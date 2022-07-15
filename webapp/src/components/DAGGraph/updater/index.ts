@@ -13,6 +13,7 @@ import {
 } from "types/automations/actions";
 import { ScriptConditionField } from "types/automations/common";
 import { convertScriptConditionFieldToAutomationConditions } from "utils/automations";
+import { AutomationNode } from "types/automations";
 
 export const createBasicUpdater =
   <K extends keyof AutomationActionData, N extends AutomationActionData[K][0]>(
@@ -260,28 +261,23 @@ export const createUpdater = (
     },
     createRepeatNodeUpdater(i: number) {
       const { repeat, ...rest } = args.sequence.data[i] as RepeatAction;
+      const sequence = {
+        data: repeat.sequence,
+        onUpdate: (upd: AutomationNode[]) =>
+          basic.sequence.updateNode(
+            {
+              ...rest,
+              repeat: {
+                ...repeat,
+                sequence: upd,
+              },
+            },
+            i
+          ),
+      };
 
-      return {
-        sequence: createUpdater({
-          openModal: args.openModal,
-          condition: createDummyUpdater(),
-          sequence: {
-            data: repeat.sequence,
-            onUpdate: (upd) =>
-              basic.sequence.updateNode(
-                {
-                  ...rest,
-                  repeat: {
-                    ...repeat,
-                    sequence: upd,
-                  },
-                },
-                i
-              ),
-          },
-          trigger: createDummyUpdater(),
-        }),
-        while: createUpdater({
+      if ("while" in repeat) {
+        return createUpdater({
           openModal: args.openModal,
           condition: {
             data: convertScriptConditionFieldToAutomationConditions(
@@ -299,10 +295,13 @@ export const createUpdater = (
                 i
               ),
           },
-          sequence: createDummyUpdater(),
           trigger: createDummyUpdater(),
-        }),
-        until: createUpdater({
+          sequence,
+        });
+      }
+
+      if ("until" in repeat) {
+        return createUpdater({
           openModal: args.openModal,
           condition: {
             data: convertScriptConditionFieldToAutomationConditions(
@@ -320,10 +319,17 @@ export const createUpdater = (
                 i
               ),
           },
-          sequence: createDummyUpdater(),
           trigger: createDummyUpdater(),
-        }),
-      };
+          sequence,
+        });
+      }
+
+      return createUpdater({
+        openModal: args.openModal,
+        condition: createDummyUpdater(),
+        trigger: createDummyUpdater(),
+        sequence,
+      });
     },
     createParallelNodeUpdater(i: number, j: number) {
       const { parallel, ...rest } = args.sequence.data[i] as ParallelAction;
