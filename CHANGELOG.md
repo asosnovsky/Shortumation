@@ -1,10 +1,16 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.3.1] - Increased Pagination + Restricted Repeat Node
+
+- Increased pagination to display up to 10,000 autos for now
+- Repeat node now has types
+
 ## [0.3.0] - Complete Refactor of Graphs
 
 - Added visual support for
-  * Repeat Nodes
-  * Parallel Nodes
+
+  - Repeat Nodes
+  - Parallel Nodes
 
 - Using collections for conditions & triggers
 - Fixed several bugs with improper alerts
@@ -16,7 +22,6 @@
 ![image](https://user-images.githubusercontent.com/7451445/179135790-a5e77e2b-6d42-4810-a27b-ff4d165e99ec.png)
 
 ![image](https://user-images.githubusercontent.com/7451445/179135916-8083aab5-bee1-4d27-b19d-9e000ca012f9.png)
-
 
 ## [0.1.22] - Many Visual improvements
 
