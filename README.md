@@ -8,13 +8,32 @@
 
 A better way to write automations in home-assistant without having to install and run a seperate automation engine!
 
+Sort and organize your home-assistant automations using tags!
+
 ![image](https://user-images.githubusercontent.com/7451445/179136346-cf04a8c0-ac4e-44b2-b9fe-806824864660.png)
+
+Utilize the auto-generated node descriptions to understand what your automation is doing! No more reading YAML to just understand what 1 node does! 
+
+![image](https://user-images.githubusercontent.com/7451445/179137357-455260f3-2cdd-44ca-ae62-084ed7c59ebd.png)
+
+
+More condense UI for service calls!
+
+![image](https://user-images.githubusercontent.com/7451445/179137126-93601ea9-435f-4c4f-8f21-0d09cd61c7a2.png)
+
+
+Visualize complex 'choose' or 'if/else' nodes
 
 ![image](https://user-images.githubusercontent.com/7451445/179135734-8d7ca46d-7e6f-4975-abc3-de86a48de0c0.png)
 
+Visualize parallel nodes!
+
+![image](https://user-images.githubusercontent.com/7451445/179136706-695912d7-e223-42d9-a27b-f330b021a56a.png)
+
+Visualize repeat nodes!
+
 ![image](https://user-images.githubusercontent.com/7451445/179135790-a5e77e2b-6d42-4810-a27b-ff4d165e99ec.png)
 
-![image](https://user-images.githubusercontent.com/7451445/179135916-8083aab5-bee1-4d27-b19d-9e000ca012f9.png)
 
 
 A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
@@ -27,6 +46,7 @@ A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI 
 - [X] Tags for automation organization
 - [X] Autocomplete fields for entities/devices
 - [X] Visualize parallel/repeat/choose/if-else nodes
+- [X] Autogenerate node names
 - [ ] Clean error reporting
 - [ ] Script Editor
 
