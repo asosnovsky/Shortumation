@@ -101,7 +101,7 @@ export const BadAutmations = make([
     condition: [],
     tags: {},
     metadata: {
-      id: "Bad Choose Sequence",
+      id: "Bad Choose Example",
       alias: "Bad Choose",
       description: "Example Metadata",
       trigger_variables: {
@@ -112,7 +112,7 @@ export const BadAutmations = make([
     trigger: [],
     sequence: [
       {
-        choose: {},
+        choose: [],
       },
     ] as any,
   },

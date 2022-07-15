@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export type SequenceNodeColor = "red" | "blue" | "green" | "lblue";
+export type SequenceNodeColor = "red" | "blue" | "green" | "lblue" | "error";
 export type SequenceNodeOnMove<Direction extends string> = Record<
   Direction,
   () => void

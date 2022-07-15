@@ -14,6 +14,7 @@ import { SequenceNodeMaker } from "../nodes/SequenceNode";
 import {
   getNodeType,
   convertScriptConditionFieldToAutomationConditions,
+  validateNode,
 } from "utils/automations";
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { AddIcon } from "components/Icons";
@@ -24,6 +25,9 @@ import { getSpecialNodeMaker, makeSpecialNodeMaker } from "./specialnodes";
 import { getNodeSubType } from "../../../utils/automations";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Add from "@mui/icons-material/Add";
+import { SequenceNodeDataProps } from "../nodes/SequenceNode/types";
+import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import { convertFailuresToSequenceNodeDataProps } from "./util";
 
 export const useAutomationNodes = (
   automation: AutomationActionData,
@@ -91,11 +95,23 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
       ...dims.collection,
       collectionType: "trigger",
       onAddNode: () => stateUpdater.basic.trigger.addNode(null),
-      nodes: nodes.map((node, index) => ({
-        enabled: node.enabled ?? true,
-        label: getDescriptionFromAutomationNode(node, namer, true),
-        ...stateUpdater.createNodeActions("trigger", index, {}),
-      })),
+      nodes: nodes.map((node, index) => {
+        const failures = validateNode(node, ["condition"]);
+
+        if (failures) {
+          return {
+            enabled: node.enabled ?? true,
+            ...stateUpdater.createNodeActions("trigger", index, {}),
+            ...convertFailuresToSequenceNodeDataProps(failures),
+          };
+        }
+
+        return {
+          enabled: node.enabled ?? true,
+          label: getDescriptionFromAutomationNode(node, namer, true),
+          ...stateUpdater.createNodeActions("trigger", index, {}),
+        };
+      }),
     })
   );
   return outputState;
@@ -112,11 +128,23 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
       collectionType: "condition",
       hasInput: !!lastNodeId,
       onAddNode: () => stateUpdater.basic.condition.addNode(null),
-      nodes: nodes.map((node, index) => ({
-        enabled: node.enabled ?? true,
-        label: getDescriptionFromAutomationNode(node, namer, true),
-        ...stateUpdater.createNodeActions("condition", index, {}),
-      })),
+      nodes: nodes.map((node, index) => {
+        const failures = validateNode(node, ["condition"]);
+
+        if (failures) {
+          return {
+            enabled: node.enabled ?? true,
+            ...stateUpdater.createNodeActions("condition", index, {}),
+            ...convertFailuresToSequenceNodeDataProps(failures),
+          };
+        }
+
+        return {
+          enabled: node.enabled ?? true,
+          label: getDescriptionFromAutomationNode(node, namer, true),
+          ...stateUpdater.createNodeActions("condition", index, {}),
+        };
+      }),
     })
   );
   if (lastNodeId && outputState.lastNodeId) {
@@ -133,10 +161,25 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   const outputState = new DAGElementsOutputState(position, dims);
   nodes.forEach((node, nodeIndex) => {
     // the JSON.stringify is hack to make the edges render nicely
-    const nodeId = `${args.nodeId}-${
-      args.nodeIndex
-    }-${nodeIndex}-${JSON.stringify(node)}`;
+    const nodeId = `${args.nodeId}-${args.nodeIndex}-${nodeIndex}`;
     outputState.incNextPos("node");
+    let nodeData: SequenceNodeDataProps = {
+      color: getNodeType(node) === "action" ? "green" : "blue",
+      enabled: node.enabled ?? true,
+      label: getDescriptionFromAutomationNode(node, namer, true),
+      ...state.getIsClosedActions(nodeId, node),
+      ...stateUpdater.createNodeActions("sequence", nodeIndex, {
+        includeAdd: true,
+        flipped: dims.flipped,
+      }),
+    };
+    const failures = validateNode(node, ["action", "condition"]);
+    if (failures) {
+      nodeData = {
+        ...nodeData,
+        ...convertFailuresToSequenceNodeDataProps(failures),
+      };
+    }
     const element = outputState.addNode(
       SequenceNodeMaker.makeElement(
         {
@@ -144,36 +187,29 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
           position: outputState.nextPos,
         },
         dims,
-        {
-          color: getNodeType(node) === "action" ? "green" : "blue",
-          enabled: node.enabled ?? true,
-          label: getDescriptionFromAutomationNode(node, namer, true),
-          ...state.getIsClosedActions(nodeId, node),
-          ...stateUpdater.createNodeActions("sequence", nodeIndex, {
-            includeAdd: true,
-            flipped: dims.flipped,
-          }),
-        }
+        nodeData
       ),
       true
     );
     if (nodeIndex === 0 && lastNodeId) {
       outputState.addEdge(lastNodeId, element.id);
     }
-    const specialNodeMaker = getSpecialNodeMaker(
-      getNodeSubType(node, true) as any
-    );
-    if (specialNodeMaker) {
-      outputState.extend(
-        specialNodeMaker([node] as any, {
-          ...args,
-          nodeId,
-          lastNodeId: element.id,
-          position: outputState.getLastNodePos(),
-          nodeIndex,
-        }),
-        true
+    if (!failures) {
+      const specialNodeMaker = getSpecialNodeMaker(
+        getNodeSubType(node, true) as any
       );
+      if (specialNodeMaker) {
+        outputState.extend(
+          specialNodeMaker([node] as any, {
+            ...args,
+            nodeId,
+            lastNodeId: element.id,
+            position: outputState.getLastNodePos(),
+            nodeIndex,
+          }),
+          true
+        );
+      }
     }
   });
 

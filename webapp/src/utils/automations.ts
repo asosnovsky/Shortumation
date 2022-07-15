@@ -196,6 +196,18 @@ export const validateNode = (
   node: AutomationNode,
   allowedNodeTypes: AutomationNodeTypes[] = []
 ): MiniFailure[] | null => {
+  if (typeof node !== "object") {
+    return [
+      {
+        message: [
+          `Expected an object but got type of "${typeof node}" = ${JSON.stringify(
+            node
+          )}`,
+        ],
+        path: "$",
+      },
+    ];
+  }
   let nodeType = getNodeType(node);
   let errors: MiniFailure[] = [];
   if (allowedNodeTypes.length > 0 && !allowedNodeTypes.includes(nodeType)) {
@@ -203,7 +215,7 @@ export const validateNode = (
       message: [
         `Got node of type "${nodeType}" but expected one of {${allowedNodeTypes}}`,
       ],
-      path: "",
+      path: "$",
     });
     nodeType = allowedNodeTypes[0];
   }
@@ -214,7 +226,16 @@ export const validateNode = (
     errors.push({ message: [`Failed to identifiy subtype`], path: "" });
   }
   if (nodeSubType) {
-    const failures = getFailures(node, AllValidators[nodeType][nodeSubType]);
+    const validator = AllValidators[nodeType][nodeSubType];
+    if (!validator) {
+      return errors.concat([
+        {
+          message: [`"${nodeSubType}" is not a known type for ${nodeType}`],
+          path: "$",
+        },
+      ]);
+    }
+    const failures = getFailures(node, validator);
     if (failures) {
       errors = errors.concat(failures);
     }

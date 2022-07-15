@@ -1,3 +1,5 @@
+import "./InputList.css";
+
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,11 +17,13 @@ export type Props<T extends string | Object> = {
   className?: string;
   prettyOptionLabels?: boolean;
   getKey?: (n: T) => string;
+  getDescription?: (n: T) => string;
   placeholder?: any;
   title?: string;
   helperText?: string;
   endAdornment?: ReactNode;
   disabled?: boolean;
+  fullWidth?: boolean;
 };
 export function InputList<T extends string | Object>({
   current,
@@ -30,11 +34,13 @@ export function InputList<T extends string | Object>({
   className,
   prettyOptionLabels = true,
   getKey = String,
+  getDescription,
   placeholder,
   title,
   helperText,
   endAdornment,
   disabled,
+  fullWidth = true,
 }: Props<T>) {
   const invalidCurrent =
     current && !options.map(getKey).includes(getKey(current));
@@ -43,7 +49,7 @@ export function InputList<T extends string | Object>({
       className={className}
       variant="filled"
       sx={{ marginRight: "0.25em", minWidth: `${label.length * 0.75}em` }}
-      fullWidth
+      fullWidth={fullWidth}
       disabled={disabled}
     >
       <InputLabel>{label}</InputLabel>
@@ -62,12 +68,20 @@ export function InputList<T extends string | Object>({
         label={label}
         variant="filled"
         error={invalidCurrent}
-        fullWidth
+        fullWidth={fullWidth}
         disabled={disabled}
       >
         {options.map((t, i) => (
-          <MenuItem key={i} value={getKey(t)}>
+          <MenuItem key={i} value={getKey(t)} className="input-list--menu-item">
             {prettyOptionLabels ? prettyName(getKey(t)) : getKey(t)}
+            {!!getDescription && (
+              <>
+                <br />
+                <div className="input-list--menu-item--description">
+                  {getDescription(t)}
+                </div>
+              </>
+            )}
           </MenuItem>
         ))}
       </Select>

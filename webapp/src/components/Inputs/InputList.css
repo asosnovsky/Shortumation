@@ -1,0 +1,15 @@
+.MuiMenuItem-root.input-list--menu-item {
+    display: inherit;
+}
+
+.input-list--menu-item .input-list--menu-item--description {
+    font-size: 0.75em;
+    max-width: 80vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+}
+
+.MuiSelect-select .input-list--menu-item--description {
+    display: none;
+}

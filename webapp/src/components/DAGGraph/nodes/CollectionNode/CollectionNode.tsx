@@ -71,11 +71,11 @@ export const CollectionNode: FC<CollectionNodeProps> = ({
         <div className="collection-nodes--inner">
           {nodes.map((n, i) => (
             <SequenceNodeElement
-              {...n}
-              {...sequenceNode}
               key={i}
               color={color}
               flipped={flipped}
+              {...n}
+              {...sequenceNode}
             />
           ))}
         </div>

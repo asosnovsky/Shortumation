@@ -468,3 +468,36 @@ ParallelAuto.args = {
     ],
   },
 };
+
+export const BadNodes = Template.bind({});
+BadNodes.args = {
+  ...BadNodes.args,
+  automation: {
+    condition: [
+      {
+        event: "triggerme",
+      },
+      {
+        condition: "and",
+        thisshouldnotbehere: "1",
+        conditions: "1234",
+      },
+    ] as any,
+    trigger: [
+      { platform: "homeassistant" },
+      { platfom: "bobid" },
+      { condition: "and" },
+      "text?",
+    ] as any,
+    sequence: [
+      {
+        parallel: {
+          bad: "me",
+        },
+      },
+      {
+        platform: "event",
+      },
+    ] as any,
+  },
+};

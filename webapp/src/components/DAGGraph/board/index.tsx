@@ -69,7 +69,7 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
         nodesDraggable={false}
         {...elements}
       >
-        <Controls showInteractive={false} />
+        <Controls showInteractive={false} showFitView />
       </ReactFlow>
     </>
   );

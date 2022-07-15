@@ -16,6 +16,8 @@ import { ArrowBack } from "@mui/icons-material";
 import { useCookies } from "react-cookie";
 import { DAGDims } from "components/DAGGraph/elements/types";
 import { DAGAutomationGraph } from "components/DAGGraph";
+import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+import { InputList } from "components/Inputs/InputList";
 
 interface Props {
   automation?: AutomationData;
@@ -95,6 +97,53 @@ export const AutomationEditor: FC<Props> = ({
         className={["automation-editor--flow-wrapper", state.status].join(" ")}
       >
         <div className="automation-editor--flow-wrapper--toolbar">
+          <div className="automation-editor--flow-wrapper--toolbar--title">
+            <span className="automation-editor--flow-wrapper--toolbar--title--text">
+              <div className="id">{state.data.metadata.id}</div>
+              <b>{state.data.metadata.alias}</b>
+            </span>
+            <InputList
+              fullWidth={false}
+              label="Mode"
+              className="automation-editor--flow-wrapper--toolbar--modes"
+              current={{
+                id: state.data.metadata.mode,
+                label: "",
+              }}
+              onChange={({ id }) =>
+                updateMetadata(
+                  {
+                    ...state.data.metadata,
+                    mode: id,
+                  },
+                  state.data.tags
+                )
+              }
+              getKey={({ id }) => id}
+              getDescription={({ label }) => label}
+              options={[
+                {
+                  id: "single",
+                  label: "Do not start a new run. Issue a warning.",
+                },
+                {
+                  id: "parallel",
+                  label:
+                    "Start a new, independent run in parallel with previous runs.",
+                },
+                {
+                  id: "queued",
+                  label:
+                    "Start a new run after all previous runs complete. Runs are guaranteed to execute in the order they were queued.",
+                },
+                {
+                  id: "restart",
+                  label: "Start a new run after first stopping previous run.",
+                },
+              ]}
+            />
+            <small>{state.data.metadata.description}</small>
+          </div>
           {!dims.flipped && (
             <Button
               className={"automation-editor--flow-wrapper--toolbar--flip-btn"}

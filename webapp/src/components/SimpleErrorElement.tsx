@@ -2,14 +2,31 @@ import { FC } from "react";
 
 export const SimpleErrorElement: FC<{ error: Error }> = ({ error }) => {
   return (
-    <>
-      <b>{error?.name}</b>
+    <div
+      style={{
+        padding: "1em",
+      }}
+    >
+      <b>Error Name</b>: {error?.name}
       <br />
-      <b>{error?.message}</b>
+      <b>Error Message</b>
+      {error?.message}
       <br />
-      <span>{error?.stack}</span>
+      <b>Error Stack</b>
+      <code
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: "1em",
+        }}
+      >
+        {error?.stack?.split("\n").map((t, i) => (
+          <span key={i}>{t}</span>
+        ))}
+      </code>
       <br />
-      <span>{JSON.stringify(error)}</span>
-    </>
+      <b>JSON:</b>
+      <code>{JSON.stringify(error)}</code>
+    </div>
   );
 };

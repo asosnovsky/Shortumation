@@ -45,7 +45,8 @@ Simple.args = {
       Use: "Flushing",
     },
     metadata: {
-      id: "random",
+      id:
+        "random" + String(Date.now()) + String(Date.now()) + String(Date.now()),
       alias: "Random",
       description: "Example Metadata",
       trigger_variables: {

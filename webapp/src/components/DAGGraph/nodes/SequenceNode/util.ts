@@ -11,6 +11,8 @@ export const useSequenceNodeColor = (color: SequenceNodeColor): string => {
     : color === "lblue"
     ? theme.palette.info.light
     : color === "red"
+    ? theme.palette.warning.dark
+    : color === "error"
     ? theme.palette.error.dark
     : "none";
 };

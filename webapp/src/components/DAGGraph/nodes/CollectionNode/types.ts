@@ -6,6 +6,7 @@ import { AutomationActionData } from "types/automations";
 export type CollectionNodeChildProps = Partial<SequenceNodeActions> & {
   enabled: boolean;
   label: ReactNode;
+  color?: SequenceNodeColor;
 };
 export type CollectionNodeDataProps = Size & {
   nodes: CollectionNodeChildProps[];

@@ -29,8 +29,39 @@
     display: flex;
     flex-direction: row;
     gap: 0.25em;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-top: 0.25em;
+}
+
+.automation-editor--flow-wrapper--toolbar--title {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.25em;
+    width: 100%;
+}
+
+.automation-editor--flow-wrapper--toolbar--title--text .id {
+    font-size: 0.75em;
+    max-width: 15em;
+    padding: 0;
+    margin: 0;
+    white-space: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.automation-editor--flow-wrapper--toolbar .automation-editor--flow-wrapper--toolbar--modes .MuiSelect-select {
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    padding-top: 1.15em;
+    padding-bottom: 0.25em;
+}
+
+.automation-editor--flow-wrapper--toolbar .automation-editor--flow-wrapper--toolbar--modes .MuiInputLabel-root {
+    font-size: 0.9em;
+    left: -0.5em;
 }
 
 .automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar * {
