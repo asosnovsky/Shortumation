@@ -26,7 +26,7 @@ export const InputTextView: FC<InputTextViewProps> = (props) => {
     return (
       <div className={className} onClick={() => setViewMode(false)}>
         {!!props.value ? (
-          props.value
+          <span>{props.value}</span>
         ) : (
           <span className="input-text-view--placeholder">
             {props.placeholder}

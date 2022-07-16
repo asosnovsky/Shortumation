@@ -9,7 +9,6 @@ import { TagDB } from "components/AutomationList/TagDB";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 interface Props {
-  className: string;
   metadata: AutomationMetadata;
   tags: Array<[string, string]>;
   onUpdate: (m: AutomationMetadata, tags: Array<[string, string]>) => void;
@@ -20,7 +19,6 @@ export const AutoInfoBox: FC<Props> = ({
   metadata,
   tags,
   onUpdate,
-  className,
   children,
   tagDB,
 }) => {
@@ -97,7 +95,7 @@ export const AutoInfoBox: FC<Props> = ({
     ]);
   // render
   return (
-    <div className={`automation-editor--info-box ${className}`}>
+    <div className="automation-editor--info-box">
       <div className="automation-editor--info-box-inner">
         <InputText
           label="ID"

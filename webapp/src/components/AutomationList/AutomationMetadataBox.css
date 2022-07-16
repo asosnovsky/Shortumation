@@ -7,6 +7,13 @@
 
 .automation-list-box--body--item--title>b {
     font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.automation-list-box--body--item--title .input-text-view span {
+    max-height: 1.5em;
 }
 
 .automation-list-box--body--item--title>span, .automation-list-box--body--item--title>b>span {
@@ -80,4 +87,15 @@
 
 .automation-list-box--body--item--tags--item>.text .icon:hover svg {
     fill: var(--mui-common-black);
+}
+
+.automation-list-box--body--item--tags--item .delete {
+    font-size: 1em;
+    color: var(--mui-error-light);
+}
+
+.automation-list-box--body--item--tags--item .delete:hover {
+    color: var(--mui-error-dark);
+    outline: 1px solid var(--mui-error-dark);
+    border-radius: 20px;
 }

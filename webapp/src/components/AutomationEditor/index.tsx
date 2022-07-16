@@ -3,8 +3,9 @@ import Icon from "@mui/material/Icon";
 import { CheckMarkIcon } from "components/Icons";
 import { FC, useState } from "react";
 import { AutomationData } from "types/automations";
+import { Modal } from "components/Modal";
 import { AutoInfoBox } from "./AutoInfoBox";
-import { ButtonIcon } from "components/Icons/ButtonIcons";
+import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 import { Button } from "components/Inputs/Button";
 import { useAutomatioEditorState, EditorData } from "./state";
 import { MiniFailure } from "types/validators/helper";
@@ -12,13 +13,12 @@ import InputYaml from "components/Inputs/InputYaml";
 import { TagDB } from "components/AutomationList/TagDB";
 import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
-import { ArrowBack } from "@mui/icons-material";
 import { useCookies } from "react-cookie";
 import { DAGDims } from "components/DAGGraph/elements/types";
 import { DAGAutomationGraph } from "components/DAGGraph";
-import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 import { InputList } from "components/Inputs/InputList";
 import { InputTextView } from "components/Inputs/InputTextView";
+import { ControlButton } from "react-flow-renderer";
 
 interface Props {
   automation?: AutomationData;
@@ -43,7 +43,7 @@ export const AutomationEditor: FC<Props> = ({
     save,
     saveAndUpdate,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
-  const [closeInfo, setCloseInfo] = useState(false);
+  const [infoBoxOpen, setInfoBox] = useState(false);
   const [
     { ckFlipped },
     setCookies,
@@ -74,25 +74,34 @@ export const AutomationEditor: FC<Props> = ({
     );
   }
   return (
-    <div className="automation-editor">
+    <div className={["automation-editor", state.status].join(" ")}>
       {state.status === "saving" && (
         <LinearProgress className="linear-loader" />
       )}
-      <AutoInfoBox
-        className={closeInfo ? "hide" : "show"}
-        metadata={state.data.metadata}
-        tags={state.data.tags}
-        onUpdate={updateMetadata}
-        tagDB={tagDB}
-      >
-        <ButtonIcon
-          className="automation-editor--info-box--icon"
-          onClick={() => setCloseInfo(!closeInfo)}
-          title={closeInfo ? "Show Metadata" : "Hide Metadata"}
-          color="success"
-          icon={<ArrowBack />}
-        />
-      </AutoInfoBox>
+      <Modal open={infoBoxOpen}>
+        <AutoInfoBox
+          metadata={state.data.metadata}
+          tags={state.data.tags}
+          onUpdate={updateMetadata}
+          tagDB={tagDB}
+        >
+          <div
+            className={[
+              "automation-editor--info-box--buttons",
+              state.status,
+            ].join(" ")}
+          >
+            <Button onClick={() => setInfoBox(false)}>Close</Button>
+            <Button
+              className={"automation-editor--flow-wrapper--toolbar--save-btn"}
+              onClick={save}
+              disabled={state.status !== "changed"}
+            >
+              Save <CheckMarkIcon color="#bf4" />
+            </Button>
+          </div>
+        </AutoInfoBox>
+      </Modal>
 
       <div
         className={["automation-editor--flow-wrapper", state.status].join(" ")}
@@ -156,6 +165,7 @@ export const AutomationEditor: FC<Props> = ({
               ]}
             />
             <InputTextView
+              className="description"
               value={state.data.metadata.description ?? ""}
               placeholder="Description"
               onChange={(description) =>
@@ -194,6 +204,11 @@ export const AutomationEditor: FC<Props> = ({
           onTriggerUpdate={updateTrigger}
           onConditionUpdate={updateCondition}
           isFlipped={flipped}
+          additionalControls={
+            <ControlButton onClick={() => setInfoBox(!infoBoxOpen)}>
+              <ModeEditOutlineTwoToneIcon />
+            </ControlButton>
+          }
         />
       </div>
     </div>

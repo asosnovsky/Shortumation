@@ -177,9 +177,10 @@ export const AutomationListBoxItem: FC<{
   onSave,
 }) => {
   // state
-  const [{ tags, isModified }, setState] = useState({
+  const [{ tags, isModified, alias }, setState] = useState({
     isModified: false,
     tags: Object.entries(auto.tags),
+    alias: auto.metadata.alias ?? "",
   });
 
   // effects
@@ -187,14 +188,22 @@ export const AutomationListBoxItem: FC<{
     setState({
       isModified: false,
       tags: Object.entries(auto.tags),
+      alias: auto.metadata.alias ?? "",
     });
   }, [auto]);
 
   // alias
+  const setAlias = (a: string) =>
+    setState({
+      isModified: true,
+      tags,
+      alias: a,
+    });
   const setTags = (t: [string, string][]) =>
     setState({
       isModified: true,
       tags: t,
+      alias,
     });
   // sub elements
   let title = "BadAuto<<Missing Metadata>>";
@@ -215,10 +224,14 @@ export const AutomationListBoxItem: FC<{
       onClick={() => onSelectAutomation(autoIndex)}
     >
       <MetadataBox
-        metadata={auto.metadata}
+        metadata={{
+          ...auto.metadata,
+          alias,
+        }}
         tags={tags}
         tagsDB={tagsDB}
-        onUpdate={setTags}
+        onTagUpdate={setTags}
+        onAliasUpdate={setAlias}
       />
       <div className="automation-list-box--body--item--buttons">
         {isModified && (
@@ -229,6 +242,10 @@ export const AutomationListBoxItem: FC<{
               onSave({
                 ...auto,
                 tags: Object.fromEntries(tags),
+                metadata: {
+                  ...auto.metadata,
+                  alias,
+                },
               })
             }
           />

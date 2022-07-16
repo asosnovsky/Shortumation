@@ -152,16 +152,22 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
   dims,
 }) => {
   const { reloadAutomations } = useHA();
+  const [saving, setSaving] = useState(false);
   const removeAutomation = async (args: any) => {
     const resp = await methods.removeAutomation(args);
+    setSaving(true);
     await reloadAutomations();
+    setSaving(false);
     return resp;
   };
   const updateAutomation = async (args: any) => {
     const resp = await methods.updateAutomation(args);
+    setSaving(true);
     await reloadAutomations();
+    setSaving(false);
     return resp;
   };
+
   if (!automations.ready) {
     return (
       <div className="automation-list--root loading">
@@ -176,15 +182,18 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
     return <span>Error {automations.error}</span>;
   }
   return (
-    <AutomationList
-      dims={dims}
-      automations={automations.data}
-      onLoadMore={() => {}}
-      onAdd={(auto) =>
-        updateAutomation({ auto, index: automations.data.totalItems + 1 })
-      }
-      onRemove={(index) => removeAutomation({ index })}
-      onUpdate={(index, auto) => updateAutomation({ index, auto })}
-    />
+    <>
+      {saving && <LinearProgress />}
+      <AutomationList
+        dims={dims}
+        automations={automations.data}
+        onLoadMore={() => {}}
+        onAdd={(auto) =>
+          updateAutomation({ auto, index: automations.data.totalItems + 1 })
+        }
+        onRemove={(index) => removeAutomation({ index })}
+        onUpdate={(index, auto) => updateAutomation({ index, auto })}
+      />
+    </>
   );
 };

@@ -50,6 +50,15 @@
     white-space: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-bottom: 0.25em;
+}
+
+.automation-editor--flow-wrapper--toolbar .automation-editor--flow-wrapper--toolbar--title--text {
+    min-width: 5em;
+}
+
+.automation-editor--flow-wrapper--toolbar .automation-editor--flow-wrapper--toolbar--modes {
+    min-width: 6em;
 }
 
 .automation-editor--flow-wrapper--toolbar .automation-editor--flow-wrapper--toolbar--modes .MuiSelect-select {
@@ -64,7 +73,8 @@
     left: -0.5em;
 }
 
-.automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar button {
+.automation-editor.changed .automation-editor--flow-wrapper--toolbar--save-btn,
+.automation-editor--info-box--buttons.changed .automation-editor--flow-wrapper--toolbar--save-btn {
     border-color: var(--mui-success-light);
     color: var(--mui-success-light);
 }
@@ -92,21 +102,6 @@
     position: relative;
 }
 
-.automation-editor .automation-editor--info-box--icon {
-    position: absolute;
-    left: 0.25em;
-    bottom: 0em;
-    z-index: 10;
-    max-width: 1.5em;
-    max-height: 1.5em;
-}
-
-.automation-editor--info-box.hide>.automation-editor--info-box--icon {
-    transform: rotate(180deg);
-    z-index: 2;
-    left: 0.1em;
-}
-
 .automation-editor.loading .mock-list {
     position: absolute;
     left: 0;
@@ -127,4 +122,9 @@
     top: 0;
     left: 0;
     width: 100%;
+}
+
+.automation-editor--info-box--buttons {
+    display: flex;
+    gap: 1em;
 }

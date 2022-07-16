@@ -4,13 +4,16 @@ import { FC, useState } from "react";
 import { AutomationMetadata } from "types/automations";
 import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 import { TagDB } from "./TagDB";
+import DeleteIcon from "@mui/icons-material/ClearTwoTone";
+import { InputTextView } from "components/Inputs/InputTextView";
 
 export const MetadataBox: FC<{
   metadata: AutomationMetadata;
-  onUpdate: (t: [string, string][]) => void;
+  onAliasUpdate: (t: string) => void;
+  onTagUpdate: (t: [string, string][]) => void;
   tags: [string, string][];
   tagsDB: TagDB;
-}> = ({ tags, onUpdate, tagsDB, metadata }) => {
+}> = ({ tags, onTagUpdate, onAliasUpdate, tagsDB, metadata }) => {
   // state
   const [newTag, setNewTag] = useState<
     | {
@@ -30,9 +33,12 @@ export const MetadataBox: FC<{
   if (metadata) {
     title = (
       <>
-        <b>
-          {String(metadata.alias ?? "").slice(0, 15)}{" "}
-          <span>({String(metadata.id).slice(0, 5)})</span>
+        <b className="text">
+          <InputTextView
+            value={metadata.alias ?? ""}
+            onChange={onAliasUpdate}
+          />
+          <span>({String(metadata.id).slice(0, 10)})</span>
         </b>
         <span>{String(metadata.description ?? "").slice(0, 25)}</span>
       </>
@@ -47,8 +53,14 @@ export const MetadataBox: FC<{
             options={[tagOptions, tagsDB.getTagValues(tagName)]}
             key={tagIndex}
             value={[tagName, tagValue]}
+            onDelete={() =>
+              onTagUpdate([
+                ...tags.slice(0, tagIndex),
+                ...tags.slice(tagIndex + 1),
+              ])
+            }
             onChange={([newName, newValue]) =>
-              onUpdate([
+              onTagUpdate([
                 ...tags.slice(0, tagIndex),
                 [newName, newValue],
                 ...tags.slice(tagIndex + 1),
@@ -56,29 +68,34 @@ export const MetadataBox: FC<{
             }
           />
         ))}
-        {newTag.on && (
+        {newTag.on ? (
           <MetadataBoxTag
             options={[tagOptions, tagsDB.getTagValues(newTag.name)]}
             key="new"
             value={[newTag.name, newTag.value]}
-            initialState={[true, true]}
+            initialState={true}
             onChange={([name, value]) => {
-              if (name.trim() !== "" && value.trim() !== "") {
-                setNewTag({
-                  on: false,
-                });
-                onUpdate([...tags, [name, value]]);
-              } else {
-                setNewTag({
-                  on: true,
-                  name,
-                  value,
-                });
+              setNewTag({
+                on: true,
+                name,
+                value,
+              });
+            }}
+            onToggle={(em) => {
+              if (!em) {
+                if (newTag.name.trim() !== "" && newTag.value.trim() !== "") {
+                  onTagUpdate(tags.concat([[newTag.name, newTag.value]]));
+                  setNewTag({
+                    on: false,
+                  });
+                }
               }
+              setNewTag({
+                on: false,
+              });
             }}
           />
-        )}
-        {!newTag.on && (
+        ) : (
           <span
             className="automation-list-box--body--item--tags--add"
             onClick={() =>
@@ -101,16 +118,29 @@ export const MetadataBoxTag: FC<{
   value: [string, string];
   onChange: (t: [string, string]) => void;
   options: [string[], string[]];
-  initialState?: [boolean, boolean];
+  initialState?: boolean;
+  onToggle?: (em: boolean) => void;
+  onDelete?: () => void;
 }> = (props) => {
-  const [[editMode1, editMode2], setEditMode] = useState(
-    props.initialState ? props.initialState : [false, false]
+  const [editMode, setEditMode] = useState(
+    props.initialState ? props.initialState : false
   );
-  const toggle1 = () => setEditMode([!editMode1, editMode2]);
-  const toggle2 = () => setEditMode([editMode1, !editMode2]);
+  const toggle = () => {
+    if (editMode) {
+      if (props.value[0].trim() === "" || props.value[1].trim() === "") {
+        props.onToggle && props.onToggle(true);
+        return setEditMode(true);
+      }
+    }
+    props.onToggle && props.onToggle(!editMode);
+    setEditMode(!editMode);
+  };
   return (
     <span className="automation-list-box--body--item--tags--item">
-      {editMode1 ? (
+      {props.onDelete && (
+        <DeleteIcon onClick={props.onDelete} className="delete" />
+      )}
+      {editMode ? (
         <InputAutoComplete
           multiple={false}
           className="text"
@@ -118,17 +148,17 @@ export const MetadataBoxTag: FC<{
           options={props.options[0]}
           label=""
           value={props.value[0]}
-          onEnter={toggle1}
+          onEnter={toggle}
           onChange={(v) => props.onChange([v ?? "", props.value[1]])}
           onlyShowLabel
-          endAdornment={<CheckMarkIcon className="icon" onClick={toggle1} />}
+          endAdornment={<CheckMarkIcon className="icon" onClick={toggle} />}
         />
       ) : (
-        <b className="text" onClick={toggle1}>
+        <b className="text" onClick={toggle}>
           {props.value[0]}:
         </b>
       )}
-      {editMode2 ? (
+      {editMode ? (
         <InputAutoComplete
           multiple={false}
           className="text"
@@ -136,13 +166,13 @@ export const MetadataBoxTag: FC<{
           options={props.options[1]}
           label=""
           value={props.value[1]}
-          onEnter={toggle2}
+          onEnter={toggle}
           onChange={(v) => props.onChange([props.value[0], v ?? ""])}
           onlyShowLabel
-          endAdornment={<CheckMarkIcon className="icon" onClick={toggle2} />}
+          endAdornment={<CheckMarkIcon className="icon" onClick={toggle} />}
         />
       ) : (
-        <span className="text" onClick={toggle2}>
+        <span className="text" onClick={toggle}>
           {props.value[1]}
         </span>
       )}

@@ -1,29 +1,14 @@
 .automation-editor--info-box {
-    height: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    overflow: hidden;
-    position: relative;
+    align-items: center;
+    gap: 0.5em;
 }
 
 .automation-editor--info-box-inner {
-    height: 100%;
+    max-width: 95vw;
+    max-height: 90vh;
     overflow: auto;
-}
-
-.automation-editor--info-box.show {
-    min-width: 20em;
-}
-
-.automation-editor--info-box.hide {
-    min-width: 1em;
-}
-
-.automation-editor--info-box.hide>.automation-editor--info-box-inner {
-    display: none;
 }
 
 .automation-editor--info-box--tags {

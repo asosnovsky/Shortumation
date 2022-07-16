@@ -21,6 +21,7 @@ export type DAGGraphBoardProps = {
   state: DAGGraphBoardState;
   modalState?: ModalState;
   closeModal: () => void;
+  additionalControls?: ReactNode;
 };
 
 export type ModalState<

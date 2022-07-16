@@ -22,6 +22,7 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
   modalState,
   state,
   closeModal,
+  additionalControls,
 }) => {
   // render unready or errored states
   if (!state.ready) {
@@ -69,7 +70,9 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
         nodesDraggable={false}
         {...elements}
       >
-        <Controls showInteractive={false} showFitView />
+        <Controls showInteractive={false} showFitView>
+          {additionalControls}
+        </Controls>
       </ReactFlow>
     </>
   );

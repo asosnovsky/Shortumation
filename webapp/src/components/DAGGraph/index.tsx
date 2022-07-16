@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, ReactNode } from "react";
 import { AutomationSequenceNode } from "types/automations";
 import { useHA } from "haService";
 import { ModalState } from "./board/types";
@@ -17,7 +17,9 @@ export const DAGAutomationGraph: FC<{
   onTriggerUpdate: (t: AutomationTrigger[]) => void;
   onConditionUpdate: (c: AutomationCondition[]) => void;
   isFlipped: boolean;
+  additionalControls?: ReactNode;
 }> = (props) => {
+  console.log({ props });
   const { namer } = useHA();
   const [modalState, setModalState] =
     useState<ModalState | undefined>(undefined);
@@ -62,6 +64,7 @@ export const DAGAutomationGraph: FC<{
           elements: elementData,
         },
       }}
+      additionalControls={props.additionalControls}
     />
   );
 };
