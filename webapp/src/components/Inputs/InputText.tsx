@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 
 export interface Props {
   textBoxFor?: string;
-  label: string | JSX.Element;
+  label?: string | JSX.Element;
   value: string;
   onChange: (v: string) => void;
   onEnter?: () => void;

@@ -64,9 +64,9 @@
     left: -0.5em;
 }
 
-.automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar * {
+.automation-editor--flow-wrapper.changed>.automation-editor--flow-wrapper--toolbar button {
     border-color: var(--mui-success-light);
-    color: var(--mui-success-light)
+    color: var(--mui-success-light);
 }
 
 

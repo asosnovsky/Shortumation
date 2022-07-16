@@ -18,6 +18,7 @@ import { DAGDims } from "components/DAGGraph/elements/types";
 import { DAGAutomationGraph } from "components/DAGGraph";
 import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 import { InputList } from "components/Inputs/InputList";
+import { InputTextView } from "components/Inputs/InputTextView";
 
 interface Props {
   automation?: AutomationData;
@@ -100,7 +101,19 @@ export const AutomationEditor: FC<Props> = ({
           <div className="automation-editor--flow-wrapper--toolbar--title">
             <span className="automation-editor--flow-wrapper--toolbar--title--text">
               <div className="id">{state.data.metadata.id}</div>
-              <b>{state.data.metadata.alias}</b>
+              <InputTextView
+                value={state.data.metadata.alias ?? ""}
+                placeholder="Name"
+                onChange={(alias) =>
+                  updateMetadata(
+                    {
+                      ...state.data.metadata,
+                      alias,
+                    },
+                    state.data.tags
+                  )
+                }
+              />
             </span>
             <InputList
               fullWidth={false}
@@ -142,7 +155,19 @@ export const AutomationEditor: FC<Props> = ({
                 },
               ]}
             />
-            <small>{state.data.metadata.description}</small>
+            <InputTextView
+              value={state.data.metadata.description ?? ""}
+              placeholder="Description"
+              onChange={(description) =>
+                updateMetadata(
+                  {
+                    ...state.data.metadata,
+                    description,
+                  },
+                  state.data.tags
+                )
+              }
+            />
           </div>
           {!dims.flipped && (
             <Button
