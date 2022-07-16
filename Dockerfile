@@ -2,7 +2,7 @@
 ARG BUILD_ARCH
 
 # <--- Image Setup --> 
-FROM homeassistant/${BUILD_ARCH}-base-python:3.9-alpine3.16
+FROM python:3.9.13-slim-buster
 WORKDIR /app
 
 # <--- Post-Build Args --> 
@@ -13,11 +13,11 @@ ENV BUILD_VERSION $BUILD_VERSION
 
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
-RUN apk add --no-cache \
-    nodejs \
-    npm \
-    build-base \
-    python3-dev  
+# RUN apk add --no-cache \
+#     nodejs \
+#     npm \
+#     build-base \
+#     python3-dev  
 
 # <--- Scripts --> 
 COPY docker/bin /app/bin
