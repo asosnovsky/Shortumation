@@ -26,8 +26,8 @@ import { getNodeSubType } from "../../../utils/automations";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Add from "@mui/icons-material/Add";
 import { SequenceNodeDataProps } from "../nodes/SequenceNode/types";
-import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import { convertFailuresToSequenceNodeDataProps } from "./util";
+import { convertChooseActionToOrignal } from "../updater/util";
 
 export const useAutomationNodes = (
   automation: AutomationActionData,
@@ -242,7 +242,8 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
 
 export const makeChooseeNodes = makeSpecialNodeMaker(
   "choose",
-  (node, outputState, args) => {
+  (incmNode, outputState, args) => {
+    const node = convertChooseActionToOrignal(incmNode);
     // offset position
     let offsetPos: XYPosition = distance.offsetBy(
       "node",
@@ -377,7 +378,6 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
       args.dims,
       true
     );
-    console.log({ addPos, lastConditionState });
     if (lastConditionState !== null) {
       addPos = distance.moveFromTo(
         "collection",

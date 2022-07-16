@@ -5,7 +5,10 @@ import {
 import { ModalState } from "../board/types";
 import { SequenceNodeActions } from "../nodes/SequenceNode/types";
 import { DAGUpdaterArgs, DAGUpdaterInput } from "./types";
-import { mapAutoActionKeyToNodeType } from "./util";
+import {
+  convertChooseActionToOrignal,
+  mapAutoActionKeyToNodeType,
+} from "./util";
 import {
   ChooseAction,
   RepeatAction,
@@ -172,7 +175,9 @@ export const createUpdater = (
       };
     },
     createChoosNodeUpdater(i: number, j: number | "else") {
-      const node = args.sequence.data[i] as ChooseAction;
+      const node = convertChooseActionToOrignal(
+        args.sequence.data[i] as ChooseAction
+      );
       if (j === "else") {
         return {
           stateUpdater: createUpdater({

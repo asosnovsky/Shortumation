@@ -1,3 +1,4 @@
+import { AutomationNodeSubtype } from "types/automations";
 import { ActionType, ActionTypeMapping } from "types/automations/actions";
 import { DAGElementsOutputState } from "./outputState";
 import { ElementMaker, ElementMakerProps } from "./types";
@@ -41,3 +42,6 @@ export const makeSpecialNodeMaker = <
 export const getSpecialNodeMaker = <AT extends ActionType>(
   nodeType: AT
 ): ElementMaker<AT> | null => SpecialNodeRegistry[nodeType] ?? null;
+
+export const isSpecialNode = (nodeType: AutomationNodeSubtype) =>
+  nodeType in SpecialNodeRegistry;

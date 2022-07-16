@@ -28,12 +28,18 @@ export type DelayAction = st.Infer<typeof v.DelayAction>;
 export type FireEventAction = st.Infer<typeof v.FireEventAction>;
 export type DeviceAction = st.Infer<typeof v.DeviceAction>;
 export type StopAction = st.Infer<typeof v.StopAction>;
-export type ChooseAction = AutomationActionNodeBase<{
+export type ChooseAction = OriginalChooseAction | IfElseAction;
+export type OriginalChooseAction = AutomationActionNodeBase<{
   choose: Array<{
     conditions: AutomationCondition[];
     sequence: AutomationSequenceNode[];
   }>;
   default?: AutomationSequenceNode[];
+}>;
+export type IfElseAction = AutomationActionNodeBase<{
+  if: AutomationCondition[];
+  then: AutomationSequenceNode[];
+  else: AutomationSequenceNode[];
 }>;
 export type ParallelAction = AutomationActionNodeBase<{
   parallel: Array<

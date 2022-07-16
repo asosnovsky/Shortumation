@@ -7,6 +7,7 @@ import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Button";
 import InputBoolean from "components/Inputs/InputBoolean";
 import { useConfirm } from "material-ui-confirm";
+import { getNodeSubTypeDescription } from "./utils";
 
 export interface NodeEditorProps {
   node: AutomationNode;
@@ -96,7 +97,8 @@ export const NodeEditor: FC<NodeEditorProps> = ({
           {state.nodeType !== "condition" ? (
             <InputList
               label={state.prettyNodeType}
-              current={state.subType as any}
+              current={state.subType}
+              getDescription={getNodeSubTypeDescription}
               options={state.subTypes}
               onChange={state.setSubType}
               prettyOptionLabels

@@ -162,7 +162,7 @@ export const getDescriptionFromAutomationNode = <
   if ("device_id" in node) {
     return getDescriptionForDeviceType(node as any, namer, false);
   }
-  if ("choose" in node) {
+  if ("choose" in node || "if" in node) {
     if (allowJs) {
       return (
         <AltRouteOutlinedIcon

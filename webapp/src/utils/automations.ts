@@ -133,7 +133,7 @@ export const getNodeSubType = <
     return "event" as any;
   } else if ("device_id" in node) {
     return "device" as any;
-  } else if ("choose" in node) {
+  } else if ("choose" in node || "if" in node) {
     return "choose" as any;
   } else if ("delay" in node) {
     return "wait" as any;

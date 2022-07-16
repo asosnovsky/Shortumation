@@ -501,3 +501,19 @@ BadNodes.args = {
     ] as any,
   },
 };
+
+export const IfElseNode = Template.bind({});
+IfElseNode.args = {
+  ...BadNodes.args,
+  automation: {
+    condition: [],
+    trigger: [],
+    sequence: [
+      {
+        if: [],
+        else: [],
+        then: [],
+      },
+    ],
+  },
+};

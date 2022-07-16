@@ -79,7 +79,7 @@ export const StopAction = st.assign(
   })
 );
 
-export const ChooseAction = st.intersection([
+export const OriginalChooseAction = st.intersection([
   AutomationActionNodeBase,
   st.type({
     choose: st.array(
@@ -91,6 +91,17 @@ export const ChooseAction = st.intersection([
     default: st.optional(st.array(st.object())),
   }),
 ]);
+
+export const IfElseAction = st.intersection([
+  AutomationActionNodeBase,
+  st.type({
+    if: st.array(st.object()),
+    then: st.array(st.object()),
+    else: st.array(st.object()),
+  }),
+]);
+
+export const ChooseAction = st.union([OriginalChooseAction, IfElseAction]);
 
 export const ParallelAction = st.intersection([
   AutomationActionNodeBase,

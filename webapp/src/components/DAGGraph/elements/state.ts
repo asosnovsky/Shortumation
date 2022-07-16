@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { AutomationNode } from "types/automations";
+import { isSpecialNode } from "./specialnodes";
+import { getNodeSubType } from "utils/automations";
 
 export type DAGNodeState = Partial<{
   isClosed: boolean;
@@ -27,7 +29,7 @@ export const useDAGElementsState = () => {
     },
 
     getIsClosedActions(nodeId: string, node: AutomationNode) {
-      if ("choose" in node || "repeat" in node) {
+      if (isSpecialNode(getNodeSubType(node))) {
         return {
           isClosed: this.get(nodeId).isClosed ?? false,
           setIsClosed: (v: boolean) => this.set(nodeId, "isClosed", v),
