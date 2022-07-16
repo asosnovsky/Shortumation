@@ -26,3 +26,4 @@ while wait -fn || werr=$?; ((werr != 127)); do
 done
 
 echo "DONE BUILD"
+exit $err

@@ -17,3 +17,4 @@ while wait -fn || werr=$?; ((werr != 127)); do
 done
 
 echo "DONE PREP"
+exit $err
