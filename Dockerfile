@@ -2,7 +2,7 @@
 ARG BUILD_ARCH
 
 # <--- Image Setup --> 
-FROM homeassistant/${BUILD_ARCH}-base-python:3.9-alpine3.14
+FROM homeassistant/${BUILD_ARCH}-base-python:3.9-alpine3.16
 WORKDIR /app
 
 # <--- Post-Build Args --> 
