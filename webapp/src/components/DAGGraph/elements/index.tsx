@@ -591,18 +591,19 @@ export const makeParallelNodes = makeSpecialNodeMaker(
       {
         icon: <Add />,
         onClick: () =>
-          args.stateUpdater.basic.sequence.updateNode(
-            {
-              ...node,
-              parallel: [
-                ...node.parallel,
+          args.openModal({
+            allowedTypes: ["condition", "action"],
+            node: args.stateUpdater.basic.sequence.defaultNode,
+            saveBtnCreateText: true,
+            update: (n) =>
+              args.stateUpdater.basic.sequence.updateNode(
                 {
-                  sequence: [],
+                  ...node,
+                  parallel: [...node.parallel, n],
                 },
-              ],
-            },
-            args.nodeIndex
-          ),
+                args.nodeIndex
+              ),
+          }),
       }
     );
     outputState.addNode(addBtn);
