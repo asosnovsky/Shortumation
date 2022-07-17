@@ -6,7 +6,7 @@ function prep_yarn() {
 }
 
 function prep_py() {
-  pip install -U wheel setuptools pip
+  pip install -U wheel setuptools pip Cython
 }
 
 declare -i err=0 werr=0
