@@ -15,7 +15,7 @@ ENV BUILD_VERSION $BUILD_VERSION
 ENV LANG C.UTF-8
 RUN apt-get update -y && \
     apt-get install -y gcc git build-essential libtool automake curl && \
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # <--- Scripts --> 
 COPY docker/bin /app/bin
