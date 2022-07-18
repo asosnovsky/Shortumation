@@ -2,7 +2,7 @@
 set -e
 
 api_location=${1}
-web_location=${2}
+# web_location=${2}
 
 function install_yarn() {
     pushd $web_location
@@ -19,6 +19,6 @@ function install_py() {
 }
 
 install_py
-install_yarn
+# install_yarn
 
 echo "DONE BUILD"

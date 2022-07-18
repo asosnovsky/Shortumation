@@ -13,6 +13,6 @@ function prep_py() {
 }
 
 prep_py
-prep_yarn
+# prep_yarn
 
 echo "DONE PREP"

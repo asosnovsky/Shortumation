@@ -1,7 +1,22 @@
 # <--- Pre-Build Args --> 
 ARG BUILD_ARCH
 
-# <--- Image Setup --> 
+# <--- Web builder --> 
+FROM node:16 AS web-builder
+
+# <--- Post-Build Args --> 
+ARG BUILD_VERSION
+
+RUN npm i -g yarn
+
+WORKDIR /web-builder
+COPY webapp/ /web-builder
+
+# Build web
+RUN echo "REACT_APP_BUILD_VERSION=${BUILD_VERSION}" > /web-builder/.env.production
+RUN yarn && yarn build
+
+# <--- Main Image --> 
 FROM python:3.9.13-slim-buster
 WORKDIR /app
 
@@ -14,7 +29,7 @@ ENV BUILD_VERSION $BUILD_VERSION
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
 RUN apt-get update -y && \
-    apt-get install -y gcc git build-essential libtool automake curl
+    apt-get install -y gcc git build-essential libtool automake
 
 # <--- Scripts --> 
 COPY docker/bin /app/bin
@@ -25,16 +40,12 @@ RUN /app/bin/prep.sh
 # <--- Python Dependencies --> 
 COPY api/setup.py /app/setup.py
 
-# <--- Webapp Build --> 
-COPY webapp/ /app/web-builder
-RUN cd /app/web-builder && \
-    echo "REACT_APP_BUILD_VERSION=${BUILD_VERSION}" > /app/web-builder/.env.production
-
 # <--- BUILD --> 
-RUN /app/bin/build.sh /app /app/web-builder
+RUN /app/bin/build.sh /app 
 
 # <--- Api Code --> 
 COPY api/src /app/src
+COPY --from=web-builder /web-builder/build /app/web
 
 # <--- Ports --> 
 EXPOSE 8000
