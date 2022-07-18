@@ -15,9 +15,11 @@ build-with-builder:
 			-t /data
 
 build:
+	cd webapp && yarn build
 	$(DC) build
 
 build-no-cache:
+	cd webapp && yarn buil
 	$(DC) build --no-cache
 
 push:

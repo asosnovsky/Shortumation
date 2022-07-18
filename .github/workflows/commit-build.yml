@@ -1,0 +1,83 @@
+name: Commit Build
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: "Version Number"
+  push:
+    branch: [main]
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    name: Metadata
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get Version
+        id: version
+        shell: bash
+        run: |
+          if [ -z "${INPUT_VERSION}" ]; then
+            echo ::set-output name=VERSION::$(git describe --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
+          else
+            echo ::set-output name=VERSION::${INPUT_VERSION}
+          fi
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+      - name: ${{ steps.version.outputs.VERSION }}
+        shell: bash
+        run: |
+          echo ${{ steps.version.outputs.VERSION }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build & Publish ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
+    if: github.event_name != 'pull_request'
+    needs:
+      - metadata
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          all_but_latest: true
+          access_token: ${{ github.token }}
+
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+          cache-dependency-path: webapp/yarn.lock
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: "Save version number"
+        run: echo "REACT_APP_BUILD_VERSION=${{ needs.metadata.outputs.version }}" > ./webapp/.env.production
+
+      - name: "Build Web"
+        run: cd webapp && yarn install && yarn build
+
+      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
+        uses: home-assistant/builder@2022.07.0
+        with:
+          args: |
+            --${{ matrix.arch }} \
+            --no-latest \
+            --version ${{ needs.metadata.outputs.version }} \
+            --target .

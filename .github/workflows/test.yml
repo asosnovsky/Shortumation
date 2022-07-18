@@ -1,10 +1,10 @@
-name: Tests
+name: Commit Tests
 on:
   push:
-    branch: 
+    branch:
       - main
   pull_request:
-    branch: 
+    branch:
       - main
 jobs:
   metadata:
@@ -72,40 +72,3 @@ jobs:
         run: cd webapp && yarn install
       - name: ${{ needs.metadata.outputs.version }} / ${{ matrix.action }}
         run: cd webapp && yarn ${{ matrix.action }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    name: Build & Publish ${{ matrix.arch }}
-    if: github.event_name != 'pull_request'
-    needs:
-      - metadata
-      - nodejs
-      - python
-    strategy:
-      matrix:
-        arch: ["aarch64", "amd64", "armhf", "armv7", "i386"]
-
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.10.0
-        with:
-          all_but_latest: true
-          access_token: ${{ github.token }}
-
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2.0.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: home-assistant/builder@2022.07.0
-        with:
-          args: |
-            --${{ matrix.arch }} \
-            --no-latest \
-            --version ${{ needs.metadata.outputs.version }} \
-            --target .

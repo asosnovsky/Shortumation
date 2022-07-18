@@ -1,21 +1,6 @@
 # <--- Pre-Build Args --> 
 ARG BUILD_ARCH
 
-# <--- Web builder --> 
-FROM node:16 AS web-builder
-
-# <--- Post-Build Args --> 
-ARG BUILD_VERSION
-
-RUN npm i -g yarn
-
-WORKDIR /web-builder
-COPY webapp/ /web-builder
-
-# Build web
-RUN echo "REACT_APP_BUILD_VERSION=${BUILD_VERSION}" > /web-builder/.env.production
-RUN yarn && yarn build
-
 # <--- Main Image --> 
 FROM python:3.9.13-slim-buster
 WORKDIR /app
@@ -45,7 +30,7 @@ RUN /app/bin/build.sh /app
 
 # <--- Api Code --> 
 COPY api/src /app/src
-COPY --from=web-builder /web-builder/build /app/web
+COPY /webapp/build /app/web
 
 # <--- Ports --> 
 EXPOSE 8000
