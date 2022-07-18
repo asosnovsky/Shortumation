@@ -3,6 +3,9 @@ on:
   push:
     branch:
       - main
+    paths:
+      - "webapp"
+      - "api"
   pull_request:
     branch:
       - main
