@@ -14,8 +14,7 @@ ENV BUILD_VERSION $BUILD_VERSION
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
 RUN apt-get update -y && \
-    apt-get install -y gcc git build-essential libtool automake && \
-    pip install Cython
+    apt-get install -y gcc git build-essential libtool automake curl
 
 # <--- Scripts --> 
 COPY docker/bin /app/bin

@@ -18,12 +18,7 @@ function install_py() {
     popd
 }
 
-declare -i err=0 werr=0
-install_py &
-install_yarn &
-while wait -fn || werr=$?; ((werr != 127)); do
-  err=$werr
-done
+install_py
+install_yarn
 
 echo "DONE BUILD"
-exit $err
