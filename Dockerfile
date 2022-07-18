@@ -30,7 +30,7 @@ RUN /app/bin/build.sh /app
 
 # <--- Api Code --> 
 COPY api/src /app/src
-COPY /webapp/build /app/web
+COPY webapp/build /app/web
 
 # <--- Ports --> 
 EXPOSE 8000
