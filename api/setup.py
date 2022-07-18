@@ -7,7 +7,7 @@ setuptools.setup(
         "PyYAML==6.0",
         "fastapi==0.78.0",
         "pydantic==1.9.1",
-        "uvicorn[standard]==0.18.2",
+        "hypercorn==0.13.2",
         "python-decouple==3.6",
     ],
     extras_require={

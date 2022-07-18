@@ -43,4 +43,4 @@ clean:
 run-local:
 	rm -f web
 	ln -s ../webapp/build web
-	USE_EXAMPLE_REPO=1 $(VENV_BIN)/uvicorn src.app:app --reload
+	USE_EXAMPLE_REPO=1 $(VENV_BIN)/hypercorn src.app:app --reload
