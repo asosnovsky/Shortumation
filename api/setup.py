@@ -9,6 +9,7 @@ setuptools.setup(
         "pydantic==1.9.1",
         "hypercorn==0.13.2",
         "python-decouple==3.6",
+        "websockets==10.3"
     ],
     extras_require={
         "dev": [
