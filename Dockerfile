@@ -2,7 +2,7 @@
 ARG BUILD_ARCH
 
 # <--- Main Image --> 
-FROM python:3.9.13-buster
+FROM python:3.11-rc-bullseye
 WORKDIR /app
 
 # <--- Post-Build Args --> 
