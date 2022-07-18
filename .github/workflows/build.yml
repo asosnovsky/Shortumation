@@ -89,7 +89,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.version != "" }}
+    if: "${{ github.event.inputs.version != '' }}"
     needs:
       - metadata
       - deploy
