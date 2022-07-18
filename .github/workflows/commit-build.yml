@@ -78,7 +78,7 @@ jobs:
       - name: "Build Web"
         run: cd webapp && yarn install && yarn build
 
-      - name: Build & Push to Dockerhub - ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
+      - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
         uses: home-assistant/builder@2022.07.0
         with:
           args: |
