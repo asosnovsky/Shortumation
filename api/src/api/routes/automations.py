@@ -5,6 +5,7 @@ from src.api.types import (
     ListData,
     ListParams,
     UpdateAutoRequest,
+    UpdateTags,
 )
 from src.automations.errors import FailedDeletion
 from src.automations.manager import AutomationManager
@@ -28,6 +29,10 @@ def make_automation_router(automations: AutomationManager) -> APIRouter:
     @router.post("/item")
     def upsert_auto(body: UpdateAutoRequest):
         automations.update(body.index, body.data)
+
+    @router.post("/item/tags")
+    def update_tags(body: UpdateTags):
+        automations.update_tags(body.automation_id, body.data)
 
     @router.delete("/item")
     def delete_auto(body: DeleteAutoRequest):

@@ -1,4 +1,4 @@
-from typing import Generic, List, TypeVar
+from typing import Dict, Generic, List, TypeVar
 
 from pydantic import BaseModel
 from pydantic.fields import Field
@@ -23,6 +23,11 @@ class ListData(GenericModel, Generic[DataT]):
 class UpdateAutoRequest(BaseModel):
     index: int = Field(description="Index of the automation to update")
     data: ExtenededAutomationData
+
+
+class UpdateTags(BaseModel):
+    automation_id: str = Field(description="Automation Id to update")
+    tags: Dict[str, str]
 
 
 class DeleteAutoRequest(BaseModel):

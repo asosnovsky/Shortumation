@@ -1,4 +1,4 @@
-from typing import Iterator, List, Optional
+from typing import Dict, Iterator, List, Optional
 
 from src.automations.errors import FailedDeletion, InvalidAutomationFile
 from src.automations.types import AutomationData, ExtenededAutomationData
@@ -24,7 +24,7 @@ class AutomationManager:
                 break
             yield from load_automation(auto, tags.get(auto.get("id", ""), {}))
 
-    def get(self, index: int) -> Optional[AutomationData]:
+    def get(self, index: int) -> Optional[ExtenededAutomationData]:
         tags = self.hass_config.automation_tags
         if index >= 0:
             for i, auto in enumerate(self.hass_config.automations):
@@ -50,6 +50,11 @@ class AutomationManager:
         tags[automation.metadata.id] = automation.tags
         self.hass_config.save_automations(automations)
         self.hass_config.save_tags(tags)
+
+    def update_tags(self, auto_id: str, tags: Dict[str, str]):
+        autos_tags = self.hass_config.automation_tags
+        autos_tags[auto_id] = tags
+        self.hass_config.save_tags(autos_tags)
 
     def delete(self, index: int):
         automations: List[dict] = []

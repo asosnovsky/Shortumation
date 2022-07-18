@@ -21,6 +21,7 @@ import { ListData, ListParams } from "apiService/types";
 interface AutomationListParams {
   automations: ListData<AutomationData>;
   onUpdate: (i: number, auto: AutomationData) => void;
+  onUpdateTags: (id: string, tags: Record<string, string>) => void;
   onAdd: (auto: AutomationData) => void;
   onRemove: (i: number) => void;
   onLoadMore: (p: ListParams) => void;
@@ -58,6 +59,7 @@ export const AutomationList: FC<AutomationListParams> = ({
   automations,
   onLoadMore,
   onUpdate,
+  onUpdateTags,
   onAdd,
   onRemove,
   dims,
@@ -96,6 +98,7 @@ export const AutomationList: FC<AutomationListParams> = ({
         <AutomationListBox
           automations={automations}
           onUpdate={(a, i) => onUpdate(i, a)}
+          onUpdateTags={onUpdateTags}
           onAdd={() => {
             onAdd(defaultAutomation(String(Date.now())));
             setCurrent(automations.data.length);
@@ -153,6 +156,16 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
 }) => {
   const { reloadAutomations } = useHA();
   const [saving, setSaving] = useState(false);
+  const updateTags = async (id: string, tags: Record<string, string>) => {
+    const resp = await methods.updateTags({
+      automation_id: id,
+      tags,
+    });
+    setSaving(true);
+    await reloadAutomations();
+    setSaving(false);
+    return resp;
+  };
   const removeAutomation = async (args: any) => {
     const resp = await methods.removeAutomation(args);
     setSaving(true);
@@ -187,6 +200,7 @@ export const ConnectedAutomationList: FC<ConnectedAutomationListParams> = ({
       <AutomationList
         dims={dims}
         automations={automations.data}
+        onUpdateTags={updateTags}
         onLoadMore={() => {}}
         onAdd={(auto) =>
           updateAutomation({ auto, index: automations.data.totalItems + 1 })

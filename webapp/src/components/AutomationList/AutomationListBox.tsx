@@ -20,6 +20,7 @@ export type AutomationListBoxProps = {
   onSelectAutomation: (i: number) => void;
   onRemove: (i: number) => void;
   onAdd: () => void;
+  onUpdateTags: (id: string, tags: Record<string, string>) => void;
   onUpdate: (a: AutomationData, i: number) => void;
   onLoadMore: (p: ListParams) => void;
   tagsDB: TagDB;
@@ -62,14 +63,15 @@ const useAutomationListBoxState = () => {
 export const AutomationListBox: FC<AutomationListBoxProps> = ({
   automations: {
     data: automations,
-    params: autoParams,
+    // params: autoParams,
     totalItems: totalAutomations,
   },
   selected,
   onSelectAutomation,
   onAdd,
   onRemove,
-  onLoadMore,
+  // onLoadMore,
+  onUpdateTags,
   tagsDB,
   onUpdate,
 }) => {

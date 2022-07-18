@@ -100,3 +100,16 @@ class manager_tests(TestCase):
         self.assertEqual(manager.get_total_items(), 3)
         with self.assertRaises(FailedDeletion):
             manager.delete(10)
+
+    def test_save_tags(self):
+        _, _, manager = get_dummy_automation_loader(
+            [
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
+                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
+            ],
+            automation_in_conifguration_mode="none",
+        )
+        manager.update_tags("test1", {"room": "bathroom"})
+        auto = manager.get(0)
+        assert auto.tags == {"room": "bathroom"}
