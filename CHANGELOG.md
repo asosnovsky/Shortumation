@@ -1,5 +1,13 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.3.2] - Fixed Addon Image for arm-based devices
+
+- Using hypercon instead of uvicorn (this losses the rust dependency which makes it easier to install on arm)
+- Pre-building web assets outside of docker (this takes the image size down and speeds up instaltion of addon)
+- Updated build scripts to actually fail installation when build/prep steps fail
+- Ensured that builds for all architecture run successfully
+- Re-worked github actions (quicker test phases)
+
 ## [0.3.1] - Increased Pagination + Restricted Repeat Node
 
 - Increased pagination to display up to 10,000 autos for now

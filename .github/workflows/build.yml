@@ -1,4 +1,4 @@
-name: Commit Build
+name: Build
 on:
   workflow_dispatch:
     inputs:
@@ -86,3 +86,25 @@ jobs:
             --no-latest \
             --version ${{ needs.metadata.outputs.version }} \
             --target .
+
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.version != "" }}
+    needs:
+      - metadata
+      - deploy
+    name: Publish Github Release
+    steps:
+      - name: Publish Release ${{ needs.metadata.outputs.version }}
+        uses: actions/github-script@v6
+        env:
+          VERSION: ${{ needs.metadata.outputs.version }}
+          CHANGELOG: ${{ needs.metadata.outputs.changlelog }}
+        with:
+          script: |
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: process.env.VERSION,
+              prerelease: true,
+            });
