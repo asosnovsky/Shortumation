@@ -96,7 +96,7 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
       collectionType: "trigger",
       onAddNode: () => stateUpdater.basic.trigger.addNode(null),
       nodes: nodes.map((node, index) => {
-        const failures = validateNode(node, ["condition"]);
+        const failures = validateNode(node, ["trigger"]);
 
         if (failures) {
           return {
