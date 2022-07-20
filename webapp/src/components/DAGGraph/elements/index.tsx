@@ -5,7 +5,6 @@ import {
   AutomationActionData,
   AutomationSequenceNode,
 } from "types/automations";
-import { AutomationCondition } from "types/automations/conditions";
 import { XYPosition } from "react-flow-renderer";
 import { DAGElementsOutputState } from "./outputState";
 import { SequenceNodeMaker } from "../nodes/SequenceNode";

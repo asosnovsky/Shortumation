@@ -13,8 +13,6 @@ import { convertFailuresToSequenceNodeDataProps } from "./util";
 
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
-import { DAGGraphChooseUpdater } from "../updater";
-import { AutomationSequenceNode } from "types/automations";
 
 export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
   nodes,
