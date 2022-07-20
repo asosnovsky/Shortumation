@@ -24,6 +24,8 @@ import { HAService } from "haService";
 import { DeviceEditor } from "components/DeviceEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import AddIcon from "@mui/icons-material/Add";
+import { getEntityDomains } from "utils/automations";
+import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{
@@ -213,10 +215,17 @@ export const LogicViewer: Editor<LogicCondition> = ({
 export const StateEditor: Editor<StateCondition> = ({
   onChange,
   condition,
+  ha,
 }) => {
+  const restrictToDomain =
+    !condition.entity_id || condition.entity_id.length === 0
+      ? undefined
+      : getEntityDomains(condition.entity_id);
+
   return (
     <>
       <InputEntity
+        restrictToDomain={restrictToDomain}
         value={condition.entity_id}
         multiple
         onChange={(entity_id) =>
@@ -226,19 +235,24 @@ export const StateEditor: Editor<StateCondition> = ({
           })
         }
       />
-      <InputText
+      <InputAutoComplete
         label="Attribute"
         value={condition.attribute ?? ""}
+        options={ha.entities.getAttributes(condition.entity_id)}
+        multiple={false}
         onChange={(attribute) =>
           onChange({
             ...condition,
-            attribute,
+            attribute: attribute ?? undefined,
           })
         }
       />
       <InputText
         label="State"
         value={String(condition.state)}
+        placeholder={ha.entities
+          .getStates(condition.entity_id, condition.attribute)
+          .join(" or ")}
         onChange={(state) =>
           onChange({
             ...condition,

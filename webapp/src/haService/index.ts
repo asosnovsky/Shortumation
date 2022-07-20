@@ -209,10 +209,14 @@ export const useHA = () => {
     },
     getEntityName(entity_id, maxEntities = 1) {
       if (Array.isArray(entity_id)) {
-        return entity_id
+        const out = entity_id
           .slice(0, maxEntities)
           .map(entities.getLabel)
           .join(", ");
+        if (entity_id.length > maxEntities) {
+          return out + " and more";
+        }
+        return out;
       }
       return entities.getLabel(entity_id);
     },

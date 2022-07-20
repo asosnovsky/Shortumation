@@ -110,7 +110,7 @@ export const getDescriptionFromAutomationNode = <
           }
           return "Numeric State Condition";
         case "state":
-          return `${namer.getEntityName(node.entity_id)} is '${node.state}'`;
+          return `${namer.getEntityName(node.entity_id, 2)} is '${node.state}'`;
         case "template":
           return node.value_template;
         case "device":
