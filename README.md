@@ -1,7 +1,7 @@
 # Shortumation ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=platsic)
 
-[![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml)
- ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/asosnovsky/Shortumation/Manual%20Build) 
+[![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml) [![Build](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml)
+ 
 |  | Stable | Edge 
 | --- | --- | --- 
 | Version | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-amd64?&sort=date&label=&style=for-the-badge) 
