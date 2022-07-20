@@ -85,42 +85,6 @@ export const useHAAreas = () => {
       }
       return true;
     },
-    validateOptions(
-      options: string[],
-      restrictedDomains?: string[],
-      restrictedIntegrations?: string[]
-    ): null | string[] {
-      let out = options;
-      if (restrictedDomains) {
-        const domains = restrictedDomains.map((x) => x.toLowerCase());
-        const domainsStr =
-          domains.length > 1
-            ? `one of "${domains.join(", ")}"`
-            : `"${domains[0]}"`;
-        out = out.reduce<string[]>((all = [], areaId) => {
-          if (!methods.areaHasEntityDomain(areaId, domains)) {
-            return [...all, `${methods.getLabel(areaId)} is not ${domainsStr}`];
-          }
-          return all;
-        }, []);
-      } else if (restrictedIntegrations) {
-        const integrations = restrictedIntegrations.map((x) => x.toLowerCase());
-        const domainsStr =
-          integrations.length > 1
-            ? `one of "${integrations.join(", ")}"`
-            : `"${integrations[0]}"`;
-        out = out.reduce<string[]>((all = [], areaId) => {
-          if (!methods.areaHasEntityIntegration(areaId, integrations)) {
-            return [...all, `${methods.getLabel(areaId)} is not ${domainsStr}`];
-          }
-          return all;
-        }, []);
-      }
-      if (out.length > 0) {
-        return out;
-      }
-      return null;
-    },
     getBaseOption(opt: AreaOption): AreaBaseOption {
       if (!areas.ready) {
         throw new Error("Not Ready!");
@@ -161,7 +125,9 @@ export const useHAAreas = () => {
     getLabel: (opt: AreaOption): string => {
       if (typeof opt === "string") {
         if (areas.ready) {
-          return areas.collection.state[opt].name ?? prettyName(opt);
+          return areas.collection.state[opt]
+            ? areas.collection.state[opt].name ?? prettyName(opt)
+            : prettyName(opt);
         }
         return opt;
       }

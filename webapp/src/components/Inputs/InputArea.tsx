@@ -16,10 +16,10 @@ export const InputArea: FC<InputAreaProps> = (props) => {
   return (
     <InputAutoComplete
       {...props}
-      validateOption={(v) => areas.validateOptions(v)}
-      options={areas.getOptions()}
+      label={props.label ?? "Area"}
       getID={areas.getID}
       getLabel={areas.getLabel}
+      options={areas.getOptions()}
       onlyShowLabel
     />
   );
