@@ -1,5 +1,4 @@
 import { DAGDims, ElementMaker, ElementMakerBaseProps } from "./types";
-import { AutomationTrigger } from "types/automations/triggers";
 import * as distance from "./distance";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import {
@@ -7,7 +6,6 @@ import {
   AutomationSequenceNode,
 } from "types/automations";
 import { AutomationCondition } from "types/automations/conditions";
-import { CollectionNodeMaker } from "../nodes/CollectionNode";
 import { XYPosition } from "react-flow-renderer";
 import { DAGElementsOutputState } from "./outputState";
 import { SequenceNodeMaker } from "../nodes/SequenceNode";
@@ -19,7 +17,6 @@ import {
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { AddIcon } from "components/Icons";
 import { useDAGElementsState } from "./state";
-import AddBox from "@mui/icons-material/AddBox";
 import { DAGGraphChooseUpdater } from "../updater";
 import { getSpecialNodeMaker, makeSpecialNodeMaker } from "./specialnodes";
 import { getNodeSubType } from "../../../utils/automations";
@@ -28,6 +25,7 @@ import Add from "@mui/icons-material/Add";
 import { SequenceNodeDataProps } from "../nodes/SequenceNode/types";
 import { convertFailuresToSequenceNodeDataProps } from "./util";
 import { convertChooseActionToOrignal } from "../updater/util";
+import * as helpers from "./helpers";
 
 export const useAutomationNodes = (
   automation: AutomationActionData,
@@ -39,7 +37,7 @@ export const useAutomationNodes = (
   const state = useDAGElementsState();
   const outputState = new DAGElementsOutputState(dims.position, dims);
   outputState.extend(
-    makeTriggerNodes(automation.trigger, {
+    helpers.makeTriggerNodes(automation.trigger, {
       ...args,
       state,
       dims,
@@ -49,7 +47,7 @@ export const useAutomationNodes = (
     })
   );
   outputState.extend(
-    makeConditionNodes(automation.condition, {
+    helpers.makeConditionNodes(automation.condition, {
       ...args,
       state,
       dims,
@@ -74,7 +72,8 @@ export const useAutomationNodes = (
         "collection",
         "node",
         outputState.getLastNodePos(),
-        dims
+        dims,
+        true
       ),
       nodeId: `${dims.flipped}-sequence`,
       nodeIndex: 2,
@@ -85,74 +84,6 @@ export const useAutomationNodes = (
   return outputState.data;
 };
 
-export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
-  nodes,
-  { dims, namer, stateUpdater, nodeId, position }
-) => {
-  const outputState = new DAGElementsOutputState(position, dims);
-  outputState.addNode(
-    CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
-      ...dims.collection,
-      collectionType: "trigger",
-      onAddNode: () => stateUpdater.basic.trigger.addNode(null),
-      nodes: nodes.map((node, index) => {
-        const failures = validateNode(node, ["trigger"]);
-
-        if (failures) {
-          return {
-            enabled: node.enabled ?? true,
-            ...stateUpdater.createNodeActions("trigger", index, {}),
-            ...convertFailuresToSequenceNodeDataProps(failures),
-          };
-        }
-
-        return {
-          enabled: node.enabled ?? true,
-          label: getDescriptionFromAutomationNode(node, namer, true),
-          ...stateUpdater.createNodeActions("trigger", index, {}),
-        };
-      }),
-    })
-  );
-  return outputState;
-};
-
-export const makeConditionNodes: ElementMaker<AutomationCondition> = (
-  nodes,
-  { nodeId, stateUpdater, position, dims, namer, lastNodeId }
-) => {
-  const outputState = new DAGElementsOutputState(position, dims);
-  outputState.addNode(
-    CollectionNodeMaker.makeElement({ id: nodeId, position }, dims, {
-      ...dims.collection,
-      collectionType: "condition",
-      hasInput: !!lastNodeId,
-      onAddNode: () => stateUpdater.basic.condition.addNode(null),
-      nodes: nodes.map((node, index) => {
-        const failures = validateNode(node, ["condition"]);
-
-        if (failures) {
-          return {
-            enabled: node.enabled ?? true,
-            ...stateUpdater.createNodeActions("condition", index, {}),
-            ...convertFailuresToSequenceNodeDataProps(failures),
-          };
-        }
-
-        return {
-          enabled: node.enabled ?? true,
-          label: getDescriptionFromAutomationNode(node, namer, true),
-          ...stateUpdater.createNodeActions("condition", index, {}),
-        };
-      }),
-    })
-  );
-  if (lastNodeId && outputState.lastNodeId) {
-    outputState.addEdge(lastNodeId, outputState.lastNodeId, { animated: true });
-  }
-  return outputState;
-};
-
 export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   nodes,
   args
@@ -161,8 +92,8 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
   const outputState = new DAGElementsOutputState(position, dims);
   nodes.forEach((node, nodeIndex) => {
     // the JSON.stringify is hack to make the edges render nicely
-    const nodeId = `${args.nodeId}-${args.nodeIndex}-${nodeIndex}`;
     outputState.incNextPos("node");
+    const nodeId = `${args.nodeId}-${args.nodeIndex}-${nodeIndex}`;
     let nodeData: SequenceNodeDataProps = {
       color: getNodeType(node) === "action" ? "green" : "blue",
       enabled: node.enabled ?? true,
@@ -211,18 +142,14 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
         );
       }
     }
+    outputState.incNextPos("node");
   });
 
   const addElement = outputState.addNode(
     ButtonNodeMaker.makeElement(
       {
         id: `${args.nodeId}-add-new`,
-        position: distance.moveAlong(
-          "node",
-          outputState.getLastNodePos(position),
-          1,
-          dims
-        ),
+        position: outputState.nextPos,
       },
       dims,
       {
@@ -245,49 +172,16 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
   (incmNode, outputState, args) => {
     const node = convertChooseActionToOrignal(incmNode);
     // offset position
-    let offsetPos: XYPosition = distance.offsetBy(
-      "node",
-      args.position,
-      args.dims
-    );
+    let pos: XYPosition = distance.offsetBy("node", args.position, args.dims);
     let lastConditionState: DAGElementsOutputState | null = null;
     // functions
-    const drawCondition = (
-      { stateUpdater, onRemove }: DAGGraphChooseUpdater,
-      position: XYPosition,
-      lastNodeId: string | undefined,
-      nodeIndex: number,
-      conditions: AutomationCondition[]
-    ) => {
-      const conditionState = makeConditionNodes(conditions, {
-        ...args,
-        stateUpdater,
-        position,
-        lastNodeId,
-        nodeIndex,
-        nodeId: `${args.nodeId}-choose-${nodeIndex}-condition`,
-      });
-      lastConditionState = conditionState;
-      (conditionState.data.nodes[0].data as any).title = `Option ${
-        nodeIndex + 1
-      }`;
-
-      (conditionState.data.nodes[0].data as any).onDelete = onRemove;
-      conditionState.data.edges[0].sourceHandle = `side`;
-      conditionState.data.edges[0].label = `Option ${nodeIndex + 1}`;
-      conditionState.data.edges[0].style = {
-        stroke: "var(--mui-info-main)",
-      };
-      outputState.extend(conditionState);
-      return conditionState;
-    };
     const drawSequence = (
       { stateUpdater }: DAGGraphChooseUpdater,
       position: XYPosition,
       lastNodeId: string | undefined,
       nodeIndex: number,
       sequence: AutomationSequenceNode[],
-      label: "else" | undefined
+      isElse: boolean = false
     ) => {
       const output = makeSequenceNodes(sequence, {
         ...args,
@@ -300,8 +194,8 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
       if (lastNodeId && output.data.nodes.length > 0) {
         outputState.addEdge(lastNodeId, output.data.nodes[0].id, {
           animated: true,
-          label,
-          sourceHandle: label === "else" ? "side" : undefined,
+          label: isElse ? "else" : "then",
+          sourceHandle: isElse ? "side" : undefined,
           style: {
             stroke: "var(--mui-error-main)",
             zIndex: -1,
@@ -313,33 +207,36 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
 
     // process options
     for (let sIndex = 0; sIndex < node.choose.length; sIndex++) {
-      const stateUpdater = args.stateUpdater.createChoosNodeUpdater(
-        args.nodeIndex,
-        sIndex
-      );
-      let pos = offsetPos;
+      const { stateUpdater, onRemove } =
+        args.stateUpdater.createChoosNodeUpdater(args.nodeIndex, sIndex);
+      // let pos = offsetPos;
       let lastNodeId = args.lastNodeId;
-      const conditionState = drawCondition(
-        stateUpdater,
-        pos,
-        lastNodeId,
-        sIndex,
-        node.choose[sIndex].conditions
-      );
-      pos = distance.moveFromTo("collection", "node", pos, args.dims);
+      const conditionState = helpers.drawCondition({
+        conditions: node.choose[sIndex].conditions,
+        onRemove,
+        args: {
+          ...args,
+          stateUpdater,
+          position: pos,
+          lastNodeId,
+          nodeIndex: sIndex,
+          nodeId: `${args.nodeId}-choose-${sIndex}-condition`,
+        },
+      });
+      outputState.extend(conditionState);
       lastConditionState = conditionState;
       lastNodeId = conditionState.lastNodeId;
       const sequence = node.choose[sIndex].sequence;
       const output = drawSequence(
-        stateUpdater,
-        pos,
+        { stateUpdater, onRemove },
+        distance.moveFromTo("collection", "node", pos, args.dims),
         lastNodeId,
         sIndex,
         sequence,
         undefined
       );
-      offsetPos = distance.moveAlongRelativeTo(
-        offsetPos,
+      pos = distance.moveAlongRelativeTo(
+        pos,
         output.bbox[1],
         args.dims,
         "collection"
@@ -347,39 +244,9 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
       outputState.extend(output);
     }
 
-    // else
-    const stateUpdater = args.stateUpdater.createChoosNodeUpdater(
-      args.nodeIndex,
-      "else"
-    );
-    let pos = offsetPos;
-    let lastNodeId = args.lastNodeId;
-    const elseOutput = drawSequence(
-      stateUpdater,
-      pos,
-      lastNodeId,
-      node.choose.length,
-      node.default ?? [],
-      "else"
-    );
-    offsetPos = distance.moveAlongRelativeTo(
-      offsetPos,
-      elseOutput.bbox[1],
-      args.dims,
-      "node"
-    );
-    outputState.extend(elseOutput);
-
     // add btn
-    let addPos = distance.moveAlong(
-      "node",
-      elseOutput.data.nodes[0].position,
-      1 / args.dims.distanceFactor.node[0],
-      args.dims,
-      true
-    );
     if (lastConditionState !== null) {
-      addPos = distance.moveFromTo(
+      pos = distance.moveFromTo(
         "collection",
         "node",
         (lastConditionState as DAGElementsOutputState).nextPos,
@@ -389,37 +256,42 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
         }
       );
     }
-    const addElement = outputState.addNode(
-      ButtonNodeMaker.makeElement(
-        {
-          id: `${args.nodeId}-choose-add-new`,
-          position: addPos,
-        },
-        args.dims,
-        {
-          text: "Option",
-          icon: <AddBox />,
-          onClick: () =>
-            args.stateUpdater.basic.sequence.updateNode(
+    helpers.makeAddButton({
+      outputState,
+      dims: args.dims,
+      nodeId: args.nodeId,
+      position: pos,
+      onClick: () =>
+        args.stateUpdater.basic.sequence.updateNode(
+          {
+            ...node,
+            choose: [
+              ...node.choose,
               {
-                ...node,
-                choose: [
-                  ...node.choose,
-                  {
-                    conditions: [],
-                    sequence: [],
-                  },
-                ],
+                conditions: [],
+                sequence: [],
               },
-              args.nodeIndex
-            ),
-        }
-      )
-    );
-    outputState.addEdge(args.nodeId, addElement.id, {
-      animated: true,
-      sourceHandle: "side",
+            ],
+          },
+          args.nodeIndex
+        ),
     });
+
+    // else
+    const stateUpdater = args.stateUpdater.createChoosNodeUpdater(
+      args.nodeIndex,
+      "else"
+    );
+    let lastNodeId = args.lastNodeId;
+    const elseOutput = drawSequence(
+      stateUpdater,
+      distance.moveAlong("node", pos, 1, args.dims, true),
+      lastNodeId,
+      node.choose.length,
+      node.default ?? [],
+      true
+    );
+    outputState.extend(elseOutput);
   }
 );
 
@@ -442,7 +314,7 @@ export const makeRepeatNodes = makeSpecialNodeMaker(
 
     // while
     if ("while" in node.repeat) {
-      whileState = makeConditionNodes(
+      whileState = helpers.makeConditionNodes(
         convertScriptConditionFieldToAutomationConditions(node.repeat.while),
         {
           ...args,
@@ -493,7 +365,7 @@ export const makeRepeatNodes = makeSpecialNodeMaker(
     );
     // until
     if ("until" in node.repeat) {
-      untilState = makeConditionNodes(
+      untilState = helpers.makeConditionNodes(
         convertScriptConditionFieldToAutomationConditions(node.repeat.until),
         {
           ...args,

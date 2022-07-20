@@ -504,7 +504,7 @@ BadNodes.args = {
 
 export const IfElseNode = Template.bind({});
 IfElseNode.args = {
-  ...BadNodes.args,
+  ...IfElseNode.args,
   automation: {
     condition: [],
     trigger: [],

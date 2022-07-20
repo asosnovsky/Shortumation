@@ -105,6 +105,6 @@ export class DAGElementsOutputState {
     if (!this.lastNode) {
       return;
     }
-    this.nextPos = moveAlong(by, this.nextPos, 1, this.dims);
+    this.nextPos = moveAlong(by, this.nextPos, 0.5, this.dims);
   }
 }
