@@ -13,7 +13,7 @@ export const InputDevice: FC<InputDeviceProps> = (props) => {
   return (
     <InputAutoComplete
       {...props}
-      label={props.label ?? "Device ID"}
+      label={props.label ?? "Device"}
       getID={dr.getID}
       getLabel={dr.getLabel}
       options={dr.getOptions()}
