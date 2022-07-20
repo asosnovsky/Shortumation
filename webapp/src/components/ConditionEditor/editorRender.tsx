@@ -313,12 +313,12 @@ export const ZoneEditor: Editor<ZoneCondition> = ({ onChange, condition }) => {
     <>
       <InputEntity
         label="Zone"
-        value={condition.zone}
-        multiple={false}
+        value={condition.zone ?? []}
+        multiple
         onChange={(zone) =>
           onChange({
             ...condition,
-            zone: zone ?? "",
+            zone: zone ?? [],
           })
         }
         restrictToDomain={["zone"]}
@@ -334,16 +334,6 @@ export const ZoneEditor: Editor<ZoneCondition> = ({ onChange, condition }) => {
           })
         }
         restrictToDomain={["person", "device_tracker"]}
-      />
-      <InputText
-        label="State"
-        value={String(condition.state)}
-        onChange={(state) =>
-          onChange({
-            ...condition,
-            state,
-          })
-        }
       />
     </>
   );

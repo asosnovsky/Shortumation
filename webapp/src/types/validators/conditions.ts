@@ -71,8 +71,7 @@ export const ZoneCondition = st.assign(
   AutomationConditionNodeBase,
   st.type({
     condition: st.literal("zone"),
-    zone: st.string(),
     entity_id: EntityId,
-    state: st.union([st.array(st.string()), st.string()]),
+    zone: st.union([st.array(st.string()), st.string()]),
   })
 );

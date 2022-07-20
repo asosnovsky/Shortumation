@@ -128,6 +128,20 @@ export const getDescriptionFromAutomationNode = <
             ? `on ${getDescriptionForWeekDay(node.weekday, "or")}`
             : "";
           return [before, after, weekday].filter((x) => x).join(", ");
+        case "zone":
+          let out = "if ";
+          if (Array.isArray(node.entity_id) && node.entity_id.length > 2) {
+            out += "multiple people";
+          } else {
+            out += namer.getEntityName(node.entity_id, 2);
+          }
+          out += " enter ";
+          if (Array.isArray(node.zone) && node.zone.length > 2) {
+            out += "multiple people";
+          } else {
+            out += namer.getEntityName(node.zone, 2);
+          }
+          return out;
         default:
           return JSON.stringify(node);
       }
