@@ -56,7 +56,12 @@ export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
   } else {
     const Editor = getEditor(condition);
     childrenConditions = (
-      <Editor condition={condition} onChange={updateCondition} ha={ha} />
+      <Editor
+        condition={condition}
+        onChange={updateCondition}
+        ha={ha}
+        initialViewMode="edit"
+      />
     );
   }
   // icons

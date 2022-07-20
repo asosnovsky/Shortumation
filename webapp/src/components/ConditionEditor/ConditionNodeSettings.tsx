@@ -1,6 +1,7 @@
 import "./ConditionNodeSettings.css";
 
-import { ButtonIcon, ButtonIconProps } from "components/Icons/ButtonIcons";
+import { FC } from "react";
+
 import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 import CodeOffOutlinedIcon from "@mui/icons-material/CodeOffOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -8,7 +9,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditOffIcon from "@mui/icons-material/EditOff";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
-import { FC } from "react";
+
+import { ButtonIcon, ButtonIconProps } from "components/Icons/ButtonIcons";
 import { SpeedDial } from "components/SpeedDial";
 
 export type ConditionNodeSettingsProps = {

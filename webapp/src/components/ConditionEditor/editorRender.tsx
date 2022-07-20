@@ -13,7 +13,10 @@ import {
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
 import { InputEntity } from "components/Inputs/InputEntities";
-import { ConditionNodeBase } from "./ConditionNodeBase";
+import {
+  ConditionNodeBase,
+  ConditionNodeBaseViewMode,
+} from "./ConditionNodeBase";
 import { genUpdateMethods } from "./nestedUpdater";
 import { InputTime } from "components/Inputs/InputTime";
 import InputYaml from "components/Inputs/InputYaml";
@@ -27,6 +30,7 @@ interface Editor<C extends AutomationCondition>
     condition: C;
     onChange: (condition: C) => void;
     ha: HAService;
+    initialViewMode: ConditionNodeBaseViewMode;
   }> {}
 
 export const getEditor = (condition: AutomationCondition): Editor<any> => {
@@ -168,6 +172,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
 export const LogicViewer: Editor<LogicCondition> = ({
   condition,
   onChange,
+  initialViewMode,
 }) => {
   return (
     <>
@@ -178,6 +183,7 @@ export const LogicViewer: Editor<LogicCondition> = ({
             condition={c}
             {...genUpdateMethods(condition, onChange)(i)}
             disableDelete={false}
+            initialViewMode={initialViewMode}
           />
         );
       })}

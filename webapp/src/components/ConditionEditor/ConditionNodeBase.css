@@ -49,6 +49,7 @@
 .condition-node-base.is-edited>.condition-node-base--body {
     max-height: calc(100%-2px-1em);
     max-width: calc(100vw-2px-1em);
+    min-width: 15em;
     border-color: var(--mui-success-main);
     border-style: solid;
     border-width: 1px;
