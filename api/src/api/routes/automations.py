@@ -32,7 +32,7 @@ def make_automation_router(automations: AutomationManager) -> APIRouter:
 
     @router.post("/item/tags")
     def update_tags(body: UpdateTags):
-        automations.update_tags(body.automation_id, body.data)
+        automations.update_tags(body.automation_id, body.tags)
 
     @router.delete("/item")
     def delete_auto(body: DeleteAutoRequest):
