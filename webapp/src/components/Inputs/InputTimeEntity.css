@@ -1,0 +1,21 @@
+.input-time-entity {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.input-time-entity button.MuiButtonBase-root {
+    border-color: var(--mui-info-light);
+    background-color: var(--mui-info-main);
+    color: var(--mui-info-contrastText);
+}
+
+.input-time-entity button.MuiButtonBase-root:hover {
+    background-color: var(--mui-info-light);
+}
+
+.input-time-entity .input-autocomplete {
+    min-width: 10em;
+}

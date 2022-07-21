@@ -62,9 +62,9 @@ export const TimeCondition = st.assign(
   AutomationConditionNodeBase,
   st.type({
     condition: st.literal("time"),
-    after: st.optional(AutomationTime),
-    before: st.optional(AutomationTime),
-    weekday: st.optional(st.union([DayOfWeek, st.array(DayOfWeek)])),
+    after: st.optional(st.string()),
+    before: st.optional(st.string()),
+    weekday: st.optional(st.array(DayOfWeek)),
   })
 );
 export const ZoneCondition = st.assign(

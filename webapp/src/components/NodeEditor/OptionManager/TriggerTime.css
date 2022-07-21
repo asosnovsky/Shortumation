@@ -57,26 +57,3 @@
     color: var(--mui-info-main);
     background-color: var(--mui-info-contrastText);
 }
-
-.trigger-time--exact--option {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding-top: 0.5em;
-    gap: 0.5em;
-}
-
-.trigger-time--exact--option button.MuiButtonBase-root {
-    border-color: var(--mui-info-light);
-    background-color: var(--mui-info-main);
-    color: var(--mui-info-contrastText);
-}
-
-.trigger-time--exact--option button.MuiButtonBase-root:hover {
-    background-color: var(--mui-info-light);
-}
-
-.trigger-time--exact--option .input-autocomplete {
-    min-width: 10em;
-}

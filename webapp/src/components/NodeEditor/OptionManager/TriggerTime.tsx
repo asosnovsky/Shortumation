@@ -23,6 +23,7 @@ import { Button } from "components/Inputs/Button";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { InputTimeEntity } from "components/Inputs/InputTimeEntity";
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {
   defaultState: () => ({
@@ -102,53 +103,13 @@ export const TriggerExactTime: FC<{
   return (
     <div className="trigger-time--exact">
       {times.map((v, i) => {
-        let editor: JSX.Element;
-        const is24Hour = isAutomationTimeString24Hours(v);
-        if (is24Hour) {
-          editor = (
-            <InputTime
-              key={`${i}-editor`}
-              label={`#${i + 1} - At`}
-              value={v ?? "00:00:00"}
-              restrictEmpty
-              onChange={(_at) =>
-                update(
-                  _at ? convertObjectToAutomationTimeString(_at) : "00:00:00",
-                  i
-                )
-              }
-            />
-          );
-        } else {
-          editor = (
-            <InputEntity
-              key={`${i}-editor`}
-              label="Time Entity"
-              restrictMode="or"
-              restrictedDeviceClass={["timestamp"]}
-              restrictToDomain={["input_datetime"]}
-              value={v}
-              multiple={false}
-              onChange={(_at) => update(_at ?? "", i)}
-            />
-          );
-        }
         return (
-          <div className="trigger-time--exact--option">
-            {editor}{" "}
-            <ButtonIcon
-              icon={
-                is24Hour ? <AccessTimeOutlinedIcon /> : <MoreTimeOutlinedIcon />
-              }
-              onClick={() => {
-                if (is24Hour) {
-                  update("", i);
-                } else {
-                  update("00:00:00", i);
-                }
-              }}
-            />
-          </div>
+          <InputTimeEntity
+            key={i}
+            className="trigger-time--exact--option"
+            value={v ?? ""}
+            onChange={(t) => update(t, i)}
+          />
         );
       })}
       <Button onClick={add} className="add">

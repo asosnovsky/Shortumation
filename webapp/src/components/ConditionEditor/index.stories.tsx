@@ -9,6 +9,9 @@ export default {
   title: "ConditionEditor",
   component: ConditionEditor,
   parameters: { actions: { argTypesRegex: "^on.*" } },
+  args: {
+    initialViewMode: "edit",
+  },
 } as ComponentMeta<typeof ConditionEditor>;
 
 const Template: ComponentStory<typeof ConditionEditor> = ({
@@ -75,6 +78,29 @@ LogicCondition.args = {
             above: "60",
           },
         ],
+      },
+    ],
+  } as AutomationCondition,
+};
+export const TimeCondition = Template.bind({});
+TimeCondition.args = {
+  condition: {
+    condition: "or",
+    conditions: [
+      {
+        condition: "time",
+      },
+      {
+        condition: "time",
+        after: "10:00:00",
+      },
+      {
+        condition: "time",
+        before: "input_datetime.test",
+      },
+      {
+        condition: "time",
+        weekday: ["fri"],
       },
     ],
   } as AutomationCondition,
