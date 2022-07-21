@@ -31,7 +31,6 @@ import { prettyName } from "utils/formatting";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Button";
 import { RemoveCircle } from "@mui/icons-material";
-import { DayOfWeek } from "types/automations/common";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{
