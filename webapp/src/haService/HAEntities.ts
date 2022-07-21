@@ -106,35 +106,82 @@ export const useHAEntities = () => {
     },
     getOptions(
       restrictToDomain?: string[],
-      restrictedIntegrations?: string[]
+      restrictedIntegrations?: string[],
+      restrictedDeviceClass?: string[],
+      mode: "and" | "or" = "and"
     ): EntityOption[] {
       if (!entities.ready) {
         return [];
       }
-      let keys = Object.keys(entities.collection.state);
-      if (restrictToDomain) {
-        const domains = restrictToDomain.map((x) => x.toLowerCase());
-        keys = keys.filter((key) =>
-          domains.includes(key.toLowerCase().split(".")[0])
-        );
-      }
-      if (restrictedIntegrations && entitySource.ready) {
-        const integrations = restrictedIntegrations.map((x) => x.toLowerCase());
-        keys = keys.filter((key) => {
-          const integration = (
-            entitySource.collection.state[key]?.domain ?? ""
-          ).toLowerCase();
-          return integrations.includes(integration);
-        });
-      }
-      return keys.map((key) => ({
-        id: key,
-        label: entities.collection.state[key].attributes.friendly_name ?? key,
-        domain: key.split(".")[0] ?? "n/a",
-        integration: entitySource.ready
-          ? (entitySource.collection.state[key] ?? {}).domain ?? "n/a"
-          : "...",
-      }));
+      const deviceClasses = (restrictedDeviceClass ?? []).map((x) =>
+        x.toLowerCase()
+      );
+      const domains = (restrictToDomain ?? []).map((x) => x.toLowerCase());
+      const integrations = (restrictedIntegrations ?? []).map((x) =>
+        x.toLowerCase()
+      );
+      return Object.keys(entities.collection.state)
+        .filter((entityId) => {
+          if (mode === "and") {
+            let keep = true;
+            if (domains.length > 0) {
+              keep =
+                keep && domains.includes(entityId.toLowerCase().split(".")[0]);
+            }
+            if (entitySource.ready && integrations.length > 0) {
+              keep =
+                keep &&
+                integrations.includes(
+                  entitySource.collection.state[entityId]?.domain ?? ""
+                );
+            }
+            if (deviceClasses.length > 0) {
+              keep =
+                keep &&
+                deviceClasses.includes(
+                  entities.collection.state[
+                    entityId
+                  ].attributes.device_class?.toLowerCase() ?? ""
+                );
+            }
+            return keep;
+          } else {
+            if (
+              !entitySource.ready &&
+              deviceClasses.length === 0 &&
+              domains.length === 0 &&
+              integrations.length === 0
+            ) {
+              return true;
+            }
+            let keep = false;
+            keep =
+              keep || domains.includes(entityId.toLowerCase().split(".")[0]);
+            if (entitySource.ready) {
+              keep =
+                keep ||
+                integrations.includes(
+                  entitySource.collection.state[entityId]?.domain ?? ""
+                );
+            }
+            keep =
+              keep ||
+              deviceClasses.includes(
+                entities.collection.state[
+                  entityId
+                ].attributes.device_class?.toLowerCase() ?? ""
+              );
+            return keep;
+          }
+        })
+        .map((key) => ({
+          id: key,
+          label: entities.collection.state[key].attributes.friendly_name ?? key,
+          domain: key.split(".")[0] ?? "n/a",
+          integration: entitySource.ready
+            ? (entitySource.collection.state[key] ?? {}).domain ?? "n/a"
+            : "...",
+        }));
     },
     getLabel: (opt: EntityOption): string => {
       if (typeof opt === "string") {

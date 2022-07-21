@@ -67,10 +67,10 @@ export const AutomationTriggerTemplate = st.type({
   for: st.optional(AutomationTime),
 });
 
-export const AutomationTriggerTime = st.type({
+export const AutomationTriggerExactTime = st.type({
   ...AutomationTriggerBase,
   platform: st.literal("time"),
-  at: AutomationTimeString,
+  at: st.union([st.string(), st.array(st.string())]),
 });
 
 export const AutomationTriggerTimePattern = st.type({
@@ -80,6 +80,11 @@ export const AutomationTriggerTimePattern = st.type({
   minutes: st.optional(st.string()),
   seconds: st.optional(st.string()),
 });
+
+export const AutomationTriggerTime = st.union([
+  AutomationTriggerExactTime,
+  AutomationTriggerTimePattern,
+]);
 
 export const AutomationTriggerWebhook = st.type({
   ...AutomationTriggerBase,

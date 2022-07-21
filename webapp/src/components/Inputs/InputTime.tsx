@@ -19,13 +19,14 @@ const fields: Array<keyof AutomationTimeObject> = [
   "seconds",
   "milliseconds",
 ];
-export interface Props {
+export type InputTimeProps = {
   label: string;
-  value?: AutomationTime;
   onChange: (v?: AutomationTimeObject) => void;
   className?: string;
-}
-export const InputTime: FC<Props> = (props) => {
+  value?: AutomationTime;
+  restrictEmpty?: boolean;
+};
+export const InputTime: FC<InputTimeProps> = (props) => {
   // state
   const [disabled, setDisabled] = useState(!props.value);
   const [displayValue, setDisplayValue] = useState(
@@ -140,10 +141,12 @@ export const InputTime: FC<Props> = (props) => {
             onChange={(e) => updateOne(name)(e.target.value)}
           />
         ))}
-        <ButtonIcon
-          onClick={() => setDisabled(!disabled)}
-          icon={disabled ? <EditIcon /> : <CloseIcon />}
-        />
+        {!props.restrictEmpty && (
+          <ButtonIcon
+            onClick={() => setDisabled(!disabled)}
+            icon={disabled ? <EditIcon /> : <CloseIcon />}
+          />
+        )}
       </div>
     </div>
   );

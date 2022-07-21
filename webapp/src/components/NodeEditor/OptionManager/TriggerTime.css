@@ -1,0 +1,82 @@
+.trigger-time--help {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.trigger-time--help .text {
+    word-wrap: break-word;
+    flex-wrap: wrap;
+    overflow: hidden;
+    text-overflow: clip;
+    cursor: pointer;
+    padding: 0.5em 0.75em;
+    max-width: 40em;
+}
+
+.trigger-time--help .text a {
+    color: var(--mui-info-light);
+}
+
+.trigger-time--help .text a:hover {
+    color: var(--mui-info-main);
+    border-radius: 10px;
+    text-decoration: underline;
+}
+
+.trigger-time--help .trigger-time--mode-selection {
+    width: 10em;
+}
+
+.trigger-time--pattern {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    margin-top: 0.5em;
+}
+
+.trigger-time--exact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.trigger-time--exact .add {
+    border-color: var(--mui-info-light);
+    color: var(--mui-info-contrastText);
+    background-color: var(--mui-info-main);
+}
+
+.trigger-time--exact .add:hover {
+    border-color: var(--mui-info-light);
+    color: var(--mui-info-main);
+    background-color: var(--mui-info-contrastText);
+}
+
+.trigger-time--exact--option {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0.5em;
+    gap: 0.5em;
+}
+
+.trigger-time--exact--option button.MuiButtonBase-root {
+    border-color: var(--mui-info-light);
+    background-color: var(--mui-info-main);
+    color: var(--mui-info-contrastText);
+}
+
+.trigger-time--exact--option button.MuiButtonBase-root:hover {
+    background-color: var(--mui-info-light);
+}
+
+.trigger-time--exact--option .input-autocomplete {
+    min-width: 10em;
+}

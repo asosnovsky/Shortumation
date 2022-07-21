@@ -10,6 +10,8 @@ export type InputEntityProps = InputAutoCompletePropsBase & {
   restrictToDomain?: string[];
   restrictedIntegrations?: string[];
   preSelectedEntityIds?: string[];
+  restrictedDeviceClass?: string[];
+  restrictMode?: "and" | "or";
 };
 
 export const InputEntity: FC<InputEntityProps> = (props) => {
@@ -17,7 +19,9 @@ export const InputEntity: FC<InputEntityProps> = (props) => {
   const entities = useHAEntities();
   let options = entities.getOptions(
     props.restrictToDomain,
-    props.restrictedIntegrations
+    props.restrictedIntegrations,
+    props.restrictedDeviceClass,
+    props.restrictMode ?? "and"
   );
   if (props.preSelectedEntityIds) {
     options = options.filter((opt) =>

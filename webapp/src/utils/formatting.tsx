@@ -41,7 +41,16 @@ export const getDescriptionFromAutomationNode = <
       return node.id ?? "";
     }
     if (node.platform === "time") {
-      return node.at;
+      const out = `At `;
+      if (Array.isArray(node.at)) {
+        return out + node.at.join(" or ");
+      }
+      return out + node.at;
+    }
+    if (node.platform === "time_pattern") {
+      return `At ${node.hours ?? "*"}:${node.minutes ?? "*"}:${
+        node.seconds ?? "*"
+      }`;
     }
     if (node.platform === "homeassistant") {
       if (node.event === "start") {

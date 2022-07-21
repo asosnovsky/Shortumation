@@ -70,7 +70,6 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T) => {
         "state",
         "numeric_state",
         "time",
-        "time_pattern",
         "zone",
         "event",
         "homeassistant",
@@ -122,6 +121,9 @@ export const getNodeSubType = <
   if ("condition" in node) {
     return node.condition as any;
   } else if ("platform" in node) {
+    if (node.platform === "time_pattern") {
+      return "time" as any;
+    }
     return node.platform as any;
   } else if ("service" in node) {
     return "service" as any;
@@ -157,7 +159,6 @@ export const TriggerValidators: Record<TriggerType, any> = {
   tag: v.triggers.AutomationTriggerTag,
   template: v.triggers.AutomationTriggerTemplate,
   time: v.triggers.AutomationTriggerTime,
-  time_pattern: v.triggers.AutomationTriggerTimePattern,
   webhook: v.triggers.AutomationTriggerWebhook,
   zone: v.triggers.AutomationTriggerZone,
 };
