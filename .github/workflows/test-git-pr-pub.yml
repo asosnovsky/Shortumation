@@ -17,7 +17,19 @@ jobs:
       - name: Publish Release {{ github.event.inputs.version }}
         uses: actions/github-script@v6
         env:
-          VERSION: { { github.event.inputs.version } }
+          VERSION: "{{ github.event.inputs.version }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: process.env.VERSION,
+            });
+      - name: Publish PreRelease {{ github.event.inputs.version }}
+        uses: actions/github-script@v6
+        env:
+          VERSION: pre-{{ github.event.inputs.version }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
