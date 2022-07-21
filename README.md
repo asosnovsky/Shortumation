@@ -73,7 +73,7 @@ If this warning does not scare you or you still want to try things out, then tak
 
 **How is this different from Node-Red?**
 
-  > Node-Red is both an execution engine and an automation editor, which means that in order for you automations to run you have to have an additional component running and executing the automations. Shortumation simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
+  > Node-Red is both an execution engine and an automation editor, which means that in order for your automations to run you have to have an additional component running and executing the automations. Shortumation simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
 
 **Which HA Installation does this support?**
 
