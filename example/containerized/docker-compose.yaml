@@ -4,18 +4,17 @@ services:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
-      - config:/config
+      - ./config:/config
     restart: unless-stopped
     privileged: true
     network_mode: host
 
   shortumation:
     # make sure to replace the ARCH with whatever system you are running!
-    image: "asosnovsky/shortumation-${ARCH:-amd64}:latest"
+    image: "asosnovsky/shortumation-${ARCH:-amd64}:${SHORTUMATION_VERSION:-latest}"
+    network_mode: host
     volumes:
-      - config:/config
-    ports:
-      - 8081:8000
-
-volumes:
-  config:
+      - ./config:/config
+    environment:
+      - SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}
+      - HASSIO_WS=ws://0.0.0.0:8123/api/websocket
