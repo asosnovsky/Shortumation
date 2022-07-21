@@ -1,6 +1,5 @@
 import * as st from "superstruct";
 import {
-  AutomationTimeString,
   AutomationTime,
   AutomationDeviceState,
 } from "./common";
