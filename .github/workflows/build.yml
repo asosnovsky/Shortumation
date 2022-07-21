@@ -96,7 +96,6 @@ jobs:
     name: Create Github Pre-Release
     permissions:
       contents: write
-      administration: write
     steps:
       - name: Pre-Release ${{ needs.metadata.outputs.version }}
         uses: actions/github-script@v6
