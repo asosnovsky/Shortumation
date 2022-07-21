@@ -1,12 +1,10 @@
-name: Build
+name: Test Release
 on:
   workflow_dispatch:
     inputs:
       version:
         type: string
         description: "Version Number"
-  push:
-    branch: [main]
 jobs:
   publish:
     runs-on: ubuntu-latest
