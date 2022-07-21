@@ -6,24 +6,6 @@ on:
         type: string
         description: "Version Number"
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    name: Publish Github Release
-    permissions:
-      contents: write
-    steps:
-      - name: "${{ github.event.inputs.version }}"
-        uses: actions/github-script@v6
-        env:
-          VERSION: "${{ github.event.inputs.version }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: process.env.VERSION,
-            });
   pre:
     runs-on: ubuntu-latest
     name: Publish Github PreRelease
@@ -41,4 +23,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: process.env.VERSION,
+              prerelease: true,
             });
