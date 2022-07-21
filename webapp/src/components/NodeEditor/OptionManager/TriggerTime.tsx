@@ -59,7 +59,7 @@ export const TriggerTime: OptionManager<AutomationTriggerTime> = {
               divisible by that number. You can specify "*" to match any value.{" "}
               <a
                 href="https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger"
-                target="_blank"
+                target="_blank" rel="noreferrer"
               >
                 More Info.
               </a>
