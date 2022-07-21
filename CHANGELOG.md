@@ -1,5 +1,21 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.3.4] - Condition/Trigger Editor Upgrades!
+
+- Many condition editor fixes
+- Many trigger editor fixes
+- Refactor time triggers & condition triggers (time + time pattern are now in a single node selection --- trying to keep list selection small)
+- Support for condition: time weekdays
+- Support for time inputs (using both timestamp device classes and input_datetime)
+- Fixed up condition editor nesting error (though still a better experience on pc, it is mostly usable on mobile)
+- Description generation for time+time pattern condition and triggers
+
+![image](https://user-images.githubusercontent.com/7451445/180237072-e5bd37bf-b89f-4978-a0ca-1cc71d9bd5a8.png)
+
+![image](https://user-images.githubusercontent.com/7451445/180237749-519244ad-ef94-4a3f-8925-67ac3ed98ee8.png)
+
+![image](https://user-images.githubusercontent.com/7451445/180238004-4b04f13a-77a2-4c4c-9144-963dbc394bf4.png)
+
 ## [0.3.2] - Fixed Addon Image for arm-based devices
 
 - Using hypercon instead of uvicorn (this losses the rust dependency which makes it easier to install on arm)
