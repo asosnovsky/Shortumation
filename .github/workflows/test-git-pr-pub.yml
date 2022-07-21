@@ -12,10 +12,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: "{{ github.event.inputs.version }}"
+      - name: "${{ github.event.inputs.version }}"
         uses: actions/github-script@v6
         env:
-          VERSION: "{{ github.event.inputs.version }}"
+          VERSION: "${{ github.event.inputs.version }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -30,10 +30,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: "{{ github.event.inputs.version }}"
+      - name: "${{ github.event.inputs.version }}"
         uses: actions/github-script@v6
         env:
-          VERSION: pre-{{ github.event.inputs.version }}
+          VERSION: pre-${{ github.event.inputs.version }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
