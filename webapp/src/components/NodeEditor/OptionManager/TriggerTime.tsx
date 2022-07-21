@@ -1,8 +1,6 @@
 import "./TriggerTime.css";
 
 import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-import MoreTimeOutlinedIcon from "@mui/icons-material/MoreTimeOutlined";
 
 import { OptionManager } from "./OptionManager";
 import {
@@ -10,19 +8,12 @@ import {
   AutomationTriggerExactTime,
   AutomationTriggerTimePattern,
 } from "types/automations/triggers";
-import { InputTime } from "components/Inputs/InputTime";
-import {
-  convertObjectToAutomationTimeString,
-  isAutomationTimeString24Hours,
-} from "utils/time";
 import InputText from "components/Inputs/InputText";
 import { FC } from "react";
 import { InputList } from "components/Inputs/InputList";
-import { InputEntity } from "components/Inputs/InputEntities";
 import { Button } from "components/Inputs/Button";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { InputTimeEntity } from "components/Inputs/InputTimeEntity";
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {

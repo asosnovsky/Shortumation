@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   AutomationCondition,
   DeviceCondition,
@@ -26,6 +26,12 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import AddIcon from "@mui/icons-material/Add";
 import { getEntityDomains } from "utils/automations";
 import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+import { InputTimeEntity } from "components/Inputs/InputTimeEntity";
+import { prettyName } from "utils/formatting";
+import { InputList } from "components/Inputs/InputList";
+import { Button } from "components/Inputs/Button";
+import { RemoveCircle } from "@mui/icons-material";
+import { DayOfWeek } from "types/automations/common";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{
@@ -274,31 +280,86 @@ export const StateEditor: Editor<StateCondition> = ({
   );
 };
 
+type TimeEditorShows = "after" | "before" | "weekday";
 export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
+  const [shows, setShows] = useState<TimeEditorShows[]>(
+    Object.keys(condition).filter((k) =>
+      ["after", "before", "weekday"].includes(k)
+    ) as any
+  );
   return (
-    <>
-      <InputTime
-        label="After"
-        value={condition.after}
-        onChange={(after) =>
-          onChange({
-            ...condition,
-            after,
-          })
+    <div className="condition-node--time-editor">
+      {shows.map((show) => {
+        if (show === "after" || show === "before") {
+          return (
+            <div className="condition-node--time-editor--ba" key={show}>
+              <b className="label">{prettyName(show)}</b>
+              <InputTimeEntity
+                value={condition[show] ?? ""}
+                onChange={(v) =>
+                  onChange({
+                    ...condition,
+                    [show]: v,
+                  })
+                }
+              />
+              <Button
+                className="remove"
+                onClick={() => {
+                  setShows(shows.filter((k) => k !== show));
+                  const upd = { ...condition };
+                  delete upd[show];
+                  onChange({ ...upd });
+                }}
+              >
+                <RemoveCircle />
+              </Button>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <InputAutoComplete
+                label="Weekday"
+                value={condition.weekday ?? []}
+                multiple={true}
+                getID={(opt) => opt}
+                getLabel={(opt) => {
+                  return {
+                    mon: "Monday",
+                    tue: "Tuesday",
+                    wed: "Wednesday",
+                    thu: "Thursday",
+                    fri: "Friday",
+                    sat: "Saturday",
+                    sun: "Sunday",
+                  }[opt];
+                }}
+                onChange={(weekday: any) =>
+                  onChange({
+                    ...condition,
+                    weekday: weekday ?? [],
+                  })
+                }
+                options={["mon", "tue", "wed", "thu", "fri", "sat", "sun"]}
+              />
+            </div>
+          );
         }
-      />
-      <InputTime
-        label="Before"
-        value={condition.before}
-        onChange={(before) =>
-          onChange({
-            ...condition,
-            before,
-          })
-        }
-      />
-      <b>Weekday not support for no, use yaml for now</b> {condition.weekday}
-    </>
+      })}
+      {shows.length < 3 && (
+        <InputList
+          className="condition-node--time-editor--new"
+          label="Option"
+          options={["after", "before", "weekday"].filter(
+            (k: any) => !shows.includes(k)
+          )}
+          onChange={(k: any) => {
+            setShows(shows.concat([k]));
+          }}
+        />
+      )}
+    </div>
   );
 };
 

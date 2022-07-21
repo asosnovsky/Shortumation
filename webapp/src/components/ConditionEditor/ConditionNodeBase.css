@@ -65,3 +65,43 @@
     padding: 0.5em;
     background-color: var(--mui-secondary-contrastText);
 }
+
+.condition-node--time-editor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.condition-node--time-editor--ba {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5em;
+    padding-top: 1.5em;
+    padding-bottom: 0.25em;
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.condition-node--time-editor--ba button.remove {
+    padding: 0.25em;
+    min-width: fit-content;
+    color: var(--mui-error-light);
+    border-color: transparent;
+}
+
+.condition-node--time-editor--ba button.remove:hover {
+    border-color: var(--mui-error-light);
+    border-radius: 20px;
+}
+
+.condition-node--time-editor--ba .label {
+    position: absolute;
+    top: 0;
+    left: 0.2em;
+}
