@@ -1,10 +1,10 @@
 # Shortumation ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=platsic)
 
 [![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml) [![Build](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml)
- 
-|  | Stable | Edge 
-| --- | --- | --- 
-| Version | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-amd64?&sort=date&label=&style=for-the-badge) 
+
+|         | Stable                                                                                                                         | Edge                                                                                                                                         |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Version | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-amd64?&sort=date&label=&style=for-the-badge) |
 
 A better way to write automations in home-assistant without having to install and run a seperate automation engine!
 
@@ -12,15 +12,13 @@ Sort and organize your home-assistant automations using tags!
 
 ![image](https://user-images.githubusercontent.com/7451445/179136346-cf04a8c0-ac4e-44b2-b9fe-806824864660.png)
 
-Utilize the auto-generated node descriptions to understand what your automation is doing! No more reading YAML to just understand what 1 node does! 
+Utilize the auto-generated node descriptions to understand what your automation is doing! No more reading YAML to just understand what 1 node does!
 
 ![image](https://user-images.githubusercontent.com/7451445/179137357-455260f3-2cdd-44ca-ae62-084ed7c59ebd.png)
-
 
 More condense UI for service calls!
 
 ![image](https://user-images.githubusercontent.com/7451445/179137126-93601ea9-435f-4c4f-8f21-0d09cd61c7a2.png)
-
 
 Visualize complex 'choose' or 'if/else' nodes
 
@@ -34,19 +32,17 @@ Visualize repeat nodes!
 
 ![image](https://user-images.githubusercontent.com/7451445/179135790-a5e77e2b-6d42-4810-a27b-ff4d165e99ec.png)
 
-
-
 A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing your automations & scripts. We provide a way to visualize and develop your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
 
 ## Features
 
-- [X] View your automations & scripts in a visual graph
-- [X] See all automations in one common view
-- [X] Automation Manager
-- [X] Tags for automation organization
-- [X] Autocomplete fields for entities/devices
-- [X] Visualize parallel/repeat/choose/if-else nodes
-- [X] Autogenerate node names
+- [x] View your automations & scripts in a visual graph
+- [x] See all automations in one common view
+- [x] Automation Manager
+- [x] Tags for automation organization
+- [x] Autocomplete fields for entities/devices
+- [x] Visualize parallel/repeat/choose/if-else nodes
+- [x] Autogenerate node names
 - [ ] Clean error reporting
 - [ ] Script Editor
 
@@ -64,21 +60,24 @@ It should now appear in your `Add-on Store` and you should be able to install it
 
 ### Containerized
 
-Please note that this way of using Shortumation is **not future proof**, currently we use the `/config/automation.yaml` file as our source of truth for the automations. Which means that we do not need access to the HA API or Websockets. In future release you may need to configure some additional compomenents to enable this. 
+Please note that this way of using Shortumation is **not future proof**.
 
-If this warning does not scare you or you still want to try things out, then take a look at the example [docker-compose.yaml](example/containerized/docker-compose.yaml).
-
+If this warning does not scare you or you still want to try things out, then take a look at the example [docker-compose.yaml](example/containerized/docker-compose.yaml), or read the [extended guide here](https://github.com/asosnovsky/Shortumation/wiki/Installation#containerized--ha-core).
 
 ## FAQ
 
 **How is this different from Node-Red?**
 
-  > Node-Red is both an execution engine and an automation editor, which means that in order for your automations to run you have to have an additional component running and executing the automations. Shortumation simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
+> Node-Red is both an execution engine and an automation editor, which means that in order for your automations to run you have to have an additional component running and executing the automations. Shortumation simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
 
 **Which HA Installation does this support?**
 
-  > Currently this is only tested on HA OS. However, you should be able to get it working supervised installations as well (as they support addons). If you want to make it work for Container or Core, you will need to do some additional leg-work and I welcome a PR to get this working (it should be just a matter of mounting the `/config` path to the container running the images in this repo).
+> Currently this is only tested on HA OS. However, you should be able to get it working supervised installations as well (as they support addons). If you want to make it work for Container or Core, you will need to do some additional leg-work and I welcome a PR to get this working (it should be just a matter of mounting the `/config` path to the container running the images in this repo).
 
 **Which version of HA does this require?**
 
-  > Since I am working on this project on my own, I can only test it against my own HA installations at home, and I tend to keep things as up to date as possible. The lowest version of HA this was tested on is `core-2022.5.4`
+> Since I am working on this project on my own, I can only test it against my own HA installations at home, and I tend to keep things as up to date as possible. The lowest version of HA this was tested on is `core-2022.5.4`
+
+**This is awesome and all, how can I help?**
+
+Take a look at our Roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1), the [Development Guide](https://github.com/asosnovsky/Shortumation/wiki/Development) and send me some PRs to review!

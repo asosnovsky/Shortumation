@@ -1,2 +1,4 @@
 .vscode/*.log
 webapp/src/types/validators/index.test.ts
+example/containerized/config/
+example/containerized/.env
