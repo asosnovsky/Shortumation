@@ -317,8 +317,10 @@ export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
           );
         } else {
           return (
-            <div>
+            <div className="condition-node--time-editor--ba" key={show}>
+              <b className="label">{prettyName(show)}</b>
               <InputAutoComplete
+                className="condition-node--time-editor--weekday"
                 label="Weekday"
                 value={condition.weekday ?? []}
                 multiple={true}
@@ -342,6 +344,17 @@ export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
                 }
                 options={["mon", "tue", "wed", "thu", "fri", "sat", "sun"]}
               />
+              <Button
+                className="remove"
+                onClick={() => {
+                  setShows(shows.filter((k) => k !== show));
+                  const upd = { ...condition };
+                  delete upd[show];
+                  onChange({ ...upd });
+                }}
+              >
+                <RemoveCircle />
+              </Button>
             </div>
           );
         }
