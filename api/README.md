@@ -7,3 +7,5 @@
 `make coverage`: run all unittests and report coverage stats
 
 `make lint`: run all linter and code formatting
+
+`make run-local`: starts the api locally
