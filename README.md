@@ -34,7 +34,7 @@ A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI 
 
     <img src="https://user-images.githubusercontent.com/7451445/179135790-a5e77e2b-6d42-4810-a27b-ff4d165e99ec.png" width="500px"/>
 
-See roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1).
+See roadmap in [Version 1 Github Project](https://github.com/users/asosnovsky/projects/3/views/4).
 
 ## Installation
 
@@ -68,7 +68,7 @@ If this warning does not scare you or you still want to try things out, then tak
 
 **This is awesome and all, how can I help?**
 
-> Take a look at our Roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1), the [Development Guide](https://github.com/asosnovsky/Shortumation/wiki/Development) and send me some PRs to review!
+> Take a look at our Roadmap in [Version 1 Github Project](https://github.com/users/asosnovsky/projects/3/views/4), the [Development Guide](https://github.com/asosnovsky/Shortumation/wiki/Development) and send me some PRs to review!
 
 > Please also note that I did went ahead and marked some [good first issues](https://github.com/asosnovsky/Shortumation/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) if you want to pick them up just leave a comment and I will give you more context (I haven't had time to add more details).
 
