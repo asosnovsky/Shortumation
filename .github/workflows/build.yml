@@ -6,7 +6,8 @@ on:
         type: string
         description: "Version Number"
   push:
-    branch: [main]
+    branch: 
+       - main
 jobs:
   metadata:
     runs-on: ubuntu-latest
