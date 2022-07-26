@@ -5000,10 +5000,10 @@ autoprefixer@^9.8.6:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-autosuggest-highlight@3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/autosuggest-highlight/-/autosuggest-highlight-3.3.2.tgz#6ccc473ff8d982efb5c188057e1484b25593796f"
-  integrity sha512-tub4n8Y0nyk8wnTulk9N9clA5SjjWCVoUT56e/GHGCaf/qSx2zBxLElzE6hXsGbOj2ejmeMZDoqwIwQh5LshqQ==
+autosuggest-highlight@3.3.4:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/autosuggest-highlight/-/autosuggest-highlight-3.3.4.tgz#d71b575ba8eab40b5adba73df9244e9ba88cc387"
+  integrity sha512-j6RETBD2xYnrVcoV1S5R4t3WxOlWZKyDQjkwnggDPSjF5L4jV98ZltBpvPvbkM1HtoSe5o+bNrTHyjPbieGeYA==
   dependencies:
     remove-accents "^0.4.2"
 
