@@ -6,7 +6,7 @@ on:
         type: string
         description: "Version Number"
   push:
-    branch: 
+    branches: 
        - main
 jobs:
   metadata:
