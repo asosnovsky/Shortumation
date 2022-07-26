@@ -10412,6 +10412,16 @@ jss@10.9.0, jss@^10.8.2:
     is-in-browser "^1.1.3"
     tiny-warning "^1.0.2"
 
+jss@10.9.1:
+  version "10.9.1"
+  resolved "https://registry.yarnpkg.com/jss/-/jss-10.9.1.tgz#43d95a964f68f31074470da8de5167aed4586311"
+  integrity sha512-omDBQTYyIdYuHee1mkpqDyHw2NguCrURBU1izPPHmdtDK6SkP7P3buZt4ybHWOahTZ3+xd0C+zLPBBw7Hn3eYg==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    csstype "^3.0.2"
+    is-in-browser "^1.1.3"
+    tiny-warning "^1.0.2"
+
 "jsx-ast-utils@^2.4.1 || ^3.0.0", jsx-ast-utils@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-3.3.0.tgz#e624f259143b9062c92b6413ff92a164c80d3ccb"
