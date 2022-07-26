@@ -71,3 +71,7 @@ If this warning does not scare you or you still want to try things out, then tak
 > Take a look at our Roadmap in [Version 1 Github Project](https://github.com/asosnovsky/Shortumation/projects/1), the [Development Guide](https://github.com/asosnovsky/Shortumation/wiki/Development) and send me some PRs to review!
 
 > Please also note that I did went ahead and marked some [good first issues](https://github.com/asosnovsky/Shortumation/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) if you want to pick them up just leave a comment and I will give you more context (I haven't had time to add more details).
+
+**HACS Support? I don't like docker.**
+
+> Currently this is beyond v1, but if this is something you really want please +1 this issue https://github.com/asosnovsky/Shortumation/issues/102 or perhaps help us get there yourself by contributing! :)
