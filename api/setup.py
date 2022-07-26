@@ -13,7 +13,7 @@ setuptools.setup(
     ],
     extras_require={
         "dev": [
-            "mypy==0.961",
+            "mypy==0.971",
             "mypy-extensions==0.4.3",
             "black==22.6.0",
             "bandit==1.7.4",
