@@ -18,7 +18,7 @@ setuptools.setup(
             "black==22.6.0",
             "bandit==1.7.4",
             "isort==5.10.1",
-            "coverage==6.4.1",
+            "coverage==6.4.2",
             "pre-commit==2.19.0",
             "vulture==2.4",
             "types-requests==2.28.0",
