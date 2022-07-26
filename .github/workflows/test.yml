@@ -1,13 +1,13 @@
 name: Commit Tests
 on:
   push:
-    branch:
+    branches:
       - main
     paths:
       - "webapp"
       - "api"
   pull_request:
-    branch:
+    branches:
       - main
 jobs:
   metadata:
