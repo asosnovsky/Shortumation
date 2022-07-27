@@ -1,5 +1,10 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.4.0] - Depedency update
+
+- Core dependency updates
+- Python port is now dynamically set
+
 ## [0.3.4] - Condition/Trigger Editor Upgrades!
 
 - Many condition editor fixes
