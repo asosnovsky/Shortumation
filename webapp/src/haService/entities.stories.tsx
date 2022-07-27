@@ -1,12 +1,44 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { useHAEntities } from "haService/HAEntities";
 
 const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
+  const [searchTerm, setSearch] = useState("");
   const conn = useHAEntities();
   onRender && onRender();
-  return <code>{JSON.stringify(conn, null, 4)}</code>;
+  return (
+    <>
+      <input
+        key="text"
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearch(e.target.value.toLowerCase())}
+      />
+      <ul
+        key="list"
+        style={{
+          maxHeight: "60vh",
+          overflow: "auto",
+        }}
+      >
+        {Object.entries(conn.collection?.state ?? {})
+          .filter(([key, _]) => key.toLowerCase().includes(searchTerm))
+          .map(([key, value]) => {
+            return (
+              <li key={key}>
+                <b>{key}</b> <br />
+                Context: {JSON.stringify(value.context)} <br />
+                Attributes: {JSON.stringify(value.attributes)} <br />
+                State: {JSON.stringify(value.state)} <br />
+                Updated at: {JSON.stringify(value.last_updated)} <br />
+                Changed at: {JSON.stringify(value.last_changed)} <br />
+              </li>
+            );
+          })}
+      </ul>
+    </>
+  );
 };
 
 export default {

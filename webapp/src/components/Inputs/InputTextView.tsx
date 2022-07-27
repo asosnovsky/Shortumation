@@ -1,6 +1,6 @@
 import "./InputTextView.css";
 
-import { FC, useState } from "react";
+import { FC, PropsWithChildren, useState } from "react";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import TextField from "@mui/material/TextField";
@@ -13,9 +13,11 @@ export type InputTextViewProps = {
   placeholder?: string;
 };
 
-export const InputTextView: FC<InputTextViewProps> = (props) => {
+export const InputTextView: FC<PropsWithChildren<InputTextViewProps>> = (
+  props
+) => {
   const [viewMode, setViewMode] = useState(props.initialViewMode ?? true);
-
+  const [text, setText] = useState(props.value);
   const className = [
     "input-text-view",
     viewMode ? "view" : "edit",
@@ -33,6 +35,7 @@ export const InputTextView: FC<InputTextViewProps> = (props) => {
           </span>
         )}
         <ModeEditOutlineOutlinedIcon className="input-text-view--edit" />
+        {props.children}
       </div>
     );
   } else {
@@ -41,11 +44,19 @@ export const InputTextView: FC<InputTextViewProps> = (props) => {
         className={className}
         placeholder={props.placeholder}
         variant="filled"
-        value={props.value}
-        onChange={(e) => props.onChange(e.target.value)}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         InputProps={{
           endAdornment: (
-            <CheckCircleOutlineOutlinedIcon onClick={() => setViewMode(true)} />
+            <>
+              <CheckCircleOutlineOutlinedIcon
+                onClick={() => {
+                  setViewMode(true);
+                  props.onChange(text);
+                }}
+              />
+              {props.children}
+            </>
           ),
         }}
       />

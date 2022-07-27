@@ -1,17 +1,30 @@
 import { Option } from "components/Inputs/InputAutoComplete";
-import { useHassCollection } from "./useHassCollection";
-import { entitiesColl } from "home-assistant-js-websocket";
+import { HACollectionState, useHassCollection } from "./useHassCollection";
+import { entitiesColl, HassEntities } from "home-assistant-js-websocket";
 import { entitySourceColl } from "./additionalCollections";
+import { EntitySource } from "./types";
 
 export type EntityOption = Option<{ domain: string; integration: string }>;
-export type HAEntitiesState = ReturnType<typeof useHAEntities>;
-export const useHAEntities = () => {
+export type HAEntitiesState = ReturnType<typeof createHAEntitiesState>;
+export const useHAEntities = (): HAEntitiesState => {
   const entities = useHassCollection(entitiesColl, (state) => ({
     domains: Array.from(
       new Set(Object.keys(state).map((x) => x.split(".")[0])).keys()
     ).sort(),
   }));
   const entitySource = useHassCollection(entitySourceColl);
+  return createHAEntitiesState(entities, entitySource);
+};
+
+export const createHAEntitiesState = (
+  entities: HACollectionState<
+    HassEntities,
+    {
+      domains: string[];
+    }
+  >,
+  entitySource: HACollectionState<Record<string, EntitySource>, {}>
+) => {
   const methods = {
     getStates(inp: string[] | string, attribute?: string): string[] {
       if (!entities.ready) {

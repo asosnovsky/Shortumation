@@ -6,6 +6,7 @@ import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
 import { TagDB } from "./TagDB";
 import DeleteIcon from "@mui/icons-material/ClearTwoTone";
 import { InputTextView } from "components/Inputs/InputTextView";
+import { useHAEntities } from "haService/HAEntities";
 
 export const MetadataBox: FC<{
   metadata: AutomationMetadata;

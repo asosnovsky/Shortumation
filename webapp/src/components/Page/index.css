@@ -11,8 +11,8 @@
     /* font */
     font-size: 16px;
     font-family: Tahoma, Geneva, sans-serif;
-    /* color      : var(--mui-grey-400); */
+    color: var(--mui-text-primary);
 
     /* background */
-    /* background-color: var(--mui-common-black); */
+    background-color: var(--mui-background-default);
 }

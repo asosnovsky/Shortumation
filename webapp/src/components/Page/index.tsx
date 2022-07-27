@@ -66,13 +66,7 @@ export const InternalPage: FC<{
   }, [conn, snackbar]);
 
   return (
-    <main
-      className="page"
-      style={{
-        color: theme.palette.text.primary,
-        background: theme.palette.background.default,
-      }}
-    >
+    <main className="page">
       <style>
         {`:root {
             ${convertPaletteToCss(theme.palette)}

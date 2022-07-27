@@ -19,7 +19,6 @@ export const DAGAutomationGraph: FC<{
   isFlipped: boolean;
   additionalControls?: ReactNode;
 }> = (props) => {
-  console.log({ props });
   const { namer } = useHA();
   const [modalState, setModalState] =
     useState<ModalState | undefined>(undefined);
