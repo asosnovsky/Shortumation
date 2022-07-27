@@ -117,7 +117,22 @@ export const Mocked: ComponentStory<typeof AutomationList> = (args) => {
             [eid]: a.state,
           });
         }}
-        onTagUpdate={() => {}}
+        onTagUpdate={(tags, aid) => {
+          args.onTagUpdate(tags, aid);
+          const index = mockAutos.findIndex(
+            ({ metadata }) => metadata.id === aid
+          );
+          if (index >= 0) {
+            setAutos([
+              ...mockAutos.slice(0, index),
+              {
+                ...mockAutos[index],
+                tags,
+              },
+              ...mockAutos.slice(index + 1),
+            ]);
+          }
+        }}
       />
     </Page>
   );
