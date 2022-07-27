@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
+import { cleanUpUndefined } from "utils/helpers";
 import { TypedHassService } from "haService/fieldTypes";
 import { FC, useState } from "react";
 import {

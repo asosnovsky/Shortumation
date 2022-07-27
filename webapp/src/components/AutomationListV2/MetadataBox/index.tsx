@@ -4,14 +4,14 @@ import { FC } from "react";
 import Switch from "@mui/material/Switch";
 import Alert from "@mui/material/Alert";
 
-import DeleteIcon from "@mui/icons-material/ClearTwoTone";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SelectIcon from "@mui/icons-material/HighlightAltSharp";
 
 import { InputTextView } from "components/Inputs/InputTextView";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
+import { cleanUpUndefined } from "utils/helpers";
 import { AutomationListAuto } from "../types";
+import { Tags } from "./Tags";
 
 export type MetadataBoxProps = AutomationListAuto & {
   onDelete: () => void;
@@ -57,27 +57,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           value={props.description}
           onChange={props.onDescriptionUpdate}
         />
-        <div className="metadatabox--tags">
-          {Object.entries(props.tags).map(([tagName, tagValue]) => (
-            <span key={tagName} className="tag">
-              <DeleteIcon
-                onClick={() =>
-                  props.onTagUpdate(
-                    cleanUpUndefined({
-                      ...props.tags,
-                      [tagName]: undefined,
-                    })
-                  )
-                }
-                className="delete-tag"
-              />
-              <b>{tagName}</b>: {tagValue}
-            </span>
-          ))}
-          <span className="tag-add" onClick={() => {}}>
-            +
-          </span>
-        </div>
+        <Tags tags={props.tags} onUpdate={props.onTagUpdate} />
         {props.issue ? (
           <Alert severity="warning" className="issue">
             {props.issue}

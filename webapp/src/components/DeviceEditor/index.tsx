@@ -5,7 +5,7 @@ import {
 import { InputDevice } from "components/Inputs/InputDevice";
 import { InputDeviceCapabilties } from "components/Inputs/InputDeviceCapabilties";
 import { InputEntity } from "components/Inputs/InputEntities";
-import { cleanUpUndefined } from "components/NodeEditor/OptionManager/OptionManager";
+import { cleanUpUndefined } from "utils/helpers";
 import { DeviceBaseType, DeviceTypeCapability } from "haService/types";
 import { AutomationDeviceState } from "types/automations/common";
 
