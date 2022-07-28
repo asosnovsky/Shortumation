@@ -2,7 +2,7 @@ import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { AutomationListSidebar } from ".";
-import { makeTagDB } from "../TagDB";
+import { useTagDB } from "../TagDB";
 import { useState } from "react";
 import { AutomationListAuto } from "../types";
 
@@ -15,11 +15,32 @@ export default {
 
 const Template: ComponentStory<typeof AutomationListSidebar> = (args) => {
   const [automations, setAutomations] = useState(args.automations);
+  const [selectedAutomationId, setSelAutoId] = useState(
+    args.selectedAutomationId
+  );
+  const onTagUpdate = (tags: Record<string, string>, aid: string) => {
+    const index = automations.findIndex(({ id }) => id === aid);
+    if (index >= 0) {
+      setAutomations([
+        ...automations.slice(0, index),
+        {
+          ...automations[index],
+          tags,
+        },
+        ...automations.slice(index + 1),
+      ]);
+    }
+  };
   return (
     <Page>
       <AutomationListSidebar
-        tagsDB={makeTagDB(automations)}
+        selectedAutomationId={selectedAutomationId}
+        tagsDB={useTagDB(automations, (a, t) => onTagUpdate(t, a))}
         automations={automations}
+        onSelectedAutomationId={(aid) => {
+          args.onSelectedAutomationId(aid);
+          setSelAutoId(aid);
+        }}
         onAutomationDelete={(aid) => {
           args.onAutomationDelete(aid);
           setAutomations(automations.filter(({ id }) => id !== aid));
@@ -38,20 +59,6 @@ const Template: ComponentStory<typeof AutomationListSidebar> = (args) => {
             ]);
           }
         }}
-        onTagUpdate={(tags, aid) => {
-          args.onTagUpdate(tags, aid);
-          const index = automations.findIndex(({ id }) => id === aid);
-          if (index >= 0) {
-            setAutomations([
-              ...automations.slice(0, index),
-              {
-                ...automations[index],
-                tags,
-              },
-              ...automations.slice(index + 1),
-            ]);
-          }
-        }}
         onAutomationAdd={() => {
           args.onAutomationAdd();
           const id = String(Date.now());
@@ -63,10 +70,10 @@ const Template: ComponentStory<typeof AutomationListSidebar> = (args) => {
               title: "new",
               tags: {},
               entityId: "automation." + id,
-              isSelected: true,
               state: "on",
             },
           ]);
+          setSelAutoId(id);
         }}
       />
     </Page>
@@ -81,16 +88,18 @@ const make = (automations: AutomationListAuto[]) => {
   };
   return Basic;
 };
-const makeAuto = (data: Partial<AutomationListAuto>): AutomationListAuto => ({
-  id: String(Date.now()),
-  entityId: `automation.${Date.now()}`,
-  title: "",
-  description: "",
-  state: "on",
-  isSelected: false,
-  tags: {},
-  ...data,
-});
+const makeAuto = (data: Partial<AutomationListAuto>): AutomationListAuto => {
+  const id = `${Date.now()}_${Math.random().toString(26).slice(3, 6)}`;
+  return {
+    id,
+    entityId: `automation.${id}`,
+    title: "",
+    description: "",
+    state: "on",
+    tags: {},
+    ...data,
+  };
+};
 
 export const Empty = make([]);
 export const Basic = make([
@@ -109,5 +118,9 @@ export const Tagged = make([
   makeAuto({
     title: "example 4",
     tags: { room: "bedroom", floor: "2", type: "button" },
+  }),
+  makeAuto({
+    title: "example 5",
+    tags: { room: "bedroom", floor: "2", type: "routine", mode: "party" },
   }),
 ]);

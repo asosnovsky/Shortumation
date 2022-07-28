@@ -1,4 +1,5 @@
 import "./index.css";
+import "./index.mobile.css";
 import { FC } from "react";
 
 import Switch from "@mui/material/Switch";
@@ -12,23 +13,26 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { AutomationListAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
+import useWindowSize from "utils/useWindowSize";
 
 export type MetadataBoxProps = AutomationListAuto & {
   onDelete: () => void;
   onSelect: () => void;
   onStateUpdate: (s: "on" | "off") => void;
-  onTagUpdate: (t: Record<string, string>) => void;
   onTitleUpdate: (t: string) => void;
   onDescriptionUpdate: (t: string) => void;
   tagsDB: TagDB;
+  isSelected: boolean;
 };
 export const MetadataBox: FC<MetadataBoxProps> = (props) => {
   const isValidState = ["on", "off"].includes(props.state);
+  const { isMobile } = useWindowSize();
   return (
     <div
       className={[
-        "automation-list--metadatabox",
+        "automation-manager--metadatabox",
         props.isSelected ? "selected" : "",
+        isMobile ? "mobile" : "",
       ].join(" ")}
     >
       <div
@@ -45,7 +49,10 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         />
         {!isValidState && `Invalid state: '${props.state}'`}
       </div>
-      <div className="metadatabox--title">
+      <div
+        className="metadatabox--title"
+        title={`ID=${props.id}, EntityID=${props.entityId}`}
+      >
         <InputTextView
           className="title"
           placeholder="Title"
@@ -58,11 +65,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           value={props.description}
           onChange={props.onDescriptionUpdate}
         />
-        <Tags
-          tags={props.tags}
-          onUpdate={props.onTagUpdate}
-          tagsDB={props.tagsDB}
-        />
+        <Tags automationId={props.id} tagsDB={props.tagsDB} />
         {props.issue ? (
           <Alert severity="warning" className="issue">
             {props.issue}
@@ -71,16 +74,18 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           <></>
         )}
       </div>
-      <ButtonIcon
-        className="select"
-        icon={<SelectIcon />}
-        onClick={props.onSelect}
-      />
-      <ButtonIcon
-        className="delete"
-        icon={<DeleteForeverIcon />}
-        onClick={props.onDelete}
-      />
+      <div className="buttons">
+        <ButtonIcon
+          className="select"
+          icon={<SelectIcon />}
+          onClick={props.onSelect}
+        />
+        <ButtonIcon
+          className="delete"
+          icon={<DeleteForeverIcon />}
+          onClick={props.onDelete}
+        />
+      </div>
     </div>
   );
 };

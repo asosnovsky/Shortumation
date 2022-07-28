@@ -27,7 +27,7 @@ export default function InputAutoText({
       freeSolo
       className={["input-autotext", className ?? ""].join(" ")}
       value={value}
-      options={options}
+      options={options.filter((opt) => opt !== value)}
       disableClearable
       onChange={(_e, v) => onChange(v === null ? "" : v)}
       renderInput={(params) => (

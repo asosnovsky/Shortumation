@@ -1,7 +1,10 @@
+import "./Tags.css";
+
 import { FC, ReactNode, useState } from "react";
 
 import DeleteIcon from "@mui/icons-material/ClearTwoTone";
 import EditIcon from "@mui/icons-material/EditOutlined";
+import SaveIcon from "@mui/icons-material/SaveOutlined";
 
 import { cleanUpUndefined } from "utils/helpers";
 import { Modal } from "components/Modal";
@@ -11,8 +14,7 @@ import InputAutoText from "components/Inputs/InputAutoText";
 import { TagDB } from "../TagDB";
 
 export type TagsProps = {
-  tags: Record<string, string>;
-  onUpdate: (t: Record<string, string>) => void;
+  automationId: string;
   tagsDB: TagDB;
 };
 
@@ -26,8 +28,11 @@ export type TagModalState =
       isNew: boolean;
     };
 
-export const Tags: FC<TagsProps> = ({ tags, onUpdate, tagsDB }) => {
+export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
   const [modalState, setModal] = useState<TagModalState>({ open: false });
+  const tags = tagsDB.getTags(automationId);
+  const onUpdate = (t: Record<string, string>) =>
+    tagsDB.update(automationId, t);
 
   let innerModal: ReactNode = <></>;
   if (modalState.open) {
@@ -83,10 +88,15 @@ export const Tags: FC<TagsProps> = ({ tags, onUpdate, tagsDB }) => {
   }
 
   return (
-    <div className="metadatabox--tags">
+    <div
+      className={[
+        "metadatabox--tags",
+        tagsDB.isModified(automationId) ? "modified" : "",
+      ].join(" ")}
+    >
       <Modal open={modalState.open}>{innerModal}</Modal>
       {Object.entries(tags).map(([tagName, tagValue]) => (
-        <span key={tagName} className="tag">
+        <div key={tagName} className="tag">
           <DeleteIcon
             onClick={() =>
               onUpdate(
@@ -98,7 +108,7 @@ export const Tags: FC<TagsProps> = ({ tags, onUpdate, tagsDB }) => {
             }
             className="delete-tag"
           />
-          <span
+          <div
             className="inner"
             onClick={() =>
               setModal({
@@ -108,22 +118,41 @@ export const Tags: FC<TagsProps> = ({ tags, onUpdate, tagsDB }) => {
               })
             }
           >
-            <b>{tagName}</b>: {tagValue} <EditIcon className="edit-icon" />
-          </span>
-        </span>
+            <b>{tagName}: </b>
+            <span>{tagValue}</span>
+          </div>
+          <EditIcon
+            className="edit-icon"
+            onClick={() =>
+              setModal({
+                open: true,
+                isNew: false,
+                tag: [tagName, tagValue],
+              })
+            }
+          />
+        </div>
       ))}
-      <span
-        className="tag-add"
-        onClick={() =>
-          setModal({
-            open: true,
-            isNew: true,
-            tag: ["", ""],
-          })
-        }
-      >
-        +
-      </span>
+      <div className="buttons">
+        <span
+          className="tag-add"
+          onClick={() =>
+            setModal({
+              open: true,
+              isNew: true,
+              tag: ["", ""],
+            })
+          }
+        >
+          +
+        </span>
+        {tagsDB.isModified(automationId) && (
+          <SaveIcon
+            className="tag-save"
+            onClick={() => tagsDB.save(automationId)}
+          />
+        )}
+      </div>
     </div>
   );
 };

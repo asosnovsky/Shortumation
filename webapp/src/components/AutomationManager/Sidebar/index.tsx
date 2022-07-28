@@ -15,7 +15,7 @@ import { Button } from "components/Inputs/Button";
 export type AutomationListSidebarProps = {
   tagsDB: TagDB;
   automations: AutomationListAuto[];
-  onTagUpdate: (t: Record<string, string>, aid: string) => void;
+  selectedAutomationId: string | null;
   onAutomationUpdate: (
     a: AutomationListAutoUpdatable,
     aid: string,
@@ -23,17 +23,18 @@ export type AutomationListSidebarProps = {
   ) => void;
   onAutomationDelete: (aid: string) => void;
   onAutomationAdd: () => void;
+  onSelectedAutomationId: (aid: string) => void;
 };
 export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
   automations,
   tagsDB,
   onAutomationAdd,
+  selectedAutomationId,
+  onSelectedAutomationId,
   ...events
 }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>([]);
-  const [selectedAutomationId, setSelectedAutomationId] =
-    useState<null | string>(null);
 
   const tags = tagsDB.getTagNames([]);
 
@@ -51,12 +52,12 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
   );
 
   const items = grouping.top.map((i) =>
-    convertGroupingToItems(i, automations, grouping)
+    convertGroupingToItems(i, selectedAutomationId, automations, grouping)
   );
 
   return (
-    <div className="automation-list">
-      <div className="automation-list-box--nav">
+    <div className="automation-manager--sidebar">
+      <div className="automation-manager--sidebar-box--nav">
         <InputText label="Search" value={searchText} onChange={setSearchText} />
         <InputMultiSelect
           label="Tags"
@@ -66,19 +67,19 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
           max={3}
         />
       </div>
-      <div className="automation-list-box--list">
+      <div className="automation-manager--sidebar-box--list">
         {items.map((item, i) => (
           <ListBoxGroup
             {...item}
             key={i}
-            onSelect={setSelectedAutomationId}
+            onSelect={onSelectedAutomationId}
             {...events}
             tagsDB={tagsDB}
             initialOpenState={true}
           />
         ))}
       </div>
-      <div className="automation-list-box--bottom">
+      <div className="automation-manager--sidebar-box--bottom-buttons">
         <Button onClick={onAutomationAdd} color="primary">
           Add
         </Button>

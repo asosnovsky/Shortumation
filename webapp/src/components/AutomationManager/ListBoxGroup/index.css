@@ -1,19 +1,19 @@
-.automation-list--list-box-group--title {
+.automation-manager--list-box-group--title {
     margin: 0.5em;
 }
 
-.automation-list--list-box-group--title .icon {
+.automation-manager--list-box-group--title .icon {
     font-size: 1.2em;
 }
 
-.automation-list--list-box-group--title:hover,
-.automation-list--list-box-group.selected .automation-list--list-box-group--title {
+.automation-manager--list-box-group--title:hover,
+.automation-manager--list-box-group.selected .automation-manager--list-box-group--title {
     color: var(--mui-primary-main);
     cursor: pointer;
     user-select: none;
 }
 
-.automation-list--list-box-group {
+.automation-manager--list-box-group {
     border-color: var(--mui-text-secondary);
     border-width: 0.125px;
     border-bottom-style: solid;
@@ -21,13 +21,13 @@
     border-bottom-right-radius: 0;
 }
 
-.automation-list--list-box-group--list.close {
+.automation-manager--list-box-group--list.close {
     height: 0;
     opacity: 0;
     display: none;
 }
 
-.automation-list--list-box-group .automation-list--list-box-group {
+.automation-manager--list-box-group .automation-manager--list-box-group {
     margin-left: 0.5em;
     margin-bottom: 0.5em;
     border-left: 1px solid var(--mui-text-secondary);

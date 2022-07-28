@@ -2,13 +2,15 @@ import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { MetadataBox } from ".";
-import { makeTagDB } from "../TagDB";
+import { useTagDB } from "../TagDB";
+import { useState } from "react";
 
 export default {
   title: "App/AutomationList/MetadataBox",
   component: MetadataBox,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
+    id: "dummy",
     title: "Example",
     description: "Cool!",
     state: "on",
@@ -21,9 +23,20 @@ export default {
 } as ComponentMeta<typeof MetadataBox>;
 
 const Template: ComponentStory<typeof MetadataBox> = (args) => {
+  const [autoTags, setTags] = useState([{ id: args.id, tags: args.tags }]);
+  const tagsDB = useTagDB(autoTags, (aid, t) =>
+    setTags(
+      autoTags
+        .filter(({ id }) => id !== aid)
+        .concat({
+          id: aid,
+          tags: t,
+        })
+    )
+  );
   return (
     <Page>
-      <MetadataBox {...args} tagsDB={makeTagDB([])} />
+      <MetadataBox {...args} tagsDB={tagsDB} />
     </Page>
   );
 };

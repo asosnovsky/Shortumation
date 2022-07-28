@@ -99,7 +99,7 @@ test("bigAutoList groupings has not duplicate ids", () => {
 test("convert grouper to items when no tags are selected", () => {
   const grouping = makeGrouping(automations, [], null);
   const items = grouping.top.map((i) =>
-    convertGroupingToItems(i, automations, grouping)
+    convertGroupingToItems(i, "", automations, grouping)
   );
   expect(items.filter((i) => i.type === "group")).toHaveLength(0);
   expect(items).toHaveLength(1);
@@ -109,7 +109,7 @@ test("convert grouper to items when no tags are selected", () => {
 test("convert grouper to items when 1 tag is selected", () => {
   const grouping = makeGrouping(automations, ["Room"], null);
   const items = grouping.top.map((i) =>
-    convertGroupingToItems(i, automations, grouping)
+    convertGroupingToItems(i, "", automations, grouping)
   );
   expect(grouping.top).toHaveLength(3);
   expect(items.filter((i) => i.type === "group")).toHaveLength(0);
@@ -125,7 +125,7 @@ test("convert grouper to items when 1 tag is selected", () => {
 test("convert grouper to items when 2 tag is selected", () => {
   const grouping = makeGrouping(automations, ["Room", "Type"], null);
   const items = grouping.top.map((i) =>
-    convertGroupingToItems(i, automations, grouping)
+    convertGroupingToItems(i, "", automations, grouping)
   );
   expect(grouping.top).toHaveLength(3);
   expect(items.filter((i) => i.type === "group")).toHaveLength(2);

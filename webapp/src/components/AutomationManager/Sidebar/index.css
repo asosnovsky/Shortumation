@@ -1,0 +1,28 @@
+.automation-manager--sidebar {
+    display: flex;
+    flex-direction: column;
+    --nav-height: 10em;
+    --bottom-height: 3em;
+    position: relative;
+    height: 100%;
+}
+
+.automation-manager--sidebar-box--nav {
+    max-height: var(--nav-height);
+}
+
+.automation-manager--sidebar .automation-manager--sidebar-box--list {
+    flex: 1;
+    max-height: calc(100vh - var(--bottom-height) - var(--nav-height));
+    min-height: calc(100vh - var(--bottom-height) - var(--nav-height));
+    overflow: auto;
+    box-shadow: 1px 1px var(--mui-primary-light);
+}
+
+.automation-manager--sidebar-box--bottom-buttons {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,123 @@
+.automation-manager--metadatabox .metadatabox--tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    margin-top: 0.25em;
+    padding: 0.25em;
+}
+
+
+.automation-manager--metadatabox .metadatabox--tags.modified {
+    border: 1px solid var(--mui-success-light);
+    border-radius: 10px;
+}
+
+
+.automation-manager--metadatabox .metadatabox--tags .tag,
+.automation-manager--metadatabox .metadatabox--tags .buttons .tag-add {
+    display: flex;
+    max-width: fit-content;
+    align-items: center;
+    gap: 0.25em;
+
+    border-color: var(--mui-grey-400);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.5em;
+    padding: 0.1em 0.5em;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .buttons .tag-add {
+    cursor: pointer;
+    color: var(--mui-primary-light);
+    border-color: var(--mui-primary-main);
+}
+
+.automation-manager--metadatabox .metadatabox--tags .buttons .tag-save {
+    cursor: pointer;
+    border-radius: 0.25em;
+    color: var(--mui-success-main);
+    height: 1em;
+    padding: 0.1em;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .buttons .tag-add:hover {
+    background-color: var(--mui-primary-light);
+    color: var(--mui-primary-contrastText);
+}
+
+.automation-manager--metadatabox .metadatabox--tags .buttons .tag-save:hover {
+    background-color: var(--mui-success-light);
+    color: var(--mui-success-contrastText);
+}
+
+.automation-manager--metadatabox .metadatabox--tags .tag .delete-tag {
+    font-size: 1em;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .tag .delete-tag:hover {
+    cursor: pointer;
+    color: var(--mui-error-light);
+    outline: 1px solid var(--mui-error-dark);
+    border-radius: 20px;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .tag .inner {
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+
+    cursor: text;
+    user-select: none;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .tag .inner span,
+.automation-manager--metadatabox .metadatabox--tags .tag .inner b {
+    font-size: 0.9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .tag .edit-icon {
+    height: 0.7em;
+    width: 0.7em;
+    padding: 0.15em;
+    cursor: text;
+}
+
+.automation-manager--metadatabox .metadatabox--tags .tag:hover .edit-icon {
+    transform: rotate(10deg);
+}
+
+.metadatabox--tags--modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.metadatabox--tags--modal .input-autotext {
+    min-width: calc(max(10em, 100%));
+}
+
+.metadatabox--tags--modal .buttons {
+    display: flex;
+    gap: 0.5em;
+    justify-content: space-evenly;
+}

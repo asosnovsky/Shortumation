@@ -6,7 +6,6 @@ import { AutomationListAutoUpdatable, AutomationListItem } from "../types";
 import { TagDB } from "../TagDB";
 
 export type ListBoxGroupProps = AutomationListItem & {
-  onTagUpdate: (t: Record<string, string>, aid: string) => void;
   onAutomationUpdate: (
     a: AutomationListAutoUpdatable,
     aid: string,
@@ -38,13 +37,13 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
   return (
     <div
       className={[
-        "automation-list--list-box-group",
+        "automation-manager--list-box-group",
         isSelected ? "selected" : "",
       ].join(" ")}
     >
       <div
         onClick={() => setOpen(!open)}
-        className="automation-list--list-box-group--title"
+        className="automation-manager--list-box-group--title"
       >
         <b>{title}</b> <span className="icon">{openIcon}</span> (
         {totalAutomations} automation
@@ -52,7 +51,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
       </div>
       <div
         className={[
-          "automation-list--list-box-group--list",
+          "automation-manager--list-box-group--list",
           open ? "open" : "close",
         ].join(" ")}
       >
@@ -64,7 +63,6 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
                 tagsDB={tagsDB}
                 onDelete={() => events.onAutomationDelete(auto.id)}
                 onSelect={() => events.onSelect(auto.id)}
-                onTagUpdate={(t) => events.onTagUpdate(t, auto.id)}
                 onDescriptionUpdate={(description) =>
                   events.onAutomationUpdate(
                     {

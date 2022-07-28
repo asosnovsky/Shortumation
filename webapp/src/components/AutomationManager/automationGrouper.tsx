@@ -149,6 +149,7 @@ export const makeGrouping = (
 
 export const convertGroupingToItems = (
   currentGroupIdx: number,
+  selectedAutomationId: string | null,
   autos: AutomationListAuto[],
   grouping: AutomationGrouping
 ): AutomationListItem => {
@@ -159,7 +160,12 @@ export const convertGroupingToItems = (
     return {
       type: "items",
       title: groupData.name,
-      data: automationIds.map((i) => autos[i]),
+      data: automationIds.map((i) => {
+        return {
+          ...autos[i],
+          isSelected: autos[i].id === selectedAutomationId,
+        };
+      }),
       isSelected: groupData.selected,
     };
   }
@@ -167,7 +173,9 @@ export const convertGroupingToItems = (
   return {
     type: "group",
     title: groupData.name,
-    data: subgroups.map((i) => convertGroupingToItems(i, autos, grouping)),
+    data: subgroups.map((i) =>
+      convertGroupingToItems(i, selectedAutomationId, autos, grouping)
+    ),
     isSelected: groupData.selected,
   };
 };

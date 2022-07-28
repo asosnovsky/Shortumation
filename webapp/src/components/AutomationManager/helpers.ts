@@ -6,7 +6,6 @@ import { AutomationListAuto } from "./types";
 export const consolidateAutomations = (
   haEntities: HassEntities,
   configAutomationMetadatas: AutomationMetadata[],
-  selectedAutomationId: string,
   tagsDB: TagDB
 ): AutomationListAuto[] => {
   const configData: Record<string, AutomationMetadata> =
@@ -45,7 +44,6 @@ export const consolidateAutomations = (
         state: entityData.state,
         tags: tagsDB.getTags(autoId),
         issue,
-        isSelected: selectedAutomationId === autoId,
       };
     });
 
@@ -57,7 +55,6 @@ export const consolidateAutomations = (
       description: autoMetadata.description ?? "",
       state: "unregistered",
       tags: tagsDB.getTags(autoMetadata.id),
-      isSelected: selectedAutomationId === autoMetadata.id,
       issue:
         "homeassistant did not load this automation, try to manually reload automations or restart homeassistant.",
     });

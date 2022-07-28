@@ -1,0 +1,74 @@
+.automation-manager--metadatabox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0.25em;
+
+    padding: 0.25em;
+    background-color: var(--mui-background-paper);
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: transparent;
+    border-radius: 10px;
+}
+
+.automation-manager--metadatabox:hover, .automation-manager--metadatabox.selected {
+    border-color: var(--mui-action-focus);
+    background-color: var(--mui-action-focus);
+}
+
+.automation-manager--metadatabox .metadatabox--title .input-text-view {
+    max-width: fit-content;
+}
+
+.automation-manager--metadatabox .metadatabox--title {
+    flex: 1;
+}
+
+.automation-manager--metadatabox .metadatabox--title .title {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.automation-manager--metadatabox .metadatabox--title .issue {
+    padding: 0 0.5em;
+    user-select: none;
+    max-width: fit-content;
+}
+
+.automation-manager--metadatabox .metadatabox--title .description {
+    font-size: 0.9em;
+}
+
+.automation-manager--metadatabox .delete:hover {
+    cursor: pointer;
+    color: var(--mui-error-light);
+    background-color: var(--mui-error-dark);
+}
+
+.automation-manager--metadatabox .select:hover,
+.automation-manager--metadatabox.selected.automation-manager--metadatabox .select {
+    cursor: pointer;
+    color: var(--mui-primary-light);
+    background-color: var(--mui-primary-dark);
+}
+
+.automation-manager--metadatabox.selected.automation-manager--metadatabox .select:hover {
+    color: var(--mui-secondary-light);
+    background-color: var(--mui-secondary-dark);
+    cursor: default;
+}
+
+.automation-manager--metadatabox .metadatabox--switch {
+    display: flex;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 0.75em;
+    user-select: none;
+    max-width: 5em;
+}

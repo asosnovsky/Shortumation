@@ -8,7 +8,6 @@ export type AutomationListAuto = AutomationListAutoUpdatable & {
   entityId: string;
   tags: Record<string, string>;
   issue?: string;
-  isSelected: boolean;
 };
 
 export type AutomationListItem = {
@@ -21,6 +20,6 @@ export type AutomationListItem = {
     }
   | {
       type: "items";
-      data: Array<AutomationListAuto>;
+      data: Array<AutomationListAuto & { isSelected: boolean }>;
     }
 );
