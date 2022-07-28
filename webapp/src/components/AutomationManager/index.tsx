@@ -59,6 +59,13 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           auto,
         })
       }
+      onAutomationDelete={(aid) =>
+        api.removeAutomation({
+          index: configAutomations.data.findIndex(
+            ({ metadata }) => metadata.id === aid
+          ),
+        })
+      }
       onUpdateTags={async (aid, t) => {
         setIsSaving(true);
         await api.updateTags({

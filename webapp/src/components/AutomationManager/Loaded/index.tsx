@@ -10,10 +10,12 @@ import {
 } from "./state";
 import Alert from "@mui/material/Alert";
 
-export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {};
+export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
+  onAutomationDelete: (aid: string) => void;
+};
 export const AutomationManagerLoaded: FC<
   PropsWithChildren<AutomationManagerLoadedProps>
-> = ({ children, ...args }) => {
+> = ({ children, onAutomationDelete, ...args }) => {
   const state = useAutomationManagerState(args);
 
   return (
@@ -25,7 +27,7 @@ export const AutomationManagerLoaded: FC<
         selectedAutomationId={state.currentAutomationId}
         onSelectedAutomationId={state.setSelectedAutomationId}
         onAutomationAdd={() => state.addNew()}
-        onAutomationDelete={() => {}}
+        onAutomationDelete={onAutomationDelete}
         onAutomationUpdate={() => {}}
       />
       <div className={["automation-manager--editor"].join(" ")}>

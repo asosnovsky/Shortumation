@@ -71,3 +71,23 @@ export const One = make({
     entitySource: {},
   },
 });
+export const MissingAutoInConfig = make({
+  automations: [],
+  haProps: {
+    loading: false,
+    entities: {
+      [`automation.${auto1.metadata.id}`]: {
+        entity_id: `automation.${auto1.metadata.id}`,
+        attributes: {
+          id: auto1.metadata.id,
+          friendly_name: auto1.metadata.alias,
+        },
+        context: { id: "", parent_id: null, user_id: null },
+        last_changed: "",
+        last_updated: "",
+        state: "on",
+      },
+    },
+    entitySource: {},
+  },
+});

@@ -10,7 +10,6 @@ export type UseAutomationManagerStateArgs = {
   configAutomations: AutomationData[];
   hassEntities: HassEntities;
   onUpdateTags: (aid: string, tags: Record<string, string>) => void;
-  //  onAutomationDelete: (aid: string) => void;
   onAutomationAdd: (auto: AutomationData) => void;
 };
 export const useAutomationManagerState = ({
