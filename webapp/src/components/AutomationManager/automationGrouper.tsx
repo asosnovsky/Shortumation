@@ -1,4 +1,4 @@
-import { AutomationListAuto, AutomationListItem } from "./types";
+import { AutomationManagerAuto, AutomationManagerItem } from "./types";
 
 const makeGrouper = () => {
   const groupIdNames: string[] = [];
@@ -63,7 +63,7 @@ const makeGrouper = () => {
 
 export type AutomationGrouping = ReturnType<typeof makeGrouping>;
 export const makeGrouping = (
-  autos: AutomationListAuto[],
+  autos: AutomationManagerAuto[],
   selectedTags: string[],
   selectedAutomationId: string | null
 ) => {
@@ -150,9 +150,9 @@ export const makeGrouping = (
 export const convertGroupingToItems = (
   currentGroupIdx: number,
   selectedAutomationId: string | null,
-  autos: AutomationListAuto[],
+  autos: AutomationManagerAuto[],
   grouping: AutomationGrouping
-): AutomationListItem => {
+): AutomationManagerItem => {
   const groupData = grouping.getData(currentGroupIdx);
   const automationIds = grouping.getAutomations(currentGroupIdx);
 

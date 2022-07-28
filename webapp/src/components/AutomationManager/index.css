@@ -1,0 +1,26 @@
+.automation-manager {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    gap: 0.25em;
+}
+
+.automation-manager.mobile, .automation-manager.error {
+    flex-direction: column;
+}
+
+.automation-manager.loading .automation-manager--sidebar.loading {
+    width: 25vh;
+    height: 100%;
+}
+
+.automation-manager.loading .MuiSkeleton-root {
+    height: 100%;
+    width: 100%;
+}
+
+.automation-manager.loading .automation-manager--editor.loading {
+    flex: 1;
+    height: 100%;
+}

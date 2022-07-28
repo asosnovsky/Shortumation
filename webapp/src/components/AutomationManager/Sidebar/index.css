@@ -25,4 +25,25 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.automation-manager--sidebar-box--bottom-buttons .hide-btn {
+    position: absolute;
+    right: 0;
+}
+
+.automation-manager--sidebar.hidden {
+    width: 2.5em;
+}
+
+.automation-manager--sidebar.hidden .automation-manager--sidebar-box--nav,
+.automation-manager--sidebar.hidden .automation-manager--sidebar-box--list,
+.automation-manager--sidebar.hidden .automation-manager--sidebar-box--bottom-buttons .add-btn {
+    width: 0;
+    opacity: 0;
+}
+
+.automation-manager--sidebar.hidden .automation-manager--sidebar-box--bottom-buttons .hide-btn {
+    transform: rotate(180deg);
 }

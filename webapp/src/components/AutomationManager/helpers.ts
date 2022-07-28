@@ -1,13 +1,13 @@
 import { HassEntities } from "home-assistant-js-websocket";
 import { AutomationMetadata } from "types/automations";
 import { TagDB } from "./TagDB";
-import { AutomationListAuto } from "./types";
+import { AutomationManagerAuto } from "./types";
 
 export const consolidateAutomations = (
   haEntities: HassEntities,
   configAutomationMetadatas: AutomationMetadata[],
   tagsDB: TagDB
-): AutomationListAuto[] => {
+): AutomationManagerAuto[] => {
   const configData: Record<string, AutomationMetadata> =
     configAutomationMetadatas.reduce(
       (all, n) => ({
@@ -19,7 +19,7 @@ export const consolidateAutomations = (
 
   const out = Object.entries(haEntities)
     .filter(([entityId, _]) => entityId.toLowerCase().startsWith("automation."))
-    .map<AutomationListAuto>(([entityId, entityData]) => {
+    .map<AutomationManagerAuto>(([entityId, entityData]) => {
       const autoId = entityData.attributes.id;
       let title = entityData.attributes.friendly_name ?? "";
       let description = "";
@@ -64,9 +64,9 @@ export const consolidateAutomations = (
 };
 
 export const filterAutomations = (
-  autos: AutomationListAuto[],
+  autos: AutomationManagerAuto[],
   searchText: string
-): AutomationListAuto[] =>
+): AutomationManagerAuto[] =>
   autos.filter((a) => {
     if (searchText.length > 0) {
       if (

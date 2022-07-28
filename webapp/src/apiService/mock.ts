@@ -9,11 +9,18 @@ import {
 
 export const useMockAPI = (
   initialAutos: AutomationData[] = [],
-  makeRef = useRef
+  makeRef = useRef,
+  returnErrors: boolean = false
 ): API => {
   const automationsRef = makeRef(initialAutos);
   return {
     async makeCall({ path, method = "POST", data = {} }) {
+      if (returnErrors) {
+        return {
+          ok: false,
+          error: "Test Error",
+        };
+      }
       // console.debug("[[mockCall]]", method, path, data);
       if (path === AUTOMTAION_LIST) {
         return {

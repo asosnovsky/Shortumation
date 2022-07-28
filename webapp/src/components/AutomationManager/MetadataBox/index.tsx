@@ -10,12 +10,12 @@ import SelectIcon from "@mui/icons-material/HighlightAltSharp";
 
 import { InputTextView } from "components/Inputs/InputTextView";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { AutomationListAuto } from "../types";
+import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
 import useWindowSize from "utils/useWindowSize";
 
-export type MetadataBoxProps = AutomationListAuto & {
+export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;
   onSelect: () => void;
   onStateUpdate: (s: "on" | "off") => void;

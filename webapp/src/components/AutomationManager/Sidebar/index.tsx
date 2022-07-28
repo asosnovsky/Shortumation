@@ -2,6 +2,8 @@ import "./index.css";
 
 import { FC, useState } from "react";
 
+import ArrowIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+
 import InputText from "components/Inputs/InputText";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 
@@ -9,15 +11,19 @@ import { ListBoxGroup } from "../ListBoxGroup";
 import { filterAutomations } from "../helpers";
 import { TagDB } from "../TagDB";
 import { convertGroupingToItems, makeGrouping } from "../automationGrouper";
-import { AutomationListAuto, AutomationListAutoUpdatable } from "../types";
+import {
+  AutomationManagerAuto,
+  AutomationManagerAutoUpdatable,
+} from "../types";
 import { Button } from "components/Inputs/Button";
+import { ButtonIcon } from "components/Icons/ButtonIcons";
 
-export type AutomationListSidebarProps = {
+export type AutomationManagerSidebarProps = {
   tagsDB: TagDB;
-  automations: AutomationListAuto[];
+  automations: AutomationManagerAuto[];
   selectedAutomationId: string | null;
   onAutomationUpdate: (
-    a: AutomationListAutoUpdatable,
+    a: AutomationManagerAutoUpdatable,
     aid: string,
     eid: string
   ) => void;
@@ -25,7 +31,7 @@ export type AutomationListSidebarProps = {
   onAutomationAdd: () => void;
   onSelectedAutomationId: (aid: string) => void;
 };
-export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
+export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
   automations,
   tagsDB,
   onAutomationAdd,
@@ -35,6 +41,7 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
 }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>([]);
+  const [isHidden, setHidden] = useState(false);
 
   const tags = tagsDB.getTagNames([]);
 
@@ -56,7 +63,12 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
   );
 
   return (
-    <div className="automation-manager--sidebar">
+    <div
+      className={[
+        "automation-manager--sidebar",
+        isHidden ? "hidden" : "shown",
+      ].join(" ")}
+    >
       <div className="automation-manager--sidebar-box--nav">
         <InputText label="Search" value={searchText} onChange={setSearchText} />
         <InputMultiSelect
@@ -80,9 +92,15 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
         ))}
       </div>
       <div className="automation-manager--sidebar-box--bottom-buttons">
-        <Button onClick={onAutomationAdd} color="primary">
+        <Button onClick={onAutomationAdd} color="primary" className="add-btn">
           Add
         </Button>
+        <ButtonIcon
+          className="hide-btn"
+          color="secondary"
+          icon={<ArrowIcon />}
+          onClick={() => setHidden(!isHidden)}
+        />
       </div>
     </div>
   );

@@ -2,12 +2,15 @@ import "./index.css";
 
 import { FC, useState } from "react";
 import { MetadataBox } from "../MetadataBox";
-import { AutomationListAutoUpdatable, AutomationListItem } from "../types";
+import {
+  AutomationManagerAutoUpdatable,
+  AutomationManagerItem,
+} from "../types";
 import { TagDB } from "../TagDB";
 
-export type ListBoxGroupProps = AutomationListItem & {
+export type ListBoxGroupProps = AutomationManagerItem & {
   onAutomationUpdate: (
-    a: AutomationListAutoUpdatable,
+    a: AutomationManagerAutoUpdatable,
     aid: string,
     eid: string
   ) => void;
@@ -103,7 +106,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
   );
 };
 
-const countAutomations = (item: AutomationListItem): number => {
+const countAutomations = (item: AutomationManagerItem): number => {
   if (item.type === "items") {
     return item.data.length;
   } else {

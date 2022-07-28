@@ -1,25 +1,25 @@
-export type AutomationListAutoUpdatable = {
+export type AutomationManagerAutoUpdatable = {
   title: string;
   description: string;
   state: "on" | "off" | string;
 };
-export type AutomationListAuto = AutomationListAutoUpdatable & {
+export type AutomationManagerAuto = AutomationManagerAutoUpdatable & {
   id: string;
   entityId: string;
   tags: Record<string, string>;
   issue?: string;
 };
 
-export type AutomationListItem = {
+export type AutomationManagerItem = {
   title: string;
   isSelected: boolean;
 } & (
   | {
       type: "group";
-      data: Array<AutomationListItem>;
+      data: Array<AutomationManagerItem>;
     }
   | {
       type: "items";
-      data: Array<AutomationListAuto & { isSelected: boolean }>;
+      data: Array<AutomationManagerAuto & { isSelected: boolean }>;
     }
 );

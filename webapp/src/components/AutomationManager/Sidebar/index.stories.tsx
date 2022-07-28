@@ -1,7 +1,7 @@
-import { AutomationListSidebar } from ".";
+import { AutomationManagerSidebar } from ".";
 import { useTagDB } from "../TagDB";
 import { useState } from "react";
-import { AutomationListAuto } from "../types";
+import { AutomationManagerAuto } from "../types";
 
 import { makeStory } from "devUtils";
 
@@ -9,7 +9,7 @@ const story = makeStory({
   meta: {
     title: "App/AutomationManager/Sidebar",
   },
-  Component: AutomationListSidebar,
+  Component: AutomationManagerSidebar,
   BaseTemplate: (args) => {
     const [automations, setAutomations] = useState(args.automations);
     const [selectedAutomationId, setSelAutoId] = useState(
@@ -29,7 +29,7 @@ const story = makeStory({
       }
     };
     return (
-      <AutomationListSidebar
+      <AutomationManagerSidebar
         selectedAutomationId={selectedAutomationId}
         tagsDB={useTagDB(automations, (a, t) => onTagUpdate(t, a))}
         automations={automations}
@@ -78,11 +78,13 @@ const story = makeStory({
 
 export default story.componentMeta;
 
-const make = (automations: AutomationListAuto[]) =>
+const make = (automations: AutomationManagerAuto[]) =>
   story.make({
     automations,
   });
-const makeAuto = (data: Partial<AutomationListAuto>): AutomationListAuto => {
+const makeAuto = (
+  data: Partial<AutomationManagerAuto>
+): AutomationManagerAuto => {
   const id = `${Date.now()}_${Math.random().toString(26).slice(3, 6)}`;
   return {
     id,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 export type TagDB = ReturnType<typeof useTagDB>;
 export const useTagDB = (
   automations: Array<{
@@ -7,6 +7,7 @@ export const useTagDB = (
   }>,
   onUpdate: (aid: string, tags: Record<string, string>) => void
 ) => {
+  const lastAuto = useRef(JSON.stringify(automations));
   const [{ automationTags, changed }, setState] = useState({
     automationTags: convertAutoListToMap(automations),
     changed: new Set<string>(),
@@ -16,11 +17,16 @@ export const useTagDB = (
   const isModified = changed.size > 0;
 
   useEffect(() => {
-    console.log("updating...");
-    setState({
-      automationTags: convertAutoListToMap(automations),
-      changed: new Set(),
-    });
+    const c = JSON.stringify(automations);
+    if (lastAuto.current !== c) {
+      lastAuto.current = c;
+      console.log("updating...");
+
+      setState({
+        automationTags: convertAutoListToMap(automations),
+        changed: new Set(),
+      });
+    }
   }, [automations, setState]);
 
   return {

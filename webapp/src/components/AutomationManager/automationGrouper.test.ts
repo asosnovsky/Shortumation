@@ -1,8 +1,8 @@
 import { convertGroupingToItems, makeGrouping } from "./automationGrouper";
 import { bigMockAutoList, createMockAuto } from "utils/mocks";
-import { AutomationListAuto } from "./types";
+import { AutomationManagerAuto } from "./types";
 
-const automations: AutomationListAuto[] = [
+const automations: AutomationManagerAuto[] = [
   createMockAuto({
     Room: "Living Room",
     Type: "Lights",
@@ -22,7 +22,7 @@ const automations: AutomationListAuto[] = [
     Room: "Living Room",
   }),
   createMockAuto({}),
-].map<AutomationListAuto>((a) => ({
+].map<AutomationManagerAuto>((a) => ({
   title: a.metadata.alias ?? "",
   entityId: "automation." + a.metadata.id,
   description: a.metadata.description ?? "",
@@ -32,7 +32,7 @@ const automations: AutomationListAuto[] = [
   isSelected: false,
 }));
 
-const bigList = bigMockAutoList.map<AutomationListAuto>((a) => ({
+const bigList = bigMockAutoList.map<AutomationManagerAuto>((a) => ({
   entityId: "automation." + a.metadata.id,
   title: a.metadata.alias ?? "",
   description: a.metadata.description ?? "",
