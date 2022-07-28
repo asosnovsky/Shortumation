@@ -3,135 +3,111 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { AutomationListSidebar } from ".";
 import { makeTagDB } from "../TagDB";
-import { useMockHAEntities } from "haService/HAEntities.mock";
-import { createMockAuto } from "utils/mocks";
 import { useState } from "react";
+import { AutomationListAuto } from "../types";
 
 export default {
   title: "App/AutomationList/Sidebar",
   component: AutomationListSidebar,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    title: "Example",
-    description: "Cool!",
-    state: "on",
-    tags: {
-      room: "main bedroom",
-      routine: "night time",
-    },
-  },
+  args: {},
 } as ComponentMeta<typeof AutomationListSidebar>;
 
-export const Loading: ComponentStory<typeof AutomationListSidebar> = (args) => {
+const Template: ComponentStory<typeof AutomationListSidebar> = (args) => {
+  const [automations, setAutomations] = useState(args.automations);
   return (
     <Page>
       <AutomationListSidebar
-        {...args}
-        haEntites={useMockHAEntities({ loading: true })}
-        tagsDB={makeTagDB([])}
-        configAutomationMetadatas={[]}
-      />
-    </Page>
-  );
-};
-
-export const Mocked: ComponentStory<typeof AutomationListSidebar> = (args) => {
-  const [mockAutos, setAutos] = useState([
-    createMockAuto({ room: "bedroom" }),
-    createMockAuto({ room: "bathroom", type: "routine" }),
-    createMockAuto({ type: "routine" }),
-    createMockAuto(),
-    createMockAuto({ type: "missing in ws" }),
-  ]);
-  const [mockEntitiesStates, setMES] = useState<Record<string, string>>({
-    ...mockAutos.slice(0, 4).reduce((all, auto, i) => {
-      const eid = `automation.number_${i}`;
-      return {
-        ...all,
-        [eid]: i % 2 == 0 ? "on" : "off",
-      };
-    }, {}),
-    "automation.number_not_in_config": "on",
-  });
-  const mockEntities = mockAutos.slice(0, 4).reduce((all, auto, i) => {
-    const eid = `automation.number_${i}`;
-    return {
-      ...all,
-      [eid]: {
-        entity_id: eid,
-        attributes: {
-          id: auto.metadata.id,
-        },
-        state: mockEntitiesStates[eid] ?? "n/a",
-      },
-    };
-  }, {});
-  const haEntities = useMockHAEntities({
-    loading: false,
-    entities: {
-      ...mockEntities,
-      "automation.number_not_in_config": {
-        entity_id: "automation.number_not_in_config",
-        state: mockEntitiesStates["automation.number_not_in_config"] ?? "n/a",
-        attributes: {
-          id: "1235",
-          friendly_name: "What am I?",
-        },
-      } as any,
-    },
-    entitySource: {},
-  });
-  return (
-    <Page>
-      <AutomationListSidebar
-        haEntites={haEntities}
-        tagsDB={makeTagDB(mockAutos)}
-        configAutomationMetadatas={mockAutos.map(({ metadata }) => metadata)}
+        tagsDB={makeTagDB(automations)}
+        automations={automations}
         onAutomationDelete={(aid) => {
           args.onAutomationDelete(aid);
-          setAutos(mockAutos.filter(({ metadata }) => metadata.id !== aid));
+          setAutomations(automations.filter(({ id }) => id !== aid));
         }}
         onAutomationUpdate={(a, aid, eid) => {
           args.onAutomationUpdate(a, aid, eid);
-          const index = mockAutos.findIndex(
-            ({ metadata }) => metadata.id === aid
-          );
+          const index = automations.findIndex(({ id }) => id === aid);
           if (index >= 0) {
-            setAutos([
-              ...mockAutos.slice(0, index),
+            setAutomations([
+              ...automations.slice(0, index),
               {
-                ...mockAutos[index],
-                metadata: {
-                  ...mockAutos[index].metadata,
-                  alias: a.title,
-                  description: a.description,
-                },
+                ...automations[index],
+                ...a,
               },
-              ...mockAutos.slice(index + 1),
+              ...automations.slice(index + 1),
             ]);
           }
-          setMES({
-            ...mockEntitiesStates,
-            [eid]: a.state,
-          });
         }}
         onTagUpdate={(tags, aid) => {
           args.onTagUpdate(tags, aid);
-          const index = mockAutos.findIndex(
-            ({ metadata }) => metadata.id === aid
-          );
+          const index = automations.findIndex(({ id }) => id === aid);
           if (index >= 0) {
-            setAutos([
-              ...mockAutos.slice(0, index),
+            setAutomations([
+              ...automations.slice(0, index),
               {
-                ...mockAutos[index],
+                ...automations[index],
                 tags,
               },
-              ...mockAutos.slice(index + 1),
+              ...automations.slice(index + 1),
             ]);
           }
+        }}
+        onAutomationAdd={() => {
+          args.onAutomationAdd();
+          const id = String(Date.now());
+          setAutomations([
+            ...automations,
+            {
+              id,
+              description: "",
+              title: "new",
+              tags: {},
+              entityId: "automation." + id,
+              isSelected: true,
+              state: "on",
+            },
+          ]);
         }}
       />
     </Page>
   );
 };
+
+const make = (automations: AutomationListAuto[]) => {
+  const Basic = Template.bind({});
+  Basic.args = {
+    ...Basic.args,
+    automations,
+  };
+  return Basic;
+};
+const makeAuto = (data: Partial<AutomationListAuto>): AutomationListAuto => ({
+  id: String(Date.now()),
+  entityId: `automation.${Date.now()}`,
+  title: "",
+  description: "",
+  state: "on",
+  isSelected: false,
+  tags: {},
+  ...data,
+});
+
+export const Empty = make([]);
+export const Basic = make([
+  makeAuto({ title: "example 1" }),
+  makeAuto({ title: "example 2", state: "off" }),
+  makeAuto({ title: "example 3", state: "invalid" }),
+  makeAuto({ title: "example 4", issue: "I have an issue!" }),
+]);
+export const Tagged = make([
+  makeAuto({ title: "example 1", tags: { room: "bathroom", floor: "1" } }),
+  makeAuto({ title: "example 2", tags: { type: "routine" } }),
+  makeAuto({
+    title: "example 3",
+    tags: { room: "living room", type: "climate" },
+  }),
+  makeAuto({
+    title: "example 4",
+    tags: { room: "bedroom", floor: "2", type: "button" },
+  }),
+]);

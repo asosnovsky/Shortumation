@@ -6,7 +6,7 @@
     margin-right: 5em;
 }
 
-.automation-list {
+.automation-list .automation-list-box--list {
     max-height: 100vh;
     overflow: auto;
 }

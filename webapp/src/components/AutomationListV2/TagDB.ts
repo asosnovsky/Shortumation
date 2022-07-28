@@ -1,10 +1,13 @@
-import { AutomationData } from "types/automations";
-
 export type TagDB = ReturnType<typeof makeTagDB>;
-export const makeTagDB = (automations: AutomationData[]) => {
+export const makeTagDB = (
+  automations: Array<{
+    id: string;
+    tags: Record<string, string>;
+  }>
+) => {
   const allTags: Record<string, Set<string>> = {};
   const automationTags: Record<string, Record<string, string>> = {};
-  automations.forEach(({ metadata: { id }, tags }) => {
+  automations.forEach(({ id, tags }) => {
     automationTags[id] = tags;
     Object.keys(tags).forEach((tagName) => {
       const tagValue = tags[tagName];

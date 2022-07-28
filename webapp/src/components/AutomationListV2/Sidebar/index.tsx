@@ -2,23 +2,19 @@ import "./index.css";
 
 import { FC, useState } from "react";
 
-import Skeleton from "@mui/material/Skeleton";
-
-import { HAEntitiesState } from "haService/HAEntities";
-import { AutomationMetadata } from "types/automations";
 import InputText from "components/Inputs/InputText";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 
 import { ListBoxGroup } from "../ListBoxGroup";
-import { consolidateAutomations, filterAutomations } from "../helpers";
+import { filterAutomations } from "../helpers";
 import { TagDB } from "../TagDB";
 import { convertGroupingToItems, makeGrouping } from "../automationGrouper";
-import { AutomationListAutoUpdatable } from "../types";
+import { AutomationListAuto, AutomationListAutoUpdatable } from "../types";
+import { Button } from "components/Inputs/Button";
 
 export type AutomationListSidebarProps = {
-  configAutomationMetadatas: AutomationMetadata[];
   tagsDB: TagDB;
-  haEntites: HAEntitiesState;
+  automations: AutomationListAuto[];
   onTagUpdate: (t: Record<string, string>, aid: string) => void;
   onAutomationUpdate: (
     a: AutomationListAutoUpdatable,
@@ -26,11 +22,12 @@ export type AutomationListSidebarProps = {
     eid: string
   ) => void;
   onAutomationDelete: (aid: string) => void;
+  onAutomationAdd: () => void;
 };
 export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
-  configAutomationMetadatas,
+  automations,
   tagsDB,
-  haEntites,
+  onAutomationAdd,
   ...events
 }) => {
   const [searchText, setSearchText] = useState("");
@@ -38,16 +35,7 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
   const [selectedAutomationId, setSelectedAutomationId] =
     useState<null | string>(null);
 
-  if (!haEntites.ready) {
-    return <Skeleton className="automation-list loading" />;
-  }
   const tags = tagsDB.getTagNames([]);
-  let automations = consolidateAutomations(
-    haEntites.collection.state,
-    configAutomationMetadatas,
-    selectedAutomationId ?? "",
-    tagsDB
-  );
 
   if (searchText.trim().length > 0) {
     automations = filterAutomations(
@@ -78,16 +66,23 @@ export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
           max={3}
         />
       </div>
-      {items.map((item, i) => (
-        <ListBoxGroup
-          {...item}
-          key={i}
-          onSelect={setSelectedAutomationId}
-          {...events}
-          tagsDB={tagsDB}
-          initialOpenState={true}
-        />
-      ))}
+      <div className="automation-list-box--list">
+        {items.map((item, i) => (
+          <ListBoxGroup
+            {...item}
+            key={i}
+            onSelect={setSelectedAutomationId}
+            {...events}
+            tagsDB={tagsDB}
+            initialOpenState={true}
+          />
+        ))}
+      </div>
+      <div className="automation-list-box--bottom">
+        <Button onClick={onAutomationAdd} color="primary">
+          Add
+        </Button>
+      </div>
     </div>
   );
 };
