@@ -1,17 +1,15 @@
 import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
-import { AutomationList } from ".";
-import { createHAEntitiesState, useHAEntities } from "haService/HAEntities";
-import { makeTagDB } from "./TagDB";
-import { useConnectedApiService } from "apiService";
+import { AutomationListSidebar } from ".";
+import { makeTagDB } from "../TagDB";
 import { useMockHAEntities } from "haService/HAEntities.mock";
 import { createMockAuto } from "utils/mocks";
 import { useState } from "react";
 
 export default {
-  title: "App/AutomationList",
-  component: AutomationList,
+  title: "App/AutomationList/Sidebar",
+  component: AutomationListSidebar,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
     title: "Example",
@@ -22,12 +20,12 @@ export default {
       routine: "night time",
     },
   },
-} as ComponentMeta<typeof AutomationList>;
+} as ComponentMeta<typeof AutomationListSidebar>;
 
-export const Loading: ComponentStory<typeof AutomationList> = (args) => {
+export const Loading: ComponentStory<typeof AutomationListSidebar> = (args) => {
   return (
     <Page>
-      <AutomationList
+      <AutomationListSidebar
         {...args}
         haEntites={useMockHAEntities({ loading: true })}
         tagsDB={makeTagDB([])}
@@ -37,7 +35,7 @@ export const Loading: ComponentStory<typeof AutomationList> = (args) => {
   );
 };
 
-export const Mocked: ComponentStory<typeof AutomationList> = (args) => {
+export const Mocked: ComponentStory<typeof AutomationListSidebar> = (args) => {
   const [mockAutos, setAutos] = useState([
     createMockAuto({ room: "bedroom" }),
     createMockAuto({ room: "bathroom", type: "routine" }),
@@ -85,7 +83,7 @@ export const Mocked: ComponentStory<typeof AutomationList> = (args) => {
   });
   return (
     <Page>
-      <AutomationList
+      <AutomationListSidebar
         haEntites={haEntities}
         tagsDB={makeTagDB(mockAutos)}
         configAutomationMetadatas={mockAutos.map(({ metadata }) => metadata)}

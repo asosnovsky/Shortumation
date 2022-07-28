@@ -9,13 +9,13 @@ import { AutomationMetadata } from "types/automations";
 import InputText from "components/Inputs/InputText";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 
-import { ListBoxGroup } from "./ListBoxGroup";
-import { consolidateAutomations, filterAutomations } from "./helpers";
-import { TagDB } from "./TagDB";
-import { convertGroupingToItems, makeGrouping } from "./automationGrouper";
-import { AutomationListAutoUpdatable } from "./types";
+import { ListBoxGroup } from "../ListBoxGroup";
+import { consolidateAutomations, filterAutomations } from "../helpers";
+import { TagDB } from "../TagDB";
+import { convertGroupingToItems, makeGrouping } from "../automationGrouper";
+import { AutomationListAutoUpdatable } from "../types";
 
-export type AutomationListProps = {
+export type AutomationListSidebarProps = {
   configAutomationMetadatas: AutomationMetadata[];
   tagsDB: TagDB;
   haEntites: HAEntitiesState;
@@ -27,7 +27,7 @@ export type AutomationListProps = {
   ) => void;
   onAutomationDelete: (aid: string) => void;
 };
-export const AutomationList: FC<AutomationListProps> = ({
+export const AutomationListSidebar: FC<AutomationListSidebarProps> = ({
   configAutomationMetadatas,
   tagsDB,
   haEntites,
