@@ -1,50 +1,52 @@
-import { ListData } from "apiService/types";
+import { ApiService } from "apiService/core";
 import { HAEntitiesState } from "haService/HAEntities";
-import { FC } from "react";
-import { AutomationData } from "types/automations";
-import { consolidateAutomations } from "./helpers";
-import { AutomationListSidebar } from "./Sidebar";
-import { useAutomationManagerState } from "./state";
-import { useTagDB } from "./TagDB";
+import { FC, useState } from "react";
+import { AutomationManagerLoaded } from "./Loaded";
+import LinearProgress from "@mui/material/LinearProgress";
 
-export type AutomationListProps = {
+export type AutomationManagerProps = {
   haEntites: HAEntitiesState;
-  configAutomations: ListData<AutomationData>;
-  onUpdate: (i: number, auto: AutomationData) => void;
-  onUpdateTags: (id: string, tags: Record<string, string>) => void;
-  onUpdateState: (id: string, state: string) => void;
-  onTrigger: (id: string, state: string) => void;
-  onAdd: () => void;
-  onRemove: (i: number) => void;
+  api: ApiService;
 };
 
-export const AutomationList: FC<AutomationListProps> = (props) => {
-  const state = useAutomationManagerState();
+export const AutomationManager: FC<AutomationManagerProps> = ({
+  api,
+  haEntites,
+}) => {
+  const [isSaving, setIsSaving] = useState(false);
 
-  if (!props.haEntites.ready) {
+  // handle bad states
+  if (!haEntites.ready || !api.state.automations.ready) {
     return <div className="automation-manager loading">...</div>;
   }
 
-  const tagsDB = useTagDB(
-    props.configAutomations.data.map(({ metadata: { id }, tags }) => ({
-      id,
-      tags,
-    })),
-    props.onUpdateTags
-  );
-  const automations = consolidateAutomations(
-    props.haEntites.collection.state,
-    props.configAutomations.data.map(({ metadata }) => metadata),
-    tagsDB
-  );
+  if (!api.state.automations.ok) {
+    return (
+      <div className="automation-manager error">
+        <h1>Failed to load</h1>
+        {api.state.automations.error}
+      </div>
+    );
+  }
+
+  // alias
+  const configAutomations = api.state.automations.data.data;
+  const hassEntities = haEntites.collection.state;
   return (
     <div className="automation-manager">
-      {/* <AutomationListSidebar
-        automations={automations}
-        tagsDB={tagsDB}
-        selectedAutomationId={state.current}
-        onTagUpdate
-      /> */}
+      {isSaving && <LinearProgress />}
+      <AutomationManagerLoaded
+        configAutomations={configAutomations}
+        hassEntities={hassEntities}
+        onUpdateTags={async (aid, t) => {
+          setIsSaving(true);
+          await api.updateTags({
+            automation_id: aid,
+            tags: t,
+          });
+          setIsSaving(false);
+        }}
+      />
     </div>
   );
 };

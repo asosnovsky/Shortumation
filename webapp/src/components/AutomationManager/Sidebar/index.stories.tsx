@@ -1,38 +1,34 @@
-import "styles/root.css";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { AutomationListSidebar } from ".";
 import { useTagDB } from "../TagDB";
 import { useState } from "react";
 import { AutomationListAuto } from "../types";
 
-export default {
-  title: "App/AutomationList/Sidebar",
-  component: AutomationListSidebar,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {},
-} as ComponentMeta<typeof AutomationListSidebar>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof AutomationListSidebar> = (args) => {
-  const [automations, setAutomations] = useState(args.automations);
-  const [selectedAutomationId, setSelAutoId] = useState(
-    args.selectedAutomationId
-  );
-  const onTagUpdate = (tags: Record<string, string>, aid: string) => {
-    const index = automations.findIndex(({ id }) => id === aid);
-    if (index >= 0) {
-      setAutomations([
-        ...automations.slice(0, index),
-        {
-          ...automations[index],
-          tags,
-        },
-        ...automations.slice(index + 1),
-      ]);
-    }
-  };
-  return (
-    <Page>
+const story = makeStory({
+  meta: {
+    title: "App/AutomationManager/Sidebar",
+  },
+  Component: AutomationListSidebar,
+  BaseTemplate: (args) => {
+    const [automations, setAutomations] = useState(args.automations);
+    const [selectedAutomationId, setSelAutoId] = useState(
+      args.selectedAutomationId
+    );
+    const onTagUpdate = (tags: Record<string, string>, aid: string) => {
+      const index = automations.findIndex(({ id }) => id === aid);
+      if (index >= 0) {
+        setAutomations([
+          ...automations.slice(0, index),
+          {
+            ...automations[index],
+            tags,
+          },
+          ...automations.slice(index + 1),
+        ]);
+      }
+    };
+    return (
       <AutomationListSidebar
         selectedAutomationId={selectedAutomationId}
         tagsDB={useTagDB(automations, (a, t) => onTagUpdate(t, a))}
@@ -76,18 +72,16 @@ const Template: ComponentStory<typeof AutomationListSidebar> = (args) => {
           setSelAutoId(id);
         }}
       />
-    </Page>
-  );
-};
+    );
+  },
+});
 
-const make = (automations: AutomationListAuto[]) => {
-  const Basic = Template.bind({});
-  Basic.args = {
-    ...Basic.args,
+export default story.componentMeta;
+
+const make = (automations: AutomationListAuto[]) =>
+  story.make({
     automations,
-  };
-  return Basic;
-};
+  });
 const makeAuto = (data: Partial<AutomationListAuto>): AutomationListAuto => {
   const id = `${Date.now()}_${Math.random().toString(26).slice(3, 6)}`;
   return {

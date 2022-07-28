@@ -1,53 +1,51 @@
-import "styles/root.css";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { ListBoxGroup } from ".";
 
-export default {
-  title: "App/AutomationList/ListBoxGroup",
-  component: ListBoxGroup,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    title: "Example",
-    type: "items",
-    isSelected: false,
-    data: [
-      {
-        id: "1",
-        title: "Example",
-        entityId: "automation.1",
-        description: "Amazing automation!",
-        tags: {},
-        state: "on",
-        isSelected: false,
-      },
-      {
-        id: "2",
-        title: "Example 2",
-        entityId: "automation.2",
-        description: "Cool!",
-        state: "on",
-        isSelected: false,
-        tags: {
-          room: "main bedroom",
-          routine: "night time",
-        },
-      },
-    ],
+import { makeStory } from "devUtils";
+import { useTagDB } from "../TagDB";
+
+const { make, componentMeta } = makeStory({
+  Component: ListBoxGroup,
+  BaseTemplate: (args) => {
+    const tagsDB = useTagDB([], () => {});
+    return <ListBoxGroup {...args} tagsDB={tagsDB} />;
   },
-} as ComponentMeta<typeof ListBoxGroup>;
+  meta: {
+    title: "App/AutomationManager/ListBoxGroup",
+    args: {
+      title: "Example",
+      type: "items",
+      isSelected: false,
+      data: [
+        {
+          id: "1",
+          title: "Example",
+          entityId: "automation.1",
+          description: "Amazing automation!",
+          tags: {},
+          state: "on",
+          isSelected: false,
+        },
+        {
+          id: "2",
+          title: "Example 2",
+          entityId: "automation.2",
+          description: "Cool!",
+          state: "on",
+          isSelected: false,
+          tags: {
+            room: "main bedroom",
+            routine: "night time",
+          },
+        },
+      ],
+    },
+  },
+});
 
-const Template: ComponentStory<typeof ListBoxGroup> = (args) => {
-  return (
-    <Page>
-      <ListBoxGroup {...args} />
-    </Page>
-  );
-};
+export default componentMeta;
 
-export const Basic = Template.bind({});
-export const Nested = Template.bind({});
-Nested.args = {
+export const Basic = make({});
+export const Nested = make({
   title: "Top Group",
   type: "group",
   isSelected: false,
@@ -120,4 +118,4 @@ Nested.args = {
       ],
     },
   ],
-};
+});
