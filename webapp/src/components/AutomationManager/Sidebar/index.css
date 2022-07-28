@@ -5,6 +5,7 @@
     --bottom-height: 3em;
     position: relative;
     height: 100%;
+    min-width: 25vw;
 }
 
 .automation-manager--sidebar-box--nav {
@@ -35,6 +36,7 @@
 
 .automation-manager--sidebar.hidden {
     width: 2.5em;
+    min-width: 0;
 }
 
 .automation-manager--sidebar.hidden .automation-manager--sidebar-box--nav,

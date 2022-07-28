@@ -8,7 +8,7 @@ import InputText from "components/Inputs/InputText";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 
 import { ListBoxGroup } from "../ListBoxGroup";
-import { filterAutomations } from "../helpers";
+import { filterAutomations } from "./helpers";
 import { TagDB } from "../TagDB";
 import { convertGroupingToItems, makeGrouping } from "../automationGrouper";
 import {

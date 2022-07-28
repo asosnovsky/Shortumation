@@ -12,12 +12,14 @@ const { make, componentMeta } = makeStory({
   Component: (args: {
     automations?: AutomationData[];
     haProps: MockHAEntitiesProps;
-  }) => (
-    <AutomationManager
-      api={useMockApiService(args.automations ?? [], !args.automations)}
-      haEntites={useMockHAEntities(args.haProps)}
-    />
-  ),
+  }) => {
+    return (
+      <AutomationManager
+        api={useMockApiService(args.automations ?? [], !args.automations)}
+        haEntites={useMockHAEntities(args.haProps)}
+      />
+    );
+  },
   meta: {
     title: "App/AutomationManager",
     args: {

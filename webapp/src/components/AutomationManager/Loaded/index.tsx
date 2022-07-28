@@ -2,69 +2,49 @@ import "./index.css";
 
 import { AutomationEditor } from "components/AutomationEditor";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
-import { HassEntities } from "home-assistant-js-websocket";
 import { FC, PropsWithChildren } from "react";
-import { AutomationData } from "types/automations";
-import { consolidateAutomations } from "../helpers";
 import { AutomationManagerSidebar } from "../Sidebar";
-import { useTagDB } from "../TagDB";
-import { useAutomationManagerState } from "./state";
+import {
+  useAutomationManagerState,
+  UseAutomationManagerStateArgs,
+} from "./state";
 import Alert from "@mui/material/Alert";
 
-export type AutomationManagerLoadedProps = {
-  configAutomations: AutomationData[];
-  hassEntities: HassEntities;
-  onUpdateTags: (aid: string, tags: Record<string, string>) => void;
-};
+export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {};
 export const AutomationManagerLoaded: FC<
   PropsWithChildren<AutomationManagerLoadedProps>
-> = ({ configAutomations, onUpdateTags, hassEntities, children }) => {
-  const state = useAutomationManagerState();
-  const tagsDB = useTagDB(
-    configAutomations.map(({ metadata: { id }, tags }) => ({
-      id,
-      tags,
-    })),
-    onUpdateTags
-  );
-
-  const automations = consolidateAutomations(
-    hassEntities,
-    configAutomations.map(({ metadata }) => metadata),
-    tagsDB
-  );
-  const currentAutomation = configAutomations.filter(
-    ({ metadata: { id } }) => state.current === id
-  );
+> = ({ children, ...args }) => {
+  const state = useAutomationManagerState(args);
 
   return (
     <div className="automation-manager">
       {children}
       <AutomationManagerSidebar
-        automations={automations}
-        tagsDB={tagsDB}
-        selectedAutomationId={state.current}
-        onSelectedAutomationId={state.setCurrent}
-        onAutomationAdd={() => {}}
+        automations={state.automations}
+        tagsDB={state.tagsDB}
+        selectedAutomationId={state.currentAutomationId}
+        onSelectedAutomationId={state.setSelectedAutomationId}
+        onAutomationAdd={() => state.addNew()}
         onAutomationDelete={() => {}}
         onAutomationUpdate={() => {}}
       />
-      <div className="automation-manager--editor">
-        {state.current !== null ? (
-          currentAutomation.length > 0 ? (
+      <div className={["automation-manager--editor"].join(" ")}>
+        {state.currentAutomationId !== null ? (
+          state.currentAutomation ? (
             <AutomationEditor
               dims={{
                 ...DEFAULT_DIMS,
                 flipped: true,
               }}
-              automation={currentAutomation[0]}
-              onUpdate={() => {}}
-              tagDB={tagsDB}
+              automation={state.currentAutomation}
+              onUpdate={state.updateAutomation}
+              tagDB={state.tagsDB}
             />
           ) : (
             <div>
               <Alert color="warning">
-                Failed to find an automation on disk with id {state.current}.
+                Failed to find an automation on disk with id{" "}
+                {state.currentAutomationId}.
               </Alert>
             </div>
           )

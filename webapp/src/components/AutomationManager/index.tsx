@@ -47,12 +47,18 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   }
 
   // alias
-  const configAutomations = api.state.automations.data.data;
+  const configAutomations = api.state.automations.data;
   const hassEntities = haEntites.collection.state;
   return (
     <AutomationManagerLoaded
-      configAutomations={configAutomations}
+      configAutomations={configAutomations.data}
       hassEntities={hassEntities}
+      onAutomationAdd={(auto) =>
+        api.updateAutomation({
+          index: configAutomations.totalItems + 1,
+          auto,
+        })
+      }
       onUpdateTags={async (aid, t) => {
         setIsSaving(true);
         await api.updateTags({
