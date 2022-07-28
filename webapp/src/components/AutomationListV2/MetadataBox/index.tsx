@@ -9,9 +9,9 @@ import SelectIcon from "@mui/icons-material/HighlightAltSharp";
 
 import { InputTextView } from "components/Inputs/InputTextView";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { cleanUpUndefined } from "utils/helpers";
 import { AutomationListAuto } from "../types";
 import { Tags } from "./Tags";
+import { TagDB } from "../TagDB";
 
 export type MetadataBoxProps = AutomationListAuto & {
   onDelete: () => void;
@@ -20,6 +20,7 @@ export type MetadataBoxProps = AutomationListAuto & {
   onTagUpdate: (t: Record<string, string>) => void;
   onTitleUpdate: (t: string) => void;
   onDescriptionUpdate: (t: string) => void;
+  tagsDB: TagDB;
 };
 export const MetadataBox: FC<MetadataBoxProps> = (props) => {
   const isValidState = ["on", "off"].includes(props.state);
@@ -57,7 +58,11 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           value={props.description}
           onChange={props.onDescriptionUpdate}
         />
-        <Tags tags={props.tags} onUpdate={props.onTagUpdate} />
+        <Tags
+          tags={props.tags}
+          onUpdate={props.onTagUpdate}
+          tagsDB={props.tagsDB}
+        />
         {props.issue ? (
           <Alert severity="warning" className="issue">
             {props.issue}

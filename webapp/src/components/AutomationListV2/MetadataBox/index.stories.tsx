@@ -2,6 +2,7 @@ import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { MetadataBox } from ".";
+import { makeTagDB } from "../TagDB";
 
 export default {
   title: "App/AutomationList/MetadataBox",
@@ -22,7 +23,7 @@ export default {
 const Template: ComponentStory<typeof MetadataBox> = (args) => {
   return (
     <Page>
-      <MetadataBox {...args} />
+      <MetadataBox {...args} tagsDB={makeTagDB([])} />
     </Page>
   );
 };

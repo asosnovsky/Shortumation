@@ -11,14 +11,12 @@ export interface InputAutoTextProps {
   required?: boolean;
   endAdornment?: ReactNode;
   onChange: (v: string) => void;
-  onEnter?: () => void;
 }
 export default function InputAutoText({
   value = "",
   label,
   options = [],
   onChange,
-  onEnter = () => {},
   className,
   required,
   endAdornment,
@@ -27,9 +25,10 @@ export default function InputAutoText({
   return (
     <Autocomplete
       freeSolo
-      className={className}
+      className={["input-autotext", className ?? ""].join(" ")}
       value={value}
       options={options}
+      disableClearable
       onChange={(_e, v) => onChange(v === null ? "" : v)}
       renderInput={(params) => (
         <TextField
@@ -41,12 +40,12 @@ export default function InputAutoText({
           helperText={error}
           fullWidth
           InputProps={{
-            endAdornment,
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              onEnter();
-            }
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {endAdornment} {params.InputProps.endAdornment}
+              </>
+            ),
           }}
           onChange={(e) => {
             e.preventDefault();

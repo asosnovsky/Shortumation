@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import MuiButton from "@mui/material/Button";
+import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 
 export const Button: FC<{
   className?: string;
@@ -7,6 +7,7 @@ export const Button: FC<{
   disabled?: boolean;
   children?: ReactNode;
   onClick?: () => void;
+  color?: MuiButtonProps["color"];
 }> = (props) => {
   return (
     <MuiButton
@@ -16,6 +17,7 @@ export const Button: FC<{
       onClick={props.onClick}
       variant="outlined"
       children={props.children}
+      color={props.color}
     />
   );
 };

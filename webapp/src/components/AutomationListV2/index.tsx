@@ -84,6 +84,7 @@ export const AutomationList: FC<AutomationListProps> = ({
           key={i}
           onSelect={setSelectedAutomationId}
           {...events}
+          tagsDB={tagsDB}
           initialOpenState={true}
         />
       ))}

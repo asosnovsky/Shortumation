@@ -3,6 +3,7 @@ import "./index.css";
 import { FC, useState } from "react";
 import { MetadataBox } from "../MetadataBox";
 import { AutomationListAutoUpdatable, AutomationListItem } from "../types";
+import { TagDB } from "../TagDB";
 
 export type ListBoxGroupProps = AutomationListItem & {
   onTagUpdate: (t: Record<string, string>, aid: string) => void;
@@ -14,6 +15,7 @@ export type ListBoxGroupProps = AutomationListItem & {
   onAutomationDelete: (aid: string) => void;
   onSelect: (aid: string) => void;
   initialOpenState?: boolean;
+  tagsDB: TagDB;
 };
 export const ListBoxGroup: FC<ListBoxGroupProps> = ({
   title,
@@ -21,6 +23,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
   data,
   isSelected,
   initialOpenState,
+  tagsDB,
   ...events
 }) => {
   const [open, setOpen] = useState(initialOpenState ?? false);
@@ -58,6 +61,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
               <MetadataBox
                 key={auto.id}
                 {...auto}
+                tagsDB={tagsDB}
                 onDelete={() => events.onAutomationDelete(auto.id)}
                 onSelect={() => events.onSelect(auto.id)}
                 onTagUpdate={(t) => events.onTagUpdate(t, auto.id)}
@@ -94,7 +98,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
               />
             ))
           : data.map((group, i) => (
-              <ListBoxGroup {...events} {...group} key={i} />
+              <ListBoxGroup {...events} {...group} tagsDB={tagsDB} key={i} />
             ))}
       </div>
     </div>

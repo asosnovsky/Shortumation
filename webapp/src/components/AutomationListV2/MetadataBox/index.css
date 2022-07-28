@@ -116,3 +116,37 @@
     outline: 1px solid var(--mui-error-dark);
     border-radius: 20px;
 }
+
+.automation-list--metadatabox .metadatabox--tags .tag .inner {
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: text;
+    user-select: none;
+}
+
+.automation-list--metadatabox .metadatabox--tags .tag .inner .edit-icon {
+    height: 0.7em;
+    width: 0.7em;
+    padding: 0.15em;
+}
+
+
+.metadatabox--tags--modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.metadatabox--tags--modal .input-autotext {
+    min-width: calc(max(10em, 100%));
+}
+
+.metadatabox--tags--modal .buttons {
+    display: flex;
+    gap: 0.5em;
+    justify-content: space-evenly;
+}

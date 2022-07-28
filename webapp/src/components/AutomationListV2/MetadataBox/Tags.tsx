@@ -1,17 +1,90 @@
-import { FC } from "react";
+import { FC, ReactNode, useState } from "react";
 
 import DeleteIcon from "@mui/icons-material/ClearTwoTone";
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 import { cleanUpUndefined } from "utils/helpers";
+import { Modal } from "components/Modal";
+import { Button } from "components/Inputs/Button";
+import InputAutoText from "components/Inputs/InputAutoText";
+
+import { TagDB } from "../TagDB";
 
 export type TagsProps = {
   tags: Record<string, string>;
   onUpdate: (t: Record<string, string>) => void;
+  tagsDB: TagDB;
 };
 
-export const Tags: FC<TagsProps> = ({ tags, onUpdate }) => {
+export type TagModalState =
+  | {
+      open: false;
+    }
+  | {
+      open: true;
+      tag: [string, string];
+      isNew: boolean;
+    };
+
+export const Tags: FC<TagsProps> = ({ tags, onUpdate, tagsDB }) => {
+  const [modalState, setModal] = useState<TagModalState>({ open: false });
+
+  let innerModal: ReactNode = <></>;
+  if (modalState.open) {
+    const validTag =
+      modalState.tag[0].trim().length > 0 &&
+      modalState.tag[1].trim().length > 0;
+    innerModal = (
+      <div className="metadatabox--tags--modal">
+        <InputAutoText
+          className="name"
+          options={tagsDB.getTagNames(Object.keys(tags))}
+          label="Tag Name"
+          value={modalState.tag[0]}
+          onChange={(v) =>
+            setModal({
+              ...modalState,
+              tag: [v ?? "", modalState.tag[1]],
+            })
+          }
+        />
+        <InputAutoText
+          className="value"
+          options={tagsDB.getTagValues(modalState.tag[0])}
+          label="Tag Value"
+          value={modalState.tag[1]}
+          onChange={(v) =>
+            setModal({
+              ...modalState,
+              tag: [modalState.tag[0], v ?? ""],
+            })
+          }
+        />
+        <div className="buttons">
+          <Button onClick={() => setModal({ open: false })} color="info">
+            Close
+          </Button>
+          <Button
+            disabled={!validTag}
+            onClick={() => {
+              onUpdate({
+                ...tags,
+                [modalState.tag[0]]: modalState.tag[1],
+              });
+              setModal({ open: false });
+            }}
+            color="success"
+          >
+            {modalState.isNew ? "Create" : "Save"}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="metadatabox--tags">
+      <Modal open={modalState.open}>{innerModal}</Modal>
       {Object.entries(tags).map(([tagName, tagValue]) => (
         <span key={tagName} className="tag">
           <DeleteIcon
@@ -25,10 +98,30 @@ export const Tags: FC<TagsProps> = ({ tags, onUpdate }) => {
             }
             className="delete-tag"
           />
-          <b>{tagName}</b>: {tagValue}
+          <span
+            className="inner"
+            onClick={() =>
+              setModal({
+                open: true,
+                isNew: false,
+                tag: [tagName, tagValue],
+              })
+            }
+          >
+            <b>{tagName}</b>: {tagValue} <EditIcon className="edit-icon" />
+          </span>
         </span>
       ))}
-      <span className="tag-add" onClick={() => {}}>
+      <span
+        className="tag-add"
+        onClick={() =>
+          setModal({
+            open: true,
+            isNew: true,
+            tag: ["", ""],
+          })
+        }
+      >
         +
       </span>
     </div>
