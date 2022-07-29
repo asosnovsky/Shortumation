@@ -60,7 +60,7 @@ export const useHassCollection = <T, D extends {} = {}>(
         });
       }
     }
-  }, [conn]);
+  }, [conn, state]);
 
   if (state.ready) {
     if (!state.collection) {
