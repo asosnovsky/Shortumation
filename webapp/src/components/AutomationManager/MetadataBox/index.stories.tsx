@@ -42,3 +42,4 @@ export const Basic = make({});
 export const IsSelected = make({ isSelected: true });
 export const InvalidState = make({ state: "unavailable" });
 export const WithIssue = make({ issue: "look at me" });
+export const NewAutomation = make({ isNew: true });

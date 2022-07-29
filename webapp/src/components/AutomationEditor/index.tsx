@@ -19,18 +19,21 @@ import { DAGAutomationGraph } from "components/DAGGraph";
 import { InputList } from "components/Inputs/InputList";
 import { InputTextView } from "components/Inputs/InputTextView";
 import { ControlButton } from "react-flow-renderer";
+import Edit from "@mui/icons-material/Edit";
 
 interface Props {
   automation?: AutomationData;
   dims: DAGDims;
   onUpdate: (auto: AutomationData) => void;
   tagDB: TagDB;
+  isNew?: boolean;
 }
 export const AutomationEditor: FC<Props> = ({
   dims,
   automation: propsAutos,
   onUpdate: propsOnUpdate,
   tagDB,
+  isNew,
 }) => {
   // state
   const {
@@ -189,9 +192,15 @@ export const AutomationEditor: FC<Props> = ({
             </Button>
           )}
           <Button
+            className={"automation-editor--flow-wrapper--toolbar--edit-btn"}
+            onClick={() => setInfoBox(!infoBoxOpen)}
+          >
+            Metadata <Edit />
+          </Button>
+          <Button
             className={"automation-editor--flow-wrapper--toolbar--save-btn"}
             onClick={save}
-            disabled={state.status !== "changed"}
+            disabled={state.status !== "changed" && !isNew}
           >
             Save <CheckMarkIcon color="#bf4" />
           </Button>

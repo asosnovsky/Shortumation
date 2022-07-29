@@ -12,6 +12,7 @@ import { useSnackbar } from "notistack";
 
 export type AutomationManagerProps = {
   onAutomationStateChange: (eid: string, on: boolean) => void;
+  refreshAutomations: () => void;
   haEntities: HAEntitiesState;
   api: ApiService;
 };
@@ -20,6 +21,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   api,
   haEntities,
   onAutomationStateChange,
+  refreshAutomations,
 }) => {
   const snackbr = useSnackbar();
   const [isSaving, setIsSaving] = useState(false);
@@ -71,12 +73,13 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
       configAutomations={configAutomations.data}
       hassEntities={hassEntities}
       onAutomationStateChange={onAutomationStateChange}
-      onAutomationAdd={(auto) =>
-        api.updateAutomation({
+      onAutomationAdd={async (auto) => {
+        await api.updateAutomation({
           index: configAutomations.totalItems + 1,
           auto,
-        })
-      }
+        });
+        refreshAutomations();
+      }}
       onAutomationDelete={(aid) => {
         const index = configAutomations.data.findIndex(
           ({ metadata }) => metadata.id === aid
@@ -85,6 +88,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           api.removeAutomation({
             index,
           });
+          refreshAutomations();
         } else {
           snackbr.enqueueSnackbar(
             "Failed to delete automation, this may be resolved by a refresh or reboot of Home Assistant",
@@ -105,6 +109,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
             ),
             auto,
           });
+          refreshAutomations();
         } else {
           snackbr.enqueueSnackbar(
             "Failed to update automation, this may be resolved by a refresh or reboot of Home Assistant.",

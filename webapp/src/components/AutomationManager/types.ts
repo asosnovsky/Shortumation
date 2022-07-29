@@ -8,6 +8,7 @@ export type AutomationManagerAuto = AutomationManagerAutoUpdatable & {
   entityId: string;
   tags: Record<string, string>;
   issue?: string;
+  isNew?: boolean;
 };
 
 export type AutomationManagerItem = {

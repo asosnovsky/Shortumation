@@ -33,6 +33,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         "automation-manager--metadatabox",
         props.isSelected ? "selected" : "",
         isMobile ? "mobile" : "",
+        props.isNew ? "new" : "",
       ].join(" ")}
     >
       <div
@@ -58,14 +59,16 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           placeholder="Title"
           value={props.title}
           onChange={props.onTitleUpdate}
+          disabled={props.isNew}
         />
         <InputTextView
           className="description"
           placeholder="Description"
           value={props.description}
           onChange={props.onDescriptionUpdate}
+          disabled={props.isNew}
         />
-        <Tags automationId={props.id} tagsDB={props.tagsDB} />
+        {!props.isNew && <Tags automationId={props.id} tagsDB={props.tagsDB} />}
         {props.issue ? (
           <Alert severity="warning" className="issue">
             {props.issue}

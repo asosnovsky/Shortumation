@@ -57,6 +57,7 @@ export const useAutomationDB = (
           state: "unregistered",
           tags: {},
           issue: "New Automation",
+          isNew: true,
         },
         auto,
       ]);

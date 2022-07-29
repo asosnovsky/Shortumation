@@ -44,6 +44,7 @@ export const AutomationManagerLoaded: FC<
               automation={state.currentAutomation}
               onUpdate={state.editorUpdateAutomation}
               tagDB={state.tagsDB}
+              isNew={state.currentAutomationIsNew}
             />
           ) : (
             <div>

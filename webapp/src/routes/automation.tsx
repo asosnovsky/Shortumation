@@ -10,6 +10,7 @@ export const AutomationRoute: FC<{ api: ApiService }> = ({ api }) => {
     <Page>
       <AutomationManager
         api={api}
+        refreshAutomations={() => ha.callService("automation", "reload")}
         onAutomationStateChange={(eid, on) => {
           ha.callService(
             "automation",

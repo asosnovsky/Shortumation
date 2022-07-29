@@ -11,6 +11,7 @@ export type InputTextViewProps = {
   onChange: (t: string) => void;
   initialViewMode?: boolean;
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export const InputTextView: FC<PropsWithChildren<InputTextViewProps>> = (
@@ -26,7 +27,10 @@ export const InputTextView: FC<PropsWithChildren<InputTextViewProps>> = (
 
   if (viewMode) {
     return (
-      <div className={className} onClick={() => setViewMode(false)}>
+      <div
+        className={className}
+        onClick={() => !!props.disabled && setViewMode(false)}
+      >
         {!!props.value ? (
           <span>{props.value}</span>
         ) : (
@@ -34,7 +38,9 @@ export const InputTextView: FC<PropsWithChildren<InputTextViewProps>> = (
             {props.placeholder}
           </span>
         )}
-        <ModeEditOutlineOutlinedIcon className="input-text-view--edit" />
+        {!props.disabled && (
+          <ModeEditOutlineOutlinedIcon className="input-text-view--edit" />
+        )}
         {props.children}
       </div>
     );

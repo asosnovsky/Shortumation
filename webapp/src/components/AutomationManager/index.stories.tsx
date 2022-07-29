@@ -19,6 +19,7 @@ const { make, componentMeta } = makeStory({
       <AutomationManager
         api={useMockApiService(args.automations ?? [], !args.automations)}
         haEntities={useMockHAEntities(haEntities)}
+        refreshAutomations={() => {}}
         onAutomationStateChange={(eid, on) => {
           if (!haEntities.loading && !haEntities.error) {
             setHAE({
