@@ -1,50 +1,19 @@
-## Available Scripts
+# Development Guide
 
-In the project directory, you can run:
+## Prerequisites
 
-### `yarn storybook`
+- https://code.visualstudio.com/
+- https://nodejs.org/en/
+- https://www.docker.com/
 
-Spins up the prototyping tool storybook.\
-Open [http://localhost:6006](http://localhost:6006) to view it in the browser.
+## Setup
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Open this folder directly with vscode. As soon as it happens you will be prompted to install certain extensions and you should see a few tasks automatically spin up. Primarily:
 
-### `yarn start`
+- `npm: tsc`: scans code and validate the syntax is correct
+- `npm: test`: automatically run test cases
+- `npm: start`: automatically starts the webap on port `3000`
+- `npm: storybook`: automatically starts storybook on port `6006` (I recommend you develop containers using this first!)
+- `Docker: Server`: this will start the Shortumation server as well as a development Homeassistant container (you can access these over locahost:8123 and localhost:8000).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+If you don't need some of these, you can turn them off by selecting the 'trash can' icon to their right.

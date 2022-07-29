@@ -8,4 +8,4 @@
 
 `make lint`: run all linter and code formatting
 
-`make run-local`: starts the api locally
+`make start-docker`: starts the api locally

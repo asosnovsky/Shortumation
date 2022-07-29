@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "njpwerner.autodocstring",
+    "bungcip.better-toml",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "ms-python.vscode-pylance",
+    "ms-python.python",
+    "redhat.vscode-yaml",
+    "ninoseki.vscode-pylens"
+  ]
+}

@@ -40,7 +40,9 @@ clean:
 	find . -type d -name  "__pycache__" -exec rm -r {} +
 	find . -type d -name  "*tmp" -exec rm -r {} +
 
-run-local:
-	rm -f web
-	ln -s ../webapp/build web
-	USE_EXAMPLE_REPO=1 $(VENV_BIN)/hypercorn src.app:app --reload
+start-docker:
+	rm -rf ./development_config
+	tar -xvf ../development_config.tar.gz -C ./
+	cp ./development_config/.env .env.api
+	docker-compose down 
+	docker-compose up 

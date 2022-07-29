@@ -1,0 +1,34 @@
+version: '3'
+services:
+  homeassistant:
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ./development_config/config:/config
+    restart: unless-stopped
+    networks:
+      - main
+    ports:
+      - 8124:8123
+  addon:
+    image: "asosnovsky/shortumation-${ARCH:-amd64}:${BUILD_TAG:-edge}"
+    build:
+      context: "../"
+      dockerfile: "../Dockerfile"
+      args:
+        BUILD_ARCH: ${ARCH:-amd64}
+        BUILD_VERSION: ${BUILD_TAG:-edge}
+    volumes:
+        - "./development_config/config:/config"
+        - "./:/app"
+        - "../docker/bin:/app/bin"
+        - "../webapp/build:/app/web"
+    networks:
+      - main
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./development_config/.env
+    entrypoint: hypercorn src.app:app --reload -b 0.0.0.0:8000
+
+networks:
+  main:

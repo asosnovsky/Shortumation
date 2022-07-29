@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Docker: Server",
+      "group": "none",
+      "command": ["make start-docker"],
+      "problemMatcher": []
+    }
+  ]
+}

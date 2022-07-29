@@ -1,59 +1,74 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "type": "npm",
-            "script": "tsc",
-            "problemMatcher": [],
-            "label": "npm: tsc",
-            "detail": "tsc -w",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            },
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
-            "group": "test"
-        },
-        {
-            "type": "npm",
-            "script": "test",
-            "problemMatcher": [],
-            "label": "npm: test",
-            "detail": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            },
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
-            "group": "test",
-        },
-        {
-            "type": "npm",
-            "script": "storybook",
-            "problemMatcher": [],
-            "label": "npm: storybook",
-            "detail": "start-storybook -p 6006 -s public",
-            "promptOnClose": true
-        },
-        {
-            "type": "npm",
-            "script": "build",
-            "problemMatcher": [],
-            "label": "npm: build",
-            "detail": "react-scripts build",
-            "group": "build"
-        },
-        {
-            "type": "npm",
-            "script": "start",
-            "problemMatcher": [],
-            "label": "npm: start",
-            "detail": "react-scripts start",
-            "promptOnClose": true
-        },
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Docker: Server",
+      "group": "none",
+      "command": [".vscode/bin/start-docker-server.sh"],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "tsc",
+      "problemMatcher": [],
+      "label": "npm: tsc",
+      "detail": "tsc -w",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "group": "test"
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "problemMatcher": [],
+      "label": "npm: test",
+      "detail": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "group": "test"
+    },
+    {
+      "type": "npm",
+      "script": "storybook",
+      "problemMatcher": [],
+      "label": "npm: storybook",
+      "detail": "start-storybook -p 6006 -s public",
+      "promptOnClose": true,
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [],
+      "label": "npm: build",
+      "detail": "react-scripts build",
+      "group": "build"
+    },
+    {
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": [],
+      "label": "npm: start",
+      "detail": "react-scripts start",
+      "promptOnClose": true,
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
 }

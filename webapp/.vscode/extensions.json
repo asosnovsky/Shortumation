@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "njpwerner.autodocstring",
+    "aeschli.vscode-css-formatter",
+    "paulmolluzzo.convert-css-in-js",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "orta.vscode-jest",
+    "esbenp.prettier-vscode",
+    "pmneo.tsimporter"
+  ]
+}
