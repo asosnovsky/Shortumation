@@ -1,5 +1,5 @@
 import { Collection, Connection } from "home-assistant-js-websocket";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useHAConnection } from "./connection";
 
 type _HACollectionState<T> =

@@ -1,6 +1,3 @@
-import { ArrowIcon } from "components/Icons";
-import { useInputMultiSelectStyles } from "./styles";
-import { useState } from "react";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
