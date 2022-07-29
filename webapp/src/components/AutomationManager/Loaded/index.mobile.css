@@ -32,6 +32,10 @@
     z-index: 100;
 }
 
+.automation-manager.mobile .automation-editor--flow-wrapper--toolbar {
+    align-items: center;
+}
+
 .automation-manager.mobile .automation-editor--flow-wrapper--toolbar--title {
     padding-left: 2.5em;
     justify-content: center;
@@ -47,6 +51,7 @@
 }
 
 .automation-manager.mobile .automation-editor--flow-wrapper--toolbar--title--text .id,
-.automation-manager.mobile .automation-editor--flow-wrapper--toolbar--title .input-text-view.description {
+.automation-manager.mobile .automation-editor--flow-wrapper--toolbar--title .input-text-view.description,
+.automation-manager.mobile .automation-editor--flow-wrapper--toolbar--edit-btn {
     display: none;
 }
