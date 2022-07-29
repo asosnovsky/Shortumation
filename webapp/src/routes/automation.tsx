@@ -11,6 +11,12 @@ export const AutomationRoute: FC<{ api: ApiService }> = ({ api }) => {
       <AutomationManager
         api={api}
         refreshAutomations={() => ha.callService("automation", "reload")}
+        forceDeleteAutomation={(eid) =>
+          ha.callHA({
+            entity_id: eid,
+            type: "config/entity_registry/remove",
+          })
+        }
         onAutomationStateChange={(eid, on) => {
           ha.callService(
             "automation",

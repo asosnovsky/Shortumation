@@ -11,7 +11,7 @@ import {
 import Alert from "@mui/material/Alert";
 
 export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
-  onAutomationDelete: (aid: string) => void;
+  onAutomationDelete: (aid: string, eid: string) => void;
 };
 export const AutomationManagerLoaded: FC<
   PropsWithChildren<AutomationManagerLoadedProps>
@@ -27,7 +27,10 @@ export const AutomationManagerLoaded: FC<
         selectedAutomationId={state.currentAutomationId}
         onSelectedAutomationId={state.setSelectedAutomationId}
         onAutomationAdd={() => state.addNew()}
-        onAutomationDelete={onAutomationDelete}
+        onAutomationDelete={(aid, eid) => {
+          onAutomationDelete(aid, eid);
+          state.setSelectedAutomationId(null);
+        }}
         onAutomationUpdate={state.sideBarUpdateAutomation}
       />
       <div className={["automation-manager--editor"].join(" ")}>

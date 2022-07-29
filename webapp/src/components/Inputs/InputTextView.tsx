@@ -29,7 +29,7 @@ export const InputTextView: FC<PropsWithChildren<InputTextViewProps>> = (
     return (
       <div
         className={className}
-        onClick={() => !!props.disabled && setViewMode(false)}
+        onClick={() => !props.disabled && setViewMode(false)}
       >
         {!!props.value ? (
           <span>{props.value}</span>

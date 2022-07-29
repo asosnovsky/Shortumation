@@ -37,8 +37,8 @@ const story = makeStory({
           args.onSelectedAutomationId(aid);
           setSelAutoId(aid);
         }}
-        onAutomationDelete={(aid) => {
-          args.onAutomationDelete(aid);
+        onAutomationDelete={(aid, eid) => {
+          args.onAutomationDelete(aid, eid);
           setAutomations(automations.filter(({ id }) => id !== aid));
         }}
         onAutomationUpdate={(a, aid, eid) => {

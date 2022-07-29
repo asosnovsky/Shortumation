@@ -13,7 +13,6 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
-import useWindowSize from "utils/useWindowSize";
 
 export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;

@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 export type AutomationManagerProps = {
   onAutomationStateChange: (eid: string, on: boolean) => void;
   refreshAutomations: () => void;
+  forceDeleteAutomation: (eid: string) => void;
   haEntities: HAEntitiesState;
   api: ApiService;
 };
@@ -22,6 +23,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   haEntities,
   onAutomationStateChange,
   refreshAutomations,
+  forceDeleteAutomation,
 }) => {
   const snackbr = useSnackbar();
   const [isSaving, setIsSaving] = useState(false);
@@ -80,16 +82,23 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
         });
         refreshAutomations();
       }}
-      onAutomationDelete={(aid) => {
+      onAutomationDelete={(aid, eid) => {
         const index = configAutomations.data.findIndex(
           ({ metadata }) => metadata.id === aid
         );
+        let deleteSent = false;
         if (index >= 0) {
           api.removeAutomation({
             index,
           });
-          refreshAutomations();
-        } else {
+          deleteSent = true;
+        }
+        const hassAuto = hassEntities[eid];
+        if (hassAuto) {
+          forceDeleteAutomation(eid);
+          deleteSent = true;
+        }
+        if (!deleteSent) {
           snackbr.enqueueSnackbar(
             "Failed to delete automation, this may be resolved by a refresh or reboot of Home Assistant",
             {
@@ -97,6 +106,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
             }
           );
         }
+        // refreshAutomations();
       }}
       onAutomationUpdate={(aid, auto) => {
         const index = configAutomations.data.findIndex(

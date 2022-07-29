@@ -28,7 +28,7 @@ export type AutomationManagerSidebarProps = {
     aid: string,
     eid: string
   ) => void;
-  onAutomationDelete: (aid: string) => void;
+  onAutomationDelete: (aid: string, eid: string) => void;
   onAutomationAdd: () => void;
   onSelectedAutomationId: (aid: string) => void;
 };
