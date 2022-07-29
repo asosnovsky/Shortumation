@@ -28,7 +28,7 @@ export const AutomationManagerLoaded: FC<
         onSelectedAutomationId={state.setSelectedAutomationId}
         onAutomationAdd={() => state.addNew()}
         onAutomationDelete={onAutomationDelete}
-        onAutomationUpdate={() => {}}
+        onAutomationUpdate={state.sideBarUpdateAutomation}
       />
       <div className={["automation-manager--editor"].join(" ")}>
         {state.currentAutomationId !== null ? (
@@ -39,7 +39,7 @@ export const AutomationManagerLoaded: FC<
                 flipped: true,
               }}
               automation={state.currentAutomation}
-              onUpdate={state.updateAutomation}
+              onUpdate={state.editorUpdateAutomation}
               tagDB={state.tagsDB}
             />
           ) : (

@@ -7,16 +7,32 @@ import {
 } from "haService/HAEntities.mock";
 import { AutomationData } from "types/automations";
 import { createMockAuto } from "utils/mocks";
+import { useState } from "react";
 
 const { make, componentMeta } = makeStory({
   Component: (args: {
     automations?: AutomationData[];
     haProps: MockHAEntitiesProps;
   }) => {
+    const [haEntities, setHAE] = useState(args.haProps);
     return (
       <AutomationManager
         api={useMockApiService(args.automations ?? [], !args.automations)}
-        haEntites={useMockHAEntities(args.haProps)}
+        haEntities={useMockHAEntities(haEntities)}
+        onAutomationStateChange={(eid, on) => {
+          if (!haEntities.loading) {
+            setHAE({
+              ...haEntities,
+              entities: {
+                ...haEntities.entities,
+                [eid]: {
+                  ...haEntities.entities[eid],
+                  state: on ? "on" : "off",
+                },
+              },
+            });
+          }
+        }}
       />
     );
   },

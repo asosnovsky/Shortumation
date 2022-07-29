@@ -8,20 +8,24 @@ import { ApiService } from "apiService/core";
 import { HAEntitiesState } from "haService/HAEntities";
 import { AutomationManagerLoaded } from "./Loaded";
 import { Alert } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 export type AutomationManagerProps = {
-  haEntites: HAEntitiesState;
+  onAutomationStateChange: (eid: string, on: boolean) => void;
+  haEntities: HAEntitiesState;
   api: ApiService;
 };
 
 export const AutomationManager: FC<AutomationManagerProps> = ({
   api,
-  haEntites,
+  haEntities,
+  onAutomationStateChange,
 }) => {
+  const snackbr = useSnackbar();
   const [isSaving, setIsSaving] = useState(false);
 
   // handle bad states
-  if (!haEntites.ready || !api.state.automations.ready) {
+  if (!haEntities.ready || !api.state.automations.ready) {
     return (
       <div className="automation-manager loading">
         <div className="automation-manager--sidebar loading">
@@ -48,24 +52,55 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
 
   // alias
   const configAutomations = api.state.automations.data;
-  const hassEntities = haEntites.collection.state;
+  const hassEntities = haEntities.collection.state;
   return (
     <AutomationManagerLoaded
       configAutomations={configAutomations.data}
       hassEntities={hassEntities}
+      onAutomationStateChange={onAutomationStateChange}
       onAutomationAdd={(auto) =>
         api.updateAutomation({
           index: configAutomations.totalItems + 1,
           auto,
         })
       }
-      onAutomationDelete={(aid) =>
-        api.removeAutomation({
-          index: configAutomations.data.findIndex(
-            ({ metadata }) => metadata.id === aid
-          ),
-        })
-      }
+      onAutomationDelete={(aid) => {
+        const index = configAutomations.data.findIndex(
+          ({ metadata }) => metadata.id === aid
+        );
+        if (index >= 0) {
+          api.removeAutomation({
+            index,
+          });
+        } else {
+          snackbr.enqueueSnackbar(
+            "Failed to delete automation, this may be resolved by a refresh or reboot of Home Assistant",
+            {
+              variant: "error",
+            }
+          );
+        }
+      }}
+      onAutomationUpdate={(aid, auto) => {
+        const index = configAutomations.data.findIndex(
+          ({ metadata }) => metadata.id === aid
+        );
+        if (index >= 0) {
+          api.updateAutomation({
+            index: configAutomations.data.findIndex(
+              ({ metadata }) => metadata.id === aid
+            ),
+            auto,
+          });
+        } else {
+          snackbr.enqueueSnackbar(
+            "Failed to update automation, this may be resolved by a refresh or reboot of Home Assistant.",
+            {
+              variant: "error",
+            }
+          );
+        }
+      }}
       onUpdateTags={async (aid, t) => {
         setIsSaving(true);
         await api.updateTags({

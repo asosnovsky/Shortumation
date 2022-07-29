@@ -34,6 +34,12 @@ export const useAutomationDB = (
       }
       return (autoMap[autoId] ?? [null, null])[1];
     },
+    getAutomationState(autoId: string): string | null {
+      if (newAuto && newAuto[0].id === autoId) {
+        return newAuto[0].state;
+      }
+      return (autoMap[autoId] ?? [{ state: null }, null])[0].state;
+    },
     isAutoNew(autoId: string) {
       return (newAuto && newAuto[0].id === autoId) ?? false;
     },

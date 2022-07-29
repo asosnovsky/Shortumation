@@ -5,21 +5,28 @@ import { AutomationData } from "types/automations";
 import { useTagDB } from "../TagDB";
 import { useAutomationDB } from "./automationDB";
 import { useConfirm } from "material-ui-confirm";
+import { AutomationManagerAutoUpdatable } from "../types";
+import { useSnackbar } from "notistack";
 
 export type UseAutomationManagerStateArgs = {
   configAutomations: AutomationData[];
   hassEntities: HassEntities;
   onUpdateTags: (aid: string, tags: Record<string, string>) => void;
   onAutomationAdd: (auto: AutomationData) => void;
+  onAutomationUpdate: (aid: string, auto: AutomationData) => void;
+  onAutomationStateChange: (eid: string, on: boolean) => void;
 };
 export const useAutomationManagerState = ({
   configAutomations,
   hassEntities,
   onUpdateTags,
   onAutomationAdd,
+  onAutomationUpdate,
+  onAutomationStateChange,
 }: UseAutomationManagerStateArgs) => {
   // state
   const confirm = useConfirm();
+  const snackbr = useSnackbar();
   const cookies = useAMSCookies();
   const tagsDB = useTagDB(
     configAutomations.map(({ metadata: { id }, tags }) => ({
@@ -82,10 +89,44 @@ export const useAutomationManagerState = ({
       const auto = automationDB.addNew();
       methods.setSelectedAutomationId(auto.metadata.id, true);
     },
-    updateAutomation(auto: AutomationData) {
+    editorUpdateAutomation(auto: AutomationData) {
       if (methods.currentAutomationIsNew) {
         onAutomationAdd(auto);
+      } else if (methods.currentAutomationId) {
+        onAutomationUpdate(methods.currentAutomationId, auto);
+      }
+    },
+    sideBarUpdateAutomation(
+      a: AutomationManagerAutoUpdatable,
+      aid: string,
+      eid: string
+    ) {
+      const previousAutoState = automationDB.getAutomationData(aid);
+      if (previousAutoState) {
+        if (
+          previousAutoState.metadata.alias !== a.title ||
+          previousAutoState.metadata.description !== a.description
+        ) {
+          onAutomationUpdate(aid, {
+            ...previousAutoState,
+            metadata: {
+              ...previousAutoState.metadata,
+              alias: a.title,
+              description: a.description,
+            },
+          });
+        }
       } else {
+        snackbr.enqueueSnackbar(
+          `Failed to save automation "${aid}" contents - ${JSON.stringify(
+            a
+          )} -- not found in /config`,
+          { variant: "error" }
+        );
+      }
+      const previousState = automationDB.getAutomationState(aid);
+      if (previousState !== a.state) {
+        onAutomationStateChange(eid, a.state === "on");
       }
     },
   };
