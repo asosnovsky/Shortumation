@@ -59,9 +59,9 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
         ].join(" ")}
       >
         {type === "items"
-          ? data.map((auto) => (
+          ? data.map((auto, i) => (
               <MetadataBox
-                key={auto.id}
+                key={`${i}-${auto.id}`}
                 {...auto}
                 tagsDB={tagsDB}
                 onDelete={() => events.onAutomationDelete(auto.id)}

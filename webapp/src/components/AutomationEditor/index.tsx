@@ -10,7 +10,7 @@ import { Button } from "components/Inputs/Button";
 import { useAutomatioEditorState, EditorData } from "./state";
 import { MiniFailure } from "types/validators/helper";
 import InputYaml from "components/Inputs/InputYaml";
-import { TagDB } from "components/AutomationList/TagDB";
+import { TagDB } from "components/AutomationManager/TagDB";
 import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useCookies } from "react-cookie";

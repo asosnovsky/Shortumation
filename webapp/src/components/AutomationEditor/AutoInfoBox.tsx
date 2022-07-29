@@ -5,17 +5,17 @@ import InputText from "components/Inputs/InputText";
 import { FC, ReactNode, useRef, useState } from "react";
 import { AddIcon, TrashIcon } from "components/Icons";
 import InputAutoText from "components/Inputs/InputAutoText";
-import { TagDB } from "components/AutomationList/TagDB";
+import { TagDB } from "components/AutomationManager/TagDB";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
-interface Props {
+export interface AutoInfoBoxProps {
   metadata: AutomationMetadata;
   tags: Array<[string, string]>;
   onUpdate: (m: AutomationMetadata, tags: Array<[string, string]>) => void;
   tagDB: TagDB;
   children?: ReactNode;
 }
-export const AutoInfoBox: FC<Props> = ({
+export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
   metadata,
   tags,
   onUpdate,

@@ -12,6 +12,8 @@ export const useHAEntities = (): HAEntitiesState => {
       new Set(Object.keys(state).map((x) => x.split(".")[0])).keys()
     ).sort(),
   }));
+  entities.collection?.subscribe(console.log);
+  console.log("ha entities refreshing...");
   const entitySource = useHassCollection(entitySourceColl);
   return createHAEntitiesState(entities, entitySource);
 };

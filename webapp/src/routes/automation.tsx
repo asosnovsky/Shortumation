@@ -1,13 +1,27 @@
 import { ApiService } from "apiService/core";
-import { ConnectedAutomationList } from "components/AutomationList";
-import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
 import { Page } from "components/Page";
 import { FC } from "react";
+import { useHA } from "haService";
+import { AutomationManager } from "components/AutomationManager";
 
 export const AutomationRoute: FC<{ api: ApiService }> = ({ api }) => {
+  const ha = useHA();
   return (
     <Page>
-      <ConnectedAutomationList dims={DEFAULT_DIMS} api={api} />
+      <AutomationManager
+        api={api}
+        onAutomationStateChange={(eid, on) => {
+          ha.callService(
+            "automation",
+            on ? "turn_on" : "turn_off",
+            {},
+            {
+              entity_id: eid,
+            }
+          );
+        }}
+        haEntities={ha.entities}
+      />
     </Page>
   );
 };

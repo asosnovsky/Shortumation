@@ -1,13 +1,12 @@
-import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { AutomationEditor } from "./index";
 import { useState } from "react";
 import { Page } from "components/Page";
-import { makeTagDB } from "components/AutomationList/TagDB";
+import { useTagDB } from "components/AutomationManager/TagDB";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
 
 export default {
-  title: "App/AutomationList/Editor",
+  title: "App/AutomationEditor",
   component: AutomationEditor,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   args: {
@@ -21,7 +20,10 @@ const Template: ComponentStory<typeof AutomationEditor> = (args) => {
     <Page>
       <AutomationEditor
         {...args}
-        tagDB={makeTagDB(state ? [state] : [])}
+        tagDB={useTagDB(
+          state ? [{ id: state.metadata.id, tags: state.tags }] : [],
+          () => {}
+        )}
         automation={state}
         onUpdate={(s) => {
           window.setTimeout(() => setState(s), 3000);

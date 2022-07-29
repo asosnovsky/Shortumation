@@ -1,25 +1,27 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { makeTagDB } from "components/AutomationList/TagDB";
-import { Page } from "components/Page";
+import { useTagDB } from "components/AutomationManager/TagDB";
 import { useState } from "react";
-import { AutoInfoBox } from "./AutoInfoBox";
-import { defaultAutomation } from "utils/defaults";
+import { AutoInfoBox, AutoInfoBoxProps } from "./AutoInfoBox";
+import { makeStory } from "devUtils";
 
-export default {
-  title: "App/AutomationList/Editor/InfoBox",
-  component: AutoInfoBox,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    tagDB: makeTagDB([defaultAutomation("test")]),
+const { componentMeta, make } = makeStory({
+  meta: {
+    title: "App/AutomationEditor/InfoBox",
   },
-} as ComponentMeta<typeof AutoInfoBox>;
+  Component: (args: {
+    metadata: AutoInfoBoxProps["metadata"];
+    tags: AutoInfoBoxProps["tags"];
+    onUpdate: AutoInfoBoxProps["onUpdate"];
+  }) => {
+    const [[metadata, tags], setState] = useState([args.metadata, args.tags]);
+    const tagDB = useTagDB(
+      [{ id: metadata.id, tags: Object.fromEntries(tags) }],
+      (_, t) => setState([metadata, Object.entries(t)])
+    );
 
-export const NoTags: ComponentStory<typeof AutoInfoBox> = (args) => {
-  const [[metadata, tags], setState] = useState([args.metadata, args.tags]);
-  return (
-    <Page>
+    return (
       <AutoInfoBox
         {...args}
+        tagDB={tagDB}
         metadata={metadata}
         tags={tags}
         onUpdate={(m, t) => {
@@ -27,11 +29,12 @@ export const NoTags: ComponentStory<typeof AutoInfoBox> = (args) => {
           setState([m, t]);
         }}
       />
-    </Page>
-  );
-};
-NoTags.args = {
-  ...NoTags.args,
+    );
+  },
+});
+
+export default componentMeta;
+export const NoTags = make({
   tags: [],
   metadata: {
     id: "random",
@@ -42,11 +45,9 @@ NoTags.args = {
     },
     mode: "single",
   },
-};
+});
 
-export const SomeTags: ComponentStory<typeof AutoInfoBox> = NoTags.bind({});
-SomeTags.args = {
-  ...SomeTags.args,
+export const SomeTags = make({
   tags: [
     ["Room", "Bathroom"],
     ["Type", "Climate"],
@@ -60,4 +61,4 @@ SomeTags.args = {
     },
     mode: "single",
   },
-};
+});

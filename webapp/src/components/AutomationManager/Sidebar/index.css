@@ -5,7 +5,7 @@
     --bottom-height: 3em;
     position: relative;
     height: 100%;
-    min-width: 25vw;
+    min-width: calc(min(max(25vw, 35em), 50vw));
 }
 
 .automation-manager--sidebar-box--nav {

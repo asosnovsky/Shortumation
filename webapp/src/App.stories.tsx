@@ -1,12 +1,14 @@
 import App from "./App";
 import { withQuery } from "@storybook/addon-queryparams";
+import { makeStory } from "devUtils";
 
-const book = {
-  title: "App/App",
-  decorators: [withQuery],
-  component: App
-};
+const { make, componentMeta } = makeStory({
+  Component: App,
+  meta: {
+    title: "App",
+    decorators: [withQuery],
+  },
+});
+export default componentMeta;
 
-export const Basic = () => <App />
-
-export default book;
+export const RootApp = make({});
