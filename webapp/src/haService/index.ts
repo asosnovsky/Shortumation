@@ -141,7 +141,7 @@ export const useHA = () => {
   const devices = useHADeviceRegistry();
   const services = useHAServices();
   const conn = useHAConnection();
-  const { enqueueSnackbar } = useSnackbar();
+  const snackbr = useSnackbar();
 
   const callService = async (
     domain: string,
@@ -158,7 +158,7 @@ export const useHA = () => {
           target,
           service_data: data,
         });
-        enqueueSnackbar(`Successfully called ${domain}.${service}`, {
+        snackbr.enqueueSnackbar(`Successfully called ${domain}.${service}`, {
           variant: "success",
         });
         return result;
@@ -167,7 +167,7 @@ export const useHA = () => {
         if ("message" in err) {
           msg = err.message;
         }
-        enqueueSnackbar(
+        snackbr.enqueueSnackbar(
           `Failed to call ${domain}.${service} because '${msg}'`,
           {
             variant: "error",
@@ -177,14 +177,14 @@ export const useHA = () => {
       }
     }
     if (conn.status === "error") {
-      enqueueSnackbar(
+      snackbr.enqueueSnackbar(
         `Failed to call service because connection is '${conn.status}' -- ${conn.error}`,
         {
           variant: "error",
         }
       );
     } else {
-      enqueueSnackbar(
+      snackbr.enqueueSnackbar(
         `Failed to call service because connection is '${conn.status}'`,
         {
           variant: "error",
