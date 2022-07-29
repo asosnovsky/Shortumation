@@ -31,12 +31,10 @@ export const useHAServices = () => {
         const [domain, action] = name.split(".");
         return {
           name:
-            services.collection.state[domain][action].name ??
-            `${domain}.${action}`,
-          description:
-            services.collection.state[domain][action].description ?? "",
-          target: services.collection.state[domain][action].target,
-          fields: services.collection.state[domain][action].fields,
+            services.collection[domain][action].name ?? `${domain}.${action}`,
+          description: services.collection[domain][action].description ?? "",
+          target: services.collection[domain][action].target,
+          fields: services.collection[domain][action].fields,
         };
       } catch (err: any) {
         console.warn(err);
@@ -47,27 +45,25 @@ export const useHAServices = () => {
       if (!services.ready) {
         return [];
       }
-      return Object.keys(services.collection.state).reduce<ServiceOption[]>(
+      return Object.keys(services.collection).reduce<ServiceOption[]>(
         (all, domain) => {
           const opts = Object.keys(
-            services.collection.state[domain]
+            services.collection[domain]
           ).map<ServiceOption>((action) => ({
             id: `${domain}.${action}`,
             label:
-              services.collection.state[domain][action].name ??
-              `${domain}.${action}`,
-            description:
-              services.collection.state[domain][action].description ?? "",
+              services.collection[domain][action].name ?? `${domain}.${action}`,
+            description: services.collection[domain][action].description ?? "",
             domain,
             action,
             data: {
               name:
-                services.collection.state[domain][action].name ??
+                services.collection[domain][action].name ??
                 `${domain}.${action}`,
               description:
-                services.collection.state[domain][action].description ?? "",
-              target: services.collection.state[domain][action].target,
-              fields: services.collection.state[domain][action].fields,
+                services.collection[domain][action].description ?? "",
+              target: services.collection[domain][action].target,
+              fields: services.collection[domain][action].fields,
             },
           }));
           return all.concat(opts);
@@ -80,7 +76,7 @@ export const useHAServices = () => {
         if (services.ready) {
           try {
             const [domain, action] = opt.split(".");
-            return services.collection.state[domain][action].name ?? opt;
+            return services.collection[domain][action].name ?? opt;
           } catch (_) {}
         }
         return opt;
@@ -109,17 +105,17 @@ export const useHADeviceRegistry = () => {
       if (!dr.ready) {
         return [];
       }
-      const keys = Object.keys(dr.collection.state);
+      const keys = Object.keys(dr.collection);
       return keys.map((key) => ({
         id: key,
-        label: getLabelForItem(dr.collection.state[key]) ?? key,
-        manufacturer: dr.collection.state[key].manufacturer ?? "",
+        label: getLabelForItem(dr.collection[key]) ?? key,
+        manufacturer: dr.collection[key].manufacturer ?? "",
       }));
     },
     getLabel: (opt: DeviceRegistryOption): string => {
       if (typeof opt === "string") {
         if (dr.ready) {
-          return getLabelForItem(dr.collection.state[opt]) ?? opt;
+          return getLabelForItem(dr.collection[opt]) ?? opt;
         }
         return opt;
       }

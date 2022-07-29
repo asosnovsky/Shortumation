@@ -52,7 +52,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
 
   // alias
   const configAutomations = api.state.automations.data;
-  const hassEntities = haEntities.collection.state;
+  const hassEntities = haEntities.collection;
   return (
     <AutomationManagerLoaded
       configAutomations={configAutomations.data}

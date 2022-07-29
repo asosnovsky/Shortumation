@@ -22,7 +22,7 @@ const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
           overflow: "auto",
         }}
       >
-        {Object.entries(conn.collection?.state ?? {})
+        {Object.entries(conn.collection ?? {})
           .filter(([key, _]) => key.toLowerCase().includes(searchTerm))
           .map(([key, value]) => {
             return (

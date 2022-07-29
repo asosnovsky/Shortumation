@@ -17,20 +17,10 @@ export const useMockHAEntities = (args: MockHAEntitiesProps) => {
       {
         additional: {},
         ready: false,
-        collection: {
-          state: {},
-          refresh: () => new Promise(() => {}),
-          subscribe: () => () => {},
-        },
       },
       {
         additional: {},
         ready: false,
-        collection: {
-          state: {},
-          refresh: () => new Promise(() => {}),
-          subscribe: () => () => {},
-        },
       }
     );
   } else {
@@ -38,20 +28,12 @@ export const useMockHAEntities = (args: MockHAEntitiesProps) => {
       {
         additional: {},
         ready: true,
-        collection: {
-          state: args.entities,
-          refresh: () => new Promise(() => {}),
-          subscribe: () => () => {},
-        },
+        collection: args.entities,
       },
       {
         additional: {},
         ready: true,
-        collection: {
-          state: args.entitySource,
-          refresh: () => new Promise(() => {}),
-          subscribe: () => () => {},
-        },
+        collection: args.entitySource,
       }
     );
   }

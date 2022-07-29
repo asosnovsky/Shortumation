@@ -20,8 +20,6 @@ export const useTagDB = (
     const c = JSON.stringify(automations);
     if (lastAuto.current !== c) {
       lastAuto.current = c;
-      console.log("updating...");
-
       setState({
         automationTags: convertAutoListToMap(automations),
         changed: new Set(),

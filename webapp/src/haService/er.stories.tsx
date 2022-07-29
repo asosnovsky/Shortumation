@@ -9,14 +9,14 @@ const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
   if (conn.ready) {
     return (
       <div>
-        {conn.collection.state.length}
+        {conn.collection.length}
         <ul
           style={{
             maxHeight: "100vh",
             overflow: "auto",
           }}
         >
-          {conn.collection.state.map((row, i) => (
+          {conn.collection.map((row, i) => (
             <li key={i}>
               {row.entity_id}
               {/* {Object.keys(row).map(k => <>

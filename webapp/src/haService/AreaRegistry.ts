@@ -68,7 +68,7 @@ export const useHAAreas = () => {
         return true;
       }
       for (const d of domains) {
-        if (!areas.collection.state[areaId].domains.has(d)) {
+        if (!areas.collection[areaId].domains.has(d)) {
           return false;
         }
       }
@@ -79,7 +79,7 @@ export const useHAAreas = () => {
         return true;
       }
       for (const d of integrations) {
-        if (!areas.collection.state[areaId].integrations.has(d)) {
+        if (!areas.collection[areaId].integrations.has(d)) {
           return false;
         }
       }
@@ -92,8 +92,8 @@ export const useHAAreas = () => {
       if (typeof opt === "string") {
         return {
           id: opt,
-          label: areas.collection.state[opt].name ?? prettyName(opt),
-          data: areas.collection.state[opt],
+          label: areas.collection[opt].name ?? prettyName(opt),
+          data: areas.collection[opt],
         };
       }
       return opt;
@@ -105,7 +105,7 @@ export const useHAAreas = () => {
       if (!areas.ready) {
         return [];
       }
-      let keys = Object.keys(areas.collection.state);
+      let keys = Object.keys(areas.collection);
       if (restrictToDomain) {
         const domains = restrictToDomain.map((x) => x.toLowerCase());
         keys = keys.filter((key) => methods.areaHasEntityDomain(key, domains));
@@ -118,15 +118,15 @@ export const useHAAreas = () => {
       }
       return keys.map((key) => ({
         id: key,
-        label: areas.collection.state[key].name ?? prettyName(key),
-        data: areas.collection.state[key],
+        label: areas.collection[key].name ?? prettyName(key),
+        data: areas.collection[key],
       }));
     },
     getLabel: (opt: AreaOption): string => {
       if (typeof opt === "string") {
         if (areas.ready) {
-          return areas.collection.state[opt]
-            ? areas.collection.state[opt].name ?? prettyName(opt)
+          return areas.collection[opt]
+            ? areas.collection[opt].name ?? prettyName(opt)
             : prettyName(opt);
         }
         return opt;

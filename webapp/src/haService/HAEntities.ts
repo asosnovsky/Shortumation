@@ -12,8 +12,6 @@ export const useHAEntities = (): HAEntitiesState => {
       new Set(Object.keys(state).map((x) => x.split(".")[0])).keys()
     ).sort(),
   }));
-  entities.collection?.subscribe(console.log);
-  console.log("ha entities refreshing...");
   const entitySource = useHassCollection(entitySourceColl);
   return createHAEntitiesState(entities, entitySource);
 };
@@ -40,11 +38,11 @@ export const createHAEntitiesState = (
       }
       let state: Set<string> = new Set();
       entityIds.forEach((entityId) => {
-        if (entities.collection.state[entityId]) {
+        if (entities.collection[entityId]) {
           if (!attribute) {
-            state.add(entities.collection.state[entityId].state);
+            state.add(entities.collection[entityId].state);
           } else {
-            const val = (entities.collection.state[entityId]?.attributes ?? {})[
+            const val = (entities.collection[entityId]?.attributes ?? {})[
               attribute
             ];
             if (val) {
@@ -68,7 +66,7 @@ export const createHAEntitiesState = (
       let attributes: Set<string> = new Set();
       entityIds.forEach((entityId) => {
         const thisAttrs = new Set(
-          Object.keys(entities.collection.state[entityId]?.attributes ?? {})
+          Object.keys(entities.collection[entityId]?.attributes ?? {})
         );
         if (attributes.size === 0) {
           attributes = thisAttrs;
@@ -107,7 +105,7 @@ export const createHAEntitiesState = (
             ? `one of "${domains.join(", ")}"`
             : `"${domains[0]}"`;
         out = out.reduce<string[]>((all = [], key) => {
-          const integration = entitySource.collection.state[key].domain;
+          const integration = entitySource.collection[key].domain;
           if (!domains.includes(integration.toLowerCase())) {
             return [...all, `${methods.getLabel(key)} is not ${domainsStr}`];
           }
@@ -135,7 +133,7 @@ export const createHAEntitiesState = (
       const integrations = (restrictedIntegrations ?? []).map((x) =>
         x.toLowerCase()
       );
-      return Object.keys(entities.collection.state)
+      return Object.keys(entities.collection)
         .filter((entityId) => {
           if (mode === "and") {
             let keep = true;
@@ -147,14 +145,14 @@ export const createHAEntitiesState = (
               keep =
                 keep &&
                 integrations.includes(
-                  entitySource.collection.state[entityId]?.domain ?? ""
+                  entitySource.collection[entityId]?.domain ?? ""
                 );
             }
             if (deviceClasses.length > 0) {
               keep =
                 keep &&
                 deviceClasses.includes(
-                  entities.collection.state[
+                  entities.collection[
                     entityId
                   ].attributes.device_class?.toLowerCase() ?? ""
                 );
@@ -176,13 +174,13 @@ export const createHAEntitiesState = (
               keep =
                 keep ||
                 integrations.includes(
-                  entitySource.collection.state[entityId]?.domain ?? ""
+                  entitySource.collection[entityId]?.domain ?? ""
                 );
             }
             keep =
               keep ||
               deviceClasses.includes(
-                entities.collection.state[
+                entities.collection[
                   entityId
                 ].attributes.device_class?.toLowerCase() ?? ""
               );
@@ -191,19 +189,17 @@ export const createHAEntitiesState = (
         })
         .map((key) => ({
           id: key,
-          label: entities.collection.state[key].attributes.friendly_name ?? key,
+          label: entities.collection[key].attributes.friendly_name ?? key,
           domain: key.split(".")[0] ?? "n/a",
           integration: entitySource.ready
-            ? (entitySource.collection.state[key] ?? {}).domain ?? "n/a"
+            ? (entitySource.collection[key] ?? {}).domain ?? "n/a"
             : "...",
         }));
     },
     getLabel: (opt: EntityOption): string => {
       if (typeof opt === "string") {
         if (entities.ready) {
-          return (
-            entities.collection.state[opt]?.attributes.friendly_name ?? opt
-          );
+          return entities.collection[opt]?.attributes.friendly_name ?? opt;
         }
         return opt;
       }

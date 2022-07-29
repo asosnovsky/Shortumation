@@ -1,15 +1,15 @@
 import { Collection, Connection } from "home-assistant-js-websocket";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useHAConnection } from "./connection";
 
 type _HACollectionState<T> =
   | {
       ready: false;
-      collection?: Collection<T>;
+      collection?: undefined;
     }
   | {
       ready: true;
-      collection: Collection<T>;
+      collection: T;
     };
 export type HACollectionState<T, D = {}> = _HACollectionState<T> & {
   additional: Partial<D>;
@@ -22,39 +22,35 @@ export const useHassCollection = <T, D extends {} = {}>(
     ready: false,
   });
   const conn = useHAConnection();
+  const collection = useMemo(() => {
+    if (conn.status === "loaded") {
+      return getHACollection(conn.connection);
+    }
+  }, [conn.status]);
 
   useEffect(() => {
-    if (conn.status === "loaded" && !state.ready) {
-      const collection = getHACollection(conn.connection);
+    if (collection) {
       setState({
-        ready: false,
-        collection,
+        ready: true,
+        collection: collection.state,
       });
       const unsub = collection.subscribe((d) => {
-        console.log("updating collection", d);
-        if (d && !state.ready) {
-          setState({
-            ready: true,
-            collection,
-          });
-          // unsub();
-        } else if (!d && state.ready) {
-          setState({
-            ready: true,
-            collection,
-          });
-          // unsub();
-        }
+        setState({
+          ready: true,
+          collection: d,
+        });
       });
-      return unsub;
+      return () => {
+        unsub();
+      };
     }
-  }, [conn, getHACollection, state.ready]);
+  }, [collection, state.ready]);
 
   return {
     ...state,
     get additional(): Partial<D> {
       if (state.ready && updateAdditionalProps) {
-        return updateAdditionalProps(state.collection.state);
+        return updateAdditionalProps(state.collection ?? {});
       }
       return {};
     },
