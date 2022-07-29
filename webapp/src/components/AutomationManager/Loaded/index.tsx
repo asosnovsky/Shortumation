@@ -1,4 +1,5 @@
 import "./index.css";
+import "./index.mobile.css";
 
 import { AutomationEditor } from "components/AutomationEditor";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
@@ -9,6 +10,7 @@ import {
   UseAutomationManagerStateArgs,
 } from "./state";
 import Alert from "@mui/material/Alert";
+import useWindowSize from "utils/useWindowSize";
 
 export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
   onAutomationDelete: (aid: string) => void;
@@ -17,9 +19,10 @@ export const AutomationManagerLoaded: FC<
   PropsWithChildren<AutomationManagerLoadedProps>
 > = ({ children, onAutomationDelete, ...args }) => {
   const state = useAutomationManagerState(args);
+  const { isMobile } = useWindowSize();
 
   return (
-    <div className="automation-manager">
+    <div className={["automation-manager", isMobile ? "mobile" : ""].join(" ")}>
       {children}
       <AutomationManagerSidebar
         automations={state.automations}
