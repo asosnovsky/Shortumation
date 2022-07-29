@@ -6,6 +6,7 @@ type _HACollectionState<T> =
   | {
       ready: false;
       collection?: undefined;
+      error?: string;
     }
   | {
       ready: true;
@@ -26,25 +27,46 @@ export const useHassCollection = <T, D extends {} = {}>(
     if (conn.status === "loaded") {
       return getHACollection(conn.connection);
     }
-  }, [conn.status]);
+  }, [conn, getHACollection]);
 
   useEffect(() => {
     if (collection) {
-      setState({
-        ready: true,
-        collection: collection.state,
-      });
-      const unsub = collection.subscribe((d) => {
+      if (collection.state) {
         setState({
           ready: true,
-          collection: d,
+          collection: collection.state,
         });
+      }
+      const unsub = collection.subscribe((d) => {
+        if (d) {
+          setState({
+            ready: true,
+            collection: d,
+          });
+        }
       });
       return () => {
         unsub();
       };
     }
   }, [collection, state.ready]);
+
+  useEffect(() => {
+    if (conn.status === "error") {
+      if (!state.ready && conn.error !== state.error) {
+        setState({
+          ready: false,
+          error: conn.error,
+        });
+      }
+    }
+  }, [conn]);
+
+  if (state.ready) {
+    if (!state.collection) {
+      throw Error("What?");
+    }
+  }
 
   return {
     ...state,

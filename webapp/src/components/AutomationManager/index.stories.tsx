@@ -20,7 +20,7 @@ const { make, componentMeta } = makeStory({
         api={useMockApiService(args.automations ?? [], !args.automations)}
         haEntities={useMockHAEntities(haEntities)}
         onAutomationStateChange={(eid, on) => {
-          if (!haEntities.loading) {
+          if (!haEntities.loading && !haEntities.error) {
             setHAE({
               ...haEntities,
               entities: {
@@ -49,12 +49,22 @@ const { make, componentMeta } = makeStory({
 
 export default componentMeta;
 export const Loading = make({});
-export const Errored = make({
+export const ErroredByAPI = make({
   automations: undefined,
   haProps: {
     loading: false,
     entities: {},
     entitySource: {},
+  },
+});
+export const ErroredByWS = make({
+  automations: [],
+  haProps: {
+    loading: false,
+    error: {
+      entities: { originalError: "1", message: "Failed to connect" },
+      entitySource: { originalError: "1", message: "Failed to connect" },
+    },
   },
 });
 export const Empty = make({

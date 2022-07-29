@@ -8,8 +8,16 @@ export type MockHAEntitiesProps =
     }
   | {
       loading: false;
+      error?: false;
       entities: HassEntities;
       entitySource: Record<string, EntitySource>;
+    }
+  | {
+      loading: false;
+      error: {
+        entities: any;
+        entitySource: any;
+      };
     };
 export const useMockHAEntities = (args: MockHAEntitiesProps) => {
   if (args.loading) {
@@ -23,7 +31,7 @@ export const useMockHAEntities = (args: MockHAEntitiesProps) => {
         ready: false,
       }
     );
-  } else {
+  } else if (!args.error) {
     return createHAEntitiesState(
       {
         additional: {},
@@ -34,6 +42,19 @@ export const useMockHAEntities = (args: MockHAEntitiesProps) => {
         additional: {},
         ready: true,
         collection: args.entitySource,
+      }
+    );
+  } else {
+    return createHAEntitiesState(
+      {
+        additional: {},
+        ready: false,
+        error: args.error.entities,
+      },
+      {
+        additional: {},
+        ready: false,
+        error: args.error.entitySource,
       }
     );
   }

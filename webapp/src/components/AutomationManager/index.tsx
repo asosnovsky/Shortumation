@@ -25,6 +25,19 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   const [isSaving, setIsSaving] = useState(false);
 
   // handle bad states
+  if (!haEntities.ready && haEntities.error) {
+    return (
+      <div className="automation-manager error">
+        <Alert color="error">
+          Failed to connect to websocket, please check that your access token is
+          properly setup
+        </Alert>{" "}
+        <br />
+        <code>{JSON.stringify(haEntities.error)}</code>
+      </div>
+    );
+  }
+
   if (!haEntities.ready || !api.state.automations.ready) {
     return (
       <div className="automation-manager loading">
