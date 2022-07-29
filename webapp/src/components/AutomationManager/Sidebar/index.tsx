@@ -1,4 +1,5 @@
 import "./index.css";
+import "./index.mobile.css";
 
 import { FC, useState } from "react";
 
@@ -92,7 +93,14 @@ export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
         ))}
       </div>
       <div className="automation-manager--sidebar-box--bottom-buttons">
-        <Button onClick={onAutomationAdd} color="primary" className="add-btn">
+        <Button
+          onClick={() => {
+            onAutomationAdd();
+            setHidden(true);
+          }}
+          color="primary"
+          className="add-btn"
+        >
           Add
         </Button>
         <ButtonIcon

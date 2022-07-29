@@ -1,0 +1,33 @@
+.mobile .automation-manager--sidebar.shown {
+    height: 100vh;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+.mobile .automation-manager--sidebar .automation-manager--sidebar-box--bottom-buttons .hide-btn {
+    transform: rotate(-90deg);
+    left: 0.5em;
+    background-color: var(--mui-background-paper);
+    height: 2em;
+    width: 2em;
+}
+
+.mobile .automation-manager--sidebar.hidden {
+    height: 0;
+    min-height: 0;
+}
+
+.mobile .automation-manager--sidebar.hidden .automation-manager--sidebar-box--nav,
+.mobile .automation-manager--sidebar.hidden .automation-manager--sidebar-box--list {
+    display: none;
+}
+
+.mobile .automation-manager--sidebar.hidden .automation-manager--sidebar-box--bottom-buttons {
+    height: 0;
+}
+
+.mobile .automation-manager--sidebar.hidden .automation-manager--sidebar-box--bottom-buttons .hide-btn {
+    transform: rotate(90deg);
+    top: 1em;
+    z-index: 100;
+}

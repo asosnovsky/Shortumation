@@ -6,7 +6,7 @@
     gap: 0.25em;
 }
 
-.automation-manager.mobile, .automation-manager.error {
+.mobile .automation-manager, .automation-manager.error {
     flex-direction: column;
 }
 

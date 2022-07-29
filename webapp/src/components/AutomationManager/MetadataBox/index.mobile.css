@@ -1,4 +1,4 @@
-.automation-manager--metadatabox.mobile .buttons {
+.mobile .automation-manager--metadatabox .buttons {
     display: flex;
     flex-direction: column;
     gap: 0.5em;

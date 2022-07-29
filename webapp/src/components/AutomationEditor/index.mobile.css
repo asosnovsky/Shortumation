@@ -1,0 +1,23 @@
+.mobile .automation-editor--flow-wrapper--toolbar {
+    align-items: center;
+}
+
+.mobile .automation-editor--flow-wrapper--toolbar--title {
+    padding-left: 2.5em;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mobile .automation-editor--flow-wrapper--toolbar--title--text .input-text-view.view span {
+    max-height: 1.25em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.mobile .automation-editor--flow-wrapper--toolbar--title--text .id,
+.mobile .automation-editor--flow-wrapper--toolbar--title .input-text-view.description,
+.mobile .automation-editor--flow-wrapper--toolbar--edit-btn {
+    display: none;
+}

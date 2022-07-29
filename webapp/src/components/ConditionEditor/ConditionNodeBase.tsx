@@ -84,11 +84,7 @@ export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
   //   render
   return (
     <div
-      className={[
-        "condition-node-base",
-        isMobile ? "mobile" : "",
-        isEdited ? "is-edited" : "",
-      ].join(" ")}
+      className={["condition-node-base", isEdited ? "is-edited" : ""].join(" ")}
     >
       <div className="condition-node-base--list">
         <InputList

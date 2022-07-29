@@ -1,25 +1,32 @@
 import "./index.css";
-import Icon from "@mui/material/Icon";
-import { CheckMarkIcon } from "components/Icons";
+import "./index.mobile.css";
+
 import { FC, useState } from "react";
-import { AutomationData } from "types/automations";
-import { Modal } from "components/Modal";
-import { AutoInfoBox } from "./AutoInfoBox";
-import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
-import { Button } from "components/Inputs/Button";
-import { useAutomatioEditorState, EditorData } from "./state";
-import { MiniFailure } from "types/validators/helper";
-import InputYaml from "components/Inputs/InputYaml";
-import { TagDB } from "components/AutomationManager/TagDB";
+import { useCookies } from "react-cookie";
+import { ControlButton } from "react-flow-renderer";
+
 import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useCookies } from "react-cookie";
+
+import Edit from "@mui/icons-material/Edit";
+import Icon from "@mui/material/Icon";
+import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
+import { CheckMarkIcon } from "components/Icons";
+
+import { Modal } from "components/Modal";
+import { Button } from "components/Inputs/Button";
+import InputYaml from "components/Inputs/InputYaml";
+import { TagDB } from "components/AutomationManager/TagDB";
 import { DAGDims } from "components/DAGGraph/elements/types";
 import { DAGAutomationGraph } from "components/DAGGraph";
 import { InputList } from "components/Inputs/InputList";
 import { InputTextView } from "components/Inputs/InputTextView";
-import { ControlButton } from "react-flow-renderer";
-import Edit from "@mui/icons-material/Edit";
+
+import { AutomationData } from "types/automations";
+import { MiniFailure } from "types/validators/helper";
+
+import { AutoInfoBox } from "./AutoInfoBox";
+import { useAutomatioEditorState, EditorData } from "./state";
 
 interface Props {
   automation?: AutomationData;

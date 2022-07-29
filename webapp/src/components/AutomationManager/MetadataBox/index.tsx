@@ -26,13 +26,11 @@ export type MetadataBoxProps = AutomationManagerAuto & {
 };
 export const MetadataBox: FC<MetadataBoxProps> = (props) => {
   const isValidState = ["on", "off"].includes(props.state);
-  const { isMobile } = useWindowSize();
   return (
     <div
       className={[
         "automation-manager--metadatabox",
         props.isSelected ? "selected" : "",
-        isMobile ? "mobile" : "",
         props.isNew ? "new" : "",
       ].join(" ")}
     >

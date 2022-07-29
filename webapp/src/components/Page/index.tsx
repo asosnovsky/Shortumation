@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import { useHAConnection } from "haService/connection";
 import { ConfirmProvider } from "material-ui-confirm";
 import { Color } from "@mui/material";
+import useWindowSize from "utils/useWindowSize";
 
 const theme = createTheme({
   palette: {
@@ -27,6 +28,7 @@ export const InternalPage: FC<{
   const theme = useTheme();
   const snackbar = useSnackbar();
   const snackbarKeyHAConKey = useRef<SnackbarKey | null>(null);
+  const { isMobile } = useWindowSize();
 
   useEffect(() => {
     if (conn.status === "error") {
@@ -66,7 +68,7 @@ export const InternalPage: FC<{
   }, [conn, snackbar]);
 
   return (
-    <main className="page">
+    <main className={["page", isMobile ? "mobile" : ""].join(" ")}>
       <style>
         {`:root {
             ${convertPaletteToCss(theme.palette)}
