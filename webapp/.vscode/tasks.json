@@ -2,13 +2,17 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "icon": {
+        "id": "server-environment"
+      },
       "type": "shell",
-      "label": "Docker: Server",
+      "label": "Docker: Start Server",
       "group": "none",
       "command": [".vscode/bin/start-docker-server.sh"],
       "runOptions": {
         "runOn": "folderOpen"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "type": "npm",

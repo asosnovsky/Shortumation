@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Skeleton from "@mui/material/Skeleton";
 
@@ -27,6 +27,11 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
 }) => {
   const snackbr = useSnackbar();
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    refreshAutomations();
+    // eslint-disable-next-line
+  }, []);
 
   // handle bad states
   if (!haEntities.ready && haEntities.error) {

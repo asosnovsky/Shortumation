@@ -1,5 +1,6 @@
 import { Collection, Connection } from "home-assistant-js-websocket";
 import { useState, useEffect, useMemo } from "react";
+import { useDelayedFunction } from "utils/useDelay";
 import { useHAConnection } from "./connection";
 
 type _HACollectionState<T> =
@@ -19,9 +20,10 @@ export const useHassCollection = <T, D extends {} = {}>(
   getHACollection: (c: Connection) => Collection<T>,
   updateAdditionalProps?: (n: T | {}) => D
 ): HACollectionState<T, D> => {
-  const [state, setState] = useState<_HACollectionState<T>>({
+  const [state, _setState] = useState<_HACollectionState<T>>({
     ready: false,
   });
+  const setState = useDelayedFunction(_setState, 500);
   const conn = useHAConnection();
   const collection = useMemo(() => {
     if (conn.status === "loaded") {
@@ -39,6 +41,12 @@ export const useHassCollection = <T, D extends {} = {}>(
       }
       const unsub = collection.subscribe((d) => {
         if (d) {
+          console.log(
+            "updating with",
+            Object.keys(d).length,
+            Object.fromEntries(Object.entries(d).map(([k, v]) => [k, v.state])),
+            getHACollection
+          );
           setState({
             ready: true,
             collection: d,
