@@ -57,6 +57,7 @@ export const useHassCollection = <T, D extends {} = {}>(
         unsub();
       };
     }
+    // eslint-disable-next-line
   }, [collection, state.ready]);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ export const useHassCollection = <T, D extends {} = {}>(
         });
       }
     }
+    // eslint-disable-next-line
   }, [conn, state]);
 
   if (state.ready) {
