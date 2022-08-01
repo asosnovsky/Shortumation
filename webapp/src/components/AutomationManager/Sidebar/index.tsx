@@ -85,7 +85,10 @@ export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
           <ListBoxGroup
             {...item}
             key={i}
-            onSelect={onSelectedAutomationId}
+            onSelect={(id) => {
+              onSelectedAutomationId(id);
+              setHidden(true);
+            }}
             {...events}
             tagsDB={tagsDB}
             initialOpenState={true}
