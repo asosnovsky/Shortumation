@@ -1,5 +1,18 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.5.1] - Sidebar!
+
+- completely redesigned the sidebar!
+
+  - Disable/enable automatons
+  - See 'bad state' automatons
+  - Delete automatons from registry (in cases where references are stale)
+  - Refactored sidebar UX to match MUI standards
+  - Cleaned up editing tags in sidebar
+    <img src="https://user-images.githubusercontent.com/7451445/182066721-07a93651-2f83-44d5-8420-15093caa52df.png" width="400px"/>
+
+- Websockets now live-refresh when updates occur
+
 ## [0.4.0] - Depedency update
 
 - Core dependency updates
