@@ -1,4 +1,9 @@
-import { AutomationManagerAuto, AutomationManagerItem } from "./types";
+import {
+  AutomationManagerAuto,
+  AutomationManagerAutoItem,
+  AutomationManagerItem,
+  AutomationManagerItemFlags,
+} from "./types";
 
 const makeGrouper = () => {
   const groupIdNames: string[] = [];
@@ -149,33 +154,59 @@ export const makeGrouping = (
 
 export const convertGroupingToItems = (
   currentGroupIdx: number,
-  selectedAutomationId: string | null,
   autos: AutomationManagerAuto[],
-  grouping: AutomationGrouping
+  grouping: AutomationGrouping,
+  computeFlags: (
+    aid: string,
+    f: AutomationManagerItemFlags
+  ) => AutomationManagerItemFlags = (aid, t) => t
 ): AutomationManagerItem => {
   const groupData = grouping.getData(currentGroupIdx);
   const automationIds = grouping.getAutomations(currentGroupIdx);
 
   if (automationIds.length > 0) {
+    const data = automationIds.map<AutomationManagerAutoItem>((i) => {
+      return {
+        ...autos[i],
+        flags: computeFlags(autos[i].id, {
+          isSelected: false,
+          isModified: false,
+        }),
+      };
+    });
     return {
       type: "items",
       title: groupData.name,
-      data: automationIds.map((i) => {
-        return {
-          ...autos[i],
-          isSelected: autos[i].id === selectedAutomationId,
-        };
-      }),
-      isSelected: groupData.selected,
+      data,
+      flags: data.reduce<AutomationManagerItemFlags>(
+        (out, a) => ({
+          isSelected: out.isSelected || a.flags.isSelected,
+          isModified: out.isModified || a.flags.isModified,
+        }),
+        {
+          isSelected: false,
+          isModified: false,
+        }
+      ),
     };
   }
   const subgroups = grouping.getSubGroups(currentGroupIdx);
+  const data = subgroups.map((i) =>
+    convertGroupingToItems(i, autos, grouping, computeFlags)
+  );
   return {
     type: "group",
     title: groupData.name,
-    data: subgroups.map((i) =>
-      convertGroupingToItems(i, selectedAutomationId, autos, grouping)
+    data,
+    flags: data.reduce<AutomationManagerItemFlags>(
+      (out, a) => ({
+        isSelected: out.isSelected || a.flags.isSelected,
+        isModified: out.isModified || a.flags.isModified,
+      }),
+      {
+        isSelected: false,
+        isModified: false,
+      }
     ),
-    isSelected: groupData.selected,
   };
 };

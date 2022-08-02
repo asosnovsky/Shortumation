@@ -14,7 +14,10 @@ const { make, componentMeta } = makeStory({
     args: {
       title: "Example",
       type: "items",
-      isSelected: false,
+      flags: {
+        isSelected: false,
+        isModified: false,
+      },
       data: [
         {
           id: "1",
@@ -23,7 +26,10 @@ const { make, componentMeta } = makeStory({
           description: "Amazing automation!",
           tags: {},
           state: "on",
-          isSelected: false,
+          flags: {
+            isSelected: false,
+            isModified: false,
+          },
         },
         {
           id: "2",
@@ -31,7 +37,10 @@ const { make, componentMeta } = makeStory({
           entityId: "automation.2",
           description: "Cool!",
           state: "on",
-          isSelected: false,
+          flags: {
+            isSelected: false,
+            isModified: false,
+          },
           tags: {
             room: "main bedroom",
             routine: "night time",
@@ -48,16 +57,25 @@ export const Basic = make({});
 export const Nested = make({
   title: "Top Group",
   type: "group",
-  isSelected: false,
+  flags: {
+    isSelected: false,
+    isModified: false,
+  },
   data: [
     {
       title: "Subgroup 1",
       type: "group",
-      isSelected: true,
+      flags: {
+        isSelected: true,
+        isModified: false,
+      },
       data: [
         {
           type: "items",
-          isSelected: true,
+          flags: {
+            isSelected: true,
+            isModified: false,
+          },
           title: "Subsub group",
           data: [
             {
@@ -66,7 +84,10 @@ export const Nested = make({
               description: "",
               title: "Automation #1",
               state: "on",
-              isSelected: true,
+              flags: {
+                isSelected: true,
+                isModified: false,
+              },
               tags: {},
             },
             {
@@ -75,7 +96,10 @@ export const Nested = make({
               description: "another one",
               title: "Automation #2",
               state: "off",
-              isSelected: false,
+              flags: {
+                isSelected: false,
+                isModified: false,
+              },
               tags: {},
             },
             {
@@ -84,7 +108,10 @@ export const Nested = make({
               description: "bad one",
               title: "Automation #3",
               state: "offing",
-              isSelected: false,
+              flags: {
+                isSelected: false,
+                isModified: false,
+              },
               tags: {
                 type: "bad",
               },
@@ -96,20 +123,29 @@ export const Nested = make({
     {
       title: "Subgroup 2",
       type: "group",
-      isSelected: false,
+      flags: {
+        isSelected: false,
+        isModified: false,
+      },
       data: [],
     },
     {
       title: "Other",
       type: "items",
-      isSelected: false,
+      flags: {
+        isSelected: false,
+        isModified: false,
+      },
       data: [
         {
           id: "4",
           entityId: "automation.4",
           description: "Cool thing",
           title: "Automation #4",
-          isSelected: false,
+          flags: {
+            isSelected: false,
+            isModified: false,
+          },
           state: "on",
           tags: {
             type: "good",

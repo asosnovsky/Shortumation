@@ -30,7 +30,7 @@ export type TagModalState =
 
 export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
   const [modalState, setModal] = useState<TagModalState>({ open: false });
-  const tags = tagsDB.getTags(automationId);
+  const tags = tagsDB.getTags(automationId, true);
   const onUpdate = (t: Record<string, string>) =>
     tagsDB.update(automationId, t);
 

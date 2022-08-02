@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+
+type TagDBState = {
+  original: Record<string, Record<string, string>>;
+  changed: Record<string, Record<string, string>>;
+};
 export type TagDB = ReturnType<typeof useTagDB>;
 export const useTagDB = (
   automations: Array<{
@@ -8,28 +13,30 @@ export const useTagDB = (
   onUpdate: (aid: string, tags: Record<string, string>) => void
 ) => {
   const lastAuto = useRef(JSON.stringify(automations));
-  const [{ automationTags, changed }, setState] = useState({
-    automationTags: convertAutoListToMap(automations),
-    changed: new Set<string>(),
+  const [{ original, changed }, setState] = useState<TagDBState>({
+    original: convertAutoListToMap(automations),
+    changed: {},
   });
-  const allTags = computeAllTags(automationTags);
+  const allTags = computeAllTags(original);
   const allTagNames = Object.keys(allTags);
-  const isModified = changed.size > 0;
-
+  const isModified = Object.keys(changed).length > 0;
   useEffect(() => {
     const c = JSON.stringify(automations);
     if (lastAuto.current !== c) {
       lastAuto.current = c;
       setState({
-        automationTags: convertAutoListToMap(automations),
-        changed: new Set(),
+        original: convertAutoListToMap(automations),
+        changed: {},
       });
     }
   }, [automations, setState]);
 
   return {
-    getTags(automationId: string) {
-      return automationTags[automationId] ?? {};
+    getTags(automationId: string, includeChanged: boolean = false) {
+      if (includeChanged) {
+        return changed[automationId] ?? original[automationId] ?? {};
+      }
+      return original[automationId] ?? {};
     },
     getTagNames(myTags: string[]): string[] {
       return allTagNames.filter((n) => !myTags.includes(n)).sort();
@@ -39,27 +46,33 @@ export const useTagDB = (
         ? Array.from(allTags[tagName].values()).sort()
         : [];
     },
-    isModified(aid: string) {
-      return changed.has(aid);
+    isModified(aid: string): boolean {
+      return aid in changed;
     },
     update(aid: string, tags: Record<string, string>) {
-      if (JSON.stringify(tags) !== JSON.stringify(automationTags[aid])) {
-        setState({
-          changed: changed.add(aid),
-          automationTags: {
-            ...automationTags,
-            [aid]: tags,
-          },
-        });
+      const update = JSON.stringify(tags);
+      if (aid in changed) {
+        if (update === JSON.stringify(changed[aid])) {
+          return;
+        }
+      } else if (update === JSON.stringify(original[aid])) {
+        return;
       }
+      setState({
+        changed: {
+          ...changed,
+          [aid]: tags,
+        },
+        original,
+      });
     },
     save(aid: string | null) {
       if (isModified) {
         if (aid) {
-          onUpdate(aid, automationTags[aid]);
+          onUpdate(aid, changed[aid]);
         } else {
-          for (const aid of changed.values()) {
-            onUpdate(aid, automationTags[aid]);
+          for (const [aid, change] of Object.entries(changed)) {
+            onUpdate(aid, change);
           }
         }
       }

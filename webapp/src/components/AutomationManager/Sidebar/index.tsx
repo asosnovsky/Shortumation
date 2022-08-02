@@ -60,7 +60,11 @@ export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
   );
 
   const items = grouping.top.map((i) =>
-    convertGroupingToItems(i, selectedAutomationId, automations, grouping)
+    convertGroupingToItems(i, automations, grouping, (aid, t) => ({
+      ...t,
+      isSelected: aid === selectedAutomationId,
+      isModified: tagsDB.isModified(aid),
+    }))
   );
 
   return (

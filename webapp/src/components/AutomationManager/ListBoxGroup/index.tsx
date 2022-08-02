@@ -23,7 +23,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
   title,
   type,
   data,
-  isSelected,
+  flags,
   initialOpenState,
   tagsDB,
   ...events
@@ -41,7 +41,8 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
     <div
       className={[
         "automation-manager--list-box-group",
-        isSelected ? "selected" : "",
+        flags.isSelected ? "selected" : "",
+        flags.isModified ? "modified" : "",
       ].join(" ")}
     >
       <div
@@ -67,6 +68,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
                 onDelete={() =>
                   events.onAutomationDelete(auto.id, auto.entityId)
                 }
+                isSelected={auto.flags.isSelected}
                 onSelect={() => events.onSelect(auto.id)}
                 onDescriptionUpdate={(description) =>
                   events.onAutomationUpdate(

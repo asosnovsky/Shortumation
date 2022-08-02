@@ -13,6 +13,10 @@
     user-select: none;
 }
 
+.automation-manager--list-box-group.modified {
+    border: 1px var(--mui-success-main) solid;
+}
+
 .automation-manager--list-box-group {
     border-color: var(--mui-text-secondary);
     border-width: 0.125px;

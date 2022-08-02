@@ -10,10 +10,16 @@ export type AutomationManagerAuto = AutomationManagerAutoUpdatable & {
   issue?: string;
   isNew?: boolean;
 };
-
+export type AutomationManagerAutoItem = AutomationManagerAuto & {
+  flags: AutomationManagerItemFlags;
+};
+export type AutomationManagerItemFlags = {
+  isSelected: boolean;
+  isModified: boolean;
+};
 export type AutomationManagerItem = {
   title: string;
-  isSelected: boolean;
+  flags: AutomationManagerItemFlags;
 } & (
   | {
       type: "group";
@@ -21,6 +27,6 @@ export type AutomationManagerItem = {
     }
   | {
       type: "items";
-      data: Array<AutomationManagerAuto & { isSelected: boolean }>;
+      data: Array<AutomationManagerAutoItem>;
     }
 );

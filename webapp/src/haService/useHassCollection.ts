@@ -41,12 +41,6 @@ export const useHassCollection = <T, D extends {} = {}>(
       }
       const unsub = collection.subscribe((d) => {
         if (d) {
-          console.log(
-            "updating with",
-            Object.keys(d).length,
-            Object.fromEntries(Object.entries(d).map(([k, v]) => [k, v.state])),
-            getHACollection
-          );
           setState({
             ready: true,
             collection: d,
