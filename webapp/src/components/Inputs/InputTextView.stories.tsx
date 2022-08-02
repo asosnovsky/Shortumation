@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
-import InputText from "./InputText";
+import InputText from "./Base/InputText";
 
 import { InputTextView } from "./InputTextView";
 

@@ -1,4 +1,4 @@
-import InputText from "components/Inputs/InputText";
+import InputText from "components/Inputs/Base/InputText";
 import { StopAction } from "types/automations/actions";
 import { OptionManager } from "./OptionManager";
 

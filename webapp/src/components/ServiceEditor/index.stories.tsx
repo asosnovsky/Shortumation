@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { ServiceEditor } from ".";
 import { TypedHassService } from "haService/fieldTypes";
-import InputYaml from "components/Inputs/InputYaml";
+import InputYaml from "components/Inputs/Base/InputYaml";
 
 export default {
   title: "Services/ServiceEditor",

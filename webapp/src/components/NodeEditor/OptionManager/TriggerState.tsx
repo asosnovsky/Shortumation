@@ -1,8 +1,8 @@
 import { OptionManager } from "./OptionManager";
 import { AutomationTriggerState } from "types/automations/triggers";
-import InputText from "components/Inputs/InputText";
+import InputText from "components/Inputs/Base/InputText";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
-import { InputTime } from "components/Inputs/InputTime";
+import { InputTime } from "components/Inputs/Base/InputTime";
 import { InputAutoComplete } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { FC } from "react";
 import { getEntityDomains } from "utils/automations";

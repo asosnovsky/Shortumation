@@ -7,8 +7,8 @@ import {
   getSubTypeList,
   validateNode,
 } from "utils/automations";
-import InputYaml from "components/Inputs/InputYaml";
-import InputText from "components/Inputs/InputText";
+import InputYaml from "components/Inputs/Base/InputYaml";
+import InputText from "components/Inputs/Base/InputText";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import { useHA } from "haService";
 import { Generic } from "./Generic";

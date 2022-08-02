@@ -1,4 +1,5 @@
 import "./InputTime.css";
+
 import { useState, useEffect, FC } from "react";
 import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
@@ -7,10 +8,9 @@ import { AutomationTime, AutomationTimeObject } from "types/automations/common";
 import {
   convertAutomationTimeToTimeObject,
   convertObjectToAutomationTimeString,
+  convertAutomationTimeToTimeString,
 } from "utils/time";
-import { convertAutomationTimeToTimeString } from "utils/time";
 import { prettyName } from "utils/formatting";
-import InputLabel from "@mui/material/InputLabel";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 // constants
@@ -20,12 +20,14 @@ const fields: Array<keyof AutomationTimeObject> = [
   "seconds",
   "milliseconds",
 ];
-export interface Props {
+export type InputTimeProps = {
   label: string;
-  value?: AutomationTime;
   onChange: (v?: AutomationTimeObject) => void;
-}
-export const InputTime: FC<Props> = (props) => {
+  className?: string;
+  value?: AutomationTime;
+  restrictEmpty?: boolean;
+};
+export const InputTime: FC<InputTimeProps> = (props) => {
   // state
   const [disabled, setDisabled] = useState(!props.value);
   const [displayValue, setDisplayValue] = useState(
@@ -122,8 +124,8 @@ export const InputTime: FC<Props> = (props) => {
   }, [disabled, displayValue]);
 
   return (
-    <div className="input-time">
-      <InputLabel>{props.label}</InputLabel>
+    <div className={["input-time", props.className ?? ""].join(" ")}>
+      {/* <InputLabel >{props.label}</InputLabel> */}
       <div className="input-time--inner">
         {fields.map((name) => (
           <TextField
@@ -140,10 +142,12 @@ export const InputTime: FC<Props> = (props) => {
             onChange={(e) => updateOne(name)(e.target.value)}
           />
         ))}
-        <ButtonIcon
-          onClick={() => setDisabled(!disabled)}
-          icon={disabled ? <EditIcon /> : <CloseIcon />}
-        />
+        {!props.restrictEmpty && (
+          <ButtonIcon
+            onClick={() => setDisabled(!disabled)}
+            icon={disabled ? <EditIcon /> : <CloseIcon />}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import InputText from "components/Inputs/InputText";
+import InputText from "components/Inputs/Base/InputText";
 import { OptionManager } from "./OptionManager";
 import { AutomationTriggerEvent } from "../../../types/automations/triggers";
-import InputYaml from "components/Inputs/InputYaml";
+import InputYaml from "components/Inputs/Base/InputYaml";
 
 export const TriggerEventState: OptionManager<AutomationTriggerEvent> = {
   defaultState: () => ({

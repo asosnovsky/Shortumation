@@ -4,10 +4,10 @@ import { useSnackbar } from "notistack";
 import { useRef } from "react";
 import { prettyName } from "utils/formatting";
 import { InputAutoComplete, Option } from "./InputAutoComplete";
-import InputBoolean from "../InputBoolean";
-import { InputTime } from "../InputDayTime";
-import InputNumber from "../InputNumber";
-import InputText from "../InputText";
+import InputBoolean from "components/Inputs/Base/InputBoolean";
+import { InputTime } from "../Base/InputTime";
+import InputNumber from "components/Inputs/Base/InputNumber";
+import InputText from "components/Inputs/Base/InputText";
 
 export type InputDeviceCapabiltiesProps<T extends Record<string, any>> = {
   defn: HaFormSchema[];

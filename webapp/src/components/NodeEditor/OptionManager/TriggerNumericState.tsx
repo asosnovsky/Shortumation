@@ -1,10 +1,10 @@
 import { OptionManager } from "./OptionManager";
 import { AutomationTriggerNumericState } from "types/automations/triggers";
-import InputText from "components/Inputs/InputText";
+import InputText from "components/Inputs/Base/InputText";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
-import InputNumber from "components/Inputs/InputNumber";
-import { InputTime } from "components/Inputs/InputTime";
-import InputYaml from "components/Inputs/InputYaml";
+import InputNumber from "components/Inputs/Base/InputNumber";
+import { InputTime } from "components/Inputs/Base/InputTime";
+import InputYaml from "components/Inputs/Base/InputYaml";
 
 export const TriggerNumericState: OptionManager<AutomationTriggerNumericState> =
   {

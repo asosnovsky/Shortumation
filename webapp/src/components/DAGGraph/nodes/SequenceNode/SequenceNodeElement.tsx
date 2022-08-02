@@ -12,7 +12,7 @@ import Edit from "@mui/icons-material/Edit";
 import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
 import AddOutlined from "@mui/icons-material/AddOutlined";
 
-import InputBoolean from "components/Inputs/InputBoolean";
+import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { SpeedDial } from "components/SpeedDial";
 import { SequenceNodeElementProps } from "./types";
 import { useSequenceNodeColor } from "./util";

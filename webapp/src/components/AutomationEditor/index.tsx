@@ -15,7 +15,7 @@ import { CheckMarkIcon } from "components/Icons";
 
 import { Modal } from "components/Modal";
 import { Button } from "components/Inputs/Buttons/Button";
-import InputYaml from "components/Inputs/InputYaml";
+import InputYaml from "components/Inputs/Base/InputYaml";
 import { TagDB } from "components/AutomationManager/TagDB";
 import { DAGDims } from "components/DAGGraph/elements/types";
 import { DAGAutomationGraph } from "components/DAGGraph";

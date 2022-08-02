@@ -8,7 +8,7 @@ import {
   AutomationTriggerExactTime,
   AutomationTriggerTimePattern,
 } from "types/automations/triggers";
-import InputText from "components/Inputs/InputText";
+import InputText from "components/Inputs/Base/InputText";
 import { FC } from "react";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";

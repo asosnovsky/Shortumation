@@ -1,17 +1,17 @@
 import "./ServiceEditorField.css";
 import { FC, useRef } from "react";
 import { ServiceEditorOption } from "./options";
-import InputText from "components/Inputs/InputText";
-import InputNumber from "components/Inputs/InputNumber";
+import InputText from "components/Inputs/Base/InputText";
+import InputNumber from "components/Inputs/Base/InputNumber";
 import { RemoveCircle } from "@mui/icons-material";
 import {
   InputAutoComplete,
   Option,
 } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { prettyName } from "utils/formatting";
-import InputBoolean from "components/Inputs/InputBoolean";
+import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { SelectorNumber, SelectorText } from "haService/fieldTypes";
-import InputYaml from "components/Inputs/InputYaml";
+import InputYaml from "components/Inputs/Base/InputYaml";
 import { useSnackbar } from "notistack";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { ButtonIcon } from "components/Icons/ButtonIcons";

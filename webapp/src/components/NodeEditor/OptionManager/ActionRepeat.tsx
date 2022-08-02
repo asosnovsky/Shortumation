@@ -1,4 +1,4 @@
-import InputNumber from "components/Inputs/InputNumber";
+import InputNumber from "components/Inputs/Base/InputNumber";
 import { RepeatAction } from "types/automations/actions";
 import { OptionManager } from "./OptionManager";
 import { InputAutoComplete } from "components/Inputs/AutoComplete/InputAutoComplete";

@@ -5,7 +5,7 @@ import { FC, useState } from "react";
 
 import ArrowIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 
-import InputText from "components/Inputs/InputText";
+import InputText from "components/Inputs/Base/InputText";
 import InputMultiSelect from "components/Inputs/InputMultiSelect";
 
 import { ListBoxGroup } from "../ListBoxGroup";

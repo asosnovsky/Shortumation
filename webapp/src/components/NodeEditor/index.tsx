@@ -5,7 +5,7 @@ import { AutomationNode, AutomationNodeMapping } from "types/automations/index";
 import { useEditorNodeState } from "./OptionManager";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";
-import InputBoolean from "components/Inputs/InputBoolean";
+import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { useConfirm } from "material-ui-confirm";
 import { getNodeSubTypeDescription } from "./utils";
 

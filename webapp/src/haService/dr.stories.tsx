@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { useHADeviceRegistry } from "haService";
-import InputYaml from "components/Inputs/InputYaml";
+import InputYaml from "components/Inputs/Base/InputYaml";
 
 const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
   const conn = useHADeviceRegistry();

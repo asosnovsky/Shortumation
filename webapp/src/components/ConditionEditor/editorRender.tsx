@@ -10,16 +10,16 @@ import {
   TriggerCondition,
   ZoneCondition,
 } from "types/automations/conditions";
-import InputNumber from "components/Inputs/InputNumber";
-import InputText from "components/Inputs/InputText";
+import InputNumber from "components/Inputs/Base/InputNumber";
+import InputText from "components/Inputs/Base/InputText";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import {
   ConditionNodeBase,
   ConditionNodeBaseViewMode,
 } from "./ConditionNodeBase";
 import { genUpdateMethods } from "./nestedUpdater";
-import { InputTime } from "components/Inputs/InputTime";
-import InputYaml from "components/Inputs/InputYaml";
+import { InputTime } from "components/Inputs/Base/InputTime";
+import InputYaml from "components/Inputs/Base/InputYaml";
 import { HAService } from "haService";
 import { DeviceEditor } from "components/DeviceEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
