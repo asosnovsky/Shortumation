@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { NodeEditor } from ".";
 
 import { AutomationCondition } from "types/automations/conditions";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 import { useState } from "react";
 import { Modal } from "components/Modal";
 import { Page } from "components/Page";

@@ -11,7 +11,7 @@ import {
   isAutomationTimeString24Hours,
 } from "utils/time";
 import { InputEntity } from "./InputEntities";
-import { InputTime } from "./InputTime";
+import { InputTime } from "../InputTime";
 
 export type InputTimeEntityProps = {
   value: string;

@@ -1,4 +1,4 @@
-import { BaseOption } from "components/Inputs/InputAutoComplete";
+import { BaseOption } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { FieldData, TypedHassService } from "haService/fieldTypes";
 import { prettyName } from "utils/formatting";
 
@@ -7,17 +7,22 @@ export type ServiceEditorData = {
   target: Record<string, any>;
 };
 export type ServiceEditorOption = BaseOption<{
-  data: FieldData
+  data: FieldData;
 }>;
 
-export const convertFieldToOption = (id: string, data: FieldData): ServiceEditorOption => ({
+export const convertFieldToOption = (
+  id: string,
+  data: FieldData
+): ServiceEditorOption => ({
   id,
   label: data.name ?? prettyName(id),
   data,
-})
+});
 
-  
-export const splitUpOptions = (service: TypedHassService, data: ServiceEditorData) => {
+export const splitUpOptions = (
+  service: TypedHassService,
+  data: ServiceEditorData
+) => {
   const required: ServiceEditorOption[] = [];
   const additional: ServiceEditorOption[] = [];
   const incmFields: string[] = [];
@@ -28,7 +33,7 @@ export const splitUpOptions = (service: TypedHassService, data: ServiceEditorDat
       required.push(opt);
     } else {
       if (data.field[opt.id]) {
-        incmFields.push(opt.id)
+        incmFields.push(opt.id);
       } else {
         additional.push(opt);
       }

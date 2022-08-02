@@ -9,7 +9,7 @@ import { useHassCollection } from "./useHassCollection";
 import { useHAConnection } from "./connection";
 import { useSnackbar } from "notistack";
 import { TypedHassService } from "./fieldTypes";
-import { Option } from "components/Inputs/InputAutoComplete";
+import { Option } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { getDeviceExtraWsCalls } from "./extras";
 import { useHAEntities } from "./HAEntities";
 

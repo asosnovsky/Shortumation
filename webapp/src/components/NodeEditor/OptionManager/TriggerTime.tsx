@@ -11,10 +11,10 @@ import {
 import InputText from "components/Inputs/InputText";
 import { FC } from "react";
 import { InputList } from "components/Inputs/InputList";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { InputTimeEntity } from "components/Inputs/InputTimeEntity";
+import { InputTimeEntity } from "components/Inputs/AutoComplete/InputTimeEntity";
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {
   defaultState: () => ({
@@ -59,7 +59,8 @@ export const TriggerTime: OptionManager<AutomationTriggerTime> = {
               divisible by that number. You can specify "*" to match any value.{" "}
               <a
                 href="https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger"
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
               >
                 More Info.
               </a>

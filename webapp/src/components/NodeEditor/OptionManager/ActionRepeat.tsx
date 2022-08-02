@@ -1,7 +1,7 @@
 import InputNumber from "components/Inputs/InputNumber";
 import { RepeatAction } from "types/automations/actions";
 import { OptionManager } from "./OptionManager";
-import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+import { InputAutoComplete } from "components/Inputs/AutoComplete/InputAutoComplete";
 
 const determineType = (repeatNode: RepeatAction["repeat"]) =>
   "count" in repeatNode ? "count" : "until" in repeatNode ? "until" : "while";

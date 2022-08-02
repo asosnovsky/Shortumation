@@ -4,7 +4,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { FC } from "react";
 import { ButtonNodeProps } from "./types";
 import { Handle, Position } from "react-flow-renderer";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 
 export const ButtonNode: FC<ButtonNodeProps> = ({
   height,

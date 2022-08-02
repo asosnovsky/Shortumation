@@ -1,4 +1,4 @@
-import { Option } from "components/Inputs/InputAutoComplete";
+import { Option } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { HACollectionState, useHassCollection } from "./useHassCollection";
 import { entitiesColl, HassEntities } from "home-assistant-js-websocket";
 import { entitySourceColl } from "./additionalCollections";

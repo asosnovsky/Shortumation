@@ -1,10 +1,10 @@
 import {
   BaseOption,
   InputAutoComplete,
-} from "components/Inputs/InputAutoComplete";
-import { InputDevice } from "components/Inputs/InputDevice";
-import { InputDeviceCapabilties } from "components/Inputs/InputDeviceCapabilties";
-import { InputEntity } from "components/Inputs/InputEntities";
+} from "components/Inputs/AutoComplete/InputAutoComplete";
+import { InputDevice } from "components/Inputs/AutoComplete/InputDevice";
+import { InputDeviceCapabilties } from "components/Inputs/AutoComplete/InputDeviceCapabilties";
+import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { cleanUpUndefined } from "utils/helpers";
 import { DeviceBaseType, DeviceTypeCapability } from "haService/types";
 import { AutomationDeviceState } from "types/automations/common";

@@ -16,7 +16,7 @@ import {
   AutomationManagerAuto,
   AutomationManagerAutoUpdatable,
 } from "../types";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 export type AutomationManagerSidebarProps = {

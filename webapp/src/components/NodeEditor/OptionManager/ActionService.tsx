@@ -1,4 +1,4 @@
-import { InputService } from "components/Inputs/InputService";
+import { InputService } from "components/Inputs/AutoComplete/InputService";
 import { ServiceEditor } from "components/ServiceEditor";
 import { ServiceAction } from "types/automations/actions";
 import { OptionManager, updateActionData } from "./OptionManager";

@@ -1,9 +1,9 @@
 import "./ServiceEditorTarget.css";
-import { InputDevice } from "components/Inputs/InputDevice";
-import { InputEntity } from "components/Inputs/InputEntities";
+import { InputDevice } from "components/Inputs/AutoComplete/InputDevice";
+import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { Targets } from "haService/fieldTypes";
 import { FC } from "react";
-import { InputArea } from "components/Inputs/InputArea";
+import { InputArea } from "components/Inputs/AutoComplete/InputArea";
 
 type RawTargetData = {
   entity_id?: string[] | string;

@@ -1,6 +1,9 @@
 import { Connection, getCollection } from "home-assistant-js-websocket";
 import { useHassCollection } from "./useHassCollection";
-import { Option, BaseOption } from "components/Inputs/InputAutoComplete";
+import {
+  Option,
+  BaseOption,
+} from "components/Inputs/AutoComplete/InputAutoComplete";
 import { EntityRegisteryItem, HassEntitiesRegistry } from "./types";
 import { prettyName } from "utils/formatting";
 

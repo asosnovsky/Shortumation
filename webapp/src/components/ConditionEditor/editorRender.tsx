@@ -12,7 +12,7 @@ import {
 } from "types/automations/conditions";
 import InputNumber from "components/Inputs/InputNumber";
 import InputText from "components/Inputs/InputText";
-import { InputEntity } from "components/Inputs/InputEntities";
+import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import {
   ConditionNodeBase,
   ConditionNodeBaseViewMode,
@@ -25,11 +25,11 @@ import { DeviceEditor } from "components/DeviceEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import AddIcon from "@mui/icons-material/Add";
 import { getEntityDomains } from "utils/automations";
-import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
-import { InputTimeEntity } from "components/Inputs/InputTimeEntity";
+import { InputAutoComplete } from "components/Inputs/AutoComplete/InputAutoComplete";
+import { InputTimeEntity } from "components/Inputs/AutoComplete/InputTimeEntity";
 import { prettyName } from "utils/formatting";
 import { InputList } from "components/Inputs/InputList";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 import { RemoveCircle } from "@mui/icons-material";
 
 interface Editor<C extends AutomationCondition>

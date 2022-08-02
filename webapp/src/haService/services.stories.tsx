@@ -4,7 +4,7 @@ import { Page } from "components/Page";
 import { useHA } from "haService";
 import InputYaml from "components/Inputs/InputYaml";
 import { InputList } from "components/Inputs/InputList";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 import { ServiceEditor } from "components/ServiceEditor";
 
 const Test: FC = () => {

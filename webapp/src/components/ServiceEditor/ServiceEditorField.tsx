@@ -4,13 +4,16 @@ import { ServiceEditorOption } from "./options";
 import InputText from "components/Inputs/InputText";
 import InputNumber from "components/Inputs/InputNumber";
 import { RemoveCircle } from "@mui/icons-material";
-import { InputAutoComplete, Option } from "components/Inputs/InputAutoComplete";
+import {
+  InputAutoComplete,
+  Option,
+} from "components/Inputs/AutoComplete/InputAutoComplete";
 import { prettyName } from "utils/formatting";
 import InputBoolean from "components/Inputs/InputBoolean";
 import { SelectorNumber, SelectorText } from "haService/fieldTypes";
 import InputYaml from "components/Inputs/InputYaml";
 import { useSnackbar } from "notistack";
-import { InputEntity } from "components/Inputs/InputEntities";
+import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 export type ServiceEditorFieldProps = {

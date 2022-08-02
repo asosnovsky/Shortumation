@@ -10,7 +10,7 @@ import {
   ServiceEditorData,
 } from "./options";
 import { ServiceEditorField } from "./ServiceEditorField";
-import { InputAutoComplete } from "components/Inputs/InputAutoComplete";
+import { InputAutoComplete } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { ServiceEditorTarget } from "./ServiceEditorTarget";
 
 export type ServiceEditorProps = {

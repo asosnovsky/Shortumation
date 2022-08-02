@@ -8,67 +8,61 @@ import { AutomationActionData } from "types/automations";
 import { createUpdaterFromAutomationData } from "../updater";
 import { ModalState } from "../board/types";
 import { DEFAULT_DIMS } from "./constants";
+import { makeStory } from "devUtils";
 
-const Demo: FC<{
-  automation: AutomationActionData;
-  flipped: boolean;
-}> = (props) => {
-  const { namer } = useHA();
-  const [state, setState] = useState<AutomationActionData>(props.automation);
-  const [modalState, setModalState] =
-    useState<ModalState | undefined>(undefined);
-  const updater = createUpdaterFromAutomationData(
-    setModalState,
-    state,
-    setState
-  );
-  const elementData = useAutomationNodes(state, {
-    dims: {
-      ...DEFAULT_DIMS,
-      flipped: props.flipped,
-    },
-    namer,
-    openModal: setModalState,
-    stateUpdater: updater,
-  });
-  return (
-    <DAGGraphBoard
-      modalState={modalState}
-      closeModal={() => setModalState(undefined)}
-      state={{
-        ready: true,
-        data: {
-          elements: elementData,
-        },
-      }}
-    />
-  );
-};
-
-export default {
-  title: "DAGGraph/Elements",
-  component: Demo,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    flipped: true,
-    automation: {
-      trigger: [],
-      condition: [],
-      sequence: [],
+const { make, componentMeta } = makeStory({
+  Component: (props: {
+    automation: AutomationActionData;
+    flipped: boolean;
+  }) => {
+    const { namer } = useHA();
+    const [state, setState] = useState<AutomationActionData>(props.automation);
+    const [modalState, setModalState] =
+      useState<ModalState | undefined>(undefined);
+    const updater = createUpdaterFromAutomationData(
+      setModalState,
+      state,
+      setState
+    );
+    const elementData = useAutomationNodes(state, {
+      dims: {
+        ...DEFAULT_DIMS,
+        flipped: props.flipped,
+      },
+      namer,
+      openModal: setModalState,
+      stateUpdater: updater,
+    });
+    return (
+      <DAGGraphBoard
+        modalState={modalState}
+        closeModal={() => setModalState(undefined)}
+        state={{
+          ready: true,
+          data: {
+            elements: elementData,
+          },
+        }}
+      />
+    );
+  },
+  meta: {
+    title: "DAGGraph/Elements",
+    args: {
+      flipped: true,
+      automation: {
+        trigger: [],
+        condition: [],
+        sequence: [],
+      },
     },
   },
-} as ComponentMeta<typeof Demo>;
+});
 
-const Template: ComponentStory<typeof Demo> = (args) => (
-  <Page>
-    <Demo {...args} />
-  </Page>
-);
+export default componentMeta;
 
-export const Empty = Template.bind({});
-export const Trigger = Template.bind({});
-Trigger.args = {
-  ...Trigger.args,
+export const Empty = make({});
+export const Trigger = make({
   automation: {
     trigger: [
       { platform: "homeassistant", event: "up" },
@@ -82,10 +76,9 @@ Trigger.args = {
     condition: [],
     sequence: [],
   },
-};
-export const Conditions = Template.bind({});
-Conditions.args = {
-  ...Conditions.args,
+});
+
+export const Conditions = make({
   automation: {
     trigger: [
       {
@@ -119,11 +112,9 @@ Conditions.args = {
     ],
     sequence: [],
   },
-};
+});
 
-export const FullAuto = Template.bind({});
-FullAuto.args = {
-  ...FullAuto.args,
+export const FullAuto = make({
   automation: {
     condition: [
       {
@@ -272,11 +263,9 @@ FullAuto.args = {
       },
     ],
   },
-};
+});
 
-export const ChooseAuto = Template.bind({});
-ChooseAuto.args = {
-  ...ChooseAuto.args,
+export const ChooseAuto = make({
   automation: {
     condition: [],
     trigger: [],
@@ -370,12 +359,9 @@ ChooseAuto.args = {
       },
     ],
   },
-};
+});
 
-export const EmptyChooseAuto = Template.bind({});
-
-EmptyChooseAuto.args = {
-  ...EmptyChooseAuto.args,
+export const EmptyChooseAuto = make({
   automation: {
     condition: [],
     trigger: [],
@@ -386,11 +372,9 @@ EmptyChooseAuto.args = {
       },
     ],
   },
-};
+});
 
-export const RepeatAuto = Template.bind({});
-RepeatAuto.args = {
-  ...RepeatAuto.args,
+export const RepeatAuto = make({
   automation: {
     condition: [],
     trigger: [],
@@ -437,11 +421,9 @@ RepeatAuto.args = {
       },
     ],
   },
-};
+});
 
-export const ParallelAuto = Template.bind({});
-ParallelAuto.args = {
-  ...ParallelAuto.args,
+export const ParallelAuto = make({
   automation: {
     condition: [],
     trigger: [],
@@ -467,11 +449,9 @@ ParallelAuto.args = {
       },
     ],
   },
-};
+});
 
-export const BadNodes = Template.bind({});
-BadNodes.args = {
-  ...BadNodes.args,
+export const BadNodes = make({
   automation: {
     condition: [
       {
@@ -500,11 +480,9 @@ BadNodes.args = {
       },
     ] as any,
   },
-};
+});
 
-export const IfElseNode = Template.bind({});
-IfElseNode.args = {
-  ...IfElseNode.args,
+export const IfElseNode = make({
   automation: {
     condition: [],
     trigger: [],
@@ -516,4 +494,24 @@ IfElseNode.args = {
       },
     ],
   },
-};
+});
+
+export const TimeNodes = make({
+  automation: {
+    condition: [],
+    trigger: [
+      {
+        platform: "time",
+        at: "",
+      },
+      {
+        platform: "time_pattern",
+      },
+    ],
+    sequence: [
+      {
+        condition: "time",
+      },
+    ],
+  },
+});

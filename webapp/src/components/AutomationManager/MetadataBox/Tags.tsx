@@ -8,7 +8,7 @@ import SaveIcon from "@mui/icons-material/SaveOutlined";
 
 import { cleanUpUndefined } from "utils/helpers";
 import { Modal } from "components/Modal";
-import { Button } from "components/Inputs/Button";
+import { Button } from "components/Inputs/Buttons/Button";
 import InputAutoText from "components/Inputs/InputAutoText";
 
 import { TagDB } from "../TagDB";

@@ -1,4 +1,4 @@
-import { BaseOption } from "components/Inputs/InputAutoComplete";
+import { BaseOption } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { MessageBase } from "home-assistant-js-websocket";
 import { useEffect, useRef, useState } from "react";
 import { prettyName } from "utils/formatting";
