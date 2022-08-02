@@ -17,7 +17,7 @@
     "@uiw/react-codemirror": "4.10.4",
     "autosuggest-highlight": "3.3.4",
     "home-assistant-js-websocket": "7.1.0",
-    "jss": "10.9.1",
+    "jss": "10.9.2",
     "material-ui-confirm": "3.0.4",
     "notistack": "2.0.5",
     "react": "18.2.0",
