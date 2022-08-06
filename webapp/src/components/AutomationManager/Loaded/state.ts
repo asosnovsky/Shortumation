@@ -66,11 +66,14 @@ export const useAutomationManagerState = ({
     get tagsDB() {
       return tagsDB;
     },
-    get currentAutomation() {
-      return currentAutomation;
+    get currentAutomation(): AutomationData | null {
+      return currentAutomation === null ? null : currentAutomation[1];
     },
     get currentAutomationIsNew() {
       return automationDB.isAutoNew(cookies.currentAutomationId ?? "");
+    },
+    get currentAutomationEntityId(): string | null {
+      return currentAutomation === null ? null : currentAutomation[0].entityId;
     },
     async setSelectedAutomationId(i: string | null, force: boolean = false) {
       if (methods.currentAutomationIsNew && !force) {
@@ -102,8 +105,9 @@ export const useAutomationManagerState = ({
       aid: string,
       eid: string
     ) {
-      const previousAutoState = automationDB.getAutomationData(aid);
-      if (previousAutoState) {
+      const previousAuto = automationDB.getAutomationData(aid);
+      if (previousAuto && previousAuto[1]) {
+        const previousAutoState = previousAuto[1];
         if (
           previousAutoState.metadata.alias !== a.title ||
           previousAutoState.metadata.description !== a.description
@@ -125,7 +129,8 @@ export const useAutomationManagerState = ({
           { variant: "error" }
         );
       }
-      const previousState = automationDB.getAutomationState(aid);
+      const previousState =
+        previousAuto === null ? null : previousAuto[0].state;
       if (previousState !== a.state) {
         onAutomationStateChange(eid, a.state === "on");
       }

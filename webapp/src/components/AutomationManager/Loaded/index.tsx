@@ -9,14 +9,27 @@ import {
   UseAutomationManagerStateArgs,
 } from "./state";
 import Alert from "@mui/material/Alert";
+import { useConfirm } from "material-ui-confirm";
 
 export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
   onAutomationDelete: (aid: string, eid: string) => void;
 };
 export const AutomationManagerLoaded: FC<
   PropsWithChildren<AutomationManagerLoadedProps>
-> = ({ children, onAutomationDelete, ...args }) => {
+> = ({ children, ...args }) => {
   const state = useAutomationManagerState(args);
+  const confirm = useConfirm();
+
+  const onAutomationDelete = async (aid: string, eid: string) =>
+    confirm({
+      title: "Are you sure you want to delete this automation?",
+      confirmationText: "Delete",
+    })
+      .then(() => {
+        args.onAutomationDelete(aid, eid);
+        state.setSelectedAutomationId(null);
+      })
+      .catch(() => {});
 
   return (
     <div className="automation-manager">
@@ -27,10 +40,7 @@ export const AutomationManagerLoaded: FC<
         selectedAutomationId={state.currentAutomationId}
         onSelectedAutomationId={state.setSelectedAutomationId}
         onAutomationAdd={() => state.addNew()}
-        onAutomationDelete={(aid, eid) => {
-          onAutomationDelete(aid, eid);
-          state.setSelectedAutomationId(null);
-        }}
+        onAutomationDelete={onAutomationDelete}
         onAutomationUpdate={state.sideBarUpdateAutomation}
         onRun={args.onAutomationRun}
       />
@@ -44,6 +54,22 @@ export const AutomationManagerLoaded: FC<
               }}
               automation={state.currentAutomation}
               onUpdate={state.editorUpdateAutomation}
+              onDelete={() => {
+                if (
+                  state.currentAutomationId &&
+                  state.currentAutomationEntityId
+                ) {
+                  onAutomationDelete(
+                    state.currentAutomationId,
+                    state.currentAutomationEntityId
+                  );
+                }
+              }}
+              onTrigger={() => {
+                if (state.currentAutomationEntityId) {
+                  args.onAutomationRun(state.currentAutomationEntityId);
+                }
+              }}
               tagDB={state.tagsDB}
               isNew={state.currentAutomationIsNew}
             />

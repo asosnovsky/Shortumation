@@ -3,15 +3,19 @@ import "./index.mobile.css";
 
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
-import { ControlButton } from "react-flow-renderer";
 
 import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 
+import SpeedDialIcon from "@mui/icons-material/SettingsRounded";
 import Edit from "@mui/icons-material/Edit";
 import Icon from "@mui/material/Icon";
-import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
+import EditIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
+import DeleteIcon from "@mui/icons-material/DeleteForever";
 import { CheckMarkIcon } from "components/Icons";
+import RunIcon from "@mui/icons-material/RunCircleOutlined";
 
 import { Modal } from "components/Modal";
 import { Button } from "components/Inputs/Buttons/Button";
@@ -32,6 +36,8 @@ interface Props {
   automation?: AutomationData;
   dims: DAGDims;
   onUpdate: (auto: AutomationData) => void;
+  onTrigger: () => void;
+  onDelete: () => void;
   tagDB: TagDB;
   isNew?: boolean;
 }
@@ -39,6 +45,8 @@ export const AutomationEditor: FC<Props> = ({
   dims,
   automation: propsAutos,
   onUpdate: propsOnUpdate,
+  onDelete,
+  onTrigger,
   tagDB,
   isNew,
 }) => {
@@ -199,12 +207,6 @@ export const AutomationEditor: FC<Props> = ({
             </Button>
           )}
           <Button
-            className={"automation-editor--flow-wrapper--toolbar--edit-btn"}
-            onClick={() => setInfoBox(!infoBoxOpen)}
-          >
-            Metadata <Edit />
-          </Button>
-          <Button
             className={"automation-editor--flow-wrapper--toolbar--save-btn"}
             onClick={save}
             disabled={state.status !== "changed" && !isNew}
@@ -220,12 +222,31 @@ export const AutomationEditor: FC<Props> = ({
           onTriggerUpdate={updateTrigger}
           onConditionUpdate={updateCondition}
           isFlipped={flipped}
-          additionalControls={
-            <ControlButton onClick={() => setInfoBox(!infoBoxOpen)}>
-              <ModeEditOutlineTwoToneIcon />
-            </ControlButton>
-          }
         />
+        <SpeedDial
+          ariaLabel="options label"
+          sx={{ position: "absolute", bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+        >
+          <SpeedDialAction
+            tooltipOpen
+            icon={<RunIcon />}
+            tooltipTitle={"Trigger"}
+            onClick={onTrigger}
+          />
+          <SpeedDialAction
+            tooltipOpen
+            icon={<DeleteIcon />}
+            tooltipTitle={"Delete"}
+            onClick={onDelete}
+          />
+          <SpeedDialAction
+            tooltipOpen
+            icon={<EditIcon />}
+            tooltipTitle={"Metadata"}
+            onClick={() => setInfoBox(!infoBoxOpen)}
+          />
+        </SpeedDial>
       </div>
     </div>
   );
