@@ -3,7 +3,6 @@ import { AutomationData, AutomationMetadata } from "types/automations";
 import * as v from "types/validators/autmation";
 import { getFailures } from "types/validators/helper";
 import { MiniFailure } from "../../types/validators/helper";
-import { useConfirm } from "material-ui-confirm";
 
 export type EditorData = ReturnType<typeof genEditorData>;
 export type EditorState =
@@ -30,7 +29,6 @@ export const useAutomatioEditorState = (
   automation: AutomationData | undefined,
   onSave: (a: AutomationData) => void
 ) => {
-  const confirm = useConfirm();
   const [state, update] = useState<EditorState>({
     status: "loading",
   });
