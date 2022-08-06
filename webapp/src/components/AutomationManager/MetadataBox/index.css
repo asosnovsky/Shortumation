@@ -42,10 +42,23 @@
     font-size: 0.9em;
 }
 
+.automation-manager--metadatabox .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25em;
+}
+
 .automation-manager--metadatabox .delete:hover {
     cursor: pointer;
     color: var(--mui-error-light);
+    color: var(--mui-error-contrastText);
     background-color: var(--mui-error-dark);
+}
+
+.automation-manager--metadatabox .run:hover {
+    cursor: pointer;
+    color: var(--mui-success-contrastText);
+    background-color: var(--mui-success-dark);
 }
 
 .automation-manager--metadatabox .select:hover,

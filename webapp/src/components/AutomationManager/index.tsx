@@ -14,6 +14,7 @@ export type AutomationManagerProps = {
   onAutomationStateChange: (eid: string, on: boolean) => void;
   refreshAutomations: () => void;
   forceDeleteAutomation: (eid: string) => void;
+  triggerAutomation: (eid: string) => void;
   haEntities: HAEntitiesState;
   api: ApiService;
 };
@@ -24,6 +25,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   onAutomationStateChange,
   refreshAutomations,
   forceDeleteAutomation,
+  triggerAutomation,
 }) => {
   const snackbr = useSnackbar();
   const [isSaving, setIsSaving] = useState(false);
@@ -79,6 +81,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
     <AutomationManagerLoaded
       configAutomations={configAutomations.data}
       hassEntities={hassEntities}
+      onAutomationRun={triggerAutomation}
       onAutomationStateChange={onAutomationStateChange}
       onAutomationAdd={async (auto) => {
         await api.updateAutomation({

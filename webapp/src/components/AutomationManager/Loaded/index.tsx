@@ -32,6 +32,7 @@ export const AutomationManagerLoaded: FC<
           state.setSelectedAutomationId(null);
         }}
         onAutomationUpdate={state.sideBarUpdateAutomation}
+        onRun={args.onAutomationRun}
       />
       <div className={["automation-manager--editor"].join(" ")}>
         {state.currentAutomationId !== null ? (

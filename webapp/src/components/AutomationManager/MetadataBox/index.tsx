@@ -7,6 +7,7 @@ import Alert from "@mui/material/Alert";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SelectIcon from "@mui/icons-material/HighlightAltSharp";
+import RunIcon from "@mui/icons-material/RunCircleOutlined";
 
 import { InputTextView } from "components/Inputs/InputTextView";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
@@ -17,6 +18,7 @@ import { TagDB } from "../TagDB";
 export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;
   onSelect: () => void;
+  onRun: () => void;
   onStateUpdate: (s: "on" | "off") => void;
   onTitleUpdate: (t: string) => void;
   onDescriptionUpdate: (t: string) => void;
@@ -80,6 +82,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           icon={<SelectIcon />}
           onClick={props.onSelect}
         />
+        <ButtonIcon className="run" icon={<RunIcon />} onClick={props.onRun} />
         <ButtonIcon
           className="delete"
           icon={<DeleteForeverIcon />}

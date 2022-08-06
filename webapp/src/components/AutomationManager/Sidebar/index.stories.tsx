@@ -33,6 +33,7 @@ const story = makeStory({
         selectedAutomationId={selectedAutomationId}
         tagsDB={useTagDB(automations, (a, t) => onTagUpdate(t, a))}
         automations={automations}
+        onRun={args.onRun}
         onSelectedAutomationId={(aid) => {
           args.onSelectedAutomationId(aid);
           setSelAutoId(aid);

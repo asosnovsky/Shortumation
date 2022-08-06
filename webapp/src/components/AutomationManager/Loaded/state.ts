@@ -15,6 +15,7 @@ export type UseAutomationManagerStateArgs = {
   onAutomationAdd: (auto: AutomationData) => void;
   onAutomationUpdate: (aid: string, auto: AutomationData) => void;
   onAutomationStateChange: (eid: string, on: boolean) => void;
+  onAutomationRun: (eid: string) => void;
 };
 export const useAutomationManagerState = ({
   configAutomations,

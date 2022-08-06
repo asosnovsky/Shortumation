@@ -20,6 +20,7 @@ const { make, componentMeta } = makeStory({
         api={useMockApiService(args.automations ?? [], !args.automations)}
         haEntities={useMockHAEntities(haEntities)}
         refreshAutomations={() => {}}
+        triggerAutomation={() => {}}
         forceDeleteAutomation={() => {}}
         onAutomationStateChange={(eid, on) => {
           if (!haEntities.loading && !haEntities.error) {

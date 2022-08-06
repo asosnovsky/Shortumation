@@ -16,6 +16,7 @@ export type ListBoxGroupProps = AutomationManagerItem & {
   ) => void;
   onAutomationDelete: (aid: string, eid: string) => void;
   onSelect: (aid: string) => void;
+  onRun: (eid: string) => void;
   initialOpenState?: boolean;
   tagsDB: TagDB;
 };
@@ -70,6 +71,7 @@ export const ListBoxGroup: FC<ListBoxGroupProps> = ({
                 }
                 isSelected={auto.flags.isSelected}
                 onSelect={() => events.onSelect(auto.id)}
+                onRun={() => events.onRun(auto.entityId)}
                 onDescriptionUpdate={(description) =>
                   events.onAutomationUpdate(
                     {

@@ -31,6 +31,7 @@ export type AutomationManagerSidebarProps = {
   onAutomationDelete: (aid: string, eid: string) => void;
   onAutomationAdd: () => void;
   onSelectedAutomationId: (aid: string) => void;
+  onRun: (eid: string) => void;
 };
 export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
   automations,
