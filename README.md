@@ -48,6 +48,8 @@ Add the repository URL under **Supervisor → Add-on store → ⋮ → Manage ad
 
 It should now appear in your `Add-on Store` and you should be able to install it!
 
+**Please note that you may need to enable advance mode in your settings first!**
+
 ### Containerized or HA Core
 
 Please note that this way of using Shortumation is **not future proof**.
