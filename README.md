@@ -8,7 +8,7 @@
 
 A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing and writing your automations. We provide a way to visualize your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
 
-<img src="./assets/comparisons.png" width="700px">
+<img src="./assets/comparisons.png">
 
 ## Features
 
