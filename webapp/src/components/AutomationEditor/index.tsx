@@ -10,7 +10,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 import SpeedDialIcon from "@mui/icons-material/SettingsRounded";
-import Edit from "@mui/icons-material/Edit";
+import UndoIcon from "@mui/icons-material/UndoSharp";
 import Icon from "@mui/material/Icon";
 import EditIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
@@ -60,6 +60,7 @@ export const AutomationEditor: FC<Props> = ({
     validate,
     save,
     saveAndUpdate,
+    undo,
   } = useAutomatioEditorState(propsAutos, propsOnUpdate);
   const [infoBoxOpen, setInfoBox] = useState(false);
   const [
@@ -206,6 +207,11 @@ export const AutomationEditor: FC<Props> = ({
               Flip
             </Button>
           )}
+          {state.status === "changed" && (
+            <Button onClick={undo}>
+              <UndoIcon />
+            </Button>
+          )}
           <Button
             className={"automation-editor--flow-wrapper--toolbar--save-btn"}
             onClick={save}
@@ -246,6 +252,14 @@ export const AutomationEditor: FC<Props> = ({
             tooltipTitle={"Metadata"}
             onClick={() => setInfoBox(!infoBoxOpen)}
           />
+          {state.status === "changed" && (
+            <SpeedDialAction
+              tooltipOpen
+              icon={<UndoIcon />}
+              tooltipTitle={"Undo"}
+              onClick={undo}
+            />
+          )}
         </SpeedDial>
       </div>
     </div>
