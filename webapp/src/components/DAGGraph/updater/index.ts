@@ -104,6 +104,9 @@ export const createUpdater = (
     }),
     trigger: createBasicUpdater("trigger", {
       platform: "device",
+      domain: "",
+      type: "",
+      device_id: "",
     })({
       trigger: args.trigger,
       openModal: args.openModal,

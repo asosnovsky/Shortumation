@@ -5,6 +5,9 @@ import { DeviceEditor } from "components/DeviceEditor";
 export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
   defaultState: () => ({
     platform: "device",
+    device_id: "",
+    domain: "",
+    type: "",
   }),
   isReady: () => true,
   Component: ({ state, setState, ha }) => {
@@ -27,6 +30,9 @@ export const TriggerDevice: OptionManager<AutomationTriggerDevice> = {
         setState={(s) =>
           setState({
             platform: "device",
+            device_id: "",
+            domain: "",
+            type: "",
             ...s,
           })
         }

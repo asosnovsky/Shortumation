@@ -48,13 +48,14 @@ export const AutomationTimeObject = st.object({
   milliseconds: st.optional(st.number()),
 });
 export const AutomationTime = st.union([st.string(), AutomationTimeObject]);
-export const AutomationDeviceState = st.type({
+export const _AutomationDeviceState = {
   subtype: st.optional(st.string()),
   entity_id: st.optional(st.string()),
   type: st.string(),
   device_id: st.string(),
   domain: st.string(),
-});
+};
+export const AutomationDeviceState = st.type(_AutomationDeviceState);
 export const DayOfWeek = st.enums([
   "mon",
   "tue",

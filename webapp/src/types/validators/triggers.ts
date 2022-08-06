@@ -1,8 +1,5 @@
 import * as st from "superstruct";
-import {
-  AutomationTime,
-  AutomationDeviceState,
-} from "./common";
+import { AutomationTime, _AutomationDeviceState } from "./common";
 
 const AutomationTriggerBase = {
   id: st.optional(st.string()),
@@ -99,13 +96,11 @@ export const AutomationTriggerZone = st.type({
   event: st.enums(["enter", "leave"]),
 });
 
-export const AutomationTriggerDevice = st.assign(
-  st.partial(AutomationDeviceState),
-  st.type({
-    ...AutomationTriggerBase,
-    platform: st.literal("device"),
-  })
-);
+export const AutomationTriggerDevice = st.type({
+  ...AutomationTriggerBase,
+  ..._AutomationDeviceState,
+  platform: st.literal("device"),
+});
 
 export const AutomationTrigger = st.union([
   AutomationTriggerEvent,
