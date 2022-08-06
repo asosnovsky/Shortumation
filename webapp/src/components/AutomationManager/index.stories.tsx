@@ -120,3 +120,54 @@ export const MissingAutoInConfig = make({
     entitySource: {},
   },
 });
+export const BadAutomation = make({
+  haProps: {
+    loading: false,
+    entities: {
+      [`automation.${auto1.metadata.id}`]: {
+        entity_id: `automation.${auto1.metadata.id}`,
+        attributes: {
+          id: "test",
+        },
+        context: { id: "", parent_id: null, user_id: null },
+        last_changed: "",
+        last_updated: "",
+        state: "on",
+      },
+    },
+    entitySource: {},
+  },
+  automations: [
+    {
+      tags: {},
+      metadata: {
+        id: "test",
+        mode: "single",
+        alias: "Light.Tank_Day",
+        description: "",
+      },
+      trigger: [
+        {
+          platform: "sun",
+          event: "sunrise",
+          offset: "30",
+        } as any,
+        { whoAmI: "bad node is who" } as any,
+      ],
+      condition: [{ whoAmI: "bad node is who" } as any],
+      sequence: [
+        { scene: "scene.light_day" } as any,
+        { whoAmI: "bad node is who" } as any,
+        {
+          service: "input_select.set_options",
+          target: {
+            entity_id: "input_select.tank_light_mode",
+          },
+          data: {
+            options: "day",
+          },
+        },
+      ],
+    },
+  ],
+});

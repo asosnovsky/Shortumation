@@ -29,7 +29,7 @@ export const useDAGElementsState = () => {
     },
 
     getIsClosedActions(nodeId: string, node: AutomationNode) {
-      if (isSpecialNode(getNodeSubType(node))) {
+      if (isSpecialNode(getNodeSubType(node, true))) {
         return {
           isClosed: this.get(nodeId).isClosed ?? false,
           setIsClosed: (v: boolean) => this.set(nodeId, "isClosed", v),
