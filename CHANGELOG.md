@@ -1,5 +1,12 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.5.2] - Better Controls
+
+- Add automation trigger
+- Speed dial on the bottom
+  <img src="https://user-images.githubusercontent.com/7451445/183231968-9891bbb4-5c7c-4e05-b804-36978c809a5c.png" width="200px"/>
+- Infinite undos <img src="https://user-images.githubusercontent.com/7451445/183231977-ed000017-2886-4a57-b5fb-c7e527bf3894.png" width="200px"/>
+
 ## [0.5.1] - Sidebar!
 
 - completely redesigned the sidebar!

@@ -1,4 +1,4 @@
-# Shortumation ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=platsic)
+# <img src="logo.png" height="40x"/> Shortumation ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=platsic)
 
 [![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml) [![Build](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml)
 
@@ -6,7 +6,9 @@
 | ------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Version | ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge) | ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/asosnovsky/shortumation-amd64?&sort=date&label=&style=for-the-badge) |
 
-A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing and writing your automations. We provide a way to visualize  your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
+A [home-assistant addon](https://www.home-assistant.io/addons/) for a better UI for managing and writing your automations. We provide a way to visualize your automation using a visual-programming language that draws inspirations from [Node-Red](https://nodered.org/).
+
+<img src="./assets/comparisons.png" width="700px">
 
 ## Features
 

@@ -6,7 +6,7 @@ export const NODE_HEIGHT = 80 as const;
 export const DEFAULT_DIMS: DAGDims = {
   collection: {
     height: NODE_HEIGHT * 3,
-    width: NODE_WIDTH * 1.5,
+    width: NODE_WIDTH * 2.5,
   },
   node: {
     height: NODE_HEIGHT,
