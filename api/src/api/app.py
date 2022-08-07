@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 
 from src.automations.manager import AutomationManager
 from src.env import API_PREFIX, ORIGIN, ROOT_FOLDER
@@ -10,7 +11,8 @@ from .routes import automations, details, ping, socket
 
 def make_app(automation_mgr: AutomationManager) -> FastAPI:
     app = FastAPI()
-    if (ROOT_FOLDER / "web").exists():
+    has_web_folder = (ROOT_FOLDER / "web").exists()
+    if has_web_folder:
         app.mount(
             f"{API_PREFIX}/web",
             StaticFiles(
@@ -19,6 +21,7 @@ def make_app(automation_mgr: AutomationManager) -> FastAPI:
             ),
             name="web",
         )
+
     else:
         print("WARN: could not find web folder")
     app.add_middleware(
@@ -36,4 +39,11 @@ def make_app(automation_mgr: AutomationManager) -> FastAPI:
         details.make_details_router(automation_mgr.hass_config), prefix=f"{API_PREFIX}/details"
     )
     app.include_router(socket.router, prefix=f"{API_PREFIX}/socket")
+
+    @app.get("/")
+    def get_index():
+        if has_web_folder:
+            return RedirectResponse("/web")
+        return RedirectResponse("/details")
+
     return app
