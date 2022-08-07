@@ -52,9 +52,9 @@ It should now appear in your `Add-on Store` and you should be able to install it
 
 ### Containerized or HA Core
 
-Please note that this way of using Shortumation is **not future proof**.
-
 If this warning does not scare you or you still want to try things out, then take a look at the example [docker-compose.yaml](example/containerized/docker-compose.yaml), or read the [extended guide here](https://github.com/asosnovsky/Shortumation/wiki/Installation#containerized--ha-core).
+
+In general, if you want to help provide this to more home-assistant fans please join on the conversation here https://github.com/asosnovsky/Shortumation/issues/102 or help contribute :)
 
 ## FAQ
 
