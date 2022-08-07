@@ -22,6 +22,7 @@ import { ActionStopState } from "./ActionStop";
 import { ActionParallelState } from "./ActionParallel";
 import { TriggerSunState } from "./TriggerSun";
 import { TriggerCalendarState } from "./TriggerCalendar";
+import { ActionSceneState } from "./ActionScene";
 
 export const getOptionManager = <T extends AutomationNodeTypes>(
   nodeType: T,
@@ -41,6 +42,8 @@ export const getOptionManager = <T extends AutomationNodeTypes>(
         return ActionCallServiceState;
       case "wait":
         return ActionWaitState;
+      case "scene":
+        return ActionSceneState;
       case "stop":
         return ActionStopState;
       case "delay":

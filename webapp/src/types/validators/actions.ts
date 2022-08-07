@@ -79,6 +79,13 @@ export const StopAction = st.assign(
   })
 );
 
+export const SceneAction = st.assign(
+  AutomationActionNodeBase,
+  st.type({
+    scene: st.string(),
+  })
+);
+
 export const OriginalChooseAction = st.intersection([
   AutomationActionNodeBase,
   st.type({

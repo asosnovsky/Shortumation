@@ -50,6 +50,7 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T) => {
         "stop",
         "choose",
         "parallel",
+        "scene",
       ] as AutomationNodeSubtype<"action">[];
     case "condition":
       return [
@@ -145,6 +146,8 @@ export const getNodeSubType = <
     return "stop" as any;
   } else if ("parallel" in node) {
     return "parallel" as any;
+  } else if ("scene" in node) {
+    return "scene" as any;
   } else if (!ignoreInvalid) {
     throw new Error("Invalid node type!");
   }
@@ -164,6 +167,7 @@ export const TriggerValidators: Record<TriggerType, any> = {
   webhook: v.triggers.AutomationTriggerWebhook,
   zone: v.triggers.AutomationTriggerZone,
   sun: v.triggers.AutomationTriggerSun,
+  calendar: v.triggers.AutomationTriggerCalendar,
 };
 
 export const ActionValidators: Record<ActionType, any> = {
@@ -174,6 +178,7 @@ export const ActionValidators: Record<ActionType, any> = {
   repeat: v.actions.RepeatAction,
   service: v.actions.ServiceAction,
   stop: v.actions.StopAction,
+  scene: v.actions.SceneAction,
   wait: st.union([v.actions.DelayAction, v.actions.WaitAction]),
 };
 

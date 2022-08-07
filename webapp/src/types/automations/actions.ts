@@ -28,6 +28,7 @@ export type DelayAction = st.Infer<typeof v.DelayAction>;
 export type FireEventAction = st.Infer<typeof v.FireEventAction>;
 export type DeviceAction = st.Infer<typeof v.DeviceAction>;
 export type StopAction = st.Infer<typeof v.StopAction>;
+export type SceneAction = st.Infer<typeof v.SceneAction>;
 export type ChooseAction = OriginalChooseAction | IfElseAction;
 export type OriginalChooseAction = AutomationActionNodeBase<{
   choose: Array<{
@@ -58,6 +59,7 @@ export type ActionTypeMapping = {
   stop: StopAction;
   choose: ChooseAction;
   parallel: ParallelAction;
+  scene: SceneAction;
 };
 export type AutomationAction =
   | ServiceAction
@@ -68,5 +70,6 @@ export type AutomationAction =
   | StopAction
   | ChooseAction
   | ParallelAction
+  | SceneAction
   | DelayAction;
 export type ActionType = keyof ActionTypeMapping;
