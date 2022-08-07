@@ -1,5 +1,5 @@
 name: Shortumation
-version: v0.5.2
+version: v0.5.3
 slug: shortumation
 image: asosnovsky/shortumation-{arch}
 url: "https://github.com/asosnovsky/Shortumation"

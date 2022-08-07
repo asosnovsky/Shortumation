@@ -1,5 +1,10 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.5.3] - Bug Fixes
+
+- Redirecting `/` to `/web` to resolve container install strangeness reported in https://github.com/asosnovsky/Shortumation/issues/125
+- Fixed missing flag that caused the automation to explode in https://github.com/asosnovsky/Shortumation/issues/124
+
 ## [0.5.2] - Better Controls
 
 - Add automation trigger
