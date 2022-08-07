@@ -48,7 +48,6 @@ export const getConditionDefaultValues = (
       condition,
       zone: "",
       entity_id: [],
-      state: [],
     } as ZoneCondition;
   } else if (condition === "device") {
     return {
