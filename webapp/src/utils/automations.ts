@@ -73,6 +73,8 @@ export const getSubTypeList = <T extends AutomationNodeTypes>(nodeType: T) => {
         "zone",
         "event",
         "homeassistant",
+        "sun",
+        "calendar",
         "mqtt",
         "tag",
         "template",
@@ -161,6 +163,7 @@ export const TriggerValidators: Record<TriggerType, any> = {
   time: v.triggers.AutomationTriggerTime,
   webhook: v.triggers.AutomationTriggerWebhook,
   zone: v.triggers.AutomationTriggerZone,
+  sun: v.triggers.AutomationTriggerSun,
 };
 
 export const ActionValidators: Record<ActionType, any> = {

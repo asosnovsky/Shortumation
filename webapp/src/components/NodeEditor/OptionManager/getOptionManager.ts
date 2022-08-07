@@ -20,6 +20,8 @@ import { TriggerZone } from "./TriggerZone";
 import { TriggerDevice } from "./TriggerDevice";
 import { ActionStopState } from "./ActionStop";
 import { ActionParallelState } from "./ActionParallel";
+import { TriggerSunState } from "./TriggerSun";
+import { TriggerCalendarState } from "./TriggerCalendar";
 
 export const getOptionManager = <T extends AutomationNodeTypes>(
   nodeType: T,
@@ -58,6 +60,10 @@ export const getOptionManager = <T extends AutomationNodeTypes>(
         return TriggerHAState;
       case "mqtt":
         return TriggerMQTTState;
+      case "sun":
+        return TriggerSunState;
+      case "calendar":
+        return TriggerCalendarState;
       case "numeric_state":
         return TriggerNumericState;
       case "state":

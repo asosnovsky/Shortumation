@@ -96,6 +96,20 @@ export const AutomationTriggerZone = st.type({
   event: st.enums(["enter", "leave"]),
 });
 
+export const AutomationTriggerSun = st.type({
+  ...AutomationTriggerBase,
+  platform: st.literal("sun"),
+  event: st.enums(["sunset", "sunrise"]),
+  offset: st.optional(st.string()),
+});
+
+export const AutomationTriggerCalendar = st.type({
+  ...AutomationTriggerBase,
+  platform: st.literal("calendar"),
+  event: st.enums(["start", "end"]),
+  offset: st.optional(st.string()),
+});
+
 export const AutomationTriggerDevice = st.type({
   ...AutomationTriggerBase,
   ..._AutomationDeviceState,
@@ -103,6 +117,7 @@ export const AutomationTriggerDevice = st.type({
 });
 
 export const AutomationTrigger = st.union([
+  AutomationTriggerSun,
   AutomationTriggerEvent,
   AutomationTriggerHA,
   AutomationTriggerMQTT,

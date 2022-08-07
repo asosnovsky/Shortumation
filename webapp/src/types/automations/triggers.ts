@@ -26,6 +26,10 @@ export type AutomationTriggerZone = st.Infer<typeof v.AutomationTriggerZone>;
 export type AutomationTriggerDevice = st.Infer<
   typeof v.AutomationTriggerDevice
 >;
+export type AutomationTriggerSun = st.Infer<typeof v.AutomationTriggerSun>;
+export type AutomationTriggerCalendar = st.Infer<
+  typeof v.AutomationTriggerCalendar
+>;
 
 export type ActionTriggerMapping = {
   homeassistant: AutomationTriggerHA;
@@ -39,6 +43,8 @@ export type ActionTriggerMapping = {
   time: AutomationTriggerTime;
   webhook: AutomationTriggerWebhook;
   zone: AutomationTriggerZone;
+  sun: AutomationTriggerSun;
+  calendar: AutomationTriggerCalendar;
 };
 
 export type TriggerType = keyof ActionTriggerMapping;
@@ -54,4 +60,6 @@ export type AutomationTrigger =
   | AutomationTriggerTime
   | AutomationTriggerWebhook
   | AutomationTriggerZone
-  | AutomationTriggerDevice;
+  | AutomationTriggerDevice
+  | AutomationTriggerSun
+  | AutomationTriggerCalendar;

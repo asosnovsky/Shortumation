@@ -8,7 +8,7 @@ export const TriggerWebhook: OptionManager<AutomationTriggerWebhook> = {
     webhook_id: "",
   }),
   isReady: () => true,
-  renderOptionList: (state, setState) => {
+  Component: ({ state, setState }) => {
     return (
       <>
         <InputText
@@ -21,6 +21,10 @@ export const TriggerWebhook: OptionManager<AutomationTriggerWebhook> = {
             })
           }
         />
+        <span>
+          You can run this automation by sending an HTTP POST request to
+          http://your-home-assistant-ip/api/webhook/{state.webhook_id}.
+        </span>
       </>
     );
   },
