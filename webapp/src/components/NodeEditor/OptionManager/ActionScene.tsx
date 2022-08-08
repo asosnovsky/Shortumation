@@ -1,4 +1,4 @@
-import InputText from "components/Inputs/Base/InputText";
+import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { SceneAction } from "types/automations/actions";
 import { OptionManager } from "./OptionManager";
 
@@ -10,10 +10,11 @@ export const ActionSceneState: OptionManager<SceneAction> = {
   Component: ({ state, setState }) => {
     return (
       <>
-        <InputText
+        <InputEntity
           label="Scene"
+          restrictToDomain={["scene"]}
           value={state.scene ?? ""}
-          onChange={(d) => setState({ ...state, scene: d })}
+          onChange={(d) => setState({ ...state, scene: d ?? "" })}
         />
       </>
     );

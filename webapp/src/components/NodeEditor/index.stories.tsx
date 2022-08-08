@@ -142,3 +142,8 @@ export const Sun = make({
     event: "sunset",
   },
 });
+export const TriggerScene = make({
+  node: {
+    scene: "",
+  },
+});

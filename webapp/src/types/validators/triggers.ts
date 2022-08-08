@@ -108,6 +108,7 @@ export const AutomationTriggerCalendar = st.type({
   platform: st.literal("calendar"),
   event: st.enums(["start", "end"]),
   offset: st.optional(st.string()),
+  entity_id: st.optional(st.string()),
 });
 
 export const AutomationTriggerDevice = st.type({
