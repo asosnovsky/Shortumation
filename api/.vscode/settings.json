@@ -1,12 +1,7 @@
 {
-    "python.formatting.provider": "black",
-    "python.testing.unittestArgs": [
-        "-v",
-        "-s",
-        "./tests",
-        "-p",
-        "*test_*.py"
-    ],
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true
+  "python.formatting.provider": "black",
+  "python.testing.unittestArgs": ["-v", "-s", "./tests", "-p", "*test_*.py"],
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": true,
+  "python.envFile": "${workspaceFolder}/development_config/.env"
 }
