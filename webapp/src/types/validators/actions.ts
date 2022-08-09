@@ -13,15 +13,7 @@ export const AutomationActionNodeBase = st.type({
   continue_on_error: st.optional(st.boolean()),
 });
 
-export const ServiceAction = st.intersection([
-  AutomationActionNodeBase,
-  st.type({
-    data: st.any(),
-    target: st.any(),
-    service: st.string(),
-  }),
-]);
-
+// Flow Actions
 export const RepeatAction = st.intersection([
   AutomationActionNodeBase,
   st.type({
@@ -59,30 +51,10 @@ export const DelayAction = st.intersection([
   }),
 ]);
 
-export const FireEventAction = st.intersection([
-  AutomationActionNodeBase,
-  st.type({
-    event: st.string(),
-    event_data: st.any(),
-  }),
-]);
-
-export const DeviceAction = st.assign(
-  AutomationActionNodeBase,
-  st.partial(AutomationDeviceState)
-);
-
 export const StopAction = st.assign(
   AutomationActionNodeBase,
   st.type({
     stop: st.string(),
-  })
-);
-
-export const SceneAction = st.assign(
-  AutomationActionNodeBase,
-  st.type({
-    scene: st.string(),
   })
 );
 
@@ -116,3 +88,33 @@ export const ParallelAction = st.intersection([
     parallel: st.array(st.object()),
   }),
 ]);
+
+// Real Actions
+export const ServiceAction = st.intersection([
+  AutomationActionNodeBase,
+  st.type({
+    data: st.any(),
+    target: st.any(),
+    service: st.string(),
+  }),
+]);
+
+export const FireEventAction = st.intersection([
+  AutomationActionNodeBase,
+  st.type({
+    event: st.string(),
+    event_data: st.any(),
+  }),
+]);
+
+export const DeviceAction = st.assign(
+  AutomationActionNodeBase,
+  st.partial(AutomationDeviceState)
+);
+
+export const SceneAction = st.assign(
+  AutomationActionNodeBase,
+  st.type({
+    scene: st.string(),
+  })
+);

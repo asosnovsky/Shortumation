@@ -52,14 +52,17 @@ export type ParallelAction = AutomationActionNodeBase<{
 }>;
 export type ActionTypeMapping = {
   service: ServiceAction;
-  repeat: RepeatAction;
-  wait: WaitAction | DelayAction;
-  event: FireEventAction;
   device: DeviceAction;
-  stop: StopAction;
+
+  event: FireEventAction;
+  scene: SceneAction;
+
+  repeat: RepeatAction;
   choose: ChooseAction;
   parallel: ParallelAction;
-  scene: SceneAction;
+
+  wait: WaitAction | DelayAction;
+  stop: StopAction;
 };
 export type AutomationAction =
   | ServiceAction

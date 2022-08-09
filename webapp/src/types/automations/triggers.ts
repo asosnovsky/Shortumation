@@ -32,19 +32,22 @@ export type AutomationTriggerCalendar = st.Infer<
 >;
 
 export type ActionTriggerMapping = {
-  homeassistant: AutomationTriggerHA;
   device: AutomationTriggerDevice;
+
   event: AutomationTriggerEvent;
   mqtt: AutomationTriggerMQTT;
-  numeric_state: AutomationTriggerNumericState;
-  state: AutomationTriggerState;
+  homeassistant: AutomationTriggerHA;
   tag: AutomationTriggerTag;
-  template: AutomationTriggerTemplate;
-  time: AutomationTriggerTime;
-  webhook: AutomationTriggerWebhook;
-  zone: AutomationTriggerZone;
   sun: AutomationTriggerSun;
   calendar: AutomationTriggerCalendar;
+  webhook: AutomationTriggerWebhook;
+
+  numeric_state: AutomationTriggerNumericState;
+  state: AutomationTriggerState;
+  zone: AutomationTriggerZone;
+
+  template: AutomationTriggerTemplate;
+  time: AutomationTriggerTime;
 };
 
 export type TriggerType = keyof ActionTriggerMapping;
