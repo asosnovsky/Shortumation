@@ -1,16 +1,53 @@
 from pathlib import Path
-from typing import Any, Iterator, Union
+from typing import Any, Iterator, Union, Dict
+from ..hass_config.loader import HassConfig
 
 from src.json_serializer import normalize_obj
-from ..logger import get_logger
+from src.logger import get_logger
 from src.yaml_serializer import load_yaml
+from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
 
 from .errors import InvalidAutomationFile
 from .types import ExtenededAutomationData
 
 logger = get_logger(__file__)
 
-# Single loader
+
+def extract_files(p: Path) -> Iterator[Path]:
+    if not p.exists():
+        logger.warning(
+            f"the specified path '{p}' does not point to a valid location! -- {p.absolute()}"
+        )
+        return
+    if p.is_dir():
+        for c in p.iterdir():
+            yield from extract_files(c)
+    else:
+        yield p
+
+
+def extract_automation_paths(
+    hass_config: HassConfig,
+) -> Iterator[Path]:
+    found = False
+    for key, value in hass_config.configurations.items():
+        if str(key).startswith("automation"):
+            logger.info(f"Loading automations from '{key}'")
+            found = True
+            if isinstance(value, dict):
+                raise NotImplementedError(
+                    "No support for automations baked into configuration.yaml! Please extract these into a seperate file"
+                )
+            elif isinstance(value, IncludedYaml):
+                yield hass_config.root_path / value.path_str
+            elif isinstance(value, IncludedYamlDir):
+                yield from extract_files(hass_config.root_path / value.name)
+            else:
+                logger.warning(f"found an invalid type in {key}!")
+    if not found:
+        yield hass_config.root_path / "automations.yaml"
+
+
 def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationData]:
     """
 

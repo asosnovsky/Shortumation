@@ -2,9 +2,17 @@ from pathlib import Path
 from tempfile import mktemp
 from unittest import TestCase
 
-from src.automations_v2.loader import load_automation_path
+from src.automations_v2.loader import extract_automation_paths, load_automation_path
 from src.automations_v2.types import ExtenededAutomationData
-from tests.utils import HA_CONFIG2_EXAMPLE, HA_CONFIG4_EXAMPLE
+from src.hass_config.loader import HassConfig
+from tests.utils import (
+    HA_CONFIG2_EXAMPLE,
+    HA_CONFIG3_EXAMPLE,
+    HA_CONFIG4_EXAMPLE,
+    HA_CONFIG5_EXAMPLE,
+    HA_CONFIG6_EXAMPLE,
+    HA_CONFIG_EXAMPLE,
+)
 
 
 class loader_tests(TestCase):
@@ -85,3 +93,17 @@ class loader_tests(TestCase):
         file_path.unlink(missing_ok=True)
         automations = list(load_automation_path(file_path))
         self.assertEqual(len(automations), 0)
+
+    def test_extract_all_automation_files(self):
+        for ha_path, expected in [
+            (HA_CONFIG_EXAMPLE, 1),
+            (HA_CONFIG2_EXAMPLE, 1),
+            (HA_CONFIG3_EXAMPLE, 1),
+            (HA_CONFIG4_EXAMPLE, 3),
+            (HA_CONFIG5_EXAMPLE, 7),
+            (HA_CONFIG6_EXAMPLE, 8),
+        ]:
+            with self.subTest(ha_path=ha_path, expected=expected):
+                hass_config = HassConfig(ha_path)
+                paths = list(extract_automation_paths(hass_config))
+                self.assertEqual(len(paths), expected)
