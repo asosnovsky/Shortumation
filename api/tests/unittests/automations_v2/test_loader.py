@@ -1,0 +1,87 @@
+from pathlib import Path
+from tempfile import mktemp
+from unittest import TestCase
+
+from src.automations_v2.loader import load_automation_path
+from src.automations_v2.types import ExtenededAutomationData
+from tests.utils import HA_CONFIG2_EXAMPLE, HA_CONFIG4_EXAMPLE
+
+
+class loader_tests(TestCase):
+    def test_load_automation_list_file(self):
+        automations = list(load_automation_path(HA_CONFIG2_EXAMPLE / "automations.yaml"))
+        self.assertEqual(len(automations), 1)
+        self.assertEqual(
+            automations[0],
+            ExtenededAutomationData(
+                id="1652069225859",
+                source_file=str(HA_CONFIG2_EXAMPLE / "automations.yaml"),
+                source_file_type="list",
+                alias="Climate - Pref temperature ",
+                description="",
+                mode="single",
+                trigger=[
+                    {
+                        "platform": "state",
+                        "entity_id": "input_number.preferred_temperature",
+                    }
+                ],
+                condition=[],
+                action=[
+                    {
+                        "service": "climate.set_temperature",
+                        "data": {
+                            "temperature": {
+                                "[object Object]": None,
+                            }
+                        },
+                        "target": {
+                            "entity_id": "climate.main_floor",
+                        },
+                    }
+                ],
+            ),
+        )
+
+    def test_load_automation_obj_file(self):
+        automations = list(
+            load_automation_path(HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml")
+        )
+        self.assertEqual(len(automations), 1)
+        self.assertEqual(
+            automations[0],
+            ExtenededAutomationData(
+                id="1659114647067",
+                source_file=str(HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml"),
+                source_file_type="obj",
+                alias="Notify Washer",
+                description="Example",
+                mode="single",
+                trigger=[
+                    {
+                        "platform": "homeassistant",
+                        "event": "start",
+                    }
+                ],
+                condition=[],
+                action=[
+                    {
+                        "service": "counter.increment",
+                        "data": {},
+                        "target": {"entity_id": "counter.up_times"},
+                    }
+                ],
+            ),
+        )
+
+    def test_load_automation_empty_file(self):
+        file_path = Path(mktemp())
+        file_path.touch()
+        automations = list(load_automation_path(file_path))
+        self.assertEqual(len(automations), 0)
+
+    def test_load_automation_none_existing_file(self):
+        file_path = Path(mktemp())
+        file_path.unlink(missing_ok=True)
+        automations = list(load_automation_path(file_path))
+        self.assertEqual(len(automations), 0)

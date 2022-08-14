@@ -2,11 +2,13 @@ from pathlib import Path
 from typing import Any, Iterator, Union
 
 from src.json_serializer import normalize_obj
+from ..logger import get_logger
 from src.yaml_serializer import load_yaml
 
 from .errors import InvalidAutomationFile
 from .types import ExtenededAutomationData
 
+logger = get_logger(__file__)
 
 # Single loader
 def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationData]:
@@ -19,6 +21,9 @@ def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationD
         Iterator[ExtenededAutomationData]
 
     """
+    if not automation_path.exists():
+        logger.warning(f"the file {automation_path} does not exists")
+        return
     try:
         with automation_path.open("r") as fp:
             automations = load_yaml(fp)
@@ -43,6 +48,9 @@ def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationD
                 error=err,
             ) from err
     else:
+        if automations is None:
+            logger.warning(f"the file {automation_path} is empty")
+            return
         for automation in automations:
             try:
                 yield ExtenededAutomationData(
