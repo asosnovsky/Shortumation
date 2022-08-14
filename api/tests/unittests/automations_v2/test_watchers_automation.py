@@ -1,9 +1,9 @@
-from src.automations_v2.automation_watcher import AutomationFileWatcher
+from src.automations_v2.watchers.automation import AutomationFileWatcher
 from tests.utils import HA_CONFIG6_EXAMPLE, HA_CONFIG_EXAMPLE, create_copy_of_example_config
 from .utils import TestWithDB
 
 
-class watcher_tests(TestWithDB):
+class automation_watcher_tests(TestWithDB):
     def test_bad_file(self):
         example_folder = create_copy_of_example_config()
         watcher = AutomationFileWatcher(example_folder / "automations.yaml", self.db_file)
@@ -12,7 +12,7 @@ class watcher_tests(TestWithDB):
         self.assertEqual(total, 0)
 
         watcher.start()
-        watcher.wait_until_next_reload(True)
+        self.assertEqual(watcher.wait_until_next_event(True), "loaded")
         self.assertEqual(self.db.count_automations(), 32)
 
         (example_folder / "automations.yaml").write_text("haha!")
@@ -28,7 +28,7 @@ class watcher_tests(TestWithDB):
         self.assertEqual(total, 0)
 
         watcher.start()
-        watcher.wait_until_next_reload(True)
+        self.assertEqual(watcher.wait_until_next_event(True), "loaded")
         self.assertEqual(self.db.count_automations(), 0)
         watcher.join()
 
@@ -36,7 +36,7 @@ class watcher_tests(TestWithDB):
         example_folder = create_copy_of_example_config(HA_CONFIG6_EXAMPLE)
         watcher = AutomationFileWatcher(example_folder / "automations", self.db_file)
         watcher.start()
-        watcher.wait_until_next_reload(True)
+        self.assertEqual(watcher.wait_until_next_event(True), "loaded")
         self.assertEqual(self.db.count_automations(), 12)
         watcher.join()
 
@@ -44,7 +44,7 @@ class watcher_tests(TestWithDB):
         example_folder = create_copy_of_example_config()
         watcher = AutomationFileWatcher(example_folder / "automations.yaml", self.db_file)
         watcher.start()
-        watcher.wait_until_next_reload(True)
+        self.assertEqual(watcher.wait_until_next_event(True), "loaded")
         self.assertEqual(self.db.count_automations(), 32)
         (example_folder / "automations.yaml").write_text("")
         (example_folder / "automations.yaml").write_text(
@@ -58,7 +58,7 @@ class watcher_tests(TestWithDB):
         (example_folder / "automations.yaml").write_text(
             (HA_CONFIG_EXAMPLE / "automations.yaml").read_text()
         )
-        watcher.wait_until_next_reload(True)
+        self.assertEqual(watcher.wait_until_next_event(True), "loaded")
         self.assertEqual(self.db.count_automations(), 32)
         watcher.join()
 
@@ -70,7 +70,7 @@ class watcher_tests(TestWithDB):
     #     self.assertEqual(total, 0)
 
     #     watcher.start()
-    #     watcher.wait_until_next_reload(True)
+    #     self.assertEqual(watcher.wait_until_next_event(True), 'loaded')
     #     self.assertEqual(self.db.count_automations(), 32)
 
     #     autos = self.db.list_automations(0, 32)

@@ -99,9 +99,9 @@ class loader_tests(TestCase):
             (HA_CONFIG_EXAMPLE, 1),
             (HA_CONFIG2_EXAMPLE, 1),
             (HA_CONFIG3_EXAMPLE, 1),
-            (HA_CONFIG4_EXAMPLE, 3),
-            (HA_CONFIG5_EXAMPLE, 7),
-            (HA_CONFIG6_EXAMPLE, 8),
+            (HA_CONFIG4_EXAMPLE, 1),
+            (HA_CONFIG5_EXAMPLE, 3),
+            (HA_CONFIG6_EXAMPLE, 4),
         ]:
             with self.subTest(ha_path=ha_path, expected=expected):
                 hass_config = HassConfig(ha_path)

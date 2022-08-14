@@ -33,6 +33,10 @@ class AutomationDBConnection:
     def __init__(self, db_file: Path) -> None:
         self.db_file = db_file
 
+    def reset(self):
+        self.db_file.unlink(missing_ok=True)
+        self.create_db()
+
     @contextmanager
     def get_cur(self) -> Iterator[sqlite3.Cursor]:
         conn = sqlite3.connect(self.db_file)

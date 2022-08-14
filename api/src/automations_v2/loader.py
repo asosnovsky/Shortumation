@@ -29,7 +29,7 @@ def extract_automation_paths(
             elif isinstance(value, IncludedYaml):
                 yield hass_config.root_path / value.path_str
             elif isinstance(value, IncludedYamlDir):
-                yield from extract_files(hass_config.root_path / value.name)
+                yield hass_config.root_path / value.name
             else:
                 logger.warning(f"found an invalid type in {key}!")
     if not found:
