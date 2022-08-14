@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 from pathlib import Path
 from typing import Any, Iterator, Union, Dict
 from ..hass_config.loader import HassConfig
@@ -61,47 +62,51 @@ def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationD
     if not automation_path.exists():
         logger.warning(f"the file {automation_path} does not exists")
         return
-    try:
-        with automation_path.open("r") as fp:
-            automations = load_yaml(fp)
-    except Exception as err:
-        raise InvalidAutomationFile(
-            when="loading yaml",
-            automation_path=automation_path,
-            error=err,
-        ) from err
-
-    if isinstance(automations, dict):
+    if automation_path.is_dir():
+        for f in extract_files(automation_path):
+            yield from load_automation_path(f)
+    else:
         try:
-            yield ExtenededAutomationData(
-                **clean_automation(automations),
-                source_file=str(automation_path),
-                source_file_type="obj",
-            )
+            with automation_path.open("r") as fp:
+                automations = load_yaml(fp)
         except Exception as err:
             raise InvalidAutomationFile(
-                when="reading file contents",
+                when="loading yaml",
                 automation_path=automation_path,
                 error=err,
             ) from err
-    else:
-        if automations is None:
-            logger.warning(f"the file {automation_path} is empty")
-            return
-        for automation in automations:
+
+        if isinstance(automations, dict):
             try:
                 yield ExtenededAutomationData(
-                    **clean_automation(automation),
+                    **clean_automation(automations),
                     source_file=str(automation_path),
-                    source_file_type="list",
+                    source_file_type="obj",
                 )
             except Exception as err:
                 raise InvalidAutomationFile(
                     when="reading file contents",
                     automation_path=automation_path,
                     error=err,
-                    automation=automation,
                 ) from err
+        else:
+            if automations is None:
+                logger.warning(f"the file {automation_path} is empty")
+                return
+            for automation in automations:
+                try:
+                    yield ExtenededAutomationData(
+                        **clean_automation(automation),
+                        source_file=str(automation_path),
+                        source_file_type="list",
+                    )
+                except Exception as err:
+                    raise InvalidAutomationFile(
+                        when="reading file contents",
+                        automation_path=automation_path,
+                        error=err,
+                        automation=automation,
+                    ) from err
 
 
 def clean_automation(auto_raw: dict):

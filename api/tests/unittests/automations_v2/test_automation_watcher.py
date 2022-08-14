@@ -1,5 +1,5 @@
-from src.automations_v2.watcher import AutomationFileWatcher
-from tests.utils import create_copy_of_example_config
+from src.automations_v2.automation_watcher import AutomationFileWatcher
+from tests.utils import HA_CONFIG6_EXAMPLE, create_copy_of_example_config
 from .utils import TestWithDB
 
 
@@ -30,6 +30,15 @@ class watcher_tests(TestWithDB):
         watcher.start()
         watcher.wait_until_next_reload(True)
         self.assertEqual(self.db.count_automations(), 0)
+        watcher.join()
+
+    def test_watch_folder(self):
+        example_folder = create_copy_of_example_config(HA_CONFIG6_EXAMPLE)
+        watcher = AutomationFileWatcher(example_folder / "automations", self.db_file)
+        watcher.start()
+        watcher.wait_until_next_reload(True)
+        self.assertEqual(self.db.count_automations(), 12)
+        watcher.join()
 
     # def test_valid_changes(self):
     #     example_folder = create_copy_of_example_config()
