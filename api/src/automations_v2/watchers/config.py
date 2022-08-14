@@ -21,16 +21,20 @@ class ConfigEventHandler(BaseFileEventHandler):
     def __init__(self, config_path: Path, db_path: Path, **kwargs) -> None:
         self.__db = AutomationDBConnection(db_path)
         self.__config_path = config_path
-        self.__hass_config = HassConfig(self.__config_path)
+        self.__hass_config = HassConfig(self.__config_path.parent)
         self.__automation_watchers: List[AutomationFileWatcher] = []
         super().__init__(**kwargs)
 
-    def should_reload(self, p: Path) -> bool:
-        return p.absolute() == self.__config_path
-
-    def reload_file(self):
+    def reload_file(self, file_path: Path, deleted: bool):
+        if file_path is None:
+            file_path = self.__config_path
+        if file_path.absolute() != self.__config_path:
+            return
         self.clear_automation_watchers()
         self.__db.reset()
+        if deleted:
+            logger.error("Could not detect your configuration.yaml file, was is deleted?")
+            return
         for p in extract_automation_paths(self.__hass_config):
             watcher = AutomationFileWatcher(automation_file=p, automation_db_path=self.__db.db_file)
             watcher.start()

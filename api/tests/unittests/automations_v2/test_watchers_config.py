@@ -1,4 +1,5 @@
 from src.automations_v2.watchers.config import ConfigFileWatcher
+from src.hass_config.loader import HassConfig
 
 from .utils import TestWithDB, make_temp_db
 from tests.utils import (
@@ -27,7 +28,7 @@ class config_watcher_tests(TestWithDB):
                 db.reset()
                 config_path = create_copy_of_example_config(p)
                 config_watcher = ConfigFileWatcher(
-                    config_path=config_path,
+                    config_path=HassConfig(config_path).get_configuration_path(),
                     automation_db_path=db.db_file,
                 )
                 self.assertEqual(db.count_automations(), 0)

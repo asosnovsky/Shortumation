@@ -2,17 +2,11 @@ import logging
 
 from src.env import LOG_LEVEL
 
-if LOG_LEVEL == "DEBUG":
-    logging.basicConfig(level=logging.DEBUG)
-elif LOG_LEVEL == "INFO":
-    logging.basicConfig(level=logging.INFO)
-elif LOG_LEVEL == "WARN":
-    logging.basicConfig(level=logging.WARN)
-elif LOG_LEVEL == "ERROR":
-    logging.basicConfig(level=logging.ERROR)
-else:
-    logging.basicConfig(level=logging.NOTSET)
-
+logging.basicConfig(
+    format="%(asctime)s|%(levelname)-4s[%(pathname)s:%(lineno)d@%(funcName)s] %(message)s",
+    datefmt="%Y-%m-%d:%H:%M:%S",
+    level=logging._nameToLevel.get(LOG_LEVEL, logging.INFO),
+)
 logger = logging.getLogger()
 
 

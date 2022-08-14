@@ -1,3 +1,4 @@
+from pathlib import Path
 from src.automations_v2.types import ExtenededAutomationData
 from .utils import TestWithDB
 
@@ -19,13 +20,13 @@ class db_tests(TestWithDB):
             ExtenededAutomationData(
                 id="test",
                 alias="test",
-                source_file="automation.yaml",
+                source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
             ),
             ExtenededAutomationData(
                 id="test2",
                 alias="test",
-                source_file="automation.yaml",
+                source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
             ),
@@ -42,13 +43,13 @@ class db_tests(TestWithDB):
             ExtenededAutomationData(
                 id="test",
                 alias="test",
-                source_file="automation.yaml",
+                source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
             ),
             ExtenededAutomationData(
                 id="test",
                 alias="test",
-                source_file="automation.yaml",
+                source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
             ),
@@ -79,3 +80,27 @@ class db_tests(TestWithDB):
         self.assertEqual(self.db.count_automations(), 2)
         self.db.delete_automations(originals)
         self.assertEqual(self.db.count_automations(), 0)
+
+    def test_delete_automations_by_source_type(self):
+        originals = [
+            ExtenededAutomationData(
+                id="test",
+                alias="test",
+                source_file="automation2.yaml",
+                source_file_type="obj",
+            ),
+            ExtenededAutomationData(
+                id="test2",
+                alias="test",
+                source_file="automation.yaml",
+                source_file_type="obj",
+                action=[{"event": {"nice": "one"}, "event_type": "custom"}],
+            ),
+        ]
+        self.assertEqual(self.db.count_automations(), 0)
+        self.db.upsert_automations(originals)
+        self.assertEqual(self.db.count_automations(), 2)
+        self.db.delete_automations_in_source_file(Path("automation2.yaml"))
+        self.assertEqual(self.db.count_automations(), 1)
+        [auto] = self.db.list_automations(0, 10)
+        self.assertEqual(auto.id, "test2")

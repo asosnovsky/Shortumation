@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from src.logger import get_logger
+from ...utils import extract_files
 
 from ..db import AutomationDBConnection, DBError
 from ..loader import load_automation_path
@@ -17,30 +18,37 @@ class AutomationEventHandler(BaseFileEventHandler):
     def __init__(self, automation_file: Path, automation_db_path: Path, **kwrgs) -> None:
         self.__automation_file = automation_file.absolute()
         self.__automation_db = AutomationDBConnection(automation_db_path)
-        self.__loaded_automations: Optional[List[ExtenededAutomationData]] = None
         super().__init__(**kwrgs)
 
-    def should_reload(self, p: Path) -> bool:
-        return p.absolute() == self.__automation_file
+    def reload_file(self, file_path: Optional[Path], deleted: bool):
+        if file_path is None:
+            file_path = self.__automation_file
 
-    def reload_file(self):
-        automations = list(load_automation_path(self.__automation_file))
-        self.__automation_db.upsert_automations(automations)
-        self.__loaded_automations = automations
+        self.clear_automations(file_path)
+
+        if not deleted:
+            automations = list(load_automation_path(file_path))
+            self.__automation_db.upsert_automations(automations)
+
+    def clear_automations(self, file_path: Path):
+        if file_path.is_dir():
+            for f in extract_files(file_path):
+                self.__automation_db.delete_automations_in_source_file(f)
+        else:
+            self.__automation_db.delete_automations_in_source_file(file_path)
 
     def handle_failure(self, error: Exception):
         logger.error(error)
         if isinstance(error, DBError):
-            logger.warning(f"Failed to reload {self.__automation_file} due to {error}")
+            logger.warning(f"Failed to reload {self.__automation_file} due to {repr(error)}")
         else:
-            logger.warning(f"Failed to load {self.__automation_file} due to {error}")
-        if self.__loaded_automations is not None:
-            try:
-                self.__automation_db.delete_automations(self.__loaded_automations)
-            except DBError as err:
-                raise FailedDeletion(
-                    f"failed to flush automations from database for the invalid file {self.__automation_file} due to {err}"
-                ) from err
+            logger.warning(f"Failed to load {self.__automation_file} due to {repr(error)}")
+        try:
+            self.clear_automations(self.__automation_file)
+        except DBError as err:
+            raise FailedDeletion(
+                f"failed to flush automations from database for the invalid file {self.__automation_file} due to {repr(err)}"
+            ) from err
 
 
 class AutomationFileWatcher(BaseWatcher):

@@ -22,13 +22,14 @@ class BaseWatcher(Observer, abc.ABC, Generic[BaseFileEventHandlerT]):
         self.__event_errored = Event()
         Observer.__init__(self)
         self.handler: Optional[BaseFileEventHandlerT] = None
+        self.name = f"{self.__class__.__name__}-{self.file_path}-{self.name}"
 
     def start(self):
         self.handler = self.get_handler(
             event_errored=self.__event_errored,
             event_loaded=self.__event_file_loaded,
         )
-        self.schedule(self.handler, self.file_path)
+        self.schedule(self.handler, self.file_path, recursive=self.file_path.is_dir())
         return super().start()
 
     def get_handler(self, event_loaded: Event, event_errored: Event) -> BaseFileEventHandlerT:
@@ -50,6 +51,14 @@ class BaseWatcher(Observer, abc.ABC, Generic[BaseFileEventHandlerT]):
         logger.warning(f"Watcher for {self.file_path} is stopped!")
         if self.handler is not None:
             self._post_stop(self.handler)
+
+    @property
+    def is_loaded(self):
+        return self.__event_file_loaded.is_set()
+
+    @property
+    def is_errored(self):
+        return self.__event_errored.is_set()
 
     def wait_until_next_reload(self, reset_after: bool = False, *, timeout: int = 5):
         self.__event_file_loaded.wait(timeout)

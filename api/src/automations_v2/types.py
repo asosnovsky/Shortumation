@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Dict, List, Literal, Optional, Union
 
 from pydantic import BaseModel
@@ -19,7 +20,7 @@ class BaseAutomation(BaseModel):
 
 
 class ExtenededAutomationData(BaseAutomation):
-    source_file: str
+    source_file: Path
     source_file_type: Literal["list", "obj"]
     tags: Dict[str, str] = Field(default_factory=dict)
 

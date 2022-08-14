@@ -1,9 +1,13 @@
 - id: "sublist3-mlist2"
   alias: Sublist 3 - Merged List 2
-  description: ""
+  description: "That was correct!"
   trigger: []
   condition: []
-  action: []
+  action:
+    - service: "switch.turn_off"
+      target:
+        entity_id: "switch.bathroom"
+      data:
   mode: single
 - id: "sublist3-mlist3"
   alias: Sublist 3 - Merged List 3

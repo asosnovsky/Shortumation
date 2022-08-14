@@ -78,7 +78,7 @@ class AutomationDBConnection:
                         "{automation.alias}",
                         "{automation.description}",
                         "{automation.mode}",
-                        "{automation.source_file}",
+                        "{automation.source_file.absolute()}",
                         "{automation.source_file_type}",
                         "{encode_auto(automation)}"
                     )
@@ -86,7 +86,7 @@ class AutomationDBConnection:
                         alias = "{automation.alias}",
                         description = "{automation.description}",
                         mode = "{automation.mode}",
-                        source_file = "{automation.source_file}",
+                        source_file = "{automation.source_file.absolute()}",
                         source_file_type = "{automation.source_file_type}",
                         rest = "{encode_auto(automation)}"
                     
@@ -97,6 +97,13 @@ class AutomationDBConnection:
         with self.get_cur() as cur:
             cur.executemany(
                 f"DELETE FROM {automations_tbl} WHERE id = ?", [(a.id,) for a in automations]
+            )
+
+    def delete_automations_in_source_file(self, source_file: Path):
+        with self.get_cur() as cur:
+            cur.execute(
+                f"DELETE FROM {automations_tbl} WHERE source_file = ?",
+                (str(source_file.absolute()),),
             )
 
     def get_automation(self, automation_id: str) -> ExtenededAutomationData:

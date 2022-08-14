@@ -1,5 +1,6 @@
 import abc
 import asyncio
+from typing import Optional
 import nest_asyncio
 
 from threading import Event
@@ -20,12 +21,9 @@ class BaseFileEventHandler(FileSystemEventHandler, abc.ABC):
         self.event_loaded = event_loaded
         self.event_errored = event_errored
         super().__init__()
-        asyncio.run(self._reload_file())
+        asyncio.run(self._reload_file(None, False))
 
-    def should_reload(self, p: Path) -> bool:
-        raise NotImplementedError
-
-    def reload_file(self):
+    def reload_file(self, file_path: Optional[Path], deleted: bool):
         raise NotImplementedError
 
     def handle_failure(self, error: Exception):
@@ -33,9 +31,9 @@ class BaseFileEventHandler(FileSystemEventHandler, abc.ABC):
         raise error from error
 
     @throttle(seconds=60)
-    def _reload_file(self):
+    def _reload_file(self, file_path: Optional[Path], deleted: bool):
         try:
-            self.reload_file()
+            self.reload_file(file_path, deleted)
         except Exception as err:
             self.event_errored.set()
             self.handle_failure(err)
@@ -43,15 +41,12 @@ class BaseFileEventHandler(FileSystemEventHandler, abc.ABC):
 
     def on_modified(self, event: FileSystemEvent):
         logger.info(f"on_modified: {event.event_type} path : {event.src_path}")
-        if self.should_reload(Path(event.src_path)):
-            asyncio.run(self._reload_file())
+        asyncio.run(self._reload_file(Path(event.src_path), False))
 
     def on_created(self, event: FileSystemEvent):
         logger.info(f"on_created: {event.event_type} path : {event.src_path}")
-        if self.should_reload(Path(event.src_path)):
-            asyncio.run(self._reload_file())
+        asyncio.run(self._reload_file(Path(event.src_path), False))
 
     def on_deleted(self, event: FileSystemEvent):
         logger.info(f"on_deleted: {event.event_type} path : {event.src_path}")
-        if self.should_reload(Path(event.src_path)):
-            asyncio.run(self._reload_file())
+        asyncio.run(self._reload_file(Path(event.src_path), True))
