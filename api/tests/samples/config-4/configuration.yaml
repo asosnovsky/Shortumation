@@ -1,0 +1,4 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+automation: !include_dir_list ./automations

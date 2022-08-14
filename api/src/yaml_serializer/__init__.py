@@ -36,6 +36,6 @@ def load_yaml(yaml_stream: TextIO) -> Union[dict, list]:
         yaml_stream (io.StringIO)
 
     Returns:
-        List[dict, list]
+        Union[dict, list]
     """
     return yaml.load(yaml_stream, Loader=YamlSafeLoader)  # nosec

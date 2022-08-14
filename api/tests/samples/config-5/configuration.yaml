@@ -1,0 +1,12 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+automation manual: !include_dir_list ./automations/include_dir_list
+automation ui: !include automations/ui.yaml
+automation cools: !include_dir_merge_list automations/include_dir_merge_list
+script: !include scripts.yaml
+scene: !include scenes.yaml

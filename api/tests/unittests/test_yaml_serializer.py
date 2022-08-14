@@ -7,7 +7,6 @@ from src.yaml_serializer.types import (
     IncludedYamlDir,
     SecretValue,
 )
-from tests.utils import SAMPLES_FOLDER
 
 
 class dumping_yamls_tests(TestCase):
@@ -25,9 +24,38 @@ class dumping_yamls_tests(TestCase):
         yaml = dump_yaml({"google_password": SecretValue("gpass", "supersec")})
         self.assertEqual(yaml, "google_password: !secret 'gpass'\n")
 
-    def test_dumping_stub(self):
+    def test_dumping_include_dir_list(self):
         yaml = dump_yaml({"sensor": IncludedYamlDir("include_dir_list", "sensors/*yaml")})
         self.assertEqual(yaml, "sensor: !include_dir_list 'sensors/*yaml'\n")
+
+    def test_dumping_include_dir_merge_list(self):
+        yaml = dump_yaml({"sensor": IncludedYamlDir("include_dir_merge_list", "sensors/*yaml")})
+        self.assertEqual(yaml, "sensor: !include_dir_merge_list 'sensors/*yaml'\n")
+
+    def test_load_complex_automation_setup(self):
+        yaml_obj = load_yaml(
+            io.StringIO(
+                """
+        automation manual: !include_dir_list ./automations/include_dir_list
+        automation ui: !include automations/ui.yaml
+        automation: !include automations/base.yaml
+        automation cools: !include_dir_merge_list automations/include_dir_merge_list
+        """
+            )
+        )
+        self.assertDictEqual(
+            dict(yaml_obj),
+            {
+                "automation manual": IncludedYamlDir(
+                    "include_dir_list", "./automations/include_dir_list"
+                ),
+                "automation ui": IncludedYaml("automations/ui.yaml"),
+                "automation cools": IncludedYamlDir(
+                    "include_dir_merge_list", "automations/include_dir_merge_list"
+                ),
+                "automation": IncludedYaml("automations/base.yaml"),
+            },
+        )
 
     def test_load_stub(self):
         yaml_obj = load_yaml(

@@ -1,0 +1,13 @@
+id: "1659114647066"
+alias: On Home Up
+description: Example
+mode: single
+trigger:
+  - platform: homeassistant
+    event: start
+condition: []
+action:
+  - service: counter.increment
+    data: {}
+    target:
+      entity_id: counter.up_times

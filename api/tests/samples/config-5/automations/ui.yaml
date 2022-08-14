@@ -1,0 +1,23 @@
+- id: '165911464702444'
+  alias: In File
+  description: Example
+  mode: single
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: counter.increment
+    data: {}
+    target:
+      entity_id: counter.up_times
+- id: '1660439437914'
+  alias: NEW
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: 0
+  condition: []
+  action: []
+  mode: single
