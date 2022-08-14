@@ -1,30 +1,17 @@
-from curses.ascii import isdigit
 from pathlib import Path
-from typing import Any, Iterator, Union, Dict
+from typing import Any, Iterator, Union
 from ..hass_config.loader import HassConfig
 
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
 from src.yaml_serializer import load_yaml
 from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
+from src.utils import extract_files
 
 from .errors import InvalidAutomationFile
 from .types import ExtenededAutomationData
 
 logger = get_logger(__file__)
-
-
-def extract_files(p: Path) -> Iterator[Path]:
-    if not p.exists():
-        logger.warning(
-            f"the specified path '{p}' does not point to a valid location! -- {p.absolute()}"
-        )
-        return
-    if p.is_dir():
-        for c in p.iterdir():
-            yield from extract_files(c)
-    else:
-        yield p
 
 
 def extract_automation_paths(

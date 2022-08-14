@@ -1,4 +1,5 @@
-from threading import Thread, Condition, Event
+import asyncio
+from threading import Thread, Event
 from pathlib import Path
 from time import sleep
 from typing import List, Optional
@@ -8,6 +9,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 from src.logger import get_logger
+from ..utils import throttle
 from .db import AutomationDBConnection, DBError
 from .loader import load_automation_path
 from .types import ExtenededAutomationData
@@ -23,8 +25,9 @@ class AutomationFileEventHandler(FileSystemEventHandler):
         self.__automation_db = AutomationDBConnection(automation_db_path)
         self.file_loaded = file_loaded
         self.__loaded_automations: Optional[List[ExtenededAutomationData]] = None
-        self.reload_file()
+        asyncio.run(self.reload_file())
 
+    @throttle(seconds=60)
     def reload_file(self):
         try:
             automations = list(load_automation_path(self.__automation_file))
@@ -48,17 +51,17 @@ class AutomationFileEventHandler(FileSystemEventHandler):
     def on_modified(self, event: FileSystemEvent):
         logger.info(f"on_modified: {type(event)} {event.event_type} path : {event.src_path}")
         if Path(event.src_path).absolute() == self.__automation_file:
-            self.reload_file()
+            asyncio.run(self.reload_file())
 
     def on_created(self, event: FileSystemEvent):
         logger.info(f"on_created: {type(event)} {event.event_type} path : {event.src_path}")
         if Path(event.src_path).absolute() == self.__automation_file:
-            self.reload_file()
+            asyncio.run(self.reload_file())
 
     def on_deleted(self, event: FileSystemEvent):
         logger.info(f"on_deleted: {type(event)} {event.event_type} path : {event.src_path}")
         if Path(event.src_path).absolute() == self.__automation_file:
-            self.reload_file()
+            asyncio.run(self.reload_file())
 
 
 class AutomationFileWatcher(Thread):
