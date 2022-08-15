@@ -46,3 +46,6 @@ start-docker:
 	cp ./development_config/.env .env.api
 	docker-compose down 
 	docker-compose up 
+
+update-vulture-whitelist:
+	$(VENV_BIN)/vulture --make-whitelist src > .vulture_whitelist

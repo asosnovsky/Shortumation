@@ -1,6 +1,6 @@
 from pathlib import Path
-from unittest import TestCase
 from tempfile import mktemp
+from unittest import TestCase
 
 from src.automations_v2.db import AutomationDBConnection
 

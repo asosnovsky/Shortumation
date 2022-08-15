@@ -2,7 +2,10 @@ from pathlib import Path
 from tempfile import mktemp
 from unittest import TestCase
 
-from src.automations_v2.loader import extract_automation_paths, load_automation_path
+from src.automations_v2.loader import (
+    extract_automation_paths,
+    load_automation_path,
+)
 from src.automations_v2.types import ExtenededAutomation
 from src.hass_config.loader import HassConfig
 from tests.utils import (

@@ -1,13 +1,13 @@
 from pathlib import Path
 from typing import Any, Iterator, Tuple, Union
-from ..hass_config.loader import HassConfig
 
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
+from src.utils import extract_files
 from src.yaml_serializer import load_yaml
 from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
-from src.utils import extract_files
 
+from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile
 from .types import ExtenededAutomation
 

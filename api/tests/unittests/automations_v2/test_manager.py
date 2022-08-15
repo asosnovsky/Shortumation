@@ -1,16 +1,21 @@
 from pathlib import Path
+
 from src import yaml_serializer
 from src.automations_v2.errors import (
     AttemptingToOverwriteAnIncompatibleFileError,
     DBNoAutomationFound,
     InvalidAutomationFile,
 )
+from src.automations_v2.manager import AutomationManager
 from src.automations_v2.types import ExtenededAutomation
 from src.errors import ErrorSet
 from src.hass_config.loader import HassConfig
-from src.automations_v2.manager import AutomationManager
+from tests.utils import (
+    HA_CONFIG6_EXAMPLE,
+    HA_CONFIG_EXAMPLE,
+    create_copy_of_example_config,
+)
 
-from tests.utils import HA_CONFIG6_EXAMPLE, HA_CONFIG_EXAMPLE, create_copy_of_example_config
 from .utils import TestWithDB
 
 

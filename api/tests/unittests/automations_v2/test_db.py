@@ -1,5 +1,7 @@
 from pathlib import Path
+
 from src.automations_v2.types import ExtenededAutomation
+
 from .utils import TestWithDB
 
 

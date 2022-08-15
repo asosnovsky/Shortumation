@@ -2,17 +2,19 @@ from pathlib import Path
 from tempfile import mktemp
 from typing import Optional, Union
 
-from ..errors import ErrorSet
-
-from ..logger import get_logger
-from .errors import AttemptingToOverwriteAnIncompatibleFileError, DBError, InvalidAutomationFile
-
 from src.hass_config.loader import HassConfig
 from src.yaml_serializer import dump_yaml, load_yaml
 
+from ..errors import ErrorSet
+from ..logger import get_logger
+from .db import AutomationDBConnection
+from .errors import (
+    AttemptingToOverwriteAnIncompatibleFileError,
+    DBError,
+    InvalidAutomationFile,
+)
 from .loader import extract_automation_paths, load_automation_path
 from .types import ExtenededAutomation
-from .db import AutomationDBConnection
 
 logger = get_logger(__file__)
 

@@ -1,14 +1,14 @@
+import base64
 import json
 import sqlite3
-import base64
-
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterable, Iterator, List, Optional
 
 from src.logger import get_logger
-from .types import ExtenededAutomation
+
 from .errors import DBDataError, DBError, DBNoAutomationFound
+from .types import ExtenededAutomation
 
 logger = get_logger(__file__)
 
@@ -98,19 +98,6 @@ class AutomationDBConnection:
                     
                     """,
                 )
-
-    def delete_automations(self, automations: List[ExtenededAutomation]):
-        with self.get_cur() as cur:
-            cur.executemany(
-                f"DELETE FROM {automations_tbl} WHERE id = ?", [(a.id,) for a in automations]
-            )
-
-    def delete_automations_in_source_file(self, source_file: Path):
-        with self.get_cur() as cur:
-            cur.execute(
-                f"DELETE FROM {automations_tbl} WHERE source_file = ?",
-                (str(source_file.absolute()),),
-            )
 
     def get_automation(self, automation_id: str) -> ExtenededAutomation:
         with self.get_cur() as cur:

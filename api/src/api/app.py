@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.automations.manager import AutomationManager
 from src.env import API_PREFIX, ORIGIN, ROOT_FOLDER
