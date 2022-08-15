@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Any, Iterator, Tuple, Union
+from .tags import TagManager
 
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
@@ -39,6 +40,7 @@ def extract_automation_paths(
 def load_automation_path(
     automation_path: Path,
     configuration_key: str,
+    tag_manager: TagManager,
 ) -> Iterator[ExtenededAutomation]:
     """
 
@@ -55,7 +57,7 @@ def load_automation_path(
         return
     if automation_path.is_dir():
         for f in extract_files(automation_path):
-            yield from load_automation_path(f, configuration_key)
+            yield from load_automation_path(f, configuration_key, tag_manager)
     else:
         try:
             with automation_path.open("r") as fp:
@@ -71,6 +73,7 @@ def load_automation_path(
             try:
                 yield ExtenededAutomation(
                     **clean_automation(automations),
+                    tags=tag_manager.get(automations["id"], {}),
                     configuration_key=configuration_key,
                     source_file=str(automation_path),
                     source_file_type="obj",
@@ -89,6 +92,7 @@ def load_automation_path(
                 try:
                     yield ExtenededAutomation(
                         **clean_automation(automation),
+                        tags=tag_manager.get(automation["id"], {}),
                         configuration_key=configuration_key,
                         source_file=str(automation_path),
                         source_file_type="list",

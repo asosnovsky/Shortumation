@@ -1,6 +1,7 @@
 from pathlib import Path
 from tempfile import mktemp
 from typing import Optional, Union
+from .tags import TagManager
 
 from src.hass_config.loader import HassConfig
 from src.yaml_serializer import dump_yaml, load_yaml
@@ -20,18 +21,27 @@ logger = get_logger(__file__)
 
 
 class AutomationManager:
-    def __init__(self, hass_config: HassConfig, db_path: Optional[Path] = None) -> None:
+    def __init__(
+        self,
+        hass_config: HassConfig,
+        tag_path: Path,
+        db_path: Optional[Path] = None,
+    ) -> None:
         if db_path is None:
             db_path = Path(mktemp())
         self.hass_config = hass_config
         self.db = AutomationDBConnection(db_path)
+        self.tag_path = tag_path
+        self.tag_manager = TagManager()
+        if tag_path.exists():
+            self.tag_manager.load(tag_path)
 
     def reload(self):
         self.db.reset()
         errors = []
         for config_key, p in extract_automation_paths(self.hass_config):
             try:
-                automations = list(load_automation_path(p, config_key))
+                automations = list(load_automation_path(p, config_key, self.tag_manager))
                 self.db.upsert_automations(automations)
             except InvalidAutomationFile as e:
                 logger.warning(e)

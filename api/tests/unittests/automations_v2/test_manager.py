@@ -1,4 +1,5 @@
 from pathlib import Path
+from tempfile import mktemp
 
 from src import yaml_serializer
 from src.automations_v2.errors import (
@@ -24,6 +25,7 @@ class manager_tests(TestWithDB):
         self.config_path = create_copy_of_example_config(ha_config_example)
         self.automation_manager = AutomationManager(
             HassConfig(self.config_path),
+            Path(mktemp()),
             self.db_file,
         )
         return self.config_path, self.automation_manager
