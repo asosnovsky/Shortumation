@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Iterator, Union
+from typing import Any, Iterator, Tuple, Union
 from ..hass_config.loader import HassConfig
 
 from src.json_serializer import normalize_obj
@@ -9,14 +9,14 @@ from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
 from src.utils import extract_files
 
 from .errors import InvalidAutomationFile
-from .types import ExtenededAutomationData
+from .types import ExtenededAutomation
 
 logger = get_logger(__file__)
 
 
 def extract_automation_paths(
     hass_config: HassConfig,
-) -> Iterator[Path]:
+) -> Iterator[Tuple[str, Path]]:
     found = False
     for key, value in hass_config.configurations.items():
         if str(key).startswith("automation"):
@@ -27,23 +27,27 @@ def extract_automation_paths(
                     "No support for automations baked into configuration.yaml! Please extract these into a seperate file"
                 )
             elif isinstance(value, IncludedYaml):
-                yield hass_config.root_path / value.path_str
+                yield key, hass_config.root_path / value.path_str
             elif isinstance(value, IncludedYamlDir):
-                yield hass_config.root_path / value.name
+                yield key, hass_config.root_path / value.name
             else:
                 logger.warning(f"found an invalid type in {key}!")
     if not found:
-        yield hass_config.root_path / "automations.yaml"
+        yield "", hass_config.root_path / "automations.yaml"
 
 
-def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationData]:
+def load_automation_path(
+    automation_path: Path,
+    configuration_key: str,
+) -> Iterator[ExtenededAutomation]:
     """
 
     Args:
         automation_path (Path)
+        configuration_key (str)
 
     Returns:
-        Iterator[ExtenededAutomationData]
+        Iterator[ExtenededAutomation]
 
     """
     if not automation_path.exists():
@@ -51,7 +55,7 @@ def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationD
         return
     if automation_path.is_dir():
         for f in extract_files(automation_path):
-            yield from load_automation_path(f)
+            yield from load_automation_path(f, configuration_key)
     else:
         try:
             with automation_path.open("r") as fp:
@@ -65,8 +69,9 @@ def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationD
 
         if isinstance(automations, dict):
             try:
-                yield ExtenededAutomationData(
+                yield ExtenededAutomation(
                     **clean_automation(automations),
+                    configuration_key=configuration_key,
                     source_file=str(automation_path),
                     source_file_type="obj",
                 )
@@ -82,8 +87,9 @@ def load_automation_path(automation_path: Path) -> Iterator[ExtenededAutomationD
                 return
             for automation in automations:
                 try:
-                    yield ExtenededAutomationData(
+                    yield ExtenededAutomation(
                         **clean_automation(automation),
+                        configuration_key=configuration_key,
                         source_file=str(automation_path),
                         source_file_type="list",
                     )

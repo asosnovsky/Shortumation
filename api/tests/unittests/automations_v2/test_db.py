@@ -1,5 +1,5 @@
 from pathlib import Path
-from src.automations_v2.types import ExtenededAutomationData
+from src.automations_v2.types import ExtenededAutomation
 from .utils import TestWithDB
 
 
@@ -17,18 +17,20 @@ class db_tests(TestWithDB):
 
     def test_insert_automations(self):
         originals = [
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test",
                 alias="test",
                 source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
+                configuration_key="automation",
             ),
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test2",
                 alias="test",
                 source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
+                configuration_key="automation",
             ),
         ]
         self.db.upsert_automations(originals)
@@ -40,18 +42,20 @@ class db_tests(TestWithDB):
 
     def test_insert_repeat_automations(self):
         originals = [
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test",
                 alias="test",
                 source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
+                configuration_key="automation",
             ),
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test",
                 alias="test",
                 source_file=Path("automation.yaml").absolute(),
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
+                configuration_key="automation",
             ),
         ]
         self.db.upsert_automations(originals)
@@ -61,18 +65,20 @@ class db_tests(TestWithDB):
 
     def test_delete_automations(self):
         originals = [
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test",
                 alias="test",
                 source_file="automation.yaml",
                 source_file_type="obj",
+                configuration_key="automation",
             ),
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test2",
                 alias="test",
                 source_file="automation.yaml",
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
+                configuration_key="automation",
             ),
         ]
         self.assertEqual(self.db.count_automations(), 0)
@@ -83,18 +89,20 @@ class db_tests(TestWithDB):
 
     def test_delete_automations_by_source_type(self):
         originals = [
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test",
                 alias="test",
                 source_file="automation2.yaml",
                 source_file_type="obj",
+                configuration_key="automation",
             ),
-            ExtenededAutomationData(
+            ExtenededAutomation(
                 id="test2",
                 alias="test",
                 source_file="automation.yaml",
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
+                configuration_key="automation",
             ),
         ]
         self.assertEqual(self.db.count_automations(), 0)

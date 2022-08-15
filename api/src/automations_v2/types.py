@@ -19,15 +19,17 @@ class BaseAutomation(BaseModel):
         return self.dict(exclude_unset=True, exclude_none=True)
 
 
-class ExtenededAutomationData(BaseAutomation):
+class ExtenededAutomation(BaseAutomation):
     source_file: Path
     source_file_type: Literal["list", "obj"]
+    configuration_key: str
     tags: Dict[str, str] = Field(default_factory=dict)
 
     def to_primitive(self, include_tags: bool = False):
         out = super().to_primitive()
         del out["source_file"]
         del out["source_file_type"]
+        del out["configuration_key"]
         if include_tags and out.get("tags", None) is not None:
             del out["tags"]
         return out

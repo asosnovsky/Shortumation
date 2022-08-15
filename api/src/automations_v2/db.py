@@ -7,24 +7,27 @@ from pathlib import Path
 from typing import Iterable, Iterator, List, Optional
 
 from src.logger import get_logger
-from .types import ExtenededAutomationData
-from .errors import DBDataError, DBError
+from .types import ExtenededAutomation
+from .errors import DBDataError, DBError, DBNoAutomationFound
 
 logger = get_logger(__file__)
 
 automations_tbl = "autos"
 
 
-def encode_auto(auto: ExtenededAutomationData) -> str:
+def encode_auto(auto: ExtenededAutomation) -> str:
     return base64.b64encode(
         json.dumps(auto.to_primitive(include_tags=True)).encode("utf-8")
     ).decode("utf-8")
 
 
-def decode_auto(auto_str: str, source_file: str, source_file_type: str) -> ExtenededAutomationData:
-    return ExtenededAutomationData(
+def decode_auto(
+    auto_str: str, source_file: str, source_file_type: str, configuration_key: str
+) -> ExtenededAutomation:
+    return ExtenededAutomation(
         source_file=source_file,
         source_file_type=source_file_type,
+        configuration_key=configuration_key,
         **json.loads(base64.b64decode(auto_str.encode("utf-8")).decode("utf-8")),
     )
 
@@ -63,12 +66,13 @@ class AutomationDBConnection:
                 mode TEXT NOT NULL,
                 source_file TEXT NOT NULL,
                 source_file_type TEXT NOT NULL,
+                configuration_key TEXT NOT NULL,
                 rest BLOB NOT NULL
             );
             """
             )
 
-    def upsert_automations(self, automations: List[ExtenededAutomationData]):
+    def upsert_automations(self, automations: List[ExtenededAutomation]):
         with self.get_cur() as cur:
             for automation in automations:
                 cur.execute(
@@ -80,6 +84,7 @@ class AutomationDBConnection:
                         "{automation.mode}",
                         "{automation.source_file.absolute()}",
                         "{automation.source_file_type}",
+                        "{automation.configuration_key}",
                         "{encode_auto(automation)}"
                     )
                     ON CONFLICT DO UPDATE SET 
@@ -88,12 +93,13 @@ class AutomationDBConnection:
                         mode = "{automation.mode}",
                         source_file = "{automation.source_file.absolute()}",
                         source_file_type = "{automation.source_file_type}",
+                        configuration_key = "{automation.configuration_key}",
                         rest = "{encode_auto(automation)}"
                     
                     """,
                 )
 
-    def delete_automations(self, automations: List[ExtenededAutomationData]):
+    def delete_automations(self, automations: List[ExtenededAutomation]):
         with self.get_cur() as cur:
             cur.executemany(
                 f"DELETE FROM {automations_tbl} WHERE id = ?", [(a.id,) for a in automations]
@@ -106,21 +112,23 @@ class AutomationDBConnection:
                 (str(source_file.absolute()),),
             )
 
-    def get_automation(self, automation_id: str) -> ExtenededAutomationData:
+    def get_automation(self, automation_id: str) -> ExtenededAutomation:
         with self.get_cur() as cur:
             cur.execute(
-                f'SELECT rest, source_file, source_file_type FROM {automations_tbl} WHERE id = "{automation_id}"'
+                f'SELECT rest, source_file, source_file_type, configuration_key FROM {automations_tbl} WHERE id = "{automation_id}"'
             )
             objs = cur.fetchone()
-            [rest, source_file, source_file_type] = objs
-            return decode_auto(rest, source_file, source_file_type)
+            if objs is None:
+                raise DBNoAutomationFound(automation_id)
+            [rest, source_file, source_file_type, configuration_key] = objs
+            return decode_auto(rest, source_file, source_file_type, configuration_key)
 
-    def list_automations(self, offset: int, limit: int) -> Iterable[ExtenededAutomationData]:
+    def list_automations(self, offset: int, limit: int) -> Iterable[ExtenededAutomation]:
         with self.get_cur() as cur:
-            for [rest, source_file, source_file_type] in cur.execute(
-                f"SELECT rest, source_file, source_file_type FROM {automations_tbl} LIMIT {limit} OFFSET {offset}"
+            for [rest, source_file, source_file_type, configuration_key] in cur.execute(
+                f"SELECT rest, source_file, source_file_type, configuration_key FROM {automations_tbl} LIMIT {limit} OFFSET {offset}"
             ):
-                yield decode_auto(rest, source_file, source_file_type)
+                yield decode_auto(rest, source_file, source_file_type, configuration_key)
 
     def count_automations(self) -> int:
         with self.get_cur() as cur:

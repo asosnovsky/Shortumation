@@ -5,6 +5,10 @@ class AutomationLoaderException(Exception):
         )
 
 
+class AttemptingToOverwriteAnIncompatibleFileError(AutomationLoaderException):
+    pass
+
+
 class InvalidAutomationFile(AutomationLoaderException):
     pass
 
@@ -18,4 +22,8 @@ class DBError(Exception):
 
 
 class DBDataError(DBError):
+    pass
+
+
+class DBNoAutomationFound(DBError):
     pass
