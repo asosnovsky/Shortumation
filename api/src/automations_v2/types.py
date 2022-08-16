@@ -30,6 +30,6 @@ class ExtenededAutomation(BaseAutomation):
         del out["source_file"]
         del out["source_file_type"]
         del out["configuration_key"]
-        if include_tags and out.get("tags", None) is not None:
+        if not include_tags and out.get("tags", None) is not None:
             del out["tags"]
         return out

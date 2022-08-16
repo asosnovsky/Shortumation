@@ -1,7 +1,7 @@
+from enum import auto
 from pathlib import Path
 from tempfile import mktemp
 from typing import Optional, Union
-from .tags import TagManager
 
 from src.hass_config.loader import HassConfig
 from src.yaml_serializer import dump_yaml, load_yaml
@@ -15,6 +15,7 @@ from .errors import (
     InvalidAutomationFile,
 )
 from .loader import extract_automation_paths, load_automation_path
+from .tags import TagManager
 from .types import ExtenededAutomation
 
 logger = get_logger(__file__)
@@ -24,20 +25,23 @@ class AutomationManager:
     def __init__(
         self,
         hass_config: HassConfig,
-        tag_path: Path,
         db_path: Optional[Path] = None,
     ) -> None:
         if db_path is None:
             db_path = Path(mktemp())
         self.hass_config = hass_config
         self.db = AutomationDBConnection(db_path)
-        self.tag_path = tag_path
+        self.tag_path = hass_config.get_automation_tags_path()
         self.tag_manager = TagManager()
-        if tag_path.exists():
-            self.tag_manager.load(tag_path)
+        self.reload_tags()
+
+    def reload_tags(self):
+        if self.tag_path.exists():
+            self.tag_manager = TagManager.load(self.tag_path)
 
     def reload(self):
         self.db.reset()
+        self.reload_tags()
         errors = []
         for config_key, p in extract_automation_paths(self.hass_config):
             try:
@@ -97,6 +101,18 @@ class AutomationManager:
             if not found:
                 objs.append(automation.to_primitive(include_tags=False))
             automation.source_file.write_text(dump_yaml(objs))
+        self.update_tags(automation)
+
+    def update_tags(self, automation: ExtenededAutomation):
+        self.reload_tags()
+        self.tag_manager[automation.id] = automation.tags
+        self.tag_manager.save(self.tag_path)
+
+    def delete_tags(self, automation_id: str):
+        self.reload_tags()
+        if automation_id in self.tag_manager:
+            del self.tag_manager[automation_id]
+            self.tag_manager.save(self.tag_path)
 
     def delete(self, automation: ExtenededAutomation):
         if automation.source_file_type == "obj":
@@ -113,3 +129,4 @@ class AutomationManager:
                     if obj["id"] != automation.id:
                         kept.append(obj)
                 automation.source_file.write_text(dump_yaml(kept))
+        self.delete_tags(automation.id)

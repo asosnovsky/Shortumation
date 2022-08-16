@@ -1,5 +1,4 @@
 from pathlib import Path
-from tempfile import mktemp
 
 from src import yaml_serializer
 from src.automations_v2.errors import (
@@ -25,7 +24,6 @@ class manager_tests(TestWithDB):
         self.config_path = create_copy_of_example_config(ha_config_example)
         self.automation_manager = AutomationManager(
             HassConfig(self.config_path),
-            Path(mktemp()),
             self.db_file,
         )
         return self.config_path, self.automation_manager
@@ -255,3 +253,71 @@ class manager_tests(TestWithDB):
             (config_path / "automations/include_dir_list/home/down.yaml").open("r")
         )
         self.assertIsInstance(data, dict)
+
+    def test_update_tags_through_automation_update(self):
+        _, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Living",
+                "Type": "Button",
+            },
+        )
+        auto.tags["Room"] = "Bathroom"
+        automation_manager.upsert(auto)
+        del auto
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Bathroom",
+                "Type": "Button",
+            },
+        )
+
+    def test_update_tags_through_tags(self):
+        _, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Living",
+                "Type": "Button",
+            },
+        )
+        auto.tags["Room"] = "Bathroom"
+        automation_manager.update_tags(auto)
+        del auto
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Bathroom",
+                "Type": "Button",
+            },
+        )
+
+    def test_delete_tags(self):
+        _, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Living",
+                "Type": "Button",
+            },
+        )
+        automation_manager.delete_tags(auto.id)
+        del auto
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {},
+        )

@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import Any, Iterator, Tuple, Union
-from .tags import TagManager
 
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
@@ -10,6 +9,7 @@ from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
 
 from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile
+from .tags import TagManager
 from .types import ExtenededAutomation
 
 logger = get_logger(__file__)

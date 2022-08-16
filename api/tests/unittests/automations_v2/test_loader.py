@@ -25,7 +25,7 @@ class loader_tests(TestCase):
             load_automation_path(
                 HA_CONFIG2_EXAMPLE / "automations.yaml",
                 configuration_key="automation",
-                tag_manager=TagManager({"type": "routine"}),
+                tag_manager=TagManager({"1652069225859": {"type": "routine"}}),
             )
         )
         self.assertEqual(len(automations), 1)

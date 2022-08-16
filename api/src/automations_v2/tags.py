@@ -6,6 +6,8 @@ from src.yaml_serializer import dump_yaml, load_yaml
 
 class TagManager(Dict[str, Dict[str, str]]):
     def save(self, path: Path):
+        if not path.parent.exists():
+            path.parent.mkdir(parents=True)
         path.write_text(dump_yaml(dict(self)))
 
     @classmethod
