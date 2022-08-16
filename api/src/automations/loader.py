@@ -1,38 +1,118 @@
-from typing import Any, Iterator, Union
-
-from pydantic.error_wrappers import ValidationError
+from pathlib import Path
+from typing import Any, Iterator, Tuple, Union
 
 from src.json_serializer import normalize_obj
+from src.logger import get_logger
+from src.utils import extract_files
+from src.yaml_serializer import load_yaml
+from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
 
+from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile
-from .types import AutomationMetdata, ExtenededAutomationData
+from .tags import TagManager
+from .types import ExtenededAutomation
+
+logger = get_logger(__file__)
 
 
-# Single loader
-def load_automation(
-    auto_raw: dict,
-    tags: dict,
-) -> Iterator[ExtenededAutomationData]:
-    """Converts an automation dictionary loaded directly from the config into
-    several python typed objects
+def extract_automation_paths(
+    hass_config: HassConfig,
+) -> Iterator[Tuple[str, Path]]:
+    found = False
+    for key, value in hass_config.configurations.items():
+        if str(key).startswith("automation"):
+            logger.info(f"Loading automations from '{key}'")
+            found = True
+            if isinstance(value, dict):
+                raise NotImplementedError(
+                    "No support for automations baked into configuration.yaml! Please extract these into a seperate file"
+                )
+            elif isinstance(value, IncludedYaml):
+                yield key, hass_config.root_path / value.path_str
+            elif isinstance(value, IncludedYamlDir):
+                yield key, hass_config.root_path / value.name
+            else:
+                logger.warning(f"found an invalid type in {key}!")
+    if not found:
+        yield "", hass_config.root_path / "automations.yaml"
+
+
+def load_automation_path(
+    automation_path: Path,
+    configuration_key: str,
+    tag_manager: TagManager,
+) -> Iterator[ExtenededAutomation]:
+    """
 
     Args:
-        automations_raw_data (Iterable[dict])
+        automation_path (Path)
+        configuration_key (str)
 
     Returns:
-        Iterator[ExtenededAutomationData]
+        Iterator[ExtenededAutomation]
 
     """
-    try:
-        yield ExtenededAutomationData(
-            metadata=AutomationMetdata.parse_obj(auto_raw),
-            condition=ifempty_or_null_then_list(load_conditions(auto_raw.get("condition", []))),
-            sequence=ifempty_or_null_then_list(load_conditions(auto_raw.get("action", []))),
-            trigger=ifempty_or_null_then_list(normalize_obj(auto_raw.get("trigger", []))),
-            tags=tags,
-        )
-    except ValidationError as err:
-        raise InvalidAutomationFile from err
+    if not automation_path.exists():
+        logger.warning(f"the file {automation_path} does not exists")
+        return
+    if automation_path.is_dir():
+        for f in extract_files(automation_path):
+            yield from load_automation_path(f, configuration_key, tag_manager)
+    else:
+        try:
+            with automation_path.open("r") as fp:
+                automations = load_yaml(fp)
+        except Exception as err:
+            raise InvalidAutomationFile(
+                when="loading yaml",
+                automation_path=automation_path,
+                error=err,
+            ) from err
+
+        if isinstance(automations, dict):
+            try:
+                yield ExtenededAutomation(
+                    **clean_automation(automations),
+                    tags=tag_manager.get(automations["id"], {}),
+                    configuration_key=configuration_key,
+                    source_file=str(automation_path),
+                    source_file_type="obj",
+                )
+            except Exception as err:
+                raise InvalidAutomationFile(
+                    when="reading file contents",
+                    automation_path=automation_path,
+                    error=err,
+                ) from err
+        else:
+            if automations is None:
+                logger.warning(f"the file {automation_path} is empty")
+                return
+            for automation in automations:
+                try:
+                    yield ExtenededAutomation(
+                        **clean_automation(automation),
+                        tags=tag_manager.get(automation["id"], {}),
+                        configuration_key=configuration_key,
+                        source_file=str(automation_path),
+                        source_file_type="list",
+                    )
+                except Exception as err:
+                    raise InvalidAutomationFile(
+                        when="reading file contents",
+                        automation_path=automation_path,
+                        error=err,
+                        automation=automation,
+                    ) from err
+
+
+def clean_automation(auto_raw: dict):
+    return {
+        **auto_raw,
+        "condition": ifempty_or_null_then_list(load_conditions(auto_raw.get("condition", []))),
+        "action": ifempty_or_null_then_list(load_conditions(auto_raw.get("action", []))),
+        "trigger": ifempty_or_null_then_list(normalize_obj(auto_raw.get("trigger", []))),
+    }
 
 
 def ifempty_or_null_then_list(obj: Any):

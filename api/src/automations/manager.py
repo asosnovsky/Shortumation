@@ -1,76 +1,132 @@
-from typing import Dict, Iterator, List, Optional
+from enum import auto
+from pathlib import Path
+from tempfile import mktemp
+from typing import Dict, Optional, Union
 
-from src.automations.errors import FailedDeletion, InvalidAutomationFile
-from src.automations.types import AutomationData, ExtenededAutomationData
 from src.hass_config.loader import HassConfig
+from src.yaml_serializer import dump_yaml, load_yaml
 
-from .loader import load_automation
+from ..errors import ErrorSet
+from ..logger import get_logger
+from .db import AutomationDBConnection
+from .errors import (
+    AttemptingToOverwriteAnIncompatibleFileError,
+    DBError,
+    InvalidAutomationFile,
+)
+from .loader import extract_automation_paths, load_automation_path
+from .tags import TagManager
+from .types import ExtenededAutomation
+
+logger = get_logger(__file__)
 
 
 class AutomationManager:
-    def __init__(self, hass_config: HassConfig) -> None:
-        self.hass_config = hass_config
-
-    def find(
+    def __init__(
         self,
-        offset: int = 0,
-        limit: int = 10,
-    ) -> Iterator[AutomationData]:
-        tags = self.hass_config.automation_tags
-        for i, auto in enumerate(self.hass_config.automations):
-            if i < offset:
-                continue
-            if i >= offset + limit:
-                break
-            yield from load_automation(auto, tags.get(auto.get("id", ""), {}))
+        hass_config: HassConfig,
+        db_path: Optional[Path] = None,
+    ) -> None:
+        if db_path is None:
+            db_path = Path(mktemp())
+        self.hass_config = hass_config
+        self.db = AutomationDBConnection(db_path)
+        self.tag_path = hass_config.get_automation_tags_path()
+        self.tag_manager = TagManager()
+        self.reload_tags()
 
-    def get(self, index: int) -> Optional[ExtenededAutomationData]:
-        tags = self.hass_config.automation_tags
-        if index >= 0:
-            for i, auto in enumerate(self.hass_config.automations):
-                if not isinstance(auto, dict):
-                    raise InvalidAutomationFile(automation_index=i)
-                if i == index:
-                    return next(load_automation(auto, tags.get(auto.get("id", ""), {})))
-        return None
+    def reload_tags(self):
+        if self.tag_path.exists():
+            self.tag_manager = TagManager.load(self.tag_path)
 
-    def update(self, index: int, automation: ExtenededAutomationData):
-        tags = self.hass_config.automation_tags
-        automations: List[dict] = []
-        updated_index: Optional[int] = None
-        for i, orig_auto in enumerate(self.hass_config.automations):
-            if i == index:
-                automations.append(automation.to_primitive())
-                updated_index = i
-            else:
-                automations.append(orig_auto)
-        if updated_index is None:
-            automations.append(automation.to_primitive())
-            updated_index = len(automations) - 1
-        tags[automation.metadata.id] = automation.tags
-        self.hass_config.save_automations(automations)
-        self.hass_config.save_tags(tags)
+    def reload(self):
+        self.db.reset()
+        self.reload_tags()
+        errors = []
+        for config_key, p in extract_automation_paths(self.hass_config):
+            try:
+                automations = list(load_automation_path(p, config_key, self.tag_manager))
+                self.db.upsert_automations(automations)
+            except InvalidAutomationFile as e:
+                logger.warning(e)
+                errors.append(e)
+            except DBError as e:
+                logger.warning(e)
+                errors.append(e)
+        if len(errors) > 0:
+            raise ErrorSet(*errors)
 
-    def update_tags(self, auto_id: str, tags: Dict[str, str]):
-        autos_tags = self.hass_config.automation_tags
-        autos_tags[auto_id] = tags
-        self.hass_config.save_tags(autos_tags)
+    def list(self, offset: int, limit: int):
+        return self.db.list_automations(offset=offset, limit=limit)
 
-    def delete(self, index: int):
-        automations: List[dict] = []
-        deleted = False
-        for i, orig_auto in enumerate(self.hass_config.automations):
-            if i == index:
-                deleted = True
-            else:
-                automations.append(orig_auto)
-        if not deleted:
-            raise FailedDeletion("No such automation found")
-        self.hass_config.save_automations(automations)
+    def count(self):
+        return self.db.count_automations()
 
-    # TODO: improve on this without keeping things in memory
-    def get_total_items(self) -> int:
-        count = 0
-        for i, _ in enumerate(self.hass_config.automations):
-            count = i
-        return count + 1
+    def get(self, auto_id: str):
+        return self.db.get_automation(auto_id)
+
+    def upsert(self, automation: ExtenededAutomation):
+        if not automation.source_file.parent.exists():
+            automation.source_file.parent.mkdir(parents=True)
+
+        objs: Optional[Union[list, dict]] = None
+        if automation.source_file.exists():
+            with automation.source_file.open("r") as fp:
+                objs = load_yaml(fp)
+
+        if automation.source_file_type == "obj":
+            if isinstance(objs, list):
+                raise AttemptingToOverwriteAnIncompatibleFileError(
+                    f"{automation.source_file} is a list, but expected a obj for {automation}"
+                )
+            raw_auto = automation.to_primitive(include_tags=False)
+            automation.source_file.write_text(dump_yaml(raw_auto))
+        else:
+            if isinstance(objs, dict):
+                raise AttemptingToOverwriteAnIncompatibleFileError(
+                    f"{automation.source_file} is a list, but expected a obj for {automation}"
+                )
+            elif objs is None:
+                objs = []
+            if not isinstance(objs, list):
+                raise AssertionError(
+                    f"Attemption to save automation to {automation.source_file} but encountering an invalid list yaml file. Did you modify this file prior to saving?\n{automation}"
+                )
+            found = False
+            for i, obj in enumerate(objs):
+                if obj["id"] == automation.id:
+                    objs[i] = automation.to_primitive(include_tags=False)
+                    found = True
+                    break
+            if not found:
+                objs.append(automation.to_primitive(include_tags=False))
+            automation.source_file.write_text(dump_yaml(objs))
+        self.update_tags(automation.id, automation.tags)
+
+    def update_tags(self, automation_id: str, tags: Dict[str, str]):
+        self.reload_tags()
+        self.tag_manager[automation_id] = tags
+        self.tag_manager.save(self.tag_path)
+
+    def delete_tags(self, automation_id: str):
+        self.reload_tags()
+        if automation_id in self.tag_manager:
+            del self.tag_manager[automation_id]
+            self.tag_manager.save(self.tag_path)
+
+    def delete(self, automation: ExtenededAutomation):
+        if automation.source_file_type == "obj":
+            automation.source_file.unlink(missing_ok=True)
+        else:
+            with automation.source_file.open("r") as fp:
+                objs = load_yaml(fp)
+                if not isinstance(objs, list):
+                    raise AssertionError(
+                        f"Attemption to save automation to {automation.source_file} but encountering an invalid list yaml file. Did you modify this file prior to saving?\n{automation}"
+                    )
+                kept = []
+                for i, obj in enumerate(objs):
+                    if obj["id"] != automation.id:
+                        kept.append(obj)
+                automation.source_file.write_text(dump_yaml(kept))
+        self.delete_tags(automation.id)

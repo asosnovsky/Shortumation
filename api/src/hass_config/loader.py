@@ -18,16 +18,6 @@ class HassConfig:
             return dict(load_yaml(f))  # type: ignore
 
     @property
-    def automations(self) -> List[dict]:
-        if automation_path := self.get_automation_path():
-            try:
-                with automation_path.open("r") as f:
-                    return load_yaml(f)  # type: ignore
-            except FileNotFoundError as err:
-                raise MissingFile("automations.yaml") from err
-        return self.configurations["automation"]
-
-    @property
     def automation_tags(self) -> TagManager:
         tag_path = self.get_automation_tags_path()
         if not tag_path.exists():

@@ -2,7 +2,7 @@ from pathlib import Path
 from tempfile import mktemp
 from unittest import TestCase
 
-from src.automations_v2.db import AutomationDBConnection
+from src.automations.db import AutomationDBConnection
 
 
 def make_temp_db():

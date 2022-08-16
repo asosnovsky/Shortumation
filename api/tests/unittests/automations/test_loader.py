@@ -1,59 +1,139 @@
+from pathlib import Path
+from tempfile import mktemp
 from unittest import TestCase
 
-from src.automations.loader import load_automation
-from src.automations.types import AutomationMetdata, ExtenededAutomationData
-from src.yaml_serializer.types import NOT_IMPLEMENTED_SV_MSG, SecretValue
+from src.automations.loader import (
+    extract_automation_paths,
+    load_automation_path,
+)
+from src.automations.tags import TagManager
+from src.automations.types import ExtenededAutomation
+from src.hass_config.loader import HassConfig
+from tests.utils import (
+    HA_CONFIG2_EXAMPLE,
+    HA_CONFIG3_EXAMPLE,
+    HA_CONFIG4_EXAMPLE,
+    HA_CONFIG5_EXAMPLE,
+    HA_CONFIG6_EXAMPLE,
+    HA_CONFIG_EXAMPLE,
+)
 
 
 class loader_tests(TestCase):
-    def test_load_automation_runs(self):
-        auto = list(
-            load_automation(
-                {
-                    "id": "1616887975473",
-                    "alias": "Home Assistant Off",
-                    "description": "",
-                    "trigger": [{"platform": "homeassistant", "event": "shutdown"}],
-                    "condition": ["states(time.time) >= '10:00:00'"],
-                    "action": [
-                        {
-                            "device_id": SecretValue("my_mobile_phone", "..."),
-                            "domain": "mobile_app",
-                            "type": "notify",
-                            "title": "Hassio Status",
-                            "message": "Hassio Is turning off...",
-                        }
-                    ],
-                    "mode": "single",
-                },
-                {},
+    def test_load_automation_list_file(self):
+        automations = list(
+            load_automation_path(
+                HA_CONFIG2_EXAMPLE / "automations.yaml",
+                configuration_key="automation",
+                tag_manager=TagManager({"1652069225859": {"type": "routine"}}),
             )
         )
+        self.assertEqual(len(automations), 1)
         self.assertEqual(
-            auto[0],
-            ExtenededAutomationData(
-                metadata=AutomationMetdata(
-                    id="1616887975473",
-                    alias="Home Assistant Off",
-                    description="",
-                    mode="single",
-                ),
-                trigger=[{"platform": "homeassistant", "event": "shutdown"}],
-                condition=[
+            automations[0],
+            ExtenededAutomation(
+                id="1652069225859",
+                source_file=str(HA_CONFIG2_EXAMPLE / "automations.yaml"),
+                source_file_type="list",
+                configuration_key="automation",
+                alias="Climate - Pref temperature ",
+                description="",
+                mode="single",
+                tags={"type": "routine"},
+                trigger=[
                     {
-                        "condition": "template",
-                        "value_template": "states(time.time) >= '10:00:00'",
+                        "platform": "state",
+                        "entity_id": "input_number.preferred_temperature",
                     }
                 ],
-                sequence=[
+                condition=[],
+                action=[
                     {
-                        "device_id": NOT_IMPLEMENTED_SV_MSG,
-                        "domain": "mobile_app",
-                        "type": "notify",
-                        "title": "Hassio Status",
-                        "message": "Hassio Is turning off...",
+                        "service": "climate.set_temperature",
+                        "data": {
+                            "temperature": {
+                                "[object Object]": None,
+                            }
+                        },
+                        "target": {
+                            "entity_id": "climate.main_floor",
+                        },
                     }
                 ],
-                tags={},
             ),
         )
+
+    def test_load_automation_obj_file(self):
+        automations = list(
+            load_automation_path(
+                HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml",
+                configuration_key="automation base",
+                tag_manager=TagManager({"1659114647067": {"room": "laundry"}}),
+            )
+        )
+        self.assertEqual(len(automations), 1)
+        self.assertEqual(
+            automations[0],
+            ExtenededAutomation(
+                id="1659114647067",
+                source_file=str(HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml"),
+                source_file_type="obj",
+                configuration_key="automation base",
+                alias="Notify Washer",
+                description="Example",
+                mode="single",
+                tags={"room": "laundry"},
+                trigger=[
+                    {
+                        "platform": "homeassistant",
+                        "event": "start",
+                    }
+                ],
+                condition=[],
+                action=[
+                    {
+                        "service": "counter.increment",
+                        "data": {},
+                        "target": {"entity_id": "counter.up_times"},
+                    }
+                ],
+            ),
+        )
+
+    def test_load_automation_empty_file(self):
+        file_path = Path(mktemp())
+        file_path.touch()
+        automations = list(
+            load_automation_path(
+                file_path,
+                configuration_key="automation ui",
+                tag_manager=TagManager(),
+            )
+        )
+        self.assertEqual(len(automations), 0)
+
+    def test_load_automation_none_existing_file(self):
+        file_path = Path(mktemp())
+        file_path.unlink(missing_ok=True)
+        automations = list(
+            load_automation_path(
+                file_path,
+                configuration_key="automation manual",
+                tag_manager=TagManager(),
+            )
+        )
+        self.assertEqual(len(automations), 0)
+
+    def test_extract_all_automation_files(self):
+        for ha_path, expected in [
+            (HA_CONFIG_EXAMPLE, 1),
+            (HA_CONFIG2_EXAMPLE, 1),
+            (HA_CONFIG3_EXAMPLE, 1),
+            (HA_CONFIG4_EXAMPLE, 1),
+            (HA_CONFIG5_EXAMPLE, 3),
+            (HA_CONFIG6_EXAMPLE, 4),
+        ]:
+            with self.subTest(ha_path=ha_path, expected=expected):
+                hass_config = HassConfig(ha_path)
+                paths = list(extract_automation_paths(hass_config))
+                self.assertEqual(len(paths), expected)

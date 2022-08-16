@@ -1,14 +1,11 @@
+from pathlib import Path
 from unittest import TestCase
 
 import yaml
 from fastapi.testclient import TestClient
 
 from src.api.app import make_app
-from src.automations.types import (
-    AutomationData,
-    AutomationMetdata,
-    ExtenededAutomationData,
-)
+from src.automations.types import ExtenededAutomation
 from tests.utils import HA_CONFIG2_EXAMPLE, get_example_automation_loader
 
 
@@ -106,48 +103,53 @@ class automation2_lists_tests(automation_list_tests):
 class automation_update_tests(BaseTestCase):
     def test_insert_new(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
+        autos = resp.json()["data"]
         self.assertEqual(resp.json()["totalItems"], 32)
         resp = self.client.post(
             "/automations/item",
-            json={
-                "index": 33,
-                "data": AutomationData(metadata=AutomationMetdata(id="testme")).dict(),
-            },
+            json=ExtenededAutomation(
+                id="i am new",
+                configuration_key="",
+                source_file_type="list",
+                source_file=autos[0]["source_file"],
+            ).to_json(),
         )
         self.assertEqual(resp.status_code, 200)
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 32})
         data = resp.json()
         self.assertEqual(data["totalItems"], 33)
-        self.assertEqual(data["data"][0]["metadata"]["id"], "testme")
+        self.assertEqual(data["data"][0]["id"], "i am new")
 
     def test_update_some(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 20})
         original_auto = resp.json()["data"][0]
+        changed_to = ExtenededAutomation(
+            id=original_auto["id"],
+            alias="I have been modified",
+            configuration_key=original_auto["configuration_key"],
+            source_file_type=original_auto["source_file_type"],
+            source_file=original_auto["source_file"],
+        )
         resp = self.client.post(
             "/automations/item",
-            json={
-                "index": 20,
-                "data": AutomationData(metadata=AutomationMetdata(id="testme")).dict(),
-            },
+            json=changed_to.to_json(),
         )
         self.assertEqual(resp.status_code, 200)
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 20})
         new_auto = resp.json()["data"][0]
         self.assertNotEqual(original_auto, new_auto)
         self.assertEqual(
-            ExtenededAutomationData(metadata=AutomationMetdata(id="testme")).dict(), new_auto
+            changed_to.to_json(),
+            new_auto,
         )
 
     def test_consistent_standard_1(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 15})
         original_auto = resp.json()["data"][0]
-        original_auto["metadata"]["alias"] = "I CHANGED!"
+        original_auto["alias"] = "I CHANGED!"
         resp = self.client.post(
             "/automations/item",
-            json={
-                "index": 15,
-                "data": original_auto,
-            },
+            json=original_auto,
         )
         self.assertEqual(resp.status_code, 200)
         with (self.config_folder / "automations.yaml").open("r") as fp:
@@ -192,13 +194,10 @@ class automation_update_tests(BaseTestCase):
     def test_consistent_standard_2(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 27})
         original_auto = resp.json()["data"][0]
-        original_auto["metadata"]["alias"] = "I CHANGED!"
+        original_auto["alias"] = "I CHANGED!"
         resp = self.client.post(
             "/automations/item",
-            json={
-                "index": 27,
-                "data": original_auto,
-            },
+            json=original_auto,
         )
         self.assertEqual(resp.status_code, 200)
         with (self.config_folder / "automations.yaml").open("r") as fp:
@@ -324,12 +323,11 @@ class automation_update_tests(BaseTestCase):
 class automation_delete_tests(BaseTestCase):
     def test_delete_some(self):
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})
+        autos = resp.json()["data"]
         self.assertEqual(resp.json()["totalItems"], 32)
         resp = self.client.delete(
             "/automations/item",
-            json={
-                "index": 20,
-            },
+            json=autos[0],
         )
         self.assertEqual(resp.status_code, 200)
         resp = self.client.post("/automations/list", json={"limit": 1, "offset": 0})

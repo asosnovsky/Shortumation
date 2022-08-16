@@ -1,115 +1,323 @@
-from unittest import TestCase
+from pathlib import Path
 
-from src.automations.errors import FailedDeletion, InvalidAutomationFile
-from src.automations.types import AutomationMetdata, ExtenededAutomationData
+from src import yaml_serializer
+from src.automations.errors import (
+    AttemptingToOverwriteAnIncompatibleFileError,
+    DBNoAutomationFound,
+    InvalidAutomationFile,
+)
+from src.automations.manager import AutomationManager
+from src.automations.types import ExtenededAutomation
+from src.errors import ErrorSet
+from src.hass_config.loader import HassConfig
 from tests.utils import (
-    get_dummy_automation_loader,
-    get_example_automation_loader,
+    HA_CONFIG6_EXAMPLE,
+    HA_CONFIG_EXAMPLE,
+    create_copy_of_example_config,
 )
 
+from .utils import TestWithDB
 
-class manager_tests(TestCase):
-    def test_find_limit_and_get(self):
-        _, _, loader = get_example_automation_loader()
-        first_auto_with_find = list(loader.find(limit=1))
-        first_auto_with_get = loader.get(0)
-        self.assertEqual(first_auto_with_find[0], first_auto_with_get)
 
-    def test_find_at_most_with_offset(self):
-        _, _, loader = get_example_automation_loader()
-        autos = list(loader.find(limit=10, offset=10))
-        self.assertTrue(len(autos), 10)
+class manager_tests(TestWithDB):
+    def get_manager(self, ha_config_example: Path):
+        self.config_path = create_copy_of_example_config(ha_config_example)
+        self.automation_manager = AutomationManager(
+            HassConfig(self.config_path),
+            self.db_file,
+        )
+        return self.config_path, self.automation_manager
+
+    def test_load_complex_read_modify_delete(self):
+        _, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        self.assertEqual(automation_manager.count(), 0)
+        automation_manager.reload()
+        self.assertEqual(automation_manager.count(), 12)
+        automation = automation_manager.get("sublist3-mlist2")
+        self.assertEqual(automation.description, "That was correct!")
+        self.assertEqual(
+            automation.action,
+            [
+                {
+                    "service": "switch.turn_off",
+                    "target": {"entity_id": "switch.bathroom"},
+                    "data": None,
+                }
+            ],
+        )
+        self.assertEqual(automation.configuration_key, "automation cools")
+        automation.trigger.append(
+            {"platform": "zone", "entity_id": "person.thor", "zone": "zone.azguard"}
+        )
+        automation_manager.upsert(automation)
+        self.assertEqual(
+            automation_manager.get("sublist3-mlist2").trigger,
+            [],
+        )
+        automation_manager.reload()
+        self.assertEqual(
+            automation_manager.get("sublist3-mlist2").trigger,
+            [
+                {
+                    "platform": "zone",
+                    "entity_id": "person.thor",
+                    "zone": "zone.azguard",
+                }
+            ],
+        )
 
     def test_find_invalid(self):
-        _, _, loader = get_example_automation_loader()
-        self.assertIsNone(loader.get(-1))
-        self.assertIsNone(loader.get(1_000))
-        self.assertIsNone(loader.get(33))
-
-    def test_length(self):
-        _, _, loader = get_example_automation_loader()
-        self.assertEqual(loader.get_total_items(), 32)
+        _, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        automation_manager.reload()
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("invalid")
 
     def test_bad_automations_file(self):
-        folder, _, manager = get_dummy_automation_loader(
-            [],
-            automation_in_conifguration_mode="none",
-        )
-        (folder / "automations.yaml").write_text("bob is an uncle")
-        with self.assertRaises(InvalidAutomationFile):
-            manager.get(0)
+        config_path, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        (config_path / "automations.yaml").write_text("bob is an uncle")
+        with self.assertRaises(ErrorSet) as err:
+            automation_manager.reload()
+        self.assertEqual(len(err.exception.errors), 1)
+        self.assertIsInstance(err.exception.errors[0], InvalidAutomationFile)
+        self.assertEqual(automation_manager.count(), 0)
 
-    def test_create_automation(self):
-        _, _, manager = get_dummy_automation_loader(
-            [],
-            automation_in_conifguration_mode="none",
-        )
-        manager.update(1, ExtenededAutomationData(metadata=AutomationMetdata(id="test1")))
-        auto = manager.get(0)
-        self.assertIsNotNone(auto)
-        self.assertEqual(auto.metadata.id, "test1")  # type: ignore
+    def test_one_bad_automations_file(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        (config_path / "automations" / "ui.yaml").write_text("bob is an uncle")
+        with self.assertRaises(ErrorSet) as err:
+            automation_manager.reload()
+        self.assertEqual(len(err.exception.errors), 1)
+        self.assertIsInstance(err.exception.errors[0], InvalidAutomationFile)
+        self.assertEqual(automation_manager.count(), 10)
 
-    def test_create_automation_with_example_folder(self):
-        _, _, manager = get_example_automation_loader()
-        self.assertEqual(manager.get_total_items(), 32)
-        manager.update(40, ExtenededAutomationData(metadata=AutomationMetdata(id="test1")))
-        auto = manager.get(32)
-        self.assertIsNotNone(auto)
-        self.assertEqual(manager.get_total_items(), 33)
-        self.assertEqual(auto.metadata.id, "test1")  # type: ignore
+    def test_delete_automation_in_single_file(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        self.assertTrue((config_path / "automations/include_dir_list/home/down.yaml").exists())
+        automation_manager.reload()
+        automation = automation_manager.get("1659114822642")
+        self.assertEqual(automation.configuration_key, "automation manual")
+        automation_manager.delete(automation)
+        automation_manager.reload()
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("1659114822642")
+        self.assertFalse((config_path / "automations/include_dir_list/home/down.yaml").exists())
 
-    def test_update_automation(self):
-        _, _, manager = get_dummy_automation_loader(
-            [
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
-            ],
-            automation_in_conifguration_mode="none",
+    def test_delete_automation_in_list(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        self.assertTrue(
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").exists()
         )
-        auto = manager.get(0)
-        self.assertEqual(auto.metadata.id, "test1")  # type: ignore
-        manager.update(0, ExtenededAutomationData(metadata=AutomationMetdata(id="toaster-7")))
-        auto = manager.get(0)
-        self.assertEqual(auto.metadata.id, "toaster-7")  # type: ignore
+        automation_manager.reload()
+        automation = automation_manager.get("mlist2")
+        self.assertEqual(automation.configuration_key, "automation cools")
+        automation_manager.delete(automation)
+        automation_manager.reload()
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("mlist2")
+        self.assertTrue(
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").exists()
+        )
 
-    def test_delete_automation(self):
-        _, _, manager = get_dummy_automation_loader(
-            [
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
-            ],
-            automation_in_conifguration_mode="none",
+    def test_create_new_in_single_file(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        automation_manager.reload()
+        self.assertFalse((config_path / "automations/include_dir_list/home/left.yaml").exists())
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+        automation_manager.upsert(
+            ExtenededAutomation(
+                id="newlymade",
+                configuration_key="automation manual",
+                source_file=config_path / "automations/include_dir_list/home/left.yaml",
+                source_file_type="obj",
+            )
         )
-        self.assertEqual(manager.get_total_items(), 3)
-        manager.delete(1)
-        self.assertEqual(manager.get_total_items(), 2)
-        for auto in manager.find(0, 1000):
-            self.assertNotEqual(auto.metadata.id, "test2")
+        self.assertTrue((config_path / "automations/include_dir_list/home/left.yaml").exists())
+        automation_manager.reload()
+        self.assertEqual(
+            automation_manager.get("newlymade"),
+            ExtenededAutomation(
+                id="newlymade",
+                configuration_key="automation manual",
+                source_file=config_path / "automations/include_dir_list/home/left.yaml",
+                source_file_type="obj",
+            ),
+        )
 
-    def test_failed_deletion_automation(self):
-        _, _, manager = get_dummy_automation_loader(
-            [
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
-            ],
-            automation_in_conifguration_mode="none",
+    def test_create_new_in_existing_list_file(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        automation_manager.reload()
+        self.assertTrue(
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").exists()
         )
-        self.assertEqual(manager.get_total_items(), 3)
-        with self.assertRaises(FailedDeletion):
-            manager.delete(10)
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+        automation_manager.upsert(
+            ExtenededAutomation(
+                id="newlymade",
+                configuration_key="automation cools",
+                source_file=config_path / "automations/include_dir_merge_list/sub/list2.yaml",
+                source_file_type="list",
+            )
+        )
+        self.assertTrue(
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").exists()
+        )
+        automation_manager.reload()
+        self.assertEqual(
+            automation_manager.get("newlymade"),
+            ExtenededAutomation(
+                id="newlymade",
+                configuration_key="automation cools",
+                source_file=config_path / "automations/include_dir_merge_list/sub/list2.yaml",
+                source_file_type="list",
+            ),
+        )
 
-    def test_save_tags(self):
-        _, _, manager = get_dummy_automation_loader(
-            [
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test1")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test2")),
-                ExtenededAutomationData(metadata=AutomationMetdata(id="test3")),
-            ],
-            automation_in_conifguration_mode="none",
+    def test_create_new_in_new_list_file(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        automation_manager.reload()
+        self.assertFalse(
+            (config_path / "automations/include_dir_merge_list/sub/list4.yaml").exists()
         )
-        manager.update_tags("test1", {"room": "bathroom"})
-        auto = manager.get(0)
-        assert auto.tags == {"room": "bathroom"}
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+        automation_manager.upsert(
+            ExtenededAutomation(
+                id="newlymade",
+                configuration_key="automation cools",
+                source_file=config_path / "automations/include_dir_merge_list/sub/list4.yaml",
+                source_file_type="list",
+            )
+        )
+        self.assertTrue(
+            (config_path / "automations/include_dir_merge_list/sub/list4.yaml").exists()
+        )
+        automation_manager.reload()
+        self.assertEqual(
+            automation_manager.get("newlymade"),
+            ExtenededAutomation(
+                id="newlymade",
+                configuration_key="automation cools",
+                source_file=config_path / "automations/include_dir_merge_list/sub/list4.yaml",
+                source_file_type="list",
+            ),
+        )
+
+    def test_save_improper_types_list_to_obj(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        automation_manager.reload()
+        self.assertTrue(
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").exists()
+        )
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+        with self.assertRaises(AttemptingToOverwriteAnIncompatibleFileError):
+            automation_manager.upsert(
+                ExtenededAutomation(
+                    id="newlymade",
+                    configuration_key="automation cools",
+                    source_file=config_path / "automations/include_dir_merge_list/sub/list2.yaml",
+                    source_file_type="obj",
+                )
+            )
+        automation_manager.reload()
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+
+        data = yaml_serializer.load_yaml(
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").open("r")
+        )
+        self.assertIsInstance(data, list)
+
+    def test_save_improper_types_obj_to_list(self):
+        config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
+        automation_manager.reload()
+        self.assertTrue((config_path / "automations/include_dir_list/home/down.yaml").exists())
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+        with self.assertRaises(AttemptingToOverwriteAnIncompatibleFileError):
+            automation_manager.upsert(
+                ExtenededAutomation(
+                    id="newlymade",
+                    configuration_key="automation cools",
+                    source_file=config_path / "automations/include_dir_list/home/down.yaml",
+                    source_file_type="list",
+                )
+            )
+        automation_manager.reload()
+        with self.assertRaises(DBNoAutomationFound):
+            automation_manager.get("newlymade")
+
+        data = yaml_serializer.load_yaml(
+            (config_path / "automations/include_dir_list/home/down.yaml").open("r")
+        )
+        self.assertIsInstance(data, dict)
+
+    def test_update_tags_through_automation_update(self):
+        _, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Living",
+                "Type": "Button",
+            },
+        )
+        auto.tags["Room"] = "Bathroom"
+        automation_manager.upsert(auto)
+        del auto
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Bathroom",
+                "Type": "Button",
+            },
+        )
+
+    def test_update_tags_through_tags(self):
+        _, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Living",
+                "Type": "Button",
+            },
+        )
+        auto.tags["Room"] = "Bathroom"
+        automation_manager.update_tags(auto.id, auto.tags)
+        del auto
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Bathroom",
+                "Type": "Button",
+            },
+        )
+
+    def test_delete_tags(self):
+        _, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {
+                "Room": "Living",
+                "Type": "Button",
+            },
+        )
+        automation_manager.delete_tags(auto.id)
+        del auto
+        automation_manager.reload()
+        auto = automation_manager.get("1619371298367")
+        self.assertDictEqual(
+            auto.tags,
+            {},
+        )
