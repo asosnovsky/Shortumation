@@ -79,17 +79,17 @@ export const Empty = make({
   },
 });
 const auto1 = createMockAuto({
-  type: "button",
+  tags: { type: "button" },
 });
 export const One = make({
   automations: [auto1],
   haProps: {
     loading: false,
     entities: {
-      [`automation.${auto1.metadata.id}`]: {
-        entity_id: `automation.${auto1.metadata.id}`,
+      [`automation.${auto1.id}`]: {
+        entity_id: `automation.${auto1.id}`,
         attributes: {
-          id: auto1.metadata.id,
+          id: auto1.id,
         },
         context: { id: "", parent_id: null, user_id: null },
         last_changed: "",
@@ -105,11 +105,11 @@ export const MissingAutoInConfig = make({
   haProps: {
     loading: false,
     entities: {
-      [`automation.${auto1.metadata.id}`]: {
-        entity_id: `automation.${auto1.metadata.id}`,
+      [`automation.${auto1.id}`]: {
+        entity_id: `automation.${auto1.id}`,
         attributes: {
-          id: auto1.metadata.id,
-          friendly_name: auto1.metadata.alias,
+          id: auto1.id,
+          friendly_name: auto1.alias,
         },
         context: { id: "", parent_id: null, user_id: null },
         last_changed: "",
@@ -120,12 +120,22 @@ export const MissingAutoInConfig = make({
     entitySource: {},
   },
 });
+
+export const CrashingAutomations = make({
+  haProps: {
+    loading: false,
+    entities: {},
+    entitySource: {},
+  },
+  automations: [""] as any,
+});
+
 export const BadAutomation = make({
   haProps: {
     loading: false,
     entities: {
-      [`automation.${auto1.metadata.id}`]: {
-        entity_id: `automation.${auto1.metadata.id}`,
+      [`automation.${auto1.id}`]: {
+        entity_id: `automation.${auto1.id}`,
         attributes: {
           id: "test",
         },
@@ -140,12 +150,10 @@ export const BadAutomation = make({
   automations: [
     {
       tags: {},
-      metadata: {
-        id: "test",
-        mode: "single",
-        alias: "Light.Tank_Day",
-        description: "",
-      },
+      id: "test",
+      mode: "single",
+      alias: "Light.Tank_Day",
+      description: "",
       trigger: [
         {
           platform: "sun",
@@ -155,7 +163,7 @@ export const BadAutomation = make({
         { whoAmI: "bad node is who" } as any,
       ],
       condition: [{ whoAmI: "bad node is who" } as any],
-      sequence: [
+      action: [
         { scene: "scene.light_day" } as any,
         { whoAmI: "bad node is who" } as any,
         {
@@ -169,5 +177,42 @@ export const BadAutomation = make({
         },
       ],
     },
+  ],
+});
+
+export const OneCrashingOneGoodAutomations = make({
+  haProps: {
+    loading: false,
+    entities: {
+      [`automation.${auto1.id}`]: {
+        entity_id: `automation.${auto1.id}`,
+        attributes: {
+          id: auto1.id,
+        },
+        context: { id: "", parent_id: null, user_id: null },
+        last_changed: "",
+        last_updated: "",
+        state: "on",
+      },
+      "1235": {
+        entity_id: `automation.1235`,
+        attributes: {
+          id: "1235",
+        },
+        context: { id: "", parent_id: null, user_id: null },
+        last_changed: "",
+        last_updated: "",
+        state: "on",
+      },
+    },
+    entitySource: {},
+  },
+  automations: [
+    auto1,
+    {
+      id: "1235",
+      tags: {},
+    } as any,
+    "" as any,
   ],
 });

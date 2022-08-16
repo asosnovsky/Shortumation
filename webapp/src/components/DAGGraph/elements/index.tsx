@@ -63,7 +63,7 @@ export const useAutomationNodes = (
   );
 
   outputState.extend(
-    makeSequenceNodes(automation.sequence, {
+    makeSequenceNodes(automation.action, {
       ...args,
       state,
       dims,
@@ -74,7 +74,7 @@ export const useAutomationNodes = (
         dims,
         true
       ),
-      nodeId: `${dims.flipped}-sequence`,
+      nodeId: `${dims.flipped}-action`,
       nodeIndex: 2,
       lastNodeId: outputState.lastNodeId,
     })
@@ -98,7 +98,7 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
       enabled: node.enabled ?? true,
       label: getDescriptionFromAutomationNode(node, namer, true),
       ...state.getIsClosedActions(nodeId, node),
-      ...stateUpdater.createNodeActions("sequence", nodeIndex, {
+      ...stateUpdater.createNodeActions("action", nodeIndex, {
         includeAdd: true,
         flipped: dims.flipped,
       }),
@@ -153,7 +153,7 @@ export const makeSequenceNodes: ElementMaker<AutomationSequenceNode> = (
       dims,
       {
         icon: <AddIcon />,
-        onClick: () => stateUpdater.basic.sequence.addNode(null),
+        onClick: () => stateUpdater.basic.action.addNode(null),
       }
     ),
     true
@@ -261,7 +261,7 @@ export const makeChooseeNodes = makeSpecialNodeMaker(
       nodeId: args.nodeId,
       position: pos,
       onClick: () =>
-        args.stateUpdater.basic.sequence.updateNode(
+        args.stateUpdater.basic.action.updateNode(
           {
             ...node,
             choose: [
@@ -464,10 +464,10 @@ export const makeParallelNodes = makeSpecialNodeMaker(
         onClick: () =>
           args.openModal({
             allowedTypes: ["condition", "action"],
-            node: args.stateUpdater.basic.sequence.defaultNode,
+            node: args.stateUpdater.basic.action.defaultNode,
             saveBtnCreateText: true,
             update: (n) =>
-              args.stateUpdater.basic.sequence.updateNode(
+              args.stateUpdater.basic.action.updateNode(
                 {
                   ...node,
                   parallel: [...node.parallel, n],

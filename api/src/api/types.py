@@ -4,8 +4,6 @@ from pydantic import BaseModel
 from pydantic.fields import Field
 from pydantic.generics import GenericModel
 
-from src.automations.types import ExtenededAutomation
-
 DataT = TypeVar("DataT")
 
 

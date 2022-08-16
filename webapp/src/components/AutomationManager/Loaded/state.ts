@@ -13,7 +13,7 @@ export type UseAutomationManagerStateArgs = {
   hassEntities: HassEntities;
   onUpdateTags: (aid: string, tags: Record<string, string>) => void;
   onAutomationAdd: (auto: AutomationData) => void;
-  onAutomationUpdate: (aid: string, auto: AutomationData) => void;
+  onAutomationUpdate: (auto: AutomationData) => void;
   onAutomationStateChange: (eid: string, on: boolean) => void;
   onAutomationRun: (eid: string) => void;
 };
@@ -30,10 +30,12 @@ export const useAutomationManagerState = ({
   const snackbr = useSnackbar();
   const cookies = useAMSCookies();
   const tagsDB = useTagDB(
-    configAutomations.map(({ metadata: { id }, tags }) => ({
-      id,
-      tags,
-    })),
+    configAutomations
+      .filter((a) => typeof a === "object")
+      .map(({ id, tags = {} }) => ({
+        id,
+        tags,
+      })),
     onUpdateTags
   );
   const automationDB = useAutomationDB(hassEntities, configAutomations, tagsDB);
@@ -91,13 +93,13 @@ export const useAutomationManagerState = ({
         }
       }
       const auto = automationDB.addNew();
-      methods.setSelectedAutomationId(auto.metadata.id, true);
+      methods.setSelectedAutomationId(auto.id, true);
     },
     editorUpdateAutomation(auto: AutomationData) {
       if (methods.currentAutomationIsNew) {
         onAutomationAdd(auto);
       } else if (methods.currentAutomationId) {
-        onAutomationUpdate(methods.currentAutomationId, auto);
+        onAutomationUpdate(auto);
       }
     },
     sideBarUpdateAutomation(
@@ -109,16 +111,13 @@ export const useAutomationManagerState = ({
       if (previousAuto && previousAuto[1]) {
         const previousAutoState = previousAuto[1];
         if (
-          previousAutoState.metadata.alias !== a.title ||
-          previousAutoState.metadata.description !== a.description
+          previousAutoState.alias !== a.title ||
+          previousAutoState.description !== a.description
         ) {
-          onAutomationUpdate(aid, {
+          onAutomationUpdate({
             ...previousAutoState,
-            metadata: {
-              ...previousAutoState.metadata,
-              alias: a.title,
-              description: a.description,
-            },
+            alias: a.title,
+            description: a.description,
           });
         }
       } else {

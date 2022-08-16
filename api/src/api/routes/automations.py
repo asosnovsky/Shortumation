@@ -1,10 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from src.api.types import (
-    ListData,
-    ListParams,
-    UpdateTags,
-)
+from src.api.types import ListData, ListParams, UpdateTags
 from src.automations.errors import FailedDeletion
 from src.automations.manager import AutomationManager
 from src.automations.types import ExtenededAutomation

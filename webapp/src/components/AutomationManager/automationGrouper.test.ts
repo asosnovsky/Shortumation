@@ -4,41 +4,51 @@ import { AutomationManagerAuto } from "./types";
 
 const automations: AutomationManagerAuto[] = [
   createMockAuto({
-    Room: "Living Room",
-    Type: "Lights",
+    tags: {
+      Room: "Living Room",
+      Type: "Lights",
+    },
   }),
   createMockAuto({
-    Room: "Living Room",
-    Type: "Climate",
+    tags: {
+      Room: "Living Room",
+      Type: "Climate",
+    },
   }),
   createMockAuto({
-    Room: "Kitchen",
-    Type: "Climate",
+    tags: {
+      Room: "Kitchen",
+      Type: "Climate",
+    },
   }),
   createMockAuto({
-    Type: "Climate",
+    tags: {
+      Type: "Climate",
+    },
   }),
   createMockAuto({
-    Room: "Living Room",
+    tags: {
+      Room: "Living Room",
+    },
   }),
   createMockAuto({}),
 ].map<AutomationManagerAuto>((a) => ({
-  title: a.metadata.alias ?? "",
-  entityId: "automation." + a.metadata.id,
-  description: a.metadata.description ?? "",
+  title: a.alias ?? "",
+  entityId: "automation." + a.id,
+  description: a.description ?? "",
   state: "on",
   tags: a.tags,
-  id: a.metadata.id,
+  id: a.id,
   isSelected: false,
 }));
 
 const bigList = bigMockAutoList.map<AutomationManagerAuto>((a) => ({
-  entityId: "automation." + a.metadata.id,
-  title: a.metadata.alias ?? "",
-  description: a.metadata.description ?? "",
+  entityId: "automation." + a.id,
+  title: a.alias ?? "",
+  description: a.description ?? "",
   state: "on",
   tags: a.tags,
-  id: a.metadata.id,
+  id: a.id,
   isSelected: false,
 }));
 

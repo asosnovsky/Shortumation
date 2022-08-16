@@ -46,10 +46,10 @@ export const useAutomationDB = (
       const auto = defaultAutomation(String(Date.now()));
       setNewAuto([
         {
-          id: auto.metadata.id,
+          id: auto.id,
           entityId: "",
-          title: auto.metadata.alias ?? "",
-          description: auto.metadata.description ?? "",
+          title: auto.alias ?? "",
+          description: auto.description ?? "",
           state: "unregistered",
           tags: {},
           issue: "New Automation",
@@ -70,7 +70,7 @@ const genMapping = (
   const configData: Record<string, AutomationData> = configAutomations.reduce(
     (all, n) => ({
       ...all,
-      [n.metadata.id]: n,
+      [n.id]: n,
     }),
     {}
   );
@@ -91,8 +91,8 @@ const genMapping = (
 
       if (configData[autoId]) {
         found = configData[entityData.attributes.id];
-        title = found.metadata.alias ?? title;
-        description = found.metadata.description ?? description;
+        title = found.alias ?? title;
+        description = found.description ?? description;
         delete configData[autoId];
       } else {
         issue = "failed to find this automation in '/config' folder";
@@ -113,14 +113,14 @@ const genMapping = (
     });
 
   Object.values(configData).forEach((auto) => {
-    automatioinMap[auto.metadata.id] = [
+    automatioinMap[auto.id] = [
       {
-        id: auto.metadata.id,
+        id: auto.id,
         entityId: "",
-        title: auto.metadata.alias ?? "",
-        description: auto.metadata.description ?? "",
+        title: auto.alias ?? "",
+        description: auto.description ?? "",
         state: "unregistered",
-        tags: tagsDB.getTags(auto.metadata.id),
+        tags: tagsDB.getTags(auto.id),
         issue:
           "homeassistant did not load this automation, try to manually reload automations or restart homeassistant.",
       },

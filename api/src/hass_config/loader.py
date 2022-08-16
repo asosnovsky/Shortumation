@@ -5,8 +5,6 @@ from src.automations.tags import TagManager
 from src.yaml_serializer import dump_yaml, load_yaml
 from src.yaml_serializer.types import IncludedYaml
 
-from .errors import MissingFile
-
 
 class HassConfig:
     def __init__(self, root_path: Path) -> None:

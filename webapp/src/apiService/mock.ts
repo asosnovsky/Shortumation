@@ -36,8 +36,11 @@ export const useMockAPI = (
       }
       if (path === AUTOMTAION_ITEM) {
         if (method === "POST") {
-          const { index, data: auto } = data as any;
-          if (index >= automationsRef.current.length) {
+          const auto = data as AutomationData;
+          const index = automationsRef.current.findIndex(
+            ({ id }) => auto.id === id
+          );
+          if (index < 0) {
             automationsRef.current = [...automationsRef.current, auto];
           } else {
             automationsRef.current = [
@@ -51,11 +54,10 @@ export const useMockAPI = (
             data: {},
           };
         } else if (method === "DELETE") {
-          const { index } = data as any;
-          automationsRef.current = [
-            ...automationsRef.current.slice(0, index),
-            ...automationsRef.current.slice(index + 1),
-          ];
+          const auto = data as AutomationData;
+          automationsRef.current = automationsRef.current.filter(
+            ({ id }) => id !== auto.id
+          );
           return {
             ok: true,
             data: {},
@@ -67,7 +69,7 @@ export const useMockAPI = (
           const { automation_id, tags } = data as any;
           for (let i = 0; i < automationsRef.current.length; i++) {
             const auto = automationsRef.current[i];
-            if (auto.metadata.id === automation_id) {
+            if (auto.id === automation_id) {
               automationsRef.current[i].tags = JSON.parse(JSON.stringify(tags));
               break;
             }

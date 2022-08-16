@@ -1,7 +1,26 @@
 .error-boundary {
     padding: 2em 5%;
+    height: calc(100vh - 4em);
+    width: calc(100vw-5%);
+    max-height: calc(100vh - 4em);
+    max-width: calc(100vw-5%);
+    overflow: auto;
 }
 
 h1, h2 {
     margin: 0;
+}
+
+.error-boundary .error-boundary--stack, .error-boundary .error-boundary--context {
+    max-height: 25vh;
+    overflow: auto;
+}
+
+.error-boundary--buttons {
+    width: 100%;
+    display: flex;
+    margin-top: 1em;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
 }

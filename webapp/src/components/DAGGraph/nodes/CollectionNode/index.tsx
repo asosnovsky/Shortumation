@@ -10,7 +10,7 @@ export const CollectionNodeMaker = NodeManager.register(
     ...pre,
     color: (pre.collectionType === "condition"
       ? "blue"
-      : pre.collectionType === "sequence"
+      : pre.collectionType === "action"
       ? "green"
       : "red") as SequenceNodeColor,
     sequenceNode: node,

@@ -11,7 +11,7 @@ test("superstructure is", () => {
 });
 
 test("getFailures returns failures", () => {
-  const failures = getFailures({ metadata: {} }, AutomationData);
+  const failures = getFailures({}, AutomationData);
   expect(failures).toHaveLength(6);
 });
 

@@ -99,7 +99,7 @@ export const AutomationEditor: FC<Props> = ({
       )}
       <Modal open={infoBoxOpen}>
         <AutoInfoBox
-          metadata={state.data.metadata}
+          metadata={state.data}
           tags={state.data.tags}
           onUpdate={updateMetadata}
           tagDB={tagDB}
@@ -128,14 +128,14 @@ export const AutomationEditor: FC<Props> = ({
         <div className="automation-editor--flow-wrapper--toolbar">
           <div className="automation-editor--flow-wrapper--toolbar--title">
             <span className="automation-editor--flow-wrapper--toolbar--title--text">
-              <div className="id">{state.data.metadata.id}</div>
+              <div className="id">{state.data.id}</div>
               <InputTextView
-                value={state.data.metadata.alias ?? ""}
+                value={state.data.alias ?? ""}
                 placeholder="Name"
                 onChange={(alias) =>
                   updateMetadata(
                     {
-                      ...state.data.metadata,
+                      ...state.data,
                       alias,
                     },
                     state.data.tags
@@ -148,13 +148,13 @@ export const AutomationEditor: FC<Props> = ({
               label="Mode"
               className="automation-editor--flow-wrapper--toolbar--modes"
               current={{
-                id: state.data.metadata.mode,
+                id: state.data.mode,
                 label: "",
               }}
               onChange={({ id }) =>
                 updateMetadata(
                   {
-                    ...state.data.metadata,
+                    ...state.data,
                     mode: id,
                   },
                   state.data.tags
@@ -185,12 +185,12 @@ export const AutomationEditor: FC<Props> = ({
             />
             <InputTextView
               className="description"
-              value={state.data.metadata.description ?? ""}
+              value={state.data.description ?? ""}
               placeholder="Description"
               onChange={(description) =>
                 updateMetadata(
                   {
-                    ...state.data.metadata,
+                    ...state.data,
                     description,
                   },
                   state.data.tags
@@ -221,10 +221,10 @@ export const AutomationEditor: FC<Props> = ({
           </Button>
         </div>
         <DAGAutomationGraph
-          sequence={state.data.sequence}
+          action={state.data.action}
           trigger={state.data.trigger}
           condition={state.data.condition}
-          onSequenceUpdate={updateSequence}
+          onActionUpdate={updateSequence}
           onTriggerUpdate={updateTrigger}
           onConditionUpdate={updateCondition}
           isFlipped={flipped}
@@ -277,26 +277,24 @@ export const ValidationBox: FC<{
     data: props.data,
   });
 
-  const makeSave =
-    <K extends keyof EditorData>(k: K) =>
-    (d: EditorData[K]) => {
-      const newData = {
-        ...data,
-        [k]: d,
-      };
-      const newFails = props.validate(newData);
-      if (newFails) {
-        setState({
-          failures: newFails,
-          data: newData,
-        });
-      } else {
-        setState({
-          failures: [],
-          data: newData,
-        });
-      }
+  const onSave = (d: EditorData) => {
+    const newData = {
+      ...data,
+      ...d,
     };
+    const newFails = props.validate(newData);
+    if (newFails) {
+      setState({
+        failures: newFails,
+        data: newData,
+      });
+    } else {
+      setState({
+        failures: [],
+        data: newData,
+      });
+    }
+  };
 
   return (
     <div className="automation-editor-failures">
@@ -317,27 +315,7 @@ export const ValidationBox: FC<{
       <span>
         Please correct the automation file manually and then continue!
       </span>
-      <InputYaml
-        label="Metadata"
-        value={data.metadata}
-        onChange={makeSave("metadata")}
-      />
-      <InputYaml label="Tags" value={data.tags} onChange={makeSave("tags")} />
-      <InputYaml
-        label="Trigger"
-        value={data.trigger}
-        onChange={makeSave("trigger")}
-      />
-      <InputYaml
-        label="Condition"
-        value={data.condition}
-        onChange={makeSave("condition")}
-      />
-      <InputYaml
-        label="Actions"
-        value={data.sequence}
-        onChange={makeSave("sequence")}
-      />
+      <InputYaml label="Raw" value={data} onChange={onSave} />
       <Button disabled={failures.length > 0} onClick={() => props.onSave(data)}>
         Save
       </Button>

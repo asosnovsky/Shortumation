@@ -9,10 +9,11 @@ export type AutomationMetadata = st.Infer<typeof mv.AutomationMetadata>;
 export interface AutomationActionData {
   trigger: AutomationTrigger[];
   condition: AutomationCondition[];
-  sequence: AutomationSequenceNode[];
+  action: AutomationSequenceNode[];
 }
-export interface AutomationData extends AutomationActionData {
-  metadata: AutomationMetadata;
+export interface AutomationData
+  extends AutomationActionData,
+    AutomationMetadata {
   tags: Record<string, string>;
 }
 export type AutomationSequenceNode = AutomationAction | AutomationCondition;

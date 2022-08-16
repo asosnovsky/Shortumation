@@ -24,12 +24,12 @@ test("mock api uses initial autos for initial population -- some data", async ()
 
 test("populate mock api with some data", async () => {
   const mockApi = makeAutomationAPI(useMockAPI([], fakeUseRef as any));
-  await mockApi.update({ index: 0, auto: createMockAuto() });
+  await mockApi.update(createMockAuto());
   let data = await mockApi.list({ limit: 10, offset: 0 });
   expect(data.ok).toBe(true);
   expect((data as any).data.data).toHaveLength(1);
   expect((data as any).data.totalItems).toBe(1);
-  await mockApi.update({ index: 1, auto: createMockAuto() });
+  await mockApi.update(createMockAuto());
   data = await mockApi.list({ limit: 10, offset: 0 });
   expect((data as any).data.data).toHaveLength(2);
   expect((data as any).data.totalItems).toBe(2);
@@ -50,13 +50,13 @@ test("delete/update data from mock api", async () => {
   );
   let data = ((await mockApi.list({ limit: 10, offset: 0 })) as any).data.data;
   const toBeEdited = data[0];
-  toBeEdited.metadata.alias = "Bob is my uncle";
-  await mockApi.update({ index: 0, auto: toBeEdited });
+  toBeEdited.alias = "Bob is my uncle";
+  await mockApi.update(toBeEdited);
   data = ((await mockApi.list({ limit: 10, offset: 0 })) as any).data.data;
-  expect(data[0].metadata.alias).toEqual("Bob is my uncle");
-  await mockApi.remove({ index: 0 });
+  expect(data[0].alias).toEqual("Bob is my uncle");
+  await mockApi.remove(data[0]);
   data = ((await mockApi.list({ limit: 10, offset: 0 })) as any).data.data;
-  expect(data[0].metadata.alias === "Bob is my uncle").toEqual(false);
+  expect(data[0].alias === "Bob is my uncle").toEqual(false);
 });
 
 test("update tags from mock api", async () => {
@@ -74,7 +74,7 @@ test("update tags from mock api", async () => {
   );
   let data = ((await mockApi.list({ limit: 10, offset: 0 })) as any).data
     .data as AutomationData[];
-  const autoId = data[0].metadata.id;
+  const autoId = data[0].id;
   expect(data[0].tags).toStrictEqual({});
   mockApi.updateTags({
     automation_id: autoId,
@@ -85,7 +85,7 @@ test("update tags from mock api", async () => {
   });
   data = ((await mockApi.list({ limit: 10, offset: 0 })) as any).data
     .data as AutomationData[];
-  expect(data[0].metadata.id).toEqual(autoId);
+  expect(data[0].id).toEqual(autoId);
   expect(data[0].tags).toStrictEqual({
     room: "bathroom",
     type: "popup",

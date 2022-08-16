@@ -53,7 +53,7 @@ const { make, componentMeta } = makeStory({
       automation: {
         trigger: [],
         condition: [],
-        sequence: [],
+        action: [],
       },
     },
   },
@@ -74,7 +74,7 @@ export const Trigger = make({
       },
     ],
     condition: [],
-    sequence: [],
+    action: [],
   },
 });
 
@@ -110,7 +110,7 @@ export const Conditions = make({
         below: "15",
       },
     ],
-    sequence: [],
+    action: [],
   },
 });
 
@@ -151,7 +151,7 @@ export const FullAuto = make({
         bad: "node",
       } as any,
     ],
-    sequence: [
+    action: [
       {
         condition: "and",
         conditions: [
@@ -269,7 +269,7 @@ export const ChooseAuto = make({
   automation: {
     condition: [],
     trigger: [],
-    sequence: [
+    action: [
       {
         choose: [
           {
@@ -365,7 +365,7 @@ export const EmptyChooseAuto = make({
   automation: {
     condition: [],
     trigger: [],
-    sequence: [
+    action: [
       {
         choose: [],
         default: [],
@@ -378,7 +378,7 @@ export const RepeatAuto = make({
   automation: {
     condition: [],
     trigger: [],
-    sequence: [
+    action: [
       {
         repeat: {
           while: 'states(lights.switch) == "on"',
@@ -427,7 +427,7 @@ export const ParallelAuto = make({
   automation: {
     condition: [],
     trigger: [],
-    sequence: [
+    action: [
       {
         parallel: [
           {
@@ -469,7 +469,7 @@ export const BadNodes = make({
       { condition: "and" },
       "text?",
     ] as any,
-    sequence: [
+    action: [
       {
         parallel: {
           bad: "me",
@@ -486,7 +486,7 @@ export const IfElseNode = make({
   automation: {
     condition: [],
     trigger: [],
-    sequence: [
+    action: [
       {
         if: [],
         else: [],
@@ -508,7 +508,7 @@ export const TimeNodes = make({
         platform: "time_pattern",
       },
     ],
-    sequence: [
+    action: [
       {
         condition: "time",
       },

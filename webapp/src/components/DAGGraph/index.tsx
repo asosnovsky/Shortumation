@@ -10,10 +10,10 @@ import { AutomationTrigger } from "types/automations/triggers";
 import { AutomationCondition } from "types/automations/conditions";
 
 export const DAGAutomationGraph: FC<{
-  sequence: AutomationSequenceNode[];
+  action: AutomationSequenceNode[];
   trigger: AutomationTrigger[];
   condition: AutomationCondition[];
-  onSequenceUpdate: (s: AutomationSequenceNode[]) => void;
+  onActionUpdate: (s: AutomationSequenceNode[]) => void;
   onTriggerUpdate: (t: AutomationTrigger[]) => void;
   onConditionUpdate: (c: AutomationCondition[]) => void;
   isFlipped: boolean;
@@ -24,9 +24,9 @@ export const DAGAutomationGraph: FC<{
     useState<ModalState | undefined>(undefined);
   const updater = createUpdater({
     openModal: setModalState,
-    sequence: {
-      data: props.sequence,
-      onUpdate: props.onSequenceUpdate,
+    action: {
+      data: props.action,
+      onUpdate: props.onActionUpdate,
     },
     condition: {
       data: props.condition,
@@ -39,7 +39,7 @@ export const DAGAutomationGraph: FC<{
   });
   const elementData = useAutomationNodes(
     {
-      sequence: props.sequence,
+      action: props.action,
       condition: props.condition,
       trigger: props.trigger,
     },

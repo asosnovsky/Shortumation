@@ -24,3 +24,21 @@
     flex: 1;
     height: 100%;
 }
+
+
+.invalid-automation-modal-list {
+    display: flex;
+    max-height: 50vh;
+    overflow: auto;
+    flex-direction: column;
+}
+
+.invalid-automation-modal-list li {
+    display: flex;
+    flex-direction: column;
+}
+
+.invalid-automation-modal-list--errors ul {
+    max-height: 10vh;
+    overflow: auto;
+}

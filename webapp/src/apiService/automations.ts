@@ -18,13 +18,10 @@ export const makeAutomationAPI = (api: API) => ({
     });
     return data;
   },
-  async update({ index, auto }: { index: number; auto: AutomationData }) {
+  async update(auto: AutomationData) {
     return await api.makeCall({
       path: AUTOMTAION_ITEM,
-      data: {
-        index,
-        data: auto,
-      },
+      data: auto,
     });
   },
   async updateTags({
@@ -42,13 +39,11 @@ export const makeAutomationAPI = (api: API) => ({
       },
     });
   },
-  async remove({ index }: { index: number }) {
+  async remove(auto: AutomationData) {
     return await api.makeCall({
       method: "DELETE",
       path: AUTOMTAION_ITEM,
-      data: {
-        index,
-      },
+      data: auto,
     });
   },
 });

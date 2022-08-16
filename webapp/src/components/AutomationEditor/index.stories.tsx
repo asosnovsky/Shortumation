@@ -21,7 +21,7 @@ const Template: ComponentStory<typeof AutomationEditor> = (args) => {
       <AutomationEditor
         {...args}
         tagDB={useTagDB(
-          state ? [{ id: state.metadata.id, tags: state.tags }] : [],
+          state ? [{ id: state.id, tags: state.tags }] : [],
           () => {}
         )}
         automation={state}
@@ -46,16 +46,13 @@ Simple.args = {
       Type: "Smell",
       Use: "Flushing",
     },
-    metadata: {
-      id:
-        "random" + String(Date.now()) + String(Date.now()) + String(Date.now()),
-      alias: "Random",
-      description: "Example Metadata",
-      trigger_variables: {
-        wowo: "!",
-      },
-      mode: "single",
+    id: "random" + String(Date.now()) + String(Date.now()) + String(Date.now()),
+    alias: "Random",
+    description: "Example Metadata",
+    trigger_variables: {
+      wowo: "!",
     },
+    mode: "single",
     trigger: [
       {
         platform: "numeric_state",
@@ -66,7 +63,7 @@ Simple.args = {
         event: "start",
       },
     ],
-    sequence: [
+    action: [
       {
         condition: "and",
         conditions: [
@@ -102,17 +99,15 @@ EmptyStart.args = {
   automation: {
     condition: [],
     tags: {},
-    metadata: {
-      id: "random",
-      alias: "Random",
-      description: "Example Metadata",
-      trigger_variables: {
-        wowo: "!",
-      },
-      mode: "single",
+    id: "random",
+    alias: "Random",
+    description: "Example Metadata",
+    trigger_variables: {
+      wowo: "!",
     },
+    mode: "single",
     trigger: [],
-    sequence: [],
+    action: [],
   },
 };
 
@@ -122,10 +117,9 @@ BadAutomationInvalidMetadata.args = {
   automation: {
     condition: [],
     tags: {},
-    metadata: {} as any,
     trigger: [],
-    sequence: [],
-  },
+    action: [],
+  } as any,
 };
 
 export const BadAutomationInvalidTriggers = Template.bind({});
@@ -134,17 +128,15 @@ BadAutomationInvalidTriggers.args = {
   automation: {
     condition: [],
     tags: {},
-    metadata: {
-      id: "random",
-      alias: "Random",
-      description: "Example Metadata",
-      trigger_variables: {
-        wowo: "!",
-      },
-      mode: "single",
+    id: "random",
+    alias: "Random",
+    description: "Example Metadata",
+    trigger_variables: {
+      wowo: "!",
     },
+    mode: "single",
     trigger: ["haha I am a string"] as any,
-    sequence: [],
+    action: [],
   },
 };
 
@@ -154,34 +146,29 @@ BadAutomationInvalidSequence.args = {
   automation: {
     condition: [],
     tags: {},
-    metadata: {
-      id: "random",
-      alias: "Bad Choose Sequence",
-      description: "Example Metadata",
-      trigger_variables: {
-        wowo: "!",
-      },
-      mode: "single",
+    alias: "Bad Choose Sequence",
+    description: "Example Metadata",
+    trigger_variables: {
+      wowo: "!",
     },
+    mode: "single",
     trigger: [],
-    sequence: [
+    action: [
       {
         choose: {},
       },
-    ] as any,
-  },
+    ],
+  } as any,
 };
 
 export const RepeatExample = Template.bind({});
 RepeatExample.args = {
   ...RepeatExample.args,
   automation: {
-    metadata: {
-      id: "1654976151462",
-      alias: "Get out of baby room",
-      description: "",
-      mode: "single",
-    },
+    id: "1654976151462",
+    alias: "Get out of baby room",
+    description: "",
+    mode: "single",
     trigger: [
       {
         type: "opened",
@@ -192,7 +179,7 @@ RepeatExample.args = {
       },
     ],
     condition: [],
-    sequence: [
+    action: [
       {
         service: "notify.mobile_app_levas_phone",
         data: {

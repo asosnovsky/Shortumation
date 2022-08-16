@@ -90,7 +90,7 @@ export const useAutomatioEditorState = (
   return {
     validate: (data: any) => getFailures(data, v.AutomationData),
     updateTrigger: makeUpdate("trigger"),
-    updateSequence: makeUpdate("sequence"),
+    updateSequence: makeUpdate("action"),
     updateCondition: makeUpdate("condition"),
     saveAndUpdate,
     updateMetadata: (
@@ -107,7 +107,7 @@ export const useAutomatioEditorState = (
           data: {
             ...state.data,
             tags,
-            metadata,
+            ...metadata,
           },
         });
       }
@@ -140,16 +140,17 @@ export const useAutomatioEditorState = (
 };
 
 const genEditorData = (automation: AutomationData) => {
-  const { metadata, trigger, sequence, condition } = automation;
+  const { tags: rawTags, trigger, action, condition, ...metadata } = automation;
 
-  const tags: [string, string][] = Object.keys(automation.tags).map(
-    (tagName) => [tagName, automation.tags[tagName]]
-  );
+  const tags: [string, string][] = Object.keys(rawTags).map((tagName) => [
+    tagName,
+    rawTags[tagName],
+  ]);
 
   return {
-    metadata,
+    ...metadata,
     trigger,
-    sequence,
+    action,
     condition,
     tags,
   };

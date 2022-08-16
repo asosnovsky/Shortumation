@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Skeleton from "@mui/material/Skeleton";
 
@@ -9,6 +9,11 @@ import { HAEntitiesState } from "haService/HAEntities";
 import { AutomationManagerLoaded } from "./Loaded";
 import { Alert } from "@mui/material";
 import { useSnackbar } from "notistack";
+import { ErrorBoundary } from "components/ErrorBoundary";
+import { getFailures } from "types/validators/helper";
+import * as av from "types/validators/autmation";
+import { useConfirm } from "material-ui-confirm";
+import InputYaml from "components/Inputs/Base/InputYaml";
 
 export type AutomationManagerProps = {
   onAutomationStateChange: (eid: string, on: boolean) => void;
@@ -28,12 +33,76 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   triggerAutomation,
 }) => {
   const snackbr = useSnackbar();
+  const confirm = useConfirm();
+  const validationsShown = useRef(false);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     refreshAutomations();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (
+      api.state.automations.ready &&
+      api.state.automations.ok &&
+      !validationsShown.current
+    ) {
+      const configAutomationsValidated = api.state.automations.data.data.map(
+        (a) => {
+          const failures = getFailures(a, av.AutomationData);
+          return {
+            automation: a,
+            failures,
+          };
+        }
+      );
+      const invalidAutomations = configAutomationsValidated.filter(
+        ({ failures }) => failures !== null
+      );
+      if (invalidAutomations.length > 0) {
+        validationsShown.current = true;
+        confirm({
+          cancellationButtonProps: {
+            style: { display: "none" },
+          },
+          title: "Invalid Automations detected!",
+          content: (
+            <>
+              <ol className="invalid-automation-modal-list">
+                {invalidAutomations.map(({ automation, failures }, i) => (
+                  <li key={i}>
+                    <b>Automation</b>
+                    <InputYaml
+                      label=""
+                      value={automation}
+                      onChange={() => {}}
+                    />
+                    <b>Errors</b>
+                    <Alert
+                      color="error"
+                      className="invalid-automation-modal-list--errors"
+                    >
+                      <ul>
+                        {failures &&
+                          failures.map((f, fi) => (
+                            <li key={fi}>
+                              <b>{f.path}</b>: {f.message.join(", ")}
+                            </li>
+                          ))}
+                      </ul>
+                    </Alert>
+                  </li>
+                ))}
+              </ol>
+            </>
+          ),
+        })
+          .then(console.info)
+          .catch(console.error);
+      }
+    }
+  }, [api.state.automations, validationsShown.current]);
 
   // handle bad states
   if (!haEntities.ready && haEntities.error) {
@@ -75,78 +144,74 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   }
 
   // alias
-  const configAutomations = api.state.automations.data;
+
   const hassEntities = haEntities.collection;
+  const configAutomations = api.state.automations.data;
+
   return (
-    <AutomationManagerLoaded
-      configAutomations={configAutomations.data}
-      hassEntities={hassEntities}
-      onAutomationRun={triggerAutomation}
-      onAutomationStateChange={onAutomationStateChange}
-      onAutomationAdd={async (auto) => {
-        await api.updateAutomation({
-          index: configAutomations.totalItems + 1,
-          auto,
-        });
-        refreshAutomations();
-      }}
-      onAutomationDelete={(aid, eid) => {
-        const index = configAutomations.data.findIndex(
-          ({ metadata }) => metadata.id === aid
-        );
-        let deleteSent = false;
-        if (index >= 0) {
-          api.removeAutomation({
-            index,
-          });
-          deleteSent = true;
-        }
-        const hassAuto = hassEntities[eid];
-        if (hassAuto) {
-          forceDeleteAutomation(eid);
-          deleteSent = true;
-        }
-        if (!deleteSent) {
-          snackbr.enqueueSnackbar(
-            "Failed to delete automation, this may be resolved by a refresh or reboot of Home Assistant",
-            {
-              variant: "error",
-            }
-          );
-        }
-        // refreshAutomations();
-      }}
-      onAutomationUpdate={(aid, auto) => {
-        const index = configAutomations.data.findIndex(
-          ({ metadata }) => metadata.id === aid
-        );
-        if (index >= 0) {
-          api.updateAutomation({
-            index: configAutomations.data.findIndex(
-              ({ metadata }) => metadata.id === aid
-            ),
-            auto,
-          });
-          refreshAutomations();
-        } else {
-          snackbr.enqueueSnackbar(
-            "Failed to update automation, this may be resolved by a refresh or reboot of Home Assistant.",
-            {
-              variant: "error",
-            }
-          );
-        }
-      }}
-      onUpdateTags={async (aid, t) => {
-        setIsSaving(true);
-        await api.updateTags({
-          automation_id: aid,
-          tags: t,
-        });
-        setIsSaving(false);
+    <ErrorBoundary
+      additionalContext={{
+        configAutomations,
+        hassEntities,
       }}
     >
-      {isSaving && <LinearProgress />}
-    </AutomationManagerLoaded>
+      <AutomationManagerLoaded
+        configAutomations={configAutomations.data}
+        hassEntities={hassEntities}
+        onAutomationRun={triggerAutomation}
+        onAutomationStateChange={onAutomationStateChange}
+        onAutomationAdd={async (auto) => {
+          await api.updateAutomation(auto);
+          refreshAutomations();
+        }}
+        onAutomationDelete={(aid, eid) => {
+          const autoToDelete = configAutomations.data.find(
+            ({ id }) => id === aid
+          );
+          let deleteSent = false;
+          if (autoToDelete) {
+            api.removeAutomation(autoToDelete);
+            deleteSent = true;
+          }
+          const hassAuto = hassEntities[eid];
+          if (hassAuto) {
+            forceDeleteAutomation(eid);
+            deleteSent = true;
+          }
+          if (!deleteSent) {
+            snackbr.enqueueSnackbar(
+              "Failed to delete automation, this may be resolved by a refresh or reboot of Home Assistant",
+              {
+                variant: "error",
+              }
+            );
+          }
+          // refreshAutomations();
+        }}
+        onAutomationUpdate={(auto) => {
+          api
+            .updateAutomation(auto)
+            .then(() => refreshAutomations())
+            .catch(() => {
+              snackbr.enqueueSnackbar(
+                "Failed to update automation, this may be resolved by a refresh or reboot of Home Assistant.",
+                {
+                  variant: "error",
+                }
+              );
+            });
+        }}
+        onUpdateTags={async (aid, t) => {
+          setIsSaving(true);
+          await api.updateTags({
+            automation_id: aid,
+            tags: t,
+          });
+          setIsSaving(false);
+        }}
+      >
+        {isSaving && <LinearProgress />}
+      </AutomationManagerLoaded>
+    </ErrorBoundary>
   );
 };

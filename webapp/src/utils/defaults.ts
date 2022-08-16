@@ -63,14 +63,12 @@ export const getConditionDefaultValues = (
 };
 
 export const defaultAutomation = (id: string): AutomationData => ({
-  metadata: {
-    id,
-    alias: "New Automation",
-    description: "",
-    mode: "single",
-  },
+  id,
+  alias: "New Automation",
+  description: "",
+  mode: "single",
   tags: {},
   trigger: [],
-  sequence: [],
+  action: [],
   condition: [],
 });

@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from src.automations.types import BaseAutomation
-from src.hass_config.errors import MissingFile
 from src.hass_config.loader import HassConfig
 from tests.utils import create_dummy_config_folder
 

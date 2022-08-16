@@ -93,13 +93,13 @@ export type DAGGraphChooseUpdater = ReturnType<
   DAGGraphUpdater["createChoosNodeUpdater"]
 >;
 export const createUpdater = (
-  args: DAGUpdaterArgs<"sequence" | "condition" | "trigger">
+  args: DAGUpdaterArgs<"action" | "condition" | "trigger">
 ) => {
   const basic = {
-    sequence: createBasicUpdater("sequence", {
+    action: createBasicUpdater("action", {
       device_id: "",
     })({
-      sequence: args.sequence,
+      action: args.action,
       openModal: args.openModal,
     }),
     trigger: createBasicUpdater("trigger", {
@@ -179,7 +179,7 @@ export const createUpdater = (
     },
     createChoosNodeUpdater(i: number, j: number | "else") {
       const node = convertChooseActionToOrignal(
-        args.sequence.data[i] as ChooseAction
+        args.action.data[i] as ChooseAction
       );
       if (j === "else") {
         return {
@@ -189,10 +189,10 @@ export const createUpdater = (
               data: [],
               onUpdate: console.warn,
             },
-            sequence: {
+            action: {
               data: node.default ?? [],
               onUpdate: (upd) =>
-                basic.sequence.updateNode(
+                basic.action.updateNode(
                   {
                     ...node,
                     default: upd,
@@ -210,7 +210,7 @@ export const createUpdater = (
       } else {
         return {
           onRemove: () =>
-            basic.sequence.updateNode(
+            basic.action.updateNode(
               {
                 ...node,
                 choose: [
@@ -225,7 +225,7 @@ export const createUpdater = (
             condition: {
               data: node.choose[j].conditions,
               onUpdate: (upd: any) =>
-                basic.sequence.updateNode(
+                basic.action.updateNode(
                   {
                     ...node,
                     choose: [
@@ -240,10 +240,10 @@ export const createUpdater = (
                   i
                 ),
             },
-            sequence: {
+            action: {
               data: node.choose[j].sequence,
               onUpdate: (upd) =>
-                basic.sequence.updateNode(
+                basic.action.updateNode(
                   {
                     ...node,
                     choose: [
@@ -267,11 +267,11 @@ export const createUpdater = (
       }
     },
     createRepeatNodeUpdater(i: number) {
-      const { repeat, ...rest } = args.sequence.data[i] as RepeatAction;
-      const sequence = {
+      const { repeat, ...rest } = args.action.data[i] as RepeatAction;
+      const action = {
         data: repeat.sequence,
         onUpdate: (upd: AutomationNode[]) =>
-          basic.sequence.updateNode(
+          basic.action.updateNode(
             {
               ...rest,
               repeat: {
@@ -291,7 +291,7 @@ export const createUpdater = (
               repeat.while
             ),
             onUpdate: (upd: any) =>
-              basic.sequence.updateNode(
+              basic.action.updateNode(
                 {
                   ...rest,
                   repeat: {
@@ -303,7 +303,7 @@ export const createUpdater = (
               ),
           },
           trigger: createDummyUpdater(),
-          sequence,
+          action,
         });
       }
 
@@ -315,7 +315,7 @@ export const createUpdater = (
               repeat.until
             ),
             onUpdate: (upd: any) =>
-              basic.sequence.updateNode(
+              basic.action.updateNode(
                 {
                   ...rest,
                   repeat: {
@@ -327,7 +327,7 @@ export const createUpdater = (
               ),
           },
           trigger: createDummyUpdater(),
-          sequence,
+          action,
         });
       }
 
@@ -335,16 +335,16 @@ export const createUpdater = (
         openModal: args.openModal,
         condition: createDummyUpdater(),
         trigger: createDummyUpdater(),
-        sequence,
+        action,
       });
     },
     createParallelNodeUpdater(i: number, j: number) {
-      const { parallel, ...rest } = args.sequence.data[i] as ParallelAction;
+      const { parallel, ...rest } = args.action.data[i] as ParallelAction;
       const child = parallel[j];
 
       return {
         onRemove: () =>
-          basic.sequence.updateNode(
+          basic.action.updateNode(
             {
               ...rest,
               parallel: [...parallel.slice(0, j), ...parallel.slice(j + 1)],
@@ -355,10 +355,10 @@ export const createUpdater = (
           openModal: args.openModal,
           condition: createDummyUpdater(),
           trigger: createDummyUpdater(),
-          sequence: {
+          action: {
             data: "sequence" in child ? child.sequence : [child],
             onUpdate(d) {
-              basic.sequence.updateNode(
+              basic.action.updateNode(
                 {
                   ...rest,
                   parallel: [
@@ -383,12 +383,12 @@ export const createUpdaterFromAutomationData = (
   onUpdate: (a: AutomationActionData) => void
 ): DAGGraphUpdater =>
   createUpdater({
-    sequence: {
-      data: auto.sequence,
+    action: {
+      data: auto.action,
       onUpdate: (s: AutomationSequenceNode[]) =>
         onUpdate({
           ...auto,
-          sequence: s,
+          action: s,
         }),
     },
     condition: {
