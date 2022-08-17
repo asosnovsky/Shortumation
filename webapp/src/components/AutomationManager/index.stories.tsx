@@ -154,6 +154,9 @@ export const BadAutomation = make({
       mode: "single",
       alias: "Light.Tank_Day",
       description: "",
+      source_file: "automation.yaml",
+      source_file_type: "list",
+      configuration_key: "automation",
       trigger: [
         {
           platform: "sun",

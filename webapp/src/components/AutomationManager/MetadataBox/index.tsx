@@ -14,6 +14,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
+import { Chip } from "@mui/material";
 
 export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;
@@ -53,6 +54,9 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         className="metadatabox--title"
         title={`ID=${props.id}, EntityID=${props.entityId}`}
       >
+        <span className="metadatabox--title--source">
+          <Chip label={`@${props.source_file}`} />
+        </span>
         <InputTextView
           className="title"
           placeholder="Title"

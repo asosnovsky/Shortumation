@@ -60,7 +60,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
       const invalidAutomations = configAutomationsValidated.filter(
         ({ failures }) => failures !== null
       );
-      if (invalidAutomations.length > 0) {
+      if (invalidAutomations.length > 0 && !validationsShown.current) {
         validationsShown.current = true;
         confirm({
           cancellationButtonProps: {
@@ -102,7 +102,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           .catch(console.error);
       }
     }
-  }, [api.state.automations, validationsShown.current]);
+  }, [api.state.automations, confirm]);
 
   // handle bad states
   if (!haEntities.ready && haEntities.error) {

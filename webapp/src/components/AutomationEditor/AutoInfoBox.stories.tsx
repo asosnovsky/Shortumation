@@ -44,6 +44,9 @@ export const NoTags = make({
       wowo: "!",
     },
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
   },
 });
 
@@ -60,5 +63,8 @@ export const SomeTags = make({
       wowo: "!",
     },
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
   },
 });

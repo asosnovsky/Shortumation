@@ -85,3 +85,13 @@
     user-select: none;
     max-width: 5em;
 }
+
+.automation-manager--metadatabox .metadatabox--title--source {
+    margin-bottom: -0.5em;
+}
+
+
+.automation-manager--metadatabox .metadatabox--title--source .MuiChip-root {
+    font-size: 0.85em;
+    height: 2em;
+}

@@ -68,6 +68,9 @@ const story = makeStory({
               tags: {},
               entityId: "automation." + id,
               state: "on",
+              source_file: "automation.yaml",
+              source_file_type: "list",
+              configuration_key: "automation",
             },
           ]);
           setSelAutoId(id);
@@ -94,6 +97,9 @@ const makeAuto = (
     description: "",
     state: "on",
     tags: {},
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     ...data,
   };
 };

@@ -16,6 +16,9 @@ export const createMockAuto = ({
   mode: "single",
   tags,
   condition: [],
+  source_file: "automation.yaml",
+  source_file_type: "list",
+  configuration_key: "automation",
   trigger: [
     {
       platform: "numeric_state",
@@ -82,6 +85,9 @@ export const bigMockAutoList: AutomationData[] = [
     description: "",
     trigger_variables: null,
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger: [
       {
         device_id: "asdasdasdas",
@@ -231,6 +237,9 @@ export const bigMockAutoList: AutomationData[] = [
     description: "",
     trigger_variables: null,
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger: [
       {
         platform: "device",
@@ -271,6 +280,9 @@ export const bigMockAutoList: AutomationData[] = [
       "Ensures that the climate is always in sync with the house settings",
     trigger_variables: null,
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger: [
       {
         platform: "state",
@@ -403,6 +415,9 @@ export const bigMockAutoList: AutomationData[] = [
     description: "Configures max/min light settings for the baby ",
     trigger_variables: null,
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger: [
       {
         platform: "time",
@@ -463,6 +478,9 @@ export const bigMockAutoList: AutomationData[] = [
     id: "alarmanlage_an",
     alias: "alarmanlage_an (Uhrzeit)",
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     tags: {},
     trigger: [
       {

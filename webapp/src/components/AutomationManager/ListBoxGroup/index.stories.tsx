@@ -26,6 +26,9 @@ const { make, componentMeta } = makeStory({
           description: "Amazing automation!",
           tags: {},
           state: "on",
+          source_file: "automation.yaml",
+          source_file_type: "list",
+          configuration_key: "automation",
           flags: {
             isSelected: false,
             isModified: false,
@@ -37,6 +40,9 @@ const { make, componentMeta } = makeStory({
           entityId: "automation.2",
           description: "Cool!",
           state: "on",
+          source_file: "automation.yaml",
+          source_file_type: "list",
+          configuration_key: "automation",
           flags: {
             isSelected: false,
             isModified: false,
@@ -84,6 +90,9 @@ export const Nested = make({
               description: "",
               title: "Automation #1",
               state: "on",
+              source_file: "automation.yaml",
+              source_file_type: "list",
+              configuration_key: "automation",
               flags: {
                 isSelected: true,
                 isModified: false,
@@ -96,6 +105,9 @@ export const Nested = make({
               description: "another one",
               title: "Automation #2",
               state: "off",
+              source_file: "automation.yaml",
+              source_file_type: "list",
+              configuration_key: "automation",
               flags: {
                 isSelected: false,
                 isModified: false,
@@ -108,6 +120,9 @@ export const Nested = make({
               description: "bad one",
               title: "Automation #3",
               state: "offing",
+              source_file: "automation.yaml",
+              source_file_type: "list",
+              configuration_key: "automation",
               flags: {
                 isSelected: false,
                 isModified: false,
@@ -146,6 +161,9 @@ export const Nested = make({
             isSelected: false,
             isModified: false,
           },
+          source_file: "automation.yaml",
+          source_file_type: "list",
+          configuration_key: "automation",
           state: "on",
           tags: {
             type: "good",

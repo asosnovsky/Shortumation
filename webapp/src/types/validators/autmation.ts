@@ -8,8 +8,13 @@ export const AutomationData = st.object({
     st.nullable(st.record(st.string(), st.string()))
   ),
   mode: st.enums(["single", "restart", "queued", "parallel"]),
+  tags: st.record(st.string(), st.string()),
+
+  source_file: st.string(),
+  source_file_type: st.string(),
+  configuration_key: st.string(),
+
   trigger: st.array(st.object()),
   condition: st.array(st.object()),
   action: st.array(st.object()),
-  tags: st.record(st.string(), st.string()),
 });

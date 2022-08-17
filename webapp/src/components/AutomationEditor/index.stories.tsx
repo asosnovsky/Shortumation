@@ -53,6 +53,9 @@ Simple.args = {
       wowo: "!",
     },
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger: [
       {
         platform: "numeric_state",
@@ -102,6 +105,9 @@ EmptyStart.args = {
     id: "random",
     alias: "Random",
     description: "Example Metadata",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger_variables: {
       wowo: "!",
     },
@@ -131,6 +137,9 @@ BadAutomationInvalidTriggers.args = {
     id: "random",
     alias: "Random",
     description: "Example Metadata",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger_variables: {
       wowo: "!",
     },
@@ -169,6 +178,9 @@ RepeatExample.args = {
     alias: "Get out of baby room",
     description: "",
     mode: "single",
+    source_file: "automation.yaml",
+    source_file_type: "list",
+    configuration_key: "automation",
     trigger: [
       {
         type: "opened",

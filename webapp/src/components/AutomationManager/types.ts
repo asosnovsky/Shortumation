@@ -9,6 +9,9 @@ export type AutomationManagerAuto = AutomationManagerAutoUpdatable & {
   tags: Record<string, string>;
   issue?: string;
   isNew?: boolean;
+  source_file: string;
+  source_file_type: string;
+  configuration_key: string;
 };
 export type AutomationManagerAutoItem = AutomationManagerAuto & {
   flags: AutomationManagerItemFlags;

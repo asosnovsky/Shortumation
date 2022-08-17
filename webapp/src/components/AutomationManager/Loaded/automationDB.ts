@@ -54,6 +54,9 @@ export const useAutomationDB = (
           tags: {},
           issue: "New Automation",
           isNew: true,
+          source_file: auto.source_file,
+          source_file_type: auto.source_file_type,
+          configuration_key: auto.configuration_key,
         },
         auto,
       ]);
@@ -88,11 +91,16 @@ const genMapping = (
         ? undefined
         : `recived invalid state "${entityData.state}, this could be because you have a lingering automation that was not cleared by homeassistant, try to reboot HA or manually clear this automation from HA Database."`;
       let found: AutomationData | null = null;
-
+      let source_file = "n/a";
+      let source_file_type = "n/a";
+      let configuration_key = "n/a";
       if (configData[autoId]) {
         found = configData[entityData.attributes.id];
         title = found.alias ?? title;
         description = found.description ?? description;
+        source_file = found.source_file ?? source_file;
+        source_file_type = found.source_file_type ?? source_file_type;
+        configuration_key = found.configuration_key ?? configuration_key;
         delete configData[autoId];
       } else {
         issue = "failed to find this automation in '/config' folder";
@@ -106,6 +114,9 @@ const genMapping = (
           description,
           state: entityData.state,
           tags: tagsDB.getTags(autoId),
+          source_file,
+          source_file_type,
+          configuration_key,
           issue,
         },
         found,
@@ -121,6 +132,9 @@ const genMapping = (
         description: auto.description ?? "",
         state: "unregistered",
         tags: tagsDB.getTags(auto.id),
+        source_file: auto.source_file,
+        source_file_type: auto.source_file_type,
+        configuration_key: auto.configuration_key,
         issue:
           "homeassistant did not load this automation, try to manually reload automations or restart homeassistant.",
       },
