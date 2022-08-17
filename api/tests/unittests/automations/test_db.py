@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from src.automations.types import ExtenededAutomation
-
+from src.automations.errors import DBDataError
 from .utils import TestWithDB
 
 
@@ -35,7 +35,7 @@ class db_tests(TestWithDB):
                 configuration_key="automation",
             ),
         ]
-        self.db.upsert_automations(originals)
+        self.db.insert_automations(originals)
         for original in originals:
             with self.subTest(original=original):
                 self.assertEqual(self.db.get_automation(original.id), original)
@@ -60,7 +60,7 @@ class db_tests(TestWithDB):
                 configuration_key="automation",
             ),
         ]
-        self.db.upsert_automations(originals)
+        with self.assertRaises(DBDataError):
+            self.db.insert_automations(originals)
         autos = list(self.db.list_automations(0, 10))
-        self.assertEqual(len(autos), 1)
-        self.assertTrue(autos[0] == originals[1])
+        self.assertEqual(len(autos), 0)

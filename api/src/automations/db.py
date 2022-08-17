@@ -72,7 +72,7 @@ class AutomationDBConnection:
             """
             )
 
-    def upsert_automations(self, automations: List[ExtenededAutomation]):
+    def insert_automations(self, automations: List[ExtenededAutomation]):
         with self.get_cur() as cur:
             for automation in automations:
                 cur.execute(
@@ -86,16 +86,7 @@ class AutomationDBConnection:
                         "{automation.source_file_type}",
                         "{automation.configuration_key}",
                         "{encode_auto(automation)}"
-                    )
-                    ON CONFLICT DO UPDATE SET 
-                        alias = "{automation.alias}",
-                        description = "{automation.description}",
-                        mode = "{automation.mode}",
-                        source_file = "{automation.source_file.absolute()}",
-                        source_file_type = "{automation.source_file_type}",
-                        configuration_key = "{automation.configuration_key}",
-                        rest = "{encode_auto(automation)}"
-                    
+                    );
                     """,
                 )
 

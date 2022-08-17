@@ -46,7 +46,7 @@ class AutomationManager:
         for config_key, p in extract_automation_paths(self.hass_config):
             try:
                 automations = list(load_automation_path(p, config_key, self.tag_manager))
-                self.db.upsert_automations(automations)
+                self.db.insert_automations(automations)
             except InvalidAutomationFile as e:
                 logger.warning(e)
                 errors.append(e)
