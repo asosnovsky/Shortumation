@@ -1,5 +1,20 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.6.1] - v0.6.0 Split Config Support & Better Error handling!
+
+- Added visual support for split config (this was a heavy refactor!)
+
+<img width="400px" src="https://user-images.githubusercontent.com/7451445/185440594-f988c136-dd35-4a44-99d9-6d54d2a27882.png" />
+
+- Capturing invalid files before they happen
+  <img width="400px" src="https://user-images.githubusercontent.com/7451445/185440785-ad48f4b3-b6c5-4362-9222-426c07c95776.png"/>
+
+- Trying to provide better information on common pitfals
+  ![image](https://user-images.githubusercontent.com/7451445/185440955-c7f15f95-c9cf-4368-bc4a-b84140b97b00.png)
+
+- Better global error capture
+  ![image](https://user-images.githubusercontent.com/7451445/185441268-9dbde36e-b28b-4a13-bd7f-45ae23834e78.png)
+
 ## [0.5.3] - Bug Fixes
 
 - Redirecting `/` to `/web` to resolve container install strangeness reported in https://github.com/asosnovsky/Shortumation/issues/125
