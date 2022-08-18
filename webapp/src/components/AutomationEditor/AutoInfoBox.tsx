@@ -1,5 +1,8 @@
 import "./AutoInfoBox.css";
-import { AutomationMetadata } from "types/automations";
+import {
+  AutomationMetadata,
+  AutomationShortumationMetadata,
+} from "types/automations";
 import { InputList } from "components/Inputs/InputList";
 import InputText from "components/Inputs/Base/InputText";
 import { FC, ReactNode, useRef, useState } from "react";
@@ -9,7 +12,7 @@ import { TagDB } from "components/AutomationManager/TagDB";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 
 export interface AutoInfoBoxProps {
-  metadata: AutomationMetadata;
+  metadata: AutomationMetadata & Partial<AutomationShortumationMetadata>;
   tags: Array<[string, string]>;
   onUpdate: (m: AutomationMetadata, tags: Array<[string, string]>) => void;
   tagDB: TagDB;

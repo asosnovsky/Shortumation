@@ -27,10 +27,10 @@ export const makeReloadAutomations = (
     });
   };
   const wrapCall = <Call extends (a: any) => Promise<any>>(fcn: Call) => {
-    return async (args: Parameters<Call>[0]): Promise<ReturnType<Call>> => {
+    return async (args: Parameters<Call>[0]) => {
       const resp = await fcn(args);
       await reload();
-      return resp;
+      return resp as ReturnType<Call>;
     };
   };
   return {

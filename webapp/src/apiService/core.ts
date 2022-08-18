@@ -22,6 +22,7 @@ export const useAPIService = (automationAPI: AutomationAPI) => {
     state,
     removeAutomation: wrapCall(automationAPI.remove),
     updateAutomation: wrapCall(automationAPI.update),
+    createAutomation: wrapCall(automationAPI.create),
     updateTags: wrapCall(automationAPI.updateTags),
   };
 };

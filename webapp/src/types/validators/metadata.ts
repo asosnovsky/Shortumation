@@ -8,6 +8,9 @@ export const AutomationMetadata = st.object({
     st.nullable(st.record(st.string(), st.string()))
   ),
   mode: st.enums(["single", "restart", "queued", "parallel"]),
+});
+
+export const AutomationShortumationMetadata = st.object({
   source_file: st.string(),
   source_file_type: st.string(),
   configuration_key: st.string(),

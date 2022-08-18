@@ -26,16 +26,16 @@ import { DAGAutomationGraph } from "components/DAGGraph";
 import { InputList } from "components/Inputs/InputList";
 import { InputTextView } from "components/Inputs/InputTextView";
 
-import { AutomationData } from "types/automations";
+import { AutomationData, BareAutomationData } from "types/automations";
 import { MiniFailure } from "types/validators/helper";
 
 import { AutoInfoBox } from "./AutoInfoBox";
 import { useAutomatioEditorState, EditorData } from "./state";
 
 interface Props {
-  automation?: AutomationData;
+  automation?: AutomationData | BareAutomationData;
   dims: DAGDims;
-  onUpdate: (auto: AutomationData) => void;
+  onUpdate: (auto: AutomationData | BareAutomationData) => void;
   onTrigger: () => void;
   onDelete: () => void;
   tagDB: TagDB;
@@ -215,7 +215,7 @@ export const AutomationEditor: FC<Props> = ({
           <Button
             className={"automation-editor--flow-wrapper--toolbar--save-btn"}
             onClick={save}
-            disabled={state.status !== "changed" && !isNew}
+            disabled={state.status !== "changed"}
           >
             Save <CheckMarkIcon color="#bf4" />
           </Button>

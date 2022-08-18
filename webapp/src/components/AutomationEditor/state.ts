@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
-import { AutomationData, AutomationMetadata } from "types/automations";
+import {
+  AutomationData,
+  AutomationMetadata,
+  BareAutomationData,
+} from "types/automations";
 import * as v from "types/validators/autmation";
-import { getFailures } from "types/validators/helper";
-import { MiniFailure } from "../../types/validators/helper";
+import { getFailures, MiniFailure } from "types/validators/helper";
 
 export type EditorData = ReturnType<typeof genEditorData>;
 export type EditorState =
@@ -26,12 +29,18 @@ export type EditorState =
 export type EditorStatus = EditorState["status"];
 
 export const useAutomatioEditorState = (
-  automation: AutomationData | undefined,
-  onSave: (a: AutomationData) => void
+  automation: AutomationData | BareAutomationData | undefined,
+  onSave: (a: AutomationData | BareAutomationData) => void
 ) => {
+  // state
   const [state, update] = useState<EditorState>({
     status: "loading",
   });
+
+  // helpers
+  const validate = (data: any) => {
+    return getFailures(data, v.AutomationData);
+  };
   const makeUpdate =
     <K extends keyof EditorData, D extends EditorData[K]>(name: K) =>
     (data: D) =>
@@ -69,26 +78,9 @@ export const useAutomatioEditorState = (
     }
   };
 
-  useEffect(() => {
-    if (automation) {
-      const failures = getFailures(automation, v.AutomationData);
-      if (failures) {
-        update({
-          status: "invalid",
-          failures,
-          data: genEditorData(automation),
-        });
-      } else {
-        update({
-          status: "unchanged",
-          data: genEditorData(automation),
-        });
-      }
-    }
-  }, [automation]);
-
-  return {
-    validate: (data: any) => getFailures(data, v.AutomationData),
+  // pub methods
+  const methods = {
+    validate,
     updateTrigger: makeUpdate("trigger"),
     updateSequence: makeUpdate("action"),
     updateCondition: makeUpdate("condition"),
@@ -137,9 +129,30 @@ export const useAutomatioEditorState = (
       return state;
     },
   };
+
+  // effects
+  useEffect(() => {
+    if (automation) {
+      const failures = validate(automation);
+      if (failures) {
+        update({
+          status: "invalid",
+          failures,
+          data: genEditorData(automation),
+        });
+      } else {
+        update({
+          status: "unchanged",
+          data: genEditorData(automation),
+        });
+      }
+    }
+  }, [automation]);
+
+  return methods;
 };
 
-const genEditorData = (automation: AutomationData) => {
+const genEditorData = (automation: AutomationData | BareAutomationData) => {
   const { tags: rawTags, trigger, action, condition, ...metadata } = automation;
 
   const tags: [string, string][] = Object.keys(rawTags).map((tagName) => [

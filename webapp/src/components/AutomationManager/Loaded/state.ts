@@ -1,7 +1,7 @@
 import { HassEntities } from "home-assistant-js-websocket";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { AutomationData } from "types/automations";
+import { AutomationData, BareAutomationData } from "types/automations";
 import { useTagDB } from "../TagDB";
 import { useAutomationDB } from "./automationDB";
 import { useConfirm } from "material-ui-confirm";
@@ -12,7 +12,7 @@ export type UseAutomationManagerStateArgs = {
   configAutomations: AutomationData[];
   hassEntities: HassEntities;
   onUpdateTags: (aid: string, tags: Record<string, string>) => void;
-  onAutomationAdd: (auto: AutomationData) => void;
+  onAutomationAdd: (auto: BareAutomationData) => void;
   onAutomationUpdate: (auto: AutomationData) => void;
   onAutomationStateChange: (eid: string, on: boolean) => void;
   onAutomationRun: (eid: string) => void;
@@ -68,7 +68,7 @@ export const useAutomationManagerState = ({
     get tagsDB() {
       return tagsDB;
     },
-    get currentAutomation(): AutomationData | null {
+    get currentAutomation(): AutomationData | BareAutomationData | null {
       return currentAutomation === null ? null : currentAutomation[1];
     },
     get currentAutomationIsNew() {
@@ -95,11 +95,11 @@ export const useAutomationManagerState = ({
       const auto = automationDB.addNew();
       methods.setSelectedAutomationId(auto.id, true);
     },
-    editorUpdateAutomation(auto: AutomationData) {
+    editorUpdateAutomation(auto: AutomationData | BareAutomationData) {
       if (methods.currentAutomationIsNew) {
         onAutomationAdd(auto);
       } else if (methods.currentAutomationId) {
-        onAutomationUpdate(auto);
+        onAutomationUpdate(auto as AutomationData);
       }
     },
     sideBarUpdateAutomation(
@@ -108,7 +108,13 @@ export const useAutomationManagerState = ({
       eid: string
     ) {
       const previousAuto = automationDB.getAutomationData(aid);
-      if (previousAuto && previousAuto[1]) {
+      if (
+        previousAuto &&
+        previousAuto[1] &&
+        "configuration_key" in previousAuto[1] &&
+        "source_file" in previousAuto[1] &&
+        "source_file_type" in previousAuto[1]
+      ) {
         const previousAutoState = previousAuto[1];
         if (
           previousAutoState.alias !== a.title ||

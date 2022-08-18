@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { AutomationData } from "types/automations";
+import { AutomationData, BareAutomationData } from "types/automations";
 import { API } from "./base";
 import {
   AUTOMTAION_LIST,
@@ -35,13 +35,16 @@ export const useMockAPI = (
         } as any;
       }
       if (path === AUTOMTAION_ITEM) {
-        if (method === "POST") {
+        if (method === "PUT") {
           const auto = data as AutomationData;
           const index = automationsRef.current.findIndex(
             ({ id }) => auto.id === id
           );
           if (index < 0) {
-            automationsRef.current = [...automationsRef.current, auto];
+            return {
+              ok: false,
+              error: "Not Found",
+            };
           } else {
             automationsRef.current = [
               ...automationsRef.current.slice(0, index),
@@ -58,6 +61,21 @@ export const useMockAPI = (
           automationsRef.current = automationsRef.current.filter(
             ({ id }) => id !== auto.id
           );
+          return {
+            ok: true,
+            data: {},
+          };
+        } else if (method === "POST") {
+          const auto = data as BareAutomationData;
+          automationsRef.current = [
+            ...automationsRef.current,
+            {
+              ...auto,
+              source_file: "automation.yaml",
+              source_file_type: "list",
+              configuration_key: "automation",
+            },
+          ];
           return {
             ok: true,
             data: {},

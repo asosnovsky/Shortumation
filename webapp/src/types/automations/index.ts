@@ -6,16 +6,23 @@ import { AutomationTrigger, TriggerType } from "./triggers";
 import * as mv from "types/validators/metadata";
 
 export type AutomationMetadata = st.Infer<typeof mv.AutomationMetadata>;
+export type AutomationShortumationMetadata = st.Infer<
+  typeof mv.AutomationShortumationMetadata
+>;
 export interface AutomationActionData {
   trigger: AutomationTrigger[];
   condition: AutomationCondition[];
   action: AutomationSequenceNode[];
 }
-export interface AutomationData
+export interface BareAutomationData
   extends AutomationActionData,
     AutomationMetadata {
   tags: Record<string, string>;
 }
+export interface AutomationData
+  extends BareAutomationData,
+    AutomationShortumationMetadata {}
+
 export type AutomationSequenceNode = AutomationAction | AutomationCondition;
 export type AutomationNodeMapping = {
   trigger: AutomationTrigger;

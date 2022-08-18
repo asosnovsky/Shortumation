@@ -1,4 +1,4 @@
-import { AutomationData } from "types/automations";
+import { AutomationData, BareAutomationData } from "types/automations";
 import { API } from "./base";
 import { ListData, ListParams } from "./types";
 import {
@@ -20,6 +20,14 @@ export const makeAutomationAPI = (api: API) => ({
   },
   async update(auto: AutomationData) {
     return await api.makeCall({
+      method: "PUT",
+      path: AUTOMTAION_ITEM,
+      data: auto,
+    });
+  },
+  async create(auto: BareAutomationData) {
+    return await api.makeCall({
+      method: "POST",
       path: AUTOMTAION_ITEM,
       data: auto,
     });

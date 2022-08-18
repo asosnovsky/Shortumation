@@ -1,6 +1,6 @@
 import { HassEntities } from "home-assistant-js-websocket";
 import { useEffect, useState } from "react";
-import { AutomationData } from "types/automations";
+import { AutomationData, BareAutomationData } from "types/automations";
 import { defaultAutomation } from "utils/defaults";
 import { TagDB } from "../TagDB";
 import { AutomationManagerAuto } from "../types";
@@ -12,7 +12,9 @@ export const useAutomationDB = (
 ) => {
   const autoMap = genMapping(haEntities, configAutomations, tagsDB);
   const [newAuto, setNewAuto] =
-    useState<null | [AutomationManagerAuto, AutomationData]>(null);
+    useState<
+      null | [AutomationManagerAuto, AutomationData | BareAutomationData]
+    >(null);
 
   useEffect(() => {
     if (newAuto && autoMap[newAuto[0].id]) {
@@ -30,7 +32,9 @@ export const useAutomationDB = (
     },
     getAutomationData(
       autoId: string
-    ): null | [AutomationManagerAuto, AutomationData | null] {
+    ):
+      | null
+      | [AutomationManagerAuto, AutomationData | BareAutomationData | null] {
       if (newAuto && newAuto[0].id === autoId) {
         return newAuto;
       }
@@ -54,9 +58,9 @@ export const useAutomationDB = (
           tags: {},
           issue: "New Automation",
           isNew: true,
-          source_file: auto.source_file,
-          source_file_type: auto.source_file_type,
-          configuration_key: auto.configuration_key,
+          source_file: "n/a",
+          source_file_type: "n/a",
+          configuration_key: "n/a",
         },
         auto,
       ]);

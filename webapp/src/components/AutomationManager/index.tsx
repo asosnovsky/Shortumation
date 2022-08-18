@@ -14,12 +14,13 @@ import { getFailures } from "types/validators/helper";
 import * as av from "types/validators/autmation";
 import { useConfirm } from "material-ui-confirm";
 import InputYaml from "components/Inputs/Base/InputYaml";
+import { APIResponse } from "apiService/types";
 
 export type AutomationManagerProps = {
-  onAutomationStateChange: (eid: string, on: boolean) => void;
-  refreshAutomations: () => void;
-  forceDeleteAutomation: (eid: string) => void;
-  triggerAutomation: (eid: string) => void;
+  onAutomationStateChange: (eid: string, on: boolean) => Promise<any>;
+  refreshAutomations: () => Promise<any>;
+  forceDeleteAutomation: (eid: string) => Promise<any>;
+  triggerAutomation: (eid: string) => Promise<any>;
   haEntities: HAEntitiesState;
   api: ApiService;
 };
@@ -27,16 +28,78 @@ export type AutomationManagerProps = {
 export const AutomationManager: FC<AutomationManagerProps> = ({
   api,
   haEntities,
-  onAutomationStateChange,
-  refreshAutomations,
-  forceDeleteAutomation,
-  triggerAutomation,
+  onAutomationStateChange: _onAutomationStateChange,
+  refreshAutomations: _refreshAutomations,
+  forceDeleteAutomation: _forceDeleteAutomation,
+  triggerAutomation: _triggerAutomation,
 }) => {
   const snackbr = useSnackbar();
   const confirm = useConfirm();
   const validationsShown = useRef(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isSaving, setIsSaving] = useState<string[]>([]);
 
+  // helpers
+  function wrapPromise<T>(
+    name: string,
+    errorMessage: string,
+    makePromise: () => Promise<T>
+  ) {
+    setIsSaving(isSaving.concat([name]));
+    return makePromise()
+      .then((resp) => {
+        setIsSaving(isSaving.filter((k) => k !== name));
+        return resp;
+      })
+      .catch((err) => {
+        console.error(err);
+        snackbr.enqueueSnackbar(errorMessage.replace("{{err}}", String(err)), {
+          variant: "error",
+        });
+        setIsSaving(isSaving.filter((k) => k !== name));
+      });
+  }
+  const wrapApiPromise = (
+    name: string,
+    errorMessage: string,
+    makePromise: () => Promise<APIResponse<any>>
+  ) => {
+    wrapPromise(name, errorMessage, makePromise).then((resp) => {
+      if (resp) {
+        if (resp.ok) {
+          refreshAutomations();
+        } else {
+          snackbr.enqueueSnackbar(errorMessage.replace("{{err}}", resp.error), {
+            variant: "error",
+          });
+        }
+      }
+    });
+  };
+
+  const onAutomationStateChange = (eid: string, on: boolean) =>
+    wrapPromise(
+      "changing automation state",
+      'failed to toggle autonation due to "{{err}}"',
+      () => _onAutomationStateChange(eid, on)
+    );
+  const refreshAutomations = () =>
+    wrapPromise(
+      "refreshing automations",
+      'failed refreshing automations due to "{{err}}"',
+      () => _refreshAutomations()
+    );
+  const forceDeleteAutomation = (eid: string) =>
+    wrapPromise("deleting automations", 'failed delete due to "{{err}}"', () =>
+      _forceDeleteAutomation(eid)
+    );
+  const triggerAutomation = (eid: string) =>
+    wrapPromise(
+      "triggering automations",
+      'failed trigger due to "{{err}}"',
+      () => _triggerAutomation(eid)
+    );
+
+  // effects
   useEffect(() => {
     refreshAutomations();
     // eslint-disable-next-line
@@ -144,7 +207,6 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   }
 
   // alias
-
   const hassEntities = haEntities.collection;
   const configAutomations = api.state.automations.data;
 
@@ -155,15 +217,24 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
         hassEntities,
       }}
     >
+      {isSaving.length > 0 && (
+        <>
+          <span>{isSaving.join(" and ")}...</span>
+          <LinearProgress />
+        </>
+      )}
       <AutomationManagerLoaded
         configAutomations={configAutomations.data}
         hassEntities={hassEntities}
         onAutomationRun={triggerAutomation}
         onAutomationStateChange={onAutomationStateChange}
-        onAutomationAdd={async (auto) => {
-          await api.updateAutomation(auto);
-          refreshAutomations();
-        }}
+        onAutomationAdd={(auto) =>
+          wrapApiPromise(
+            "adding automation",
+            "Failed to create automation, recieved error: {{err}}!",
+            () => api.createAutomation(auto) as any
+          )
+        }
         onAutomationDelete={(aid, eid) => {
           const autoToDelete = configAutomations.data.find(
             ({ id }) => id === aid
@@ -188,30 +259,25 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           }
           // refreshAutomations();
         }}
-        onAutomationUpdate={(auto) => {
-          api
-            .updateAutomation(auto)
-            .then(() => refreshAutomations())
-            .catch(() => {
-              snackbr.enqueueSnackbar(
-                "Failed to update automation, this may be resolved by a refresh or reboot of Home Assistant.",
-                {
-                  variant: "error",
-                }
-              );
-            });
-        }}
+        onAutomationUpdate={(auto) =>
+          wrapApiPromise(
+            "updating automation",
+            "Failed to update automation, recieved error: {{err}}!",
+            () => api.updateAutomation(auto) as any
+          )
+        }
         onUpdateTags={async (aid, t) => {
-          setIsSaving(true);
-          await api.updateTags({
-            automation_id: aid,
-            tags: t,
-          });
-          setIsSaving(false);
+          wrapApiPromise(
+            "updating tags",
+            "Failed to update tags, recieved error: {{err}}!",
+            () =>
+              api.updateTags({
+                automation_id: aid,
+                tags: t,
+              }) as any
+          );
         }}
-      >
-        {isSaving && <LinearProgress />}
-      </AutomationManagerLoaded>
+      />
     </ErrorBoundary>
   );
 };

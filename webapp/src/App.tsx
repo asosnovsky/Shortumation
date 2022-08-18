@@ -1,20 +1,31 @@
-import './App.css';
+import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { AutomationRoute } from 'routes/automation';
-import { useConnectedApiService } from 'apiService';
-import { ErrorBoundary } from 'components/ErrorBoundary';
+import { AutomationRoute } from "routes/automation";
+import { useConnectedApiService } from "apiService";
+import { ErrorBoundary } from "components/ErrorBoundary";
 import { CookiesProvider } from "react-cookie";
+import { Page } from "components/Page";
+
+const ConnectedAutomationRoute = () => {
+  const api = useConnectedApiService();
+  return <AutomationRoute api={api} />;
+};
 
 function App() {
-  const api = useConnectedApiService();
-
   return (
     <div className="app">
       <ErrorBoundary>
         <CookiesProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="*" element={<AutomationRoute api={api} />} />
+              <Route
+                path="*"
+                element={
+                  <Page>
+                    <ConnectedAutomationRoute />
+                  </Page>
+                }
+              />
             </Routes>
           </BrowserRouter>
         </CookiesProvider>

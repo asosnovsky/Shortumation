@@ -8,7 +8,7 @@ import {
   TriggerCondition,
   ZoneCondition,
 } from "types/automations/conditions";
-import { AutomationData } from "types/automations";
+import { BareAutomationData } from "types/automations";
 
 export const getConditionDefaultValues = (
   condition: AutomationCondition["condition"]
@@ -62,14 +62,11 @@ export const getConditionDefaultValues = (
   } as any;
 };
 
-export const defaultAutomation = (id: string): AutomationData => ({
+export const defaultAutomation = (id: string): BareAutomationData => ({
   id,
   alias: "New Automation",
   description: "",
   mode: "single",
-  source_file: "automation.yaml",
-  source_file_type: "list",
-  configuration_key: "automation",
   tags: {},
   trigger: [],
   action: [],
