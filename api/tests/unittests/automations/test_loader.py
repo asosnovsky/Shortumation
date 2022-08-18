@@ -23,6 +23,7 @@ class loader_tests(TestCase):
     def test_load_automation_list_file(self):
         automations = list(
             load_automation_path(
+                HA_CONFIG2_EXAMPLE,
                 HA_CONFIG2_EXAMPLE / "automations.yaml",
                 configuration_key="automation",
                 tag_manager=TagManager({"1652069225859": {"type": "routine"}}),
@@ -33,7 +34,7 @@ class loader_tests(TestCase):
             automations[0],
             ExtenededAutomation(
                 id="1652069225859",
-                source_file=str(HA_CONFIG2_EXAMPLE / "automations.yaml"),
+                source_file="automations.yaml",
                 source_file_type="list",
                 configuration_key="automation",
                 alias="Climate - Pref temperature ",
@@ -66,6 +67,7 @@ class loader_tests(TestCase):
     def test_load_automation_obj_file(self):
         automations = list(
             load_automation_path(
+                HA_CONFIG4_EXAMPLE,
                 HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml",
                 configuration_key="automation base",
                 tag_manager=TagManager({"1659114647067": {"room": "laundry"}}),
@@ -76,7 +78,7 @@ class loader_tests(TestCase):
             automations[0],
             ExtenededAutomation(
                 id="1659114647067",
-                source_file=str(HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml"),
+                source_file="automations/notify_washer.yaml",
                 source_file_type="obj",
                 configuration_key="automation base",
                 alias="Notify Washer",
@@ -105,6 +107,7 @@ class loader_tests(TestCase):
         file_path.touch()
         automations = list(
             load_automation_path(
+                file_path.parent,
                 file_path,
                 configuration_key="automation ui",
                 tag_manager=TagManager(),
@@ -117,6 +120,7 @@ class loader_tests(TestCase):
         file_path.unlink(missing_ok=True)
         automations = list(
             load_automation_path(
+                file_path.parent,
                 file_path,
                 configuration_key="automation manual",
                 tag_manager=TagManager(),

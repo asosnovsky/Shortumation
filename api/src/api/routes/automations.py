@@ -1,9 +1,10 @@
+from ctypes import Union
 from fastapi import APIRouter, HTTPException
 
 from src.api.types import ListData, ListParams, UpdateTags
 from src.automations.errors import FailedDeletion
 from src.automations.manager import AutomationManager
-from src.automations.types import ExtenededAutomation
+from src.automations.types import Automation, ExtenededAutomation
 
 
 def make_automation_router(automations: AutomationManager) -> APIRouter:
@@ -22,8 +23,12 @@ def make_automation_router(automations: AutomationManager) -> APIRouter:
         )
 
     @router.post("/item")
-    def upsert_auto(body: ExtenededAutomation):
-        automations.upsert(body)
+    def insert_auto(body: Automation):
+        automations.create(body)
+
+    @router.put("/item")
+    def update_auto(body: ExtenededAutomation):
+        automations.update(body)
 
     @router.post("/item/tags")
     def update_tags(body: UpdateTags):

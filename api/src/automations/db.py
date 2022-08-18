@@ -82,7 +82,7 @@ class AutomationDBConnection:
                         "{automation.alias}",
                         "{automation.description}",
                         "{automation.mode}",
-                        "{automation.source_file.absolute()}",
+                        "{automation.source_file}",
                         "{automation.source_file_type}",
                         "{automation.configuration_key}",
                         "{encode_auto(automation)}"

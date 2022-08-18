@@ -22,14 +22,14 @@ class db_tests(TestWithDB):
             ExtenededAutomation(
                 id="test",
                 alias="test",
-                source_file=Path("automation.yaml").absolute(),
+                source_file="automation.yaml",
                 source_file_type="obj",
                 configuration_key="automation",
             ),
             ExtenededAutomation(
                 id="test2",
                 alias="test",
-                source_file=Path("automation.yaml").absolute(),
+                source_file="automation.yaml",
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
                 configuration_key="automation",
@@ -47,14 +47,14 @@ class db_tests(TestWithDB):
             ExtenededAutomation(
                 id="test",
                 alias="test",
-                source_file=Path("automation.yaml").absolute(),
+                source_file="automation.yaml",
                 source_file_type="obj",
                 configuration_key="automation",
             ),
             ExtenededAutomation(
                 id="test",
                 alias="test",
-                source_file=Path("automation.yaml").absolute(),
+                source_file="automation.yaml",
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
                 configuration_key="automation",

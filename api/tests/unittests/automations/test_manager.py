@@ -49,7 +49,7 @@ class manager_tests(TestWithDB):
         automation.trigger.append(
             {"platform": "zone", "entity_id": "person.thor", "zone": "zone.azguard"}
         )
-        automation_manager.upsert(automation)
+        automation_manager.update(automation)
         self.assertEqual(
             automation_manager.get("sublist3-mlist2").trigger,
             [],
@@ -124,11 +124,11 @@ class manager_tests(TestWithDB):
         self.assertFalse((config_path / "automations/include_dir_list/home/left.yaml").exists())
         with self.assertRaises(DBNoAutomationFound):
             automation_manager.get("newlymade")
-        automation_manager.upsert(
+        automation_manager.update(
             ExtenededAutomation(
                 id="newlymade",
                 configuration_key="automation manual",
-                source_file=config_path / "automations/include_dir_list/home/left.yaml",
+                source_file="automations/include_dir_list/home/left.yaml",
                 source_file_type="obj",
             )
         )
@@ -139,7 +139,7 @@ class manager_tests(TestWithDB):
             ExtenededAutomation(
                 id="newlymade",
                 configuration_key="automation manual",
-                source_file=config_path / "automations/include_dir_list/home/left.yaml",
+                source_file="automations/include_dir_list/home/left.yaml",
                 source_file_type="obj",
             ),
         )
@@ -152,13 +152,14 @@ class manager_tests(TestWithDB):
         )
         with self.assertRaises(DBNoAutomationFound):
             automation_manager.get("newlymade")
-        automation_manager.upsert(
+        automation_manager.update(
             ExtenededAutomation(
                 id="newlymade",
                 configuration_key="automation cools",
-                source_file=config_path / "automations/include_dir_merge_list/sub/list2.yaml",
+                source_file="automations/include_dir_merge_list/sub/list2.yaml",
                 source_file_type="list",
-            )
+            ),
+            create_if_not_found=True,
         )
         self.assertTrue(
             (config_path / "automations/include_dir_merge_list/sub/list2.yaml").exists()
@@ -169,7 +170,7 @@ class manager_tests(TestWithDB):
             ExtenededAutomation(
                 id="newlymade",
                 configuration_key="automation cools",
-                source_file=config_path / "automations/include_dir_merge_list/sub/list2.yaml",
+                source_file="automations/include_dir_merge_list/sub/list2.yaml",
                 source_file_type="list",
             ),
         )
@@ -182,13 +183,14 @@ class manager_tests(TestWithDB):
         )
         with self.assertRaises(DBNoAutomationFound):
             automation_manager.get("newlymade")
-        automation_manager.upsert(
+        automation_manager.update(
             ExtenededAutomation(
                 id="newlymade",
                 configuration_key="automation cools",
-                source_file=config_path / "automations/include_dir_merge_list/sub/list4.yaml",
+                source_file="automations/include_dir_merge_list/sub/list4.yaml",
                 source_file_type="list",
-            )
+            ),
+            create_if_not_found=True,
         )
         self.assertTrue(
             (config_path / "automations/include_dir_merge_list/sub/list4.yaml").exists()
@@ -199,7 +201,7 @@ class manager_tests(TestWithDB):
             ExtenededAutomation(
                 id="newlymade",
                 configuration_key="automation cools",
-                source_file=config_path / "automations/include_dir_merge_list/sub/list4.yaml",
+                source_file="automations/include_dir_merge_list/sub/list4.yaml",
                 source_file_type="list",
             ),
         )
@@ -213,13 +215,14 @@ class manager_tests(TestWithDB):
         with self.assertRaises(DBNoAutomationFound):
             automation_manager.get("newlymade")
         with self.assertRaises(AttemptingToOverwriteAnIncompatibleFileError):
-            automation_manager.upsert(
+            automation_manager.update(
                 ExtenededAutomation(
                     id="newlymade",
                     configuration_key="automation cools",
-                    source_file=config_path / "automations/include_dir_merge_list/sub/list2.yaml",
+                    source_file="automations/include_dir_merge_list/sub/list2.yaml",
                     source_file_type="obj",
-                )
+                ),
+                create_if_not_found=True,
             )
         automation_manager.reload()
         with self.assertRaises(DBNoAutomationFound):
@@ -237,13 +240,14 @@ class manager_tests(TestWithDB):
         with self.assertRaises(DBNoAutomationFound):
             automation_manager.get("newlymade")
         with self.assertRaises(AttemptingToOverwriteAnIncompatibleFileError):
-            automation_manager.upsert(
+            automation_manager.update(
                 ExtenededAutomation(
                     id="newlymade",
                     configuration_key="automation cools",
-                    source_file=config_path / "automations/include_dir_list/home/down.yaml",
+                    source_file="automations/include_dir_list/home/down.yaml",
                     source_file_type="list",
-                )
+                ),
+                create_if_not_found=True,
             )
         automation_manager.reload()
         with self.assertRaises(DBNoAutomationFound):
@@ -266,7 +270,7 @@ class manager_tests(TestWithDB):
             },
         )
         auto.tags["Room"] = "Bathroom"
-        automation_manager.upsert(auto)
+        automation_manager.update(auto)
         del auto
         automation_manager.reload()
         auto = automation_manager.get("1619371298367")

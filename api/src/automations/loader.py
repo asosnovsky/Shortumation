@@ -4,7 +4,7 @@ from typing import Any, Iterator, Tuple, Union
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
 from src.utils import extract_files
-from src.yaml_serializer import load_yaml
+from src.yaml_serializer import dump_yaml, load_yaml
 from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
 
 from ..hass_config.loader import HassConfig
@@ -14,30 +14,62 @@ from .types import ExtenededAutomation
 
 logger = get_logger(__file__)
 
+AUTOMATION_CONFIGURATION_KEY = "automation shortumation"
+
 
 def extract_automation_paths(
     hass_config: HassConfig,
-) -> Iterator[Tuple[str, Path]]:
+) -> Iterator[Tuple[str, str]]:
     found = False
+    for key, value in extract_automation_keys(hass_config):
+        logger.info(f"Loading automations from '{key}'")
+        found = True
+        if isinstance(value, IncludedYaml):
+            yield key, value.path_str
+        elif isinstance(value, IncludedYamlDir):
+            yield key, value.name
+        else:
+            logger.warning(f"found an invalid type in {key}!")
+    if not found:
+        yield "", "automations.yaml"
+
+
+def get_base_automation_key(hass_config: HassConfig):
+    found_any = False
+    for key, value in extract_automation_keys(hass_config):
+        found_any = True
+        if isinstance(value, IncludedYaml):
+            return key, value.path_str
+    configurations = hass_config.configurations
+    if found_any:
+        out_path = hass_config.get_backup_automation_file_path()
+    else:
+        out_path = hass_config.get_default_automation_path()
+    out_file = str(out_path.relative_to(hass_config.root_path))
+    configurations[AUTOMATION_CONFIGURATION_KEY] = IncludedYaml(out_file)
+    out_path.touch(exist_ok=True)
+    with hass_config.get_configuration_path().open("w") as fp:
+        fp.write(dump_yaml(configurations))
+    return AUTOMATION_CONFIGURATION_KEY, out_file
+
+
+def extract_automation_keys(
+    hass_config: HassConfig,
+) -> Iterator[Tuple[str, Union[IncludedYaml, IncludedYamlDir]]]:
     for key, value in hass_config.configurations.items():
         if str(key).startswith("automation"):
-            logger.info(f"Loading automations from '{key}'")
-            found = True
-            if isinstance(value, dict):
+            if isinstance(value, dict) or isinstance(value, list):
                 raise NotImplementedError(
                     "No support for automations baked into configuration.yaml! Please extract these into a seperate file"
                 )
-            elif isinstance(value, IncludedYaml):
-                yield key, hass_config.root_path / value.path_str
-            elif isinstance(value, IncludedYamlDir):
-                yield key, hass_config.root_path / value.name
+            elif isinstance(value, IncludedYaml) or isinstance(value, IncludedYamlDir):
+                yield key, value
             else:
                 logger.warning(f"found an invalid type in {key}!")
-    if not found:
-        yield "", hass_config.root_path / "automations.yaml"
 
 
 def load_automation_path(
+    root_path: Path,
     automation_path: Path,
     configuration_key: str,
     tag_manager: TagManager,
@@ -57,7 +89,7 @@ def load_automation_path(
         return
     if automation_path.is_dir():
         for f in extract_files(automation_path):
-            yield from load_automation_path(f, configuration_key, tag_manager)
+            yield from load_automation_path(root_path, f, configuration_key, tag_manager)
     else:
         try:
             with automation_path.open("r") as fp:
@@ -75,7 +107,7 @@ def load_automation_path(
                     **clean_automation(automations),
                     tags=tag_manager.get(automations["id"], {}),
                     configuration_key=configuration_key,
-                    source_file=str(automation_path),
+                    source_file=str(automation_path.relative_to(root_path)),
                     source_file_type="obj",
                 )
             except Exception as err:
@@ -94,7 +126,7 @@ def load_automation_path(
                         **clean_automation(automation),
                         tags=tag_manager.get(automation["id"], {}),
                         configuration_key=configuration_key,
-                        source_file=str(automation_path),
+                        source_file=str(automation_path.relative_to(root_path)),
                         source_file_type="list",
                     )
                 except Exception as err:

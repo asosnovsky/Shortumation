@@ -19,18 +19,14 @@ class HassConfig:
     def automation_tags(self) -> TagManager:
         tag_path = self.get_automation_tags_path()
         if not tag_path.exists():
-            tag_path.parent.mkdir(parents=True, exist_ok=True)
             return TagManager()
         else:
             return TagManager.load(tag_path)
 
-    def get_automation_tags_path(self) -> Path:
-        return self.root_path / ".shortumations" / "tags.yaml"
+    def get_backup_automation_file_path(self) -> Path:
+        return self.get_shortumations_path() / "automations.yaml"
 
-    def get_configuration_path(self) -> Path:
-        return self.root_path / "configuration.yaml"
-
-    def get_automation_path(self) -> Optional[Path]:
+    def get_default_automation_path(self) -> Optional[Path]:
         """Get Automation Path (if not included in configuration.yaml, in this case the return value is None)
 
         Returns:
@@ -45,13 +41,17 @@ class HassConfig:
                 return None
         return self.root_path / "automations.yaml"
 
-    def save_automations(self, automations: List[dict]):
-        if automation_path := self.get_automation_path():
-            automation_path.write_text(dump_yaml(automations))
-        else:
-            self.get_configuration_path().write_text(
-                dump_yaml({**self.configurations, "automation": automations})
-            )
+    def get_shortumations_path(self) -> Path:
+        shortumations_path = self.root_path / ".shortumations"
+        if not shortumations_path.exists():
+            shortumations_path.mkdir(parents=True, exist_ok=True)
+        return shortumations_path
+
+    def get_automation_tags_path(self) -> Path:
+        return self.get_shortumations_path() / "tags.yaml"
+
+    def get_configuration_path(self) -> Path:
+        return self.root_path / "configuration.yaml"
 
     def save_tags(self, tags: TagManager):
         tags.save(self.get_automation_tags_path())
