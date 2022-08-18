@@ -195,13 +195,20 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   }
 
   if (!api.state.automations.ok) {
+    let error = api.state.automations.error;
+    try {
+      const errorObj = JSON.parse(api.state.automations.error);
+      if ("detail" in errorObj) {
+        error = errorObj["detail"];
+      }
+    } catch (_: any) {}
     return (
       <div className="automation-manager error">
         <Alert color="error">
           Failed to load automations from <code>/config</code>
         </Alert>{" "}
         <br />
-        <code>{api.state.automations.error}</code>
+        <code>{error}</code>
       </div>
     );
   }

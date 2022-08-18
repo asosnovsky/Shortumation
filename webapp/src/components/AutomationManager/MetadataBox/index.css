@@ -25,6 +25,11 @@
 
 .automation-manager--metadatabox .metadatabox--title {
     flex: 1;
+    max-width: calc(80% - 5em);
+}
+
+.automation-manager--metadatabox .metadatabox--switch {
+    width: 5em;
 }
 
 .automation-manager--metadatabox .metadatabox--title .title {
@@ -94,4 +99,5 @@
 .automation-manager--metadatabox .metadatabox--title--source .MuiChip-root {
     font-size: 0.85em;
     height: 2em;
+    max-width: 60%;
 }

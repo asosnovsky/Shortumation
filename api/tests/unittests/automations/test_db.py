@@ -60,7 +60,7 @@ class db_tests(TestWithDB):
                 configuration_key="automation",
             ),
         ]
-        with self.assertRaises(DBDataError):
+        with self.assertRaises(DBDataError) as err:
             self.db.insert_automations(originals)
         autos = list(self.db.list_automations(0, 10))
         self.assertEqual(len(autos), 0)

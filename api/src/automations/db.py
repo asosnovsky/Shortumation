@@ -7,7 +7,7 @@ from typing import Iterable, Iterator, List, Optional
 
 from src.logger import get_logger
 
-from .errors import DBDataError, DBError, DBNoAutomationFound
+from .errors import DBDataError, DBError, DBNoAutomationFound, RepeatedAutomationId
 from .types import ExtenededAutomation
 
 logger = get_logger(__file__)
@@ -47,8 +47,6 @@ class AutomationDBConnection:
         try:
             yield cur
             conn.commit()
-        except sqlite3.IntegrityError as err:
-            raise DBDataError(*err.args) from err
         except sqlite3.DatabaseError as err:
             raise DBError(*err.args) from err
         finally:
@@ -75,20 +73,25 @@ class AutomationDBConnection:
     def insert_automations(self, automations: List[ExtenededAutomation]):
         with self.get_cur() as cur:
             for automation in automations:
-                cur.execute(
-                    f"""
-                    INSERT INTO {automations_tbl} VALUES (
-                        "{automation.id}",
-                        "{automation.alias}",
-                        "{automation.description}",
-                        "{automation.mode}",
-                        "{automation.source_file}",
-                        "{automation.source_file_type}",
-                        "{automation.configuration_key}",
-                        "{encode_auto(automation)}"
-                    );
-                    """,
-                )
+                try:
+                    cur.execute(
+                        f"""
+                        INSERT INTO {automations_tbl} VALUES (
+                            "{automation.id}",
+                            "{automation.alias}",
+                            "{automation.description}",
+                            "{automation.mode}",
+                            "{automation.source_file}",
+                            "{automation.source_file_type}",
+                            "{automation.configuration_key}",
+                            "{encode_auto(automation)}"
+                        );
+                        """,
+                    )
+                except sqlite3.IntegrityError as err:
+                    raise RepeatedAutomationId(
+                        f"automation id '{automation.id}' in '{automation.source_file}' was already seen before. Please check for duplicate automation ids in your files."
+                    ) from err
 
     def get_automation(self, automation_id: str) -> ExtenededAutomation:
         with self.get_cur() as cur:

@@ -14,7 +14,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
-import { Chip } from "@mui/material";
+import { Chip, Tooltip } from "@mui/material";
 
 export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;
@@ -55,7 +55,14 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         title={`ID=${props.id}, EntityID=${props.entityId}`}
       >
         <span className="metadatabox--title--source">
-          <Chip label={`@${props.source_file} (${props.source_file_type})`} />
+          <Tooltip
+            title={`This automation is located in the file ${props.source_file} and is set up in your configuration.yaml file under the key ${props.configuration_key}.`}
+          >
+            <Chip
+              label={`@${props.source_file} (${props.source_file_type})`}
+              className="text-ellipsis"
+            />
+          </Tooltip>
         </span>
         <InputTextView
           className="title"

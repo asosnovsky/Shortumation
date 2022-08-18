@@ -25,5 +25,9 @@ class DBDataError(DBError):
     pass
 
 
+class RepeatedAutomationId(DBDataError):
+    pass
+
+
 class DBNoAutomationFound(DBError):
     pass

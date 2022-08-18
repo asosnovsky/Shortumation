@@ -10,6 +10,10 @@
     flex-direction: column;
 }
 
+.automation-manager.error>code {
+    padding: 1.5em;
+}
+
 .automation-manager.loading .automation-manager--sidebar.loading {
     width: 25vh;
     height: 100%;

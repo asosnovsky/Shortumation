@@ -1,10 +1,10 @@
-from ctypes import Union
 from fastapi import APIRouter, HTTPException
 
 from src.api.types import ListData, ListParams, UpdateTags
 from src.automations.errors import FailedDeletion
 from src.automations.manager import AutomationManager
 from src.automations.types import Automation, ExtenededAutomation
+from src.errors import ErrorSet
 
 
 def make_automation_router(automations: AutomationManager) -> APIRouter:
@@ -12,15 +12,18 @@ def make_automation_router(automations: AutomationManager) -> APIRouter:
 
     @router.post("/list")
     def list_autos(body: ListParams) -> ListData[ExtenededAutomation]:
-        automations.reload()
-        return ListData(
-            params=body,
-            totalItems=automations.count(),
-            data=automations.list(
-                offset=body.offset,
-                limit=body.limit,
-            ),
-        )
+        try:
+            automations.reload()
+            return ListData(
+                params=body,
+                totalItems=automations.count(),
+                data=automations.list(
+                    offset=body.offset,
+                    limit=body.limit,
+                ),
+            )
+        except ErrorSet as err:
+            raise HTTPException(status_code=400, detail=err.gen_message())
 
     @router.post("/item")
     def insert_auto(body: Automation):
