@@ -35,6 +35,8 @@
     max-height: 50vh;
     overflow: auto;
     flex-direction: column;
+    padding: 0.5em;
+    margin: 0;
 }
 
 .invalid-automation-modal-list li {
