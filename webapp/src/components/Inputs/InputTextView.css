@@ -2,16 +2,6 @@
     max-height: 2em;
 }
 
-.input-text-view.view span {
-    height: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    word-wrap: break-word;
-    line-break: loose;
-    overflow-wrap: break-word;
-}
-
 .input-text-view.edit .MuiFilledInput-input {
     padding-top: 0.5em;
     padding-bottom: 0.5em;

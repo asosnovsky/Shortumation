@@ -61,3 +61,17 @@ body,
     display: flex;
     flex-direction: row;
 }
+
+
+.text-ellipsis {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.text-ellipsis span, a, h1, h2, h3, h4, h5, h6 {
+    display: table-cell;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

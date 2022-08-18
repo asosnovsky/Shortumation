@@ -32,11 +32,13 @@ export const InputTextView: FC<PropsWithChildren<InputTextViewProps>> = (
         onClick={() => !props.disabled && setViewMode(false)}
       >
         {!!props.value ? (
-          <span>{props.value}</span>
+          <div className="input-text-view--text text-ellipsis">
+            <span>{props.value}</span>
+          </div>
         ) : (
-          <span className="input-text-view--placeholder">
-            {props.placeholder}
-          </span>
+          <div className="input-text-view--text input-text-view--placeholder text-ellipsis">
+            <span>{props.placeholder}</span>
+          </div>
         )}
         {!props.disabled && (
           <ModeEditOutlineOutlinedIcon className="input-text-view--edit" />
