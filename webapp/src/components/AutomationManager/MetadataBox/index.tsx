@@ -55,7 +55,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         title={`ID=${props.id}, EntityID=${props.entityId}`}
       >
         <span className="metadatabox--title--source">
-          <Chip label={`@${props.source_file}`} />
+          <Chip label={`@${props.source_file} (${props.source_file_type})`} />
         </span>
         <InputTextView
           className="title"
@@ -85,12 +85,19 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           className="select"
           icon={<SelectIcon />}
           onClick={props.onSelect}
+          title="Select automation"
         />
-        <ButtonIcon className="run" icon={<RunIcon />} onClick={props.onRun} />
+        <ButtonIcon
+          className="run"
+          icon={<RunIcon />}
+          onClick={props.onRun}
+          title="Trigger automation"
+        />
         <ButtonIcon
           className="delete"
           icon={<DeleteForeverIcon />}
           onClick={props.onDelete}
+          title="Delete automation"
         />
       </div>
     </div>

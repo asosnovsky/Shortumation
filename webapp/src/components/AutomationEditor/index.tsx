@@ -231,30 +231,35 @@ export const AutomationEditor: FC<Props> = ({
         />
         <SpeedDial
           ariaLabel="options label"
-          sx={{ position: "absolute", bottom: 16, right: 16 }}
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            right: 16,
+          }}
           icon={<SpeedDialIcon />}
         >
           <SpeedDialAction
-            tooltipOpen
+            // tooltipOpen
+            sx={{ pointerEvents: "auto" }}
             icon={<RunIcon />}
             tooltipTitle={"Trigger"}
             onClick={onTrigger}
           />
           <SpeedDialAction
-            tooltipOpen
+            // tooltipOpen
             icon={<DeleteIcon />}
             tooltipTitle={"Delete"}
             onClick={onDelete}
           />
           <SpeedDialAction
-            tooltipOpen
+            // tooltipOpen
             icon={<EditIcon />}
             tooltipTitle={"Metadata"}
             onClick={() => setInfoBox(!infoBoxOpen)}
           />
           {state.status === "changed" && (
             <SpeedDialAction
-              tooltipOpen
+              // tooltipOpen
               icon={<UndoIcon />}
               tooltipTitle={"Undo"}
               onClick={undo}
