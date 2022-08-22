@@ -24,12 +24,12 @@ test("mock api uses initial autos for initial population -- some data", async ()
 
 test("populate mock api with some data", async () => {
   const mockApi = makeAutomationAPI(useMockAPI([], fakeUseRef as any));
-  await mockApi.update(createMockAuto());
+  await mockApi.create(createMockAuto());
   let data = await mockApi.list({ limit: 10, offset: 0 });
   expect(data.ok).toBe(true);
   expect((data as any).data.data).toHaveLength(1);
   expect((data as any).data.totalItems).toBe(1);
-  await mockApi.update(createMockAuto());
+  await mockApi.create(createMockAuto());
   data = await mockApi.list({ limit: 10, offset: 0 });
   expect((data as any).data.data).toHaveLength(2);
   expect((data as any).data.totalItems).toBe(2);

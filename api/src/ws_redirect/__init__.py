@@ -34,7 +34,12 @@ class WSRedirector:
             return await self._client.send(msg)
 
     async def start(self):
-        async with connect(self._host) as websocket:
+        async with connect(
+            self._host,
+            max_size=16 * 2**20,
+            read_limit=16 * 2**20,
+            write_limit=16 * 2**20,
+        ) as websocket:
             self._client = websocket
             await websocket.send(json.dumps({"type": "auth", "access_token": self._token}))
             while not self.is_closed:

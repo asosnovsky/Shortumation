@@ -12,4 +12,4 @@ echo "HOST = $host_port"
 echo "HASSIO_WS = $HASSIO_WS"
 echo $(python --version)
 echo "--------------------"
-python -m hypercorn src.app:app -b $host_port
+python -m hypercorn src.app:app -b $host_port --config /app/hypercorn.toml

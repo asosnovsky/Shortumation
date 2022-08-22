@@ -18,6 +18,7 @@ RUN apt-get update -y && \
 
 # <--- Scripts --> 
 COPY docker/bin /app/bin
+COPY docker/hypercorn.toml /app/hypercorn.toml
 
 # <--- PREP --> 
 RUN /app/bin/prep.sh
