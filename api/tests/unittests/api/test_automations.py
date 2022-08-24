@@ -6,7 +6,11 @@ from fastapi.testclient import TestClient
 
 from src.api.app import make_app
 from src.automations.types import Automation, ExtenededAutomation
-from tests.utils import HA_CONFIG2_EXAMPLE, HA_CONFIG6_EXAMPLE, get_example_automation_loader
+from tests.utils import (
+    HA_CONFIG2_EXAMPLE,
+    HA_CONFIG6_EXAMPLE,
+    get_example_automation_loader,
+)
 
 
 class BaseTestCase(TestCase):

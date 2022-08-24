@@ -1,11 +1,12 @@
 import io
 from pathlib import Path
-from typing import Any, Optional, TextIO, TypeVar, Union
+from typing import Any, TextIO, Type, TypeVar, Union
+
 from .dumper import YamlSafeDumper
 from .loader import YamlSafeLoader
 from .types import Constructor
 
-ConstructorT = TypeVar("ConstructorT", bound=Constructor)
+ConstructorT = TypeVar("ConstructorT", bound=Type[Constructor])
 
 
 class YamlManager:
@@ -23,7 +24,7 @@ class YamlManager:
         return wrapper
 
     @classmethod
-    def load_yaml(cls, yaml_stream: TextIO, root_path: Optional[Path] = None) -> Union[dict, list]:
+    def load_yaml(cls, yaml_stream: TextIO, root_path: Path) -> Union[dict, list]:
         """Load yaml from string using some hass-compliant yaml strings
 
         Args:
@@ -39,7 +40,7 @@ class YamlManager:
             loader.dispose()
 
     @classmethod
-    def dump_yaml(cls, obj: Any, root_path: Optional[Path] = None) -> str:
+    def dump_yaml(cls, obj: Any, root_path: Path) -> str:
         """Convert a python object to a hass-compliant yaml string
 
         Args:

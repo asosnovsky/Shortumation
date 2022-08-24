@@ -1,14 +1,16 @@
-from typing import Protocol, TypeVar
+from typing import Protocol
 
 from yaml.nodes import Node
-from yaml.representer import BaseRepresenter
+
+from .dumper import YamlSafeDumper
+from .loader import YamlSafeLoader
 
 
 class Constructor(Protocol):
     @classmethod
-    def to_yaml(cls, representer: BaseRepresenter, node: "Constructor"):
+    def to_yaml(cls, representer: YamlSafeDumper, node: "Constructor"):
         ...
 
     @classmethod
-    def from_yaml(cls, _constructor, node: Node):
+    def from_yaml(cls, constructor: YamlSafeLoader, node: Node):
         ...

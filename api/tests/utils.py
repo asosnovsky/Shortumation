@@ -6,7 +6,7 @@ from typing import List, Literal, Optional, Tuple
 from src.automations.manager import AutomationManager
 from src.automations.types import BaseAutomation
 from src.hass_config.loader import HassConfig
-from src.yaml_serializer import dump_yaml, IncludedYaml
+from src.yaml_serializer import IncludedYaml, dump_yaml
 
 THIS_FOLDER = Path(__file__).parent
 SAMPLES_FOLDER = THIS_FOLDER / "samples"
@@ -96,11 +96,13 @@ def create_dummy_config_folder(
         configuration_yaml["automation"] = auto_prims
     elif automation_in_conifguration_mode == "include":
         configuration_yaml["automation"] = IncludedYaml(
-            "automations.yaml",
+            root_folder / "automations.yaml",
         )
     if automation_in_conifguration_mode != "inline":
-        (root_folder / "automations.yaml").write_text(dump_yaml(auto_prims))
+        (root_folder / "automations.yaml").write_text(dump_yaml(auto_prims, root_path=root_folder))
     if secrets is not None:
-        (root_folder / "secrets.yaml").write_text(dump_yaml(secrets))
-    (root_folder / "configuration.yaml").write_text(dump_yaml(configuration_yaml))
+        (root_folder / "secrets.yaml").write_text(dump_yaml(secrets, root_path=root_folder))
+    (root_folder / "configuration.yaml").write_text(
+        dump_yaml(configuration_yaml, root_path=root_folder)
+    )
     return root_folder

@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from src.automations.types import ExtenededAutomation
 from src.automations.errors import DBDataError
+from src.automations.types import ExtenededAutomation
+
 from .utils import TestWithDB
 
 

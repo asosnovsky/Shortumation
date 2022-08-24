@@ -7,7 +7,12 @@ from typing import Iterable, Iterator, List, Optional
 
 from src.logger import get_logger
 
-from .errors import DBDataError, DBError, DBNoAutomationFound, RepeatedAutomationId
+from .errors import (
+    DBDataError,
+    DBError,
+    DBNoAutomationFound,
+    RepeatedAutomationId,
+)
 from .types import ExtenededAutomation
 
 logger = get_logger(__file__)

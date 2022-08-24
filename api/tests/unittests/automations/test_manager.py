@@ -229,7 +229,8 @@ class manager_tests(TestWithDB):
             automation_manager.get("newlymade")
 
         data = yaml_serializer.load_yaml(
-            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").open("r")
+            (config_path / "automations/include_dir_merge_list/sub/list2.yaml").open("r"),
+            root_path=config_path,
         )
         self.assertIsInstance(data, list)
 
@@ -254,7 +255,8 @@ class manager_tests(TestWithDB):
             automation_manager.get("newlymade")
 
         data = yaml_serializer.load_yaml(
-            (config_path / "automations/include_dir_list/home/down.yaml").open("r")
+            (config_path / "automations/include_dir_list/home/down.yaml").open("r"),
+            config_path,
         )
         self.assertIsInstance(data, dict)
 

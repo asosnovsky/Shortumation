@@ -1,7 +1,7 @@
-import yaml
-
 from pathlib import Path
 from typing import Optional, TextIO
+
+import yaml
 
 
 class YamlSafeDumper(yaml.SafeDumper):

@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.automations.tags import TagManager
-from src.yaml_serializer import load_yaml, IncludedYaml
+from src.yaml_serializer import IncludedYaml, load_yaml
 
 
 class HassConfig:
@@ -12,7 +12,7 @@ class HassConfig:
     @property
     def configurations(self) -> dict:
         with self.get_configuration_path().open("r") as f:
-            return dict(load_yaml(f))  # type: ignore
+            return dict(load_yaml(f, root_path=self.root_path))  # type: ignore
 
     @property
     def automation_tags(self) -> TagManager:
@@ -35,7 +35,7 @@ class HassConfig:
         if "automation" in config:
             automation_ref = config["automation"]
             if isinstance(automation_ref, IncludedYaml):
-                return self.root_path / automation_ref.path_str
+                return automation_ref.path
             else:
                 return None
         return self.root_path / "automations.yaml"
@@ -51,6 +51,3 @@ class HassConfig:
 
     def get_configuration_path(self) -> Path:
         return self.root_path / "configuration.yaml"
-
-    def save_tags(self, tags: TagManager):
-        tags.save(self.get_automation_tags_path())

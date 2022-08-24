@@ -4,7 +4,12 @@ from typing import Any, Iterator, Tuple, Union
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
 from src.utils import extract_files
-from src.yaml_serializer import dump_yaml, load_yaml, IncludedYaml, IncludedYamlDir
+from src.yaml_serializer import (
+    IncludedYaml,
+    IncludedYamlDir,
+    dump_yaml,
+    load_yaml,
+)
 
 from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile
@@ -23,10 +28,8 @@ def extract_automation_paths(
     for key, value in extract_automation_keys(hass_config):
         logger.info(f"Loading automations from '{key}'")
         found = True
-        if isinstance(value, IncludedYaml):
-            yield key, value.path_str
-        elif isinstance(value, IncludedYamlDir):
-            yield key, value.name
+        if isinstance(value, (IncludedYaml, IncludedYamlDir)):
+            yield key, str(value.path.relative_to(hass_config.root_path))
         else:
             logger.warning(f"found an invalid type in {key}!")
     if not found:
@@ -38,17 +41,18 @@ def get_base_automation_key(hass_config: HassConfig):
     for key, value in extract_automation_keys(hass_config):
         found_any = True
         if isinstance(value, IncludedYaml):
-            return key, value.path_str
+            return key, str(value.path.relative_to(hass_config.root_path))
     configurations = hass_config.configurations
     if found_any:
         out_path = hass_config.get_backup_automation_file_path()
     else:
-        out_path = hass_config.get_default_automation_path()
+        if not (out_path := hass_config.get_default_automation_path()):  # type: ignore
+            raise AssertionError("Failed to find automation files...")
     out_file = str(out_path.relative_to(hass_config.root_path))
-    configurations[AUTOMATION_CONFIGURATION_KEY] = IncludedYaml(out_file)
+    configurations[AUTOMATION_CONFIGURATION_KEY] = IncludedYaml(out_path)
     out_path.touch(exist_ok=True)
     with hass_config.get_configuration_path().open("w") as fp:
-        fp.write(dump_yaml(configurations))
+        fp.write(dump_yaml(configurations, root_path=hass_config.root_path))
     return AUTOMATION_CONFIGURATION_KEY, out_file
 
 
@@ -92,7 +96,7 @@ def load_automation_path(
     else:
         try:
             with automation_path.open("r") as fp:
-                automations = load_yaml(fp)
+                automations = load_yaml(fp, root_path=root_path)
         except Exception as err:
             raise InvalidAutomationFile(
                 when="loading yaml",

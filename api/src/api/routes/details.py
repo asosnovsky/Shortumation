@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
+from src.automations.loader import extract_automation_paths
 from src.env import BUILD_VERSION, HASSIO_TOKEN, HASSIO_WS
 from src.hass_config import HassConfig
-from src.automations.loader import extract_automation_paths
 
 
 def make_details_router(hass_config: HassConfig) -> APIRouter:

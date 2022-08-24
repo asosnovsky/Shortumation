@@ -1,5 +1,6 @@
+from pathlib import Path
+
 from yaml.nodes import Node
-from yaml.representer import BaseRepresenter
 
 from .manager import YamlManager
 
@@ -15,15 +16,21 @@ class IncludedYaml(NamedTuple):
     this data type will represent it.
     """
 
-    path_str: str  # original node path
+    path: Path  # original node path
 
     @classmethod
-    def to_yaml(cls, representer: BaseRepresenter, node: "IncludedYaml"):
-        return representer.represent_scalar("!include", node.path_str)
+    def to_yaml(cls, representer, node: "IncludedYaml"):
+        return representer.represent_scalar(
+            "!include", str(node.path.relative_to(representer.root_path))
+        )
 
     @classmethod
-    def from_yaml(cls, constructor: YamlManager.Loader, node: Node):
-        return cls(node.value)
+    def from_yaml(cls, constructor, node: Node):
+        return cls(constructor.root_path / node.value)
+
+    def to_normalized_json(self):
+        with self.path.open("r") as fp:
+            return load_yaml(fp, root_path=self.path.parent)
 
 
 # TODO: add support for these
@@ -36,11 +43,11 @@ class SecretValue(NamedTuple):
     value: str
 
     @classmethod
-    def to_yaml(cls, representer: BaseRepresenter, node: "SecretValue"):
+    def to_yaml(cls, representer, node: "SecretValue"):
         return representer.represent_scalar("!secret", node.name)
 
     @classmethod
-    def from_yaml(cls, _constructor, node: Node):
+    def from_yaml(cls, constructor, node: Node):
         return cls(node.value, "n/a")
 
     def to_normalized_json(self):
@@ -52,16 +59,32 @@ class SecretValue(NamedTuple):
     "!include_dir_merge_list",
     "!include_dir_named",
     "!include_dir_merge_named",
-    "!env_var",
 )
 class IncludedYamlDir(NamedTuple):
     original_tag: str  # original node name
-    name: str  # original node name
+    path: Path  # original node name
 
     @classmethod
-    def to_yaml(cls, representer: BaseRepresenter, node: "IncludedYamlDir"):
-        return representer.represent_scalar(f"!{node.original_tag}", node.name)
+    def to_yaml(cls, representer, node: "IncludedYamlDir"):
+        return representer.represent_scalar(
+            f"!{node.original_tag}", str(node.path.relative_to(representer.root_path))
+        )
 
     @classmethod
-    def from_yaml(cls, _constructor, node: Node):
-        return cls(node.tag[1:], node.value)
+    def from_yaml(cls, constructor, node: Node):
+        return cls(node.tag[1:], constructor.root_path / node.value)
+
+
+@YamlManager.as_constructor(
+    "!env_var",
+)
+class EnvVar(NamedTuple):
+    value: str  # original node name
+
+    @classmethod
+    def to_yaml(cls, representer, node: "EnvVar"):
+        return representer.represent_scalar("!env_var", node.value)
+
+    @classmethod
+    def from_yaml(cls, constructor, node: Node):
+        return cls(node.value)

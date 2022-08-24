@@ -14,7 +14,11 @@ from .errors import (
     DBError,
     InvalidAutomationFile,
 )
-from .loader import extract_automation_paths, get_base_automation_key, load_automation_path
+from .loader import (
+    extract_automation_paths,
+    get_base_automation_key,
+    load_automation_path,
+)
 from .tags import TagManager
 from .types import Automation, ExtenededAutomation
 
@@ -92,7 +96,7 @@ class AutomationManager:
         objs: Optional[Union[list, dict]] = None
         if automation_path.exists():
             with automation_path.open("r") as fp:
-                objs = load_yaml(fp)
+                objs = load_yaml(fp, self.hass_config.root_path)
 
         if automation.source_file_type == "obj":
             if isinstance(objs, list):
@@ -100,7 +104,7 @@ class AutomationManager:
                     f"{automation_path} is a list, but expected a obj for {automation}"
                 )
             raw_auto = automation.to_primitive(include_tags=False)
-            automation_path.write_text(dump_yaml(raw_auto))
+            automation_path.write_text(dump_yaml(raw_auto, self.hass_config.root_path))
         else:
             if isinstance(objs, dict):
                 raise AttemptingToOverwriteAnIncompatibleFileError(
@@ -125,7 +129,7 @@ class AutomationManager:
                     raise InvalidAutomationFile(
                         "Could not update automations, not found in source file."
                     )
-            automation_path.write_text(dump_yaml(objs))
+            automation_path.write_text(dump_yaml(objs, self.hass_config.root_path))
         self.update_tags(automation.id, automation.tags)
 
     def update_tags(self, automation_id: str, tags: Dict[str, str]):
@@ -145,7 +149,7 @@ class AutomationManager:
             automation_path.unlink(missing_ok=True)
         else:
             with automation_path.open("r") as fp:
-                objs = load_yaml(fp)
+                objs = load_yaml(fp, self.hass_config.root_path)
                 if not isinstance(objs, list):
                     raise AssertionError(
                         f"Attemption to save automation to {automation_path} but encountering an invalid list yaml file. Did you modify this file prior to saving?\n{automation}"
@@ -154,5 +158,5 @@ class AutomationManager:
                 for i, obj in enumerate(objs):
                     if obj["id"] != automation.id:
                         kept.append(obj)
-                automation_path.write_text(dump_yaml(kept))
+                automation_path.write_text(dump_yaml(kept, self.hass_config.root_path))
         self.delete_tags(automation.id)
