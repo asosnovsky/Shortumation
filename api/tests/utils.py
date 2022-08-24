@@ -6,8 +6,7 @@ from typing import List, Literal, Optional, Tuple
 from src.automations.manager import AutomationManager
 from src.automations.types import BaseAutomation
 from src.hass_config.loader import HassConfig
-from src.yaml_serializer import dump_yaml
-from src.yaml_serializer.types import IncludedYaml
+from src.yaml_serializer import dump_yaml, IncludedYaml
 
 THIS_FOLDER = Path(__file__).parent
 SAMPLES_FOLDER = THIS_FOLDER / "samples"
