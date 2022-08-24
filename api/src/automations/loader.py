@@ -4,8 +4,7 @@ from typing import Any, Iterator, Tuple, Union
 from src.json_serializer import normalize_obj
 from src.logger import get_logger
 from src.utils import extract_files
-from src.yaml_serializer import dump_yaml, load_yaml
-from src.yaml_serializer.types import IncludedYaml, IncludedYamlDir
+from src.yaml_serializer import dump_yaml, load_yaml, IncludedYaml, IncludedYamlDir
 
 from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile

@@ -2,7 +2,7 @@ import io
 from unittest import TestCase
 
 from src.yaml_serializer import dump_yaml, load_yaml
-from src.yaml_serializer.types import (
+from src.yaml_serializer import (
     IncludedYaml,
     IncludedYamlDir,
     SecretValue,

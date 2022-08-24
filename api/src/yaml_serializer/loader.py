@@ -1,20 +1,15 @@
 import yaml
 
-from src.yaml_serializer.types import (
-    IncludedYaml,
-    IncludedYamlDir,
-    SecretValue,
-)
+from pathlib import Path
+from typing import Optional, Union, TextIO
 
 
 class YamlSafeLoader(yaml.SafeLoader):
-    pass
-
-
-YamlSafeLoader.add_constructor("!include", IncludedYaml.from_yaml)
-YamlSafeLoader.add_constructor("!secret", SecretValue.from_yaml)
-YamlSafeLoader.add_constructor("!env_var", IncludedYamlDir.from_yaml)
-YamlSafeLoader.add_constructor("!include_dir_list", IncludedYamlDir.from_yaml)
-YamlSafeLoader.add_constructor("!include_dir_merge_list", IncludedYamlDir.from_yaml)
-YamlSafeLoader.add_constructor("!include_dir_named", IncludedYamlDir.from_yaml)
-YamlSafeLoader.add_constructor("!include_dir_merge_named", IncludedYamlDir.from_yaml)
+    def __init__(self, stream: Union[TextIO, Path], root_path: Optional[Path] = None) -> None:
+        super().__init__(stream)
+        if isinstance(stream, Path) and root_path is None:
+            self.root_path = stream.parent
+        elif root_path is None:
+            self.root_path = Path.cwd()
+        else:
+            self.root_path = root_path

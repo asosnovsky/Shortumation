@@ -1,9 +1,8 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 from src.automations.tags import TagManager
-from src.yaml_serializer import dump_yaml, load_yaml
-from src.yaml_serializer.types import IncludedYaml
+from src.yaml_serializer import load_yaml, IncludedYaml
 
 
 class HassConfig:

@@ -2,7 +2,7 @@ import json
 from unittest import TestCase
 
 from src.json_serializer import json_dumps
-from src.yaml_serializer.types import NOT_IMPLEMENTED_SV_MSG, SecretValue
+from src.yaml_serializer import NOT_IMPLEMENTED_SV_MSG, SecretValue
 
 
 class json_serializer_tests(TestCase):

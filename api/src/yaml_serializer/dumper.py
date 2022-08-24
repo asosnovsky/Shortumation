@@ -1,16 +1,19 @@
 import yaml
 
-from src.yaml_serializer.types import (
-    IncludedYaml,
-    IncludedYamlDir,
-    SecretValue,
-)
+from pathlib import Path
+from typing import Optional, TextIO
 
 
 class YamlSafeDumper(yaml.SafeDumper):
-    pass
+    def __init__(self, stream: TextIO, root_path: Optional[Path] = None) -> None:
+        if root_path is None:
+            self.root_path = Path.cwd()
+        else:
+            self.root_path = root_path
 
-
-YamlSafeDumper.add_representer(IncludedYaml, IncludedYaml.to_yaml)  # type: ignore
-YamlSafeDumper.add_representer(SecretValue, SecretValue.to_yaml)  # type: ignore
-YamlSafeDumper.add_representer(IncludedYamlDir, IncludedYamlDir.to_yaml)  # type: ignore
+        super().__init__(
+            stream,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
