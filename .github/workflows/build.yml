@@ -6,8 +6,8 @@ on:
         type: string
         description: "Version Number"
   push:
-    branches: 
-       - main
+    branches:
+      - main
 jobs:
   metadata:
     runs-on: ubuntu-latest
@@ -80,7 +80,7 @@ jobs:
         run: cd webapp && yarn install && yarn build
 
       - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: home-assistant/builder@2022.07.0
+        uses: home-assistant/builder@master
         with:
           args: |
             --${{ matrix.arch }} \
