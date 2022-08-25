@@ -1,5 +1,10 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.6.2] - Patches
+
+- Attempting to increasing websocket file limit
+- Support for all !include directives
+
 ## [0.6.1] - v0.6.0 Split Config Support & Better Error handling!
 
 - Added visual support for split config (this was a heavy refactor!)
