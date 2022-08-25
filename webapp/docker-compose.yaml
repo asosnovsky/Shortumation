@@ -13,7 +13,7 @@ services:
     image: "asosnovsky/shortumation-${ARCH:-amd64}:${BUILD_TAG:-edge}"
     build:
       context: "../"
-      dockerfile: "../Dockerfile"
+      dockerfile: "./Dockerfile"
       args:
         BUILD_ARCH: ${ARCH:-amd64}
         BUILD_VERSION: ${BUILD_TAG:-edge}
