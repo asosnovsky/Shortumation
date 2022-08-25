@@ -50,10 +50,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         />
         {!isValidState && `Invalid state: '${props.state}'`}
       </div>
-      <div
-        className="metadatabox--title"
-        title={`ID=${props.id}, EntityID=${props.entityId}`}
-      >
+      <div className="metadatabox--title">
         <span className="metadatabox--title--source">
           <Tooltip
             title={`This automation is located in the file ${props.source_file} and is set up in your configuration.yaml file under the key ${props.configuration_key}.`}
@@ -64,13 +61,15 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
             />
           </Tooltip>
         </span>
-        <InputTextView
-          className="title"
-          placeholder="Title"
-          value={props.title}
-          onChange={props.onTitleUpdate}
-          disabled={props.isNew}
-        />
+        <Tooltip title={`ID=${props.id}, EntityID=${props.entityId}`}>
+          <InputTextView
+            className="title"
+            placeholder="Title"
+            value={props.title}
+            onChange={props.onTitleUpdate}
+            disabled={props.isNew}
+          />
+        </Tooltip>
         <InputTextView
           className="description"
           placeholder="Description"

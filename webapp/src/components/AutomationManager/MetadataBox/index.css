@@ -79,6 +79,11 @@
     cursor: default;
 }
 
+.automation-manager--metadatabox {
+    --metadatabox--switch-width: 5em;
+    --metadatabox--title--source-height: 1.5em;
+}
+
 .automation-manager--metadatabox .metadatabox--switch {
     display: flex;
     cursor: pointer;
@@ -88,16 +93,28 @@
     text-align: center;
     font-size: 0.75em;
     user-select: none;
-    max-width: 5em;
+    max-width: var(--metadatabox--switch-width);
+}
+
+.automation-manager--metadatabox .metadatabox--title {
+    position: relative;
+    padding-top: var(--metadatabox--title--source-height);
 }
 
 .automation-manager--metadatabox .metadatabox--title--source {
+    position: absolute;
     margin-bottom: -0.5em;
+    left: calc(0.75em - var(--metadatabox--switch-width));
+    top: 0;
 }
 
 
 .automation-manager--metadatabox .metadatabox--title--source .MuiChip-root {
-    font-size: 0.85em;
-    height: 2em;
+    font-size: 0.6em;
+    max-height: calc(var(--metadatabox--title--source-height));
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    height: fit-content;
     max-width: 60%;
+    min-width: fit-content;
 }
