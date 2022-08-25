@@ -1,4 +1,3 @@
-from enum import auto
 from pathlib import Path
 from tempfile import mktemp
 from typing import Dict, Optional, Union
@@ -32,7 +31,7 @@ class AutomationManager:
         db_path: Optional[Path] = None,
     ) -> None:
         if db_path is None:
-            db_path = Path(mktemp())
+            db_path = Path(mktemp())  # nosec
         self.hass_config = hass_config
         self.db = AutomationDBConnection(db_path)
         self.tag_path = hass_config.get_automation_tags_path()

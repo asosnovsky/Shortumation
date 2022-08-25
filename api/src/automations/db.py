@@ -101,7 +101,7 @@ class AutomationDBConnection:
     def get_automation(self, automation_id: str) -> ExtenededAutomation:
         with self.get_cur() as cur:
             cur.execute(
-                f'SELECT rest, source_file, source_file_type, configuration_key FROM {automations_tbl} WHERE id = "{automation_id}"'
+                f'SELECT rest, source_file, source_file_type, configuration_key FROM {automations_tbl} WHERE id = "{automation_id}"'  # nosec
             )
             objs = cur.fetchone()
             if objs is None:
@@ -112,10 +112,10 @@ class AutomationDBConnection:
     def list_automations(self, offset: int, limit: int) -> Iterable[ExtenededAutomation]:
         with self.get_cur() as cur:
             for [rest, source_file, source_file_type, configuration_key] in cur.execute(
-                f"SELECT rest, source_file, source_file_type, configuration_key FROM {automations_tbl} LIMIT {limit} OFFSET {offset}"
+                f"SELECT rest, source_file, source_file_type, configuration_key FROM {automations_tbl} LIMIT {limit} OFFSET {offset}"  # nosec
             ):
                 yield decode_auto(rest, source_file, source_file_type, configuration_key)
 
     def count_automations(self) -> int:
         with self.get_cur() as cur:
-            return cur.execute(f"SELECT count(id) FROM {automations_tbl}").fetchone()[0]
+            return cur.execute(f"SELECT count(id) FROM {automations_tbl}").fetchone()[0]  # nosec
