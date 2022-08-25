@@ -58,6 +58,10 @@ In general, if you want to help provide this to more home-assistant fans please 
 
 ## FAQ
 
+**How can I buy you a coffee?**
+
+> <a href='https://ko-fi.com/J3J8C4RB7' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi1.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 **How is this different from Node-Red?**
 
 > Node-Red is both an execution engine and an automation editor, which means that in order for your automations to run you have to have an additional component running and executing the automations. Shortumation simply provides a different editor and manager for writing Homeassistant automations, while relying on Homeassistant to execute the automations (this uses the `automations.yaml` file as the backend database)
