@@ -4,7 +4,8 @@ from unittest import TestCase
 
 from src.yaml_serializer import (
     IncludedYaml,
-    IncludedYamlDir,
+    IncludedYamlDirList,
+    IncludedYamlMergeListDir,
     SecretValue,
     dump_yaml,
     load_yaml,
@@ -28,14 +29,12 @@ class dumping_yamls_tests(TestCase):
         self.assertEqual(yaml, "google_password: !secret 'gpass'\n")
 
     def test_dumping_include_dir_list(self):
-        yaml = dump_yaml(
-            {"sensor": IncludedYamlDir("include_dir_list", Path.cwd() / "sensors")}, Path.cwd()
-        )
+        yaml = dump_yaml({"sensor": IncludedYamlDirList(Path.cwd() / "sensors")}, Path.cwd())
         self.assertEqual(yaml, "sensor: !include_dir_list 'sensors'\n")
 
     def test_dumping_include_dir_merge_list(self):
         yaml = dump_yaml(
-            {"sensor": IncludedYamlDir("include_dir_merge_list", Path.cwd() / "sensors")},
+            {"sensor": IncludedYamlMergeListDir(Path.cwd() / "sensors")},
             Path.cwd(),
         )
         self.assertEqual(yaml, "sensor: !include_dir_merge_list 'sensors'\n")
@@ -55,12 +54,12 @@ class dumping_yamls_tests(TestCase):
         self.assertDictEqual(
             dict(yaml_obj),
             {
-                "automation manual": IncludedYamlDir(
-                    "include_dir_list", Path.cwd() / "automations/include_dir_list"
+                "automation manual": IncludedYamlDirList(
+                    Path.cwd() / "automations/include_dir_list"
                 ),
                 "automation ui": IncludedYaml(Path.cwd() / "automations/ui.yaml"),
-                "automation cools": IncludedYamlDir(
-                    "include_dir_merge_list", Path.cwd() / "automations/include_dir_merge_list"
+                "automation cools": IncludedYamlMergeListDir(
+                    Path.cwd() / "automations/include_dir_merge_list"
                 ),
                 "automation": IncludedYaml(Path.cwd() / "automations/base.yaml"),
             },
@@ -95,7 +94,7 @@ class dumping_yamls_tests(TestCase):
                 "bobIsNull": None,
                 "bobIsNull2": None,
                 "google_password": SecretValue("gpass", "n/a"),
-                "sensor": IncludedYamlDir("include_dir_list", Path.cwd() / "sensors"),
+                "sensor": IncludedYamlDirList(Path.cwd() / "sensors"),
                 "automations": IncludedYaml(Path.cwd() / "automations.yaml"),
             },
         )

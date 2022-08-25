@@ -1,0 +1,14 @@
+- id: "mlist2"
+  alias: Merged List 2
+  description: ""
+  trigger: []
+  condition: []
+  action: []
+  mode: single
+- id: "mlist3"
+  alias: Merged List 3
+  description: ""
+  trigger: []
+  condition: []
+  action: []
+  mode: single

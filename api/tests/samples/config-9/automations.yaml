@@ -1,0 +1,20 @@
+- id: "1616887975473"
+  alias: Home Assistant Off
+  description: ""
+  trigger:
+    - platform: homeassistant
+      event: shutdown
+  condition: []
+  action:
+    - !include parts.yaml
+  mode: single
+- id: "1616888026264"
+  alias: Home Assistant On
+  description: ""
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition: []
+  action:
+    - !include parts.yaml
+  mode: single

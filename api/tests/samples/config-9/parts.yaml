@@ -1,0 +1,5 @@
+device_id: das2qdasdasdasadaasd
+domain: mobile_app
+type: notify
+title: Hassio Status
+message: Hassio Is turning off...

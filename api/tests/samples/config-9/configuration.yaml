@@ -1,0 +1,4 @@
+# empty configuration file
+cloud:
+
+automation base: !include automations.yaml

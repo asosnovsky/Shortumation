@@ -15,6 +15,7 @@ from tests.utils import (
     HA_CONFIG4_EXAMPLE,
     HA_CONFIG5_EXAMPLE,
     HA_CONFIG6_EXAMPLE,
+    HA_CONFIG9_EXAMPLE,
     HA_CONFIG_EXAMPLE,
 )
 
@@ -102,6 +103,18 @@ class loader_tests(TestCase):
             ),
         )
 
+    def test_include_in_automation(self):
+        automations = list(
+            load_automation_path(
+                HA_CONFIG9_EXAMPLE,
+                HA_CONFIG9_EXAMPLE / "automations.yaml",
+                configuration_key="automation base",
+                tag_manager=TagManager({}),
+            )
+        )
+        self.assertEqual(len(automations), 2)
+        self.assertEqual(automations[1].action, automations[0].action)
+
     def test_load_automation_empty_file(self):
         file_path = Path(mktemp())
         file_path.touch()
@@ -136,6 +149,7 @@ class loader_tests(TestCase):
             (HA_CONFIG4_EXAMPLE, 1),
             (HA_CONFIG5_EXAMPLE, 3),
             (HA_CONFIG6_EXAMPLE, 4),
+            (HA_CONFIG9_EXAMPLE, 1),
         ]:
             with self.subTest(ha_path=ha_path, expected=expected):
                 hass_config = HassConfig(ha_path)

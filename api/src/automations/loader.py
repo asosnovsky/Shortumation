@@ -28,7 +28,7 @@ def extract_automation_paths(
     for key, value in extract_automation_keys(hass_config):
         logger.info(f"Loading automations from '{key}'")
         found = True
-        if isinstance(value, (IncludedYaml, IncludedYamlDir)):
+        if isinstance(value, IncludedYamlDir):
             yield key, str(value.path.relative_to(hass_config.root_path))
         else:
             logger.warning(f"found an invalid type in {key}!")
@@ -58,14 +58,14 @@ def get_base_automation_key(hass_config: HassConfig):
 
 def extract_automation_keys(
     hass_config: HassConfig,
-) -> Iterator[Tuple[str, Union[IncludedYaml, IncludedYamlDir]]]:
+) -> Iterator[Tuple[str, IncludedYamlDir]]:
     for key, value in hass_config.configurations.items():
         if str(key).startswith("automation"):
             if isinstance(value, dict) or isinstance(value, list):
                 raise NotImplementedError(
                     "No support for automations baked into configuration.yaml! Please extract these into a seperate file"
                 )
-            elif isinstance(value, IncludedYaml) or isinstance(value, IncludedYamlDir):
+            elif isinstance(value, IncludedYamlDir):
                 yield key, value
             else:
                 logger.warning(f"found an invalid type in {key}!")
