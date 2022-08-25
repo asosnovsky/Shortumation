@@ -229,6 +229,9 @@ export const useHA = () => {
     callService,
     callHA,
     deviceExtras: getDeviceExtraWsCalls(callHA),
-    reloadAutomations: () => callService("automation", "reload"),
+    reloadAutomations: () =>
+      conn.status === "loaded"
+        ? callService("automation", "reload")
+        : Promise.resolve(),
   };
 };

@@ -8,7 +8,7 @@ export const AutomationRoute: FC<{ api: ApiService }> = ({ api }) => {
   return (
     <AutomationManager
       api={api}
-      refreshAutomations={() => ha.callService("automation", "reload")}
+      refreshAutomations={() => ha.reloadAutomations()}
       triggerAutomation={(entity_id) =>
         ha.callService(
           "automation",

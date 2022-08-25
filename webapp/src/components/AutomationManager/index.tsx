@@ -264,7 +264,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
               }
             );
           }
-          // refreshAutomations();
+          refreshAutomations();
         }}
         onAutomationUpdate={(auto) =>
           wrapApiPromise(

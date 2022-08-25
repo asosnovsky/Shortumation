@@ -58,12 +58,6 @@ export const InternalPage: FC<{
       if (snackbarKeyHAConKey.current) {
         snackbar.closeSnackbar(snackbarKeyHAConKey.current);
       }
-      snackbarKeyHAConKey.current = snackbar.enqueueSnackbar(
-        `Connected to HA!`,
-        {
-          variant: "success",
-        }
-      );
     }
   }, [conn, snackbar]);
 
