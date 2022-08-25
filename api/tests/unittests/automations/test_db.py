@@ -9,12 +9,12 @@ from .utils import TestWithDB
 class db_tests(TestWithDB):
     def test_db_creation(self):
         with self.db.get_cur() as cur:
-            cur.execute("SELECT name FROM  sqlite_schema WHERE type ='table'")
+            cur.execute("SELECT name FROM sqlite_master WHERE type ='table'")
             tables = cur.fetchall()
             self.assertListEqual(tables, [("autos",)])
         self.db.create_db()
         with self.db.get_cur() as cur:
-            cur.execute("SELECT name FROM  sqlite_schema WHERE type ='table'")
+            cur.execute("SELECT name FROM sqlite_master WHERE type ='table'")
             tables = cur.fetchall()
             self.assertListEqual(tables, [("autos",)])
 
