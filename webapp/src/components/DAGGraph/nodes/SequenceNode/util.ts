@@ -1,5 +1,6 @@
 import { SequenceNodeColor } from "./types";
 import { useTheme } from "@mui/material/styles";
+import { AutomationNodeMapping } from "types/automations";
 
 export const useSequenceNodeColor = (color: SequenceNodeColor): string => {
   const theme = useTheme();
@@ -16,3 +17,8 @@ export const useSequenceNodeColor = (color: SequenceNodeColor): string => {
     ? theme.palette.error.dark
     : "none";
 };
+
+export const convertNodeTypeToSequenceNodeColor = (
+  type: keyof AutomationNodeMapping
+): SequenceNodeColor =>
+  type === "condition" ? "blue" : type === "action" ? "green" : "red";

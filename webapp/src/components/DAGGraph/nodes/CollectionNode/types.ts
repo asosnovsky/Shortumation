@@ -20,5 +20,4 @@ export type CollectionNodeDataProps = Size & {
 export type CollectionNodeProps = CollectionNodeDataProps & {
   sequenceNode: Size;
   flipped: boolean;
-  color: SequenceNodeColor;
 };

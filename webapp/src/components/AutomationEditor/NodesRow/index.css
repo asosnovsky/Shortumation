@@ -1,0 +1,9 @@
+.automation-editor--nodes-row .collection-nodes--wrap {
+    --node-height: 12em !important;
+    --node-width: 100% !important;
+}
+
+.automation-editor--nodes-row .collection-nodes--wrap .collection-nodes {
+    min-width: 90%;
+    min-height: 10em;
+}

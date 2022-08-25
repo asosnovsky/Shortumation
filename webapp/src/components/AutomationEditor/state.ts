@@ -43,19 +43,20 @@ export const useAutomatioEditorState = (
   };
   const makeUpdate =
     <K extends keyof EditorData, D extends EditorData[K]>(name: K) =>
-    (data: D) =>
+    (data: D) => {
       (state.status === "changed" || state.status === "unchanged") &&
-      update({
-        status: "changed",
-        previous:
-          state.status === "unchanged"
-            ? [state.data]
-            : state.previous.concat([state.data]),
-        data: {
-          ...state.data,
-          [name]: data,
-        },
-      });
+        update({
+          status: "changed",
+          previous:
+            state.status === "unchanged"
+              ? [state.data]
+              : state.previous.concat([state.data]),
+          data: {
+            ...state.data,
+            [name]: data,
+          },
+        });
+    };
 
   const saveAndUpdate = (data: EditorData) => {
     if (state.status === "changed") {
