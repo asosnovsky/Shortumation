@@ -81,7 +81,7 @@ jobs:
         arch:
           - "aarch64"
           - "amd64"
-          # - "armhf"
+          # - "armhf" # see https://github.com/asosnovsky/Shortumation/issues/147
           - "armv7"
           - "i386"
 
