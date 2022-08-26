@@ -3,7 +3,7 @@ import json
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterable, Iterator, List, Optional
+from typing import Iterable, Iterator
 
 from src.logger import get_logger
 
@@ -26,15 +26,23 @@ def encode_auto(auto: ExtenededAutomation) -> str:
     ).decode("utf-8")
 
 
+def encode_obj(auto: dict | list) -> str:
+    return base64.b64encode(json.dumps(auto).encode("utf-8")).decode("utf-8")
+
+
 def decode_auto(
     auto_str: str, source_file: str, source_file_type: str, configuration_key: str
 ) -> ExtenededAutomation:
     return ExtenededAutomation(
         source_file=source_file,
         source_file_type=source_file_type,
-        configuration_key=configuration_key,
-        **json.loads(base64.b64decode(auto_str.encode("utf-8")).decode("utf-8")),
+        configuration_key=decode_obj(configuration_key),  # type: ignore
+        **decode_obj(auto_str),
     )
+
+
+def decode_obj(obj_str: str) -> dict | list:
+    return json.loads(base64.b64decode(obj_str.encode("utf-8")).decode("utf-8"))
 
 
 class AutomationDBConnection:
@@ -69,13 +77,13 @@ class AutomationDBConnection:
                 mode TEXT NOT NULL,
                 source_file TEXT NOT NULL,
                 source_file_type TEXT NOT NULL,
-                configuration_key TEXT NOT NULL,
+                configuration_key BLOB NOT NULL,
                 rest BLOB NOT NULL
             );
             """
             )
 
-    def insert_automations(self, automations: List[ExtenededAutomation]):
+    def insert_automations(self, automations: list[ExtenededAutomation]):
         with self.get_cur() as cur:
             for automation in automations:
                 try:
@@ -88,7 +96,7 @@ class AutomationDBConnection:
                             "{automation.mode}",
                             "{automation.source_file}",
                             "{automation.source_file_type}",
-                            "{automation.configuration_key}",
+                            "{encode_obj(automation.configuration_key)}",
                             "{encode_auto(automation)}"
                         );
                         """,

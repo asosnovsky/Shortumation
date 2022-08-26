@@ -1,7 +1,7 @@
 from pathlib import Path
 from shutil import copytree
 from tempfile import mkdtemp
-from typing import List, Literal, Optional, Tuple
+from typing import Literal, Optional, Tuple
 
 from src.automations.manager import AutomationManager
 from src.automations.types import BaseAutomation
@@ -49,7 +49,7 @@ def create_copy_of_example_config(config_to_copy: Path = HA_CONFIG_EXAMPLE) -> P
 
 
 def get_dummy_automation_loader(
-    auto: List[BaseAutomation],
+    auto: list[BaseAutomation],
     secrets: Optional[dict] = None,
     other_config: Optional[dict] = None,
     automation_in_conifguration_mode: Literal["include", "inline", "none"] = "include",
@@ -57,7 +57,7 @@ def get_dummy_automation_loader(
     """Creates a dummy /config structure for testing and return the loader and config
 
     Args:
-        auto (List[BaseAutomation]): automations
+        auto (list[BaseAutomation]): automations
         secrets (Optional[dict], optional): dictionary of secrets
         other_config (Optional[dict], optional): some config stuff to place into configuration.yaml. Defaults to None.
         automation_in_conifguration_mode (Literal['include', 'inline', 'none'], optional): whether to !include automation as a separete file or in the configuration yaml. Defaults to inline.
@@ -77,7 +77,7 @@ def get_dummy_automation_loader(
 
 
 def create_dummy_config_folder(
-    auto: List[BaseAutomation],
+    auto: list[BaseAutomation],
     secrets: Optional[dict] = None,
     other_config: Optional[dict] = None,
     automation_in_conifguration_mode: Literal["include", "inline", "none"] = "include",
@@ -85,7 +85,7 @@ def create_dummy_config_folder(
     """Creates a dummy /config structure for testing
 
     Args:
-        auto (List[BaseAutomation]): automations
+        auto (list[BaseAutomation]): automations
         secrets (Optional[dict], optional): dictionary of secrets
         other_config (Optional[dict], optional): some config stuff to place into configuration.yaml. Defaults to None.
         automation_in_conifguration_mode (Literal['include', 'inline', 'none'], optional): whether to !include automation as a separete file or in the configuration yaml. Defaults to inline.

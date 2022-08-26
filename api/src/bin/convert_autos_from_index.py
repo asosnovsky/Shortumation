@@ -1,11 +1,10 @@
 import argparse
 from pathlib import Path
-from typing import Dict, List
 
 import yaml
 
 
-def convert_tags(automations: List[dict], tags: Dict[int, dict]) -> Dict[str, dict]:
+def convert_tags(automations: list[dict], tags: dict[int, dict]) -> dict[str, dict]:
     converted = {}
     for tagsIdx, tagValues in tags.items():
         if tagsIdx < len(automations):

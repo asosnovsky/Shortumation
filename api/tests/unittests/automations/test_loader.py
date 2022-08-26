@@ -10,7 +10,6 @@ from src.automations.tags import TagManager
 from src.automations.types import ExtenededAutomation
 from src.hass_config.loader import HassConfig
 from tests.utils import (
-    HA_CONFIG10_EXAMPLE,
     HA_CONFIG2_EXAMPLE,
     HA_CONFIG3_EXAMPLE,
     HA_CONFIG4_EXAMPLE,
@@ -19,6 +18,7 @@ from tests.utils import (
     HA_CONFIG7_EXAMPLE,
     HA_CONFIG8_EXAMPLE,
     HA_CONFIG9_EXAMPLE,
+    HA_CONFIG10_EXAMPLE,
     HA_CONFIG_EXAMPLE,
 )
 
@@ -29,7 +29,7 @@ class loader_tests(TestCase):
             load_automation_path(
                 HA_CONFIG2_EXAMPLE,
                 HA_CONFIG2_EXAMPLE / "automations.yaml",
-                configuration_key="automation",
+                configuration_key=["automation"],
                 tag_manager=TagManager({"1652069225859": {"type": "routine"}}),
             )
         )
@@ -40,7 +40,7 @@ class loader_tests(TestCase):
                 id="1652069225859",
                 source_file="automations.yaml",
                 source_file_type="list",
-                configuration_key="automation",
+                configuration_key=["automation"],
                 alias="Climate - Pref temperature ",
                 description="",
                 mode="single",
@@ -73,7 +73,7 @@ class loader_tests(TestCase):
             load_automation_path(
                 HA_CONFIG4_EXAMPLE,
                 HA_CONFIG4_EXAMPLE / "automations" / "notify_washer.yaml",
-                configuration_key="automation base",
+                configuration_key=["automation base"],
                 tag_manager=TagManager({"1659114647067": {"room": "laundry"}}),
             )
         )
@@ -84,7 +84,7 @@ class loader_tests(TestCase):
                 id="1659114647067",
                 source_file="automations/notify_washer.yaml",
                 source_file_type="obj",
-                configuration_key="automation base",
+                configuration_key=["automation base"],
                 alias="Notify Washer",
                 description="Example",
                 mode="single",
@@ -111,7 +111,7 @@ class loader_tests(TestCase):
             load_automation_path(
                 HA_CONFIG9_EXAMPLE,
                 HA_CONFIG9_EXAMPLE / "automations.yaml",
-                configuration_key="automation base",
+                configuration_key=["automation base"],
                 tag_manager=TagManager({}),
             )
         )
@@ -125,7 +125,7 @@ class loader_tests(TestCase):
             load_automation_path(
                 file_path.parent,
                 file_path,
-                configuration_key="automation ui",
+                configuration_key=["automation ui"],
                 tag_manager=TagManager(),
             )
         )
@@ -138,7 +138,7 @@ class loader_tests(TestCase):
             load_automation_path(
                 file_path.parent,
                 file_path,
-                configuration_key="automation manual",
+                configuration_key=["automation manual"],
                 tag_manager=TagManager(),
             )
         )

@@ -1,27 +1,29 @@
 import json
-from pathlib import Path
-from typing import Dict, List, Literal, Optional, Union
+from typing import Iterator, Literal, Optional, Union
 
 from pydantic import BaseModel
 from pydantic.fields import Field
+
+ConfigurationKey = list[str]
+AutomationPathIter = Iterator[tuple[ConfigurationKey, str]]
 
 
 class BaseAutomation(BaseModel):
     id: str
     alias: Optional[str] = None
     description: Optional[str] = None
-    trigger_variables: Optional[Dict[str, Union[str, int, bool, float]]] = None
+    trigger_variables: Optional[dict[str, Union[str, int, bool, float]]] = None
     mode: str = "single"
-    trigger: List[dict] = []
-    condition: List[dict] = []
-    action: List[dict] = []
+    trigger: list[dict] = []
+    condition: list[dict] = []
+    action: list[dict] = []
 
     def to_primitive(self):
         return self.dict(exclude_unset=True, exclude_none=True)
 
 
 class Automation(BaseAutomation):
-    tags: Dict[str, str] = Field(default_factory=dict)
+    tags: dict[str, str] = Field(default_factory=dict)
 
     def to_primitive(self, include_tags: bool = False):
         out = super().to_primitive()
@@ -32,8 +34,8 @@ class Automation(BaseAutomation):
 
 class ExtenededAutomation(Automation):
     source_file: str
-    source_file_type: Literal["list", "obj"]
-    configuration_key: str
+    source_file_type: Literal["list", "obj", "inline"]
+    configuration_key: ConfigurationKey
 
     def to_primitive(self, include_tags: bool = False):
         out = super().to_primitive(include_tags=include_tags)

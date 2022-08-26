@@ -1,4 +1,4 @@
-from typing import Dict, Generic, List, TypeVar
+from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 from pydantic.fields import Field
@@ -15,9 +15,9 @@ class ListParams(BaseModel):
 class ListData(GenericModel, Generic[DataT]):
     params: ListParams
     total_items: int = Field(alias="totalItems")
-    data: List[DataT]
+    data: list[DataT]
 
 
 class UpdateTags(BaseModel):
     automation_id: str = Field(description="Automation Id to update")
-    tags: Dict[str, str]
+    tags: dict[str, str]

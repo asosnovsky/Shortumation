@@ -1,12 +1,12 @@
 from pathlib import Path
 from tempfile import mktemp
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 
+from src.errors import ErrorSet
 from src.hass_config.loader import HassConfig
+from src.logger import get_logger
 from src.yaml_serializer import dump_yaml, load_yaml
 
-from ..errors import ErrorSet
-from ..logger import get_logger
 from .db import AutomationDBConnection
 from .errors import (
     AttemptingToOverwriteAnIncompatibleFileError,
@@ -14,8 +14,8 @@ from .errors import (
     InvalidAutomationFile,
 )
 from .loader import (
-    extract_automation_paths,
     get_base_automation_key,
+    load_and_iter_automations,
     load_automation_path,
 )
 from .tags import TagManager
@@ -42,27 +42,32 @@ class AutomationManager:
         if self.tag_path.exists():
             self.tag_manager = TagManager.load(self.tag_path)
 
-    def reload(self):
+    def reload(self, batch_size: int = 100):
         self.db.reset()
         self.reload_tags()
         errors = []
-        for config_key, p in extract_automation_paths(self.hass_config):
+        auto_it = load_and_iter_automations(self.hass_config, self.tag_manager)
+        batch: list[ExtenededAutomation] = []
+        stop = False
+        while not stop:
             try:
-                automations = list(
-                    load_automation_path(
-                        self.hass_config.root_path,
-                        self.hass_config.root_path / p,
-                        config_key,
-                        self.tag_manager,
-                    )
-                )
-                self.db.insert_automations(automations)
-            except InvalidAutomationFile as e:
-                logger.warning(e)
-                errors.append(e)
+                batch.append(next(auto_it))
+                if len(batch) >= batch_size:
+                    self.db.insert_automations(batch)
+                    batch = []
+            except StopIteration:
+                if stop:
+                    break
+                stop = True
             except DBError as e:
                 logger.warning(e)
                 errors.append(e)
+        try:
+            if len(batch) >= 0:
+                self.db.insert_automations(batch)
+        except DBError as e:
+            logger.warning(e)
+            errors.append(e)
         if len(errors) > 0:
             raise ErrorSet(*errors)
 
@@ -131,7 +136,7 @@ class AutomationManager:
             automation_path.write_text(dump_yaml(objs, self.hass_config.root_path))
         self.update_tags(automation.id, automation.tags)
 
-    def update_tags(self, automation_id: str, tags: Dict[str, str]):
+    def update_tags(self, automation_id: str, tags: dict[str, str]):
         self.reload_tags()
         self.tag_manager[automation_id] = tags
         self.tag_manager.save(self.tag_path)

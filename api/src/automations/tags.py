@@ -1,10 +1,9 @@
 from pathlib import Path
-from typing import Dict
 
 from src.yaml_serializer import dump_yaml, load_yaml
 
 
-class TagManager(Dict[str, Dict[str, str]]):
+class TagManager(dict[str, dict[str, str]]):
     def save(self, path: Path):
         if not path.parent.exists():
             path.parent.mkdir(parents=True)

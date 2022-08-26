@@ -15,16 +15,31 @@ from src.yaml_serializer import (
 from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile
 from .tags import TagManager
-from .types import ExtenededAutomation
+from .types import AutomationPathIter, ConfigurationKey, ExtenededAutomation
 
 logger = get_logger(__file__)
 
 AUTOMATION_CONFIGURATION_KEY = "automation shortumation"
 
 
+def load_and_iter_automations(
+    hass_config: HassConfig, tag_manager: TagManager
+) -> Iterator[ExtenededAutomation]:
+    for config_key, p in extract_automation_paths(hass_config):
+        try:
+            yield from load_automation_path(
+                hass_config.root_path,
+                hass_config.root_path / p,
+                config_key,
+                tag_manager,
+            )
+        except InvalidAutomationFile as e:
+            logger.error(e)
+
+
 def extract_automation_paths(
     hass_config: HassConfig,
-) -> Iterator[Tuple[str, str]]:
+) -> AutomationPathIter:
     found = False
 
     for config_key, automation_path in chain(
@@ -34,23 +49,23 @@ def extract_automation_paths(
         yield config_key, automation_path
 
     if not found:
-        yield "", "automations.yaml"
+        yield [""], "automations.yaml"
 
 
 def extract_automation_root_paths(
     hass_config: HassConfig,
-) -> Iterator[Tuple[str, str]]:
+) -> AutomationPathIter:
     for key, value in extract_automation_keys(hass_config):
         logger.info(f"Loading automations from '{key}'")
         if isinstance(value, IncludedYamlDir):  # type: ignore
-            yield key, str(value.path.relative_to(hass_config.root_path))
+            yield [key], str(value.path.relative_to(hass_config.root_path))
         elif isinstance(value, list):
             logger.warning(f"Failed to load from '{key}' as no support for inline automations yet.")
         else:
             logger.warning(f"found an invalid type in {key}!")
 
 
-def extract_package_automation_paths(hass_config: HassConfig) -> Iterator[Tuple[str, str]]:
+def extract_package_automation_paths(hass_config: HassConfig) -> AutomationPathIter:
     for package_name, package_data in hass_config.pacakges.items():
         if not isinstance(package_data, dict):
             logger.warning(f"The package {package_name} is incorrectly configured!")
@@ -58,7 +73,7 @@ def extract_package_automation_paths(hass_config: HassConfig) -> Iterator[Tuple[
             if automations := package_data.get("automation", None):
                 logger.info(f"Loading automations from package '{package_name}'")
                 if isinstance(automations, IncludedYamlDir):  # type: ignore
-                    yield package_name, str(automations.path.relative_to(hass_config.root_path))
+                    yield [package_name], str(automations.path.relative_to(hass_config.root_path))
                 elif isinstance(automations, list):
                     logger.warning(
                         f"Failed to load from '{package_name}' as no support for inline automations yet."
@@ -67,12 +82,12 @@ def extract_package_automation_paths(hass_config: HassConfig) -> Iterator[Tuple[
                     logger.warning(f"found an invalid type in {package_name}!")
 
 
-def get_base_automation_key(hass_config: HassConfig):
+def get_base_automation_key(hass_config: HassConfig) -> Tuple[ConfigurationKey, str]:
     found_any = False
     for key, value in extract_automation_keys(hass_config):
         found_any = True
         if isinstance(value, IncludedYaml):
-            return key, str(value.path.relative_to(hass_config.root_path))
+            return [key], str(value.path.relative_to(hass_config.root_path))
     configurations = hass_config.configurations
     if found_any:
         out_path = hass_config.get_backup_automation_file_path()
@@ -84,7 +99,7 @@ def get_base_automation_key(hass_config: HassConfig):
     out_path.touch(exist_ok=True)
     with hass_config.get_configuration_path().open("w") as fp:
         fp.write(dump_yaml(configurations, root_path=hass_config.root_path))
-    return AUTOMATION_CONFIGURATION_KEY, out_file
+    return [AUTOMATION_CONFIGURATION_KEY], out_file
 
 
 def extract_automation_keys(
@@ -105,14 +120,14 @@ def extract_automation_keys(
 def load_automation_path(
     root_path: Path,
     automation_path: Path,
-    configuration_key: str,
+    configuration_key: ConfigurationKey,
     tag_manager: TagManager,
 ) -> Iterator[ExtenededAutomation]:
     """
 
     Args:
         automation_path (Path)
-        configuration_key (str)
+        configuration_key (list[str])
 
     Returns:
         Iterator[ExtenededAutomation]

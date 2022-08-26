@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, TypeVar
 
 
 def extract_files(p: Path) -> Iterator[Path]:
@@ -18,3 +18,16 @@ def extract_files(p: Path) -> Iterator[Path]:
             yield from extract_files(c)
     else:
         yield p
+
+
+T = TypeVar("T")
+
+
+def batch(it: Iterator[T], batch_size: int) -> Iterator[list[T]]:
+    b = []
+    for n in it:
+        b.append(n)
+        if len(b) >= batch_size:
+            yield b
+    if len(b) > 0:
+        yield b

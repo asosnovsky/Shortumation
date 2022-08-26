@@ -13,6 +13,7 @@ from src.hass_config.loader import HassConfig
 from tests.utils import (
     HA_CONFIG6_EXAMPLE,
     HA_CONFIG8_EXAMPLE,
+    HA_CONFIG10_EXAMPLE,
     HA_CONFIG_EXAMPLE,
     create_copy_of_example_config,
 )
@@ -46,7 +47,7 @@ class manager_tests(TestWithDB):
                 }
             ],
         )
-        self.assertEqual(automation.configuration_key, "automation cools")
+        self.assertEqual(automation.configuration_key, ["automation cools"])
         automation.trigger.append(
             {"platform": "zone", "entity_id": "person.thor", "zone": "zone.azguard"}
         )
@@ -76,19 +77,13 @@ class manager_tests(TestWithDB):
     def test_bad_automations_file(self):
         config_path, automation_manager = self.get_manager(HA_CONFIG_EXAMPLE)
         (config_path / "automations.yaml").write_text("bob is an uncle")
-        with self.assertRaises(ErrorSet) as err:
-            automation_manager.reload()
-        self.assertEqual(len(err.exception.errors), 1)
-        self.assertIsInstance(err.exception.errors[0], InvalidAutomationFile)
+        automation_manager.reload()
         self.assertEqual(automation_manager.count(), 0)
 
     def test_one_bad_automations_file(self):
         config_path, automation_manager = self.get_manager(HA_CONFIG6_EXAMPLE)
         (config_path / "automations" / "ui.yaml").write_text("bob is an uncle")
-        with self.assertRaises(ErrorSet) as err:
-            automation_manager.reload()
-        self.assertEqual(len(err.exception.errors), 1)
-        self.assertIsInstance(err.exception.errors[0], InvalidAutomationFile)
+        automation_manager.reload()
         self.assertEqual(automation_manager.count(), 10)
 
     def test_delete_automation_in_single_file(self):
@@ -96,7 +91,7 @@ class manager_tests(TestWithDB):
         self.assertTrue((config_path / "automations/include_dir_list/home/down.yaml").exists())
         automation_manager.reload()
         automation = automation_manager.get("1659114822642")
-        self.assertEqual(automation.configuration_key, "automation manual")
+        self.assertEqual(automation.configuration_key, ["automation manual"])
         automation_manager.delete(automation)
         automation_manager.reload()
         with self.assertRaises(DBNoAutomationFound):
@@ -110,7 +105,7 @@ class manager_tests(TestWithDB):
         )
         automation_manager.reload()
         automation = automation_manager.get("mlist2")
-        self.assertEqual(automation.configuration_key, "automation cools")
+        self.assertEqual(automation.configuration_key, ["automation cools"])
         automation_manager.delete(automation)
         automation_manager.reload()
         with self.assertRaises(DBNoAutomationFound):
@@ -128,7 +123,7 @@ class manager_tests(TestWithDB):
         automation_manager.update(
             ExtenededAutomation(
                 id="newlymade",
-                configuration_key="automation manual",
+                configuration_key=["automation manual"],
                 source_file="automations/include_dir_list/home/left.yaml",
                 source_file_type="obj",
             )
@@ -139,7 +134,7 @@ class manager_tests(TestWithDB):
             automation_manager.get("newlymade"),
             ExtenededAutomation(
                 id="newlymade",
-                configuration_key="automation manual",
+                configuration_key=["automation manual"],
                 source_file="automations/include_dir_list/home/left.yaml",
                 source_file_type="obj",
             ),
@@ -156,7 +151,7 @@ class manager_tests(TestWithDB):
         automation_manager.update(
             ExtenededAutomation(
                 id="newlymade",
-                configuration_key="automation cools",
+                configuration_key=["automation cools"],
                 source_file="automations/include_dir_merge_list/sub/list2.yaml",
                 source_file_type="list",
             ),
@@ -170,7 +165,7 @@ class manager_tests(TestWithDB):
             automation_manager.get("newlymade"),
             ExtenededAutomation(
                 id="newlymade",
-                configuration_key="automation cools",
+                configuration_key=["automation cools"],
                 source_file="automations/include_dir_merge_list/sub/list2.yaml",
                 source_file_type="list",
             ),
@@ -187,7 +182,7 @@ class manager_tests(TestWithDB):
         automation_manager.update(
             ExtenededAutomation(
                 id="newlymade",
-                configuration_key="automation cools",
+                configuration_key=["automation cools"],
                 source_file="automations/include_dir_merge_list/sub/list4.yaml",
                 source_file_type="list",
             ),
@@ -201,7 +196,7 @@ class manager_tests(TestWithDB):
             automation_manager.get("newlymade"),
             ExtenededAutomation(
                 id="newlymade",
-                configuration_key="automation cools",
+                configuration_key=["automation cools"],
                 source_file="automations/include_dir_merge_list/sub/list4.yaml",
                 source_file_type="list",
             ),
@@ -219,7 +214,7 @@ class manager_tests(TestWithDB):
             automation_manager.update(
                 ExtenededAutomation(
                     id="newlymade",
-                    configuration_key="automation cools",
+                    configuration_key=["automation cools"],
                     source_file="automations/include_dir_merge_list/sub/list2.yaml",
                     source_file_type="obj",
                 ),
@@ -245,7 +240,7 @@ class manager_tests(TestWithDB):
             automation_manager.update(
                 ExtenededAutomation(
                     id="newlymade",
-                    configuration_key="automation cools",
+                    configuration_key=["automation cools"],
                     source_file="automations/include_dir_list/home/down.yaml",
                     source_file_type="list",
                 ),
@@ -333,4 +328,11 @@ class manager_tests(TestWithDB):
         _, automation_manager = self.get_manager(HA_CONFIG8_EXAMPLE)
         automation_manager.reload()
         auto = automation_manager.get("package-sub")
-        self.assertEqual(auto.configuration_key, "pacakage2")
+        self.assertEqual(auto.configuration_key, ["pacakage2"])
+
+    def test_load_inline_auto(self):
+        _, automation_manager = self.get_manager(HA_CONFIG10_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("inline-auto")
+        self.assertEqual(auto.source_file_type, ["inline"])
+        self.assertEqual(auto.configuration_key, ["automation"])

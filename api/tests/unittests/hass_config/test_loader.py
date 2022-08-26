@@ -2,7 +2,11 @@ from unittest import TestCase
 
 from src.automations.types import BaseAutomation
 from src.hass_config.loader import HassConfig
-from tests.utils import HA_CONFIG8_EXAMPLE, SAMPLES_FOLDER, create_dummy_config_folder
+from tests.utils import (
+    HA_CONFIG8_EXAMPLE,
+    SAMPLES_FOLDER,
+    create_dummy_config_folder,
+)
 
 
 class loader_tests(TestCase):

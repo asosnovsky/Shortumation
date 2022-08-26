@@ -12,5 +12,20 @@ tts:
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+automation:
+  - id: "inline-auto"
+    alias: inline-auto
+    description: Example package auto
+    mode: single
+    trigger:
+      - platform: homeassistant
+        event: start
+    condition: []
+    action:
+      - service: counter.increment
+        data: {}
+        target:
+          entity_id: counter.up_times
+
 homeassistant:
   packages: !include_dir_merge_named packages

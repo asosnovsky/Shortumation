@@ -25,7 +25,7 @@ class db_tests(TestWithDB):
                 alias="test",
                 source_file="automation.yaml",
                 source_file_type="obj",
-                configuration_key="automation",
+                configuration_key=["automation"],
             ),
             ExtenededAutomation(
                 id="test2",
@@ -33,7 +33,7 @@ class db_tests(TestWithDB):
                 source_file="automation.yaml",
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
-                configuration_key="automation",
+                configuration_key=["automation"],
             ),
         ]
         self.db.insert_automations(originals)
@@ -50,7 +50,7 @@ class db_tests(TestWithDB):
                 alias="test",
                 source_file="automation.yaml",
                 source_file_type="obj",
-                configuration_key="automation",
+                configuration_key=["automation"],
             ),
             ExtenededAutomation(
                 id="test",
@@ -58,7 +58,7 @@ class db_tests(TestWithDB):
                 source_file="automation.yaml",
                 source_file_type="obj",
                 action=[{"event": {"nice": "one"}, "event_type": "custom"}],
-                configuration_key="automation",
+                configuration_key=["automation"],
             ),
         ]
         with self.assertRaises(DBDataError) as err:

@@ -1,5 +1,5 @@
 import json
-from typing import Any, List
+from typing import Any
 
 
 def json_dumps(obj: Any) -> str:
