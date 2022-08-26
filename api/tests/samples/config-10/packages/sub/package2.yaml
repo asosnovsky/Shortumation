@@ -1,6 +1,6 @@
 package2:
   automation:
-    - id: "package-ha"
+    - id: "package2"
       alias: package ha
       description: Example package auto
       mode: single

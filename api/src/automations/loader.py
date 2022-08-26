@@ -1,3 +1,4 @@
+from itertools import chain
 from pathlib import Path
 from typing import Any, Iterator, Tuple, Union
 
@@ -25,25 +26,45 @@ def extract_automation_paths(
     hass_config: HassConfig,
 ) -> Iterator[Tuple[str, str]]:
     found = False
-    for key, value in extract_automation_keys(hass_config):
-        logger.info(f"Loading automations from '{key}'")
+
+    for config_key, automation_path in chain(
+        extract_automation_root_paths(hass_config), extract_package_automation_paths(hass_config)
+    ):
         found = True
-        if isinstance(value, IncludedYamlDir):  # type: ignore
-            yield key, str(value.path.relative_to(hass_config.root_path))
-        else:
-            logger.warning(f"found an invalid type in {key}!")
+        yield config_key, automation_path
+
     if not found:
         yield "", "automations.yaml"
 
 
-def extract_package_automation_paths(hass_config: HassConfig):
-    if homeassistant_config := hass_config.configurations.get("homeassistant", None):
-        if isinstance(homeassistant_config, IncludedYamlDir):  # type: ignore
-            homeassistant_config_d = homeassistant_config.to_normalized_json()
-        elif isinstance(homeassistant_config, dict):
-            homeassistant_config_d = homeassistant_config
+def extract_automation_root_paths(
+    hass_config: HassConfig,
+) -> Iterator[Tuple[str, str]]:
+    for key, value in extract_automation_keys(hass_config):
+        logger.info(f"Loading automations from '{key}'")
+        if isinstance(value, IncludedYamlDir):  # type: ignore
+            yield key, str(value.path.relative_to(hass_config.root_path))
+        elif isinstance(value, list):
+            logger.warning(f"Failed to load from '{key}' as no support for inline automations yet.")
         else:
-            raise AssertionError("configurations.homeassistant must be a dictionary!")
+            logger.warning(f"found an invalid type in {key}!")
+
+
+def extract_package_automation_paths(hass_config: HassConfig) -> Iterator[Tuple[str, str]]:
+    for package_name, package_data in hass_config.pacakges.items():
+        if not isinstance(package_data, dict):
+            logger.warning(f"The package {package_name} is incorrectly configured!")
+        else:
+            if automations := package_data.get("automation", None):
+                logger.info(f"Loading automations from package '{package_name}'")
+                if isinstance(automations, IncludedYamlDir):  # type: ignore
+                    yield package_name, str(automations.path.relative_to(hass_config.root_path))
+                elif isinstance(automations, list):
+                    logger.warning(
+                        f"Failed to load from '{package_name}' as no support for inline automations yet."
+                    )
+                else:
+                    logger.warning(f"found an invalid type in {package_name}!")
 
 
 def get_base_automation_key(hass_config: HassConfig):

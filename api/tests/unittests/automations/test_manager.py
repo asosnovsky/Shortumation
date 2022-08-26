@@ -12,6 +12,7 @@ from src.errors import ErrorSet
 from src.hass_config.loader import HassConfig
 from tests.utils import (
     HA_CONFIG6_EXAMPLE,
+    HA_CONFIG8_EXAMPLE,
     HA_CONFIG_EXAMPLE,
     create_copy_of_example_config,
 )
@@ -327,3 +328,9 @@ class manager_tests(TestWithDB):
             auto.tags,
             {},
         )
+
+    def test_load_pacakges(self):
+        _, automation_manager = self.get_manager(HA_CONFIG8_EXAMPLE)
+        automation_manager.reload()
+        auto = automation_manager.get("package-sub")
+        self.assertEqual(auto.configuration_key, "pacakage2")

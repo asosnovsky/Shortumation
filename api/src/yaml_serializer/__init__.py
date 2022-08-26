@@ -115,7 +115,7 @@ class IncludedYamlDirNamed(NamedTuple):
         out = {}
         for path, data in load_dir_yaml(self.path):
             if out.get(path.name, None) is None:
-                out[path.name] = data
+                out[path.stem] = data
             else:
                 raise AssertionError(
                     f"expected {path.name} to be a unique file name but found a second file name in {path}"
