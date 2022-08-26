@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from src.automations.types import BaseAutomation
 from src.hass_config.loader import HassConfig
-from tests.utils import create_dummy_config_folder
+from tests.utils import HA_CONFIG8_EXAMPLE, SAMPLES_FOLDER, create_dummy_config_folder
 
 
 class loader_tests(TestCase):
@@ -41,3 +41,15 @@ class loader_tests(TestCase):
         (folder / "automations.yaml").unlink()
         hass_config = HassConfig(folder)
         self.assertIsInstance(hass_config.configurations, dict)
+
+    def test_load_homeassitant(self):
+        for folder in SAMPLES_FOLDER.iterdir():
+            with self.subTest(name=folder.name):
+                hass_config = HassConfig(folder)
+                assert isinstance(hass_config.homeassistant, dict)
+
+    def test_load_packages(self):
+        for folder in SAMPLES_FOLDER.iterdir():
+            with self.subTest(name=folder.name):
+                hass_config = HassConfig(folder)
+                assert isinstance(hass_config.pacakges, dict)

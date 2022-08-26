@@ -81,7 +81,7 @@ class IncludedYamlDirMergedNamed(NamedTuple):
     def to_normalized_json(self):
         out = {}
         for path, data in load_dir_yaml(self.path):
-            overlap = set(data.key()).intersection(set(out.keys()))
+            overlap = set(data.keys()).intersection(set(out.keys()))
             if len(overlap) > 0:
                 raise AssertionError(
                     f"The keys {overlap} were found in more than 1 file, cannot handle overlapping keys due to undefined behavior expectation. See {path}"
@@ -114,7 +114,7 @@ class IncludedYamlDirNamed(NamedTuple):
     def to_normalized_json(self):
         out = {}
         for path, data in load_dir_yaml(self.path):
-            if out.get(path.name, None):
+            if out.get(path.name, None) is None:
                 out[path.name] = data
             else:
                 raise AssertionError(

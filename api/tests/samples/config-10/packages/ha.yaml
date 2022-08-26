@@ -1,0 +1,2 @@
+ha:
+  automation: !include ../automations/ui.yaml

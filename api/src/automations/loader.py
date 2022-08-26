@@ -36,6 +36,16 @@ def extract_automation_paths(
         yield "", "automations.yaml"
 
 
+def extract_package_automation_paths(hass_config: HassConfig):
+    if homeassistant_config := hass_config.configurations.get("homeassistant", None):
+        if isinstance(homeassistant_config, IncludedYamlDir):  # type: ignore
+            homeassistant_config_d = homeassistant_config.to_normalized_json()
+        elif isinstance(homeassistant_config, dict):
+            homeassistant_config_d = homeassistant_config
+        else:
+            raise AssertionError("configurations.homeassistant must be a dictionary!")
+
+
 def get_base_automation_key(hass_config: HassConfig):
     found_any = False
     for key, value in extract_automation_keys(hass_config):

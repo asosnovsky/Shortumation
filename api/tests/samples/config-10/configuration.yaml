@@ -13,6 +13,4 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 
 homeassistant:
-  packages:
-    ha:
-      automation: !include automations/ui.yaml
+  packages: !include_dir_merge_named packages

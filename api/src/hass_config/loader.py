@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.automations.tags import TagManager
-from src.yaml_serializer import IncludedYaml, load_yaml
+from src.yaml_serializer import IncludedYaml, IncludedYamlDir, load_yaml
 
 
 class HassConfig:
@@ -13,6 +13,29 @@ class HassConfig:
     def configurations(self) -> dict:
         with self.get_configuration_path().open("r") as f:
             return dict(load_yaml(f, root_path=self.root_path))  # type: ignore
+
+    @property
+    def homeassistant(self) -> dict:
+        if homeassistant_config := self.configurations.get("homeassistant", None):
+            if isinstance(homeassistant_config, IncludedYamlDir):  # type: ignore
+                homeassistant_config = homeassistant_config.to_normalized_json()
+            if isinstance(homeassistant_config, dict):
+                return homeassistant_config
+            else:
+                raise AssertionError("configurations.homeassistant must be a dictionary!")
+        return {}
+
+    @property
+    def pacakges(self) -> dict:
+        if packages_config := self.homeassistant.get("packages", None):
+            if isinstance(packages_config, IncludedYamlDir):  # type: ignore
+                packages_config = packages_config.to_normalized_json()
+            if isinstance(packages_config, dict):
+                return packages_config
+            else:
+                raise AssertionError("configurations.homeassistant.packages must be a dictionary!")
+
+        return {}
 
     @property
     def automation_tags(self) -> TagManager:
