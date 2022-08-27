@@ -13,5 +13,5 @@ export const AutomationMetadata = st.object({
 export const AutomationShortumationMetadata = st.object({
   source_file: st.string(),
   source_file_type: st.string(),
-  configuration_key: st.string(),
+  configuration_key: st.array(st.string()),
 });

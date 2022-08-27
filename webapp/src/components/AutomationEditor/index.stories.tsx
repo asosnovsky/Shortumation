@@ -55,7 +55,7 @@ Simple.args = {
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger: [
       {
         platform: "numeric_state",
@@ -107,7 +107,7 @@ EmptyStart.args = {
     description: "Example Metadata",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger_variables: {
       wowo: "!",
     },
@@ -139,7 +139,7 @@ BadAutomationInvalidTriggers.args = {
     description: "Example Metadata",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger_variables: {
       wowo: "!",
     },
@@ -180,7 +180,7 @@ RepeatExample.args = {
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger: [
       {
         type: "opened",

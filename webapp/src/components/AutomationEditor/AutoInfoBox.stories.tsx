@@ -46,7 +46,7 @@ export const NoTags = make({
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
   },
 });
 
@@ -65,6 +65,6 @@ export const SomeTags = make({
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
   },
 });

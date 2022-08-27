@@ -60,7 +60,7 @@ export const useAutomationDB = (
           isNew: true,
           source_file: "n/a",
           source_file_type: "n/a",
-          configuration_key: "n/a",
+          configuration_key: ["n/a"],
         },
         auto,
       ]);
@@ -97,7 +97,7 @@ const genMapping = (
       let found: AutomationData | null = null;
       let source_file = "n/a";
       let source_file_type = "n/a";
-      let configuration_key = "n/a";
+      let configuration_key = ["n/a"];
       if (configData[autoId]) {
         found = configData[entityData.attributes.id];
         title = found.alias ?? title;

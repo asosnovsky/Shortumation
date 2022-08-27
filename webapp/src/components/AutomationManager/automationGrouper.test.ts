@@ -42,7 +42,7 @@ const automations: AutomationManagerAuto[] = [
   isSelected: false,
   source_file: "automation.yaml",
   source_file_type: "list",
-  configuration_key: "automation",
+  configuration_key: ["automation"],
 }));
 
 const bigList = bigMockAutoList.map<AutomationManagerAuto>((a) => ({
@@ -55,7 +55,7 @@ const bigList = bigMockAutoList.map<AutomationManagerAuto>((a) => ({
   isSelected: false,
   source_file: "automation.yaml",
   source_file_type: "list",
-  configuration_key: "automation",
+  configuration_key: ["automation"],
 }));
 
 test("no grouping", () => {

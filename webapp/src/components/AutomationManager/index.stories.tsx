@@ -156,7 +156,7 @@ export const BadAutomation = make({
       description: "",
       source_file: "automation.yaml",
       source_file_type: "list",
-      configuration_key: "automation",
+      configuration_key: ["automation"],
       trigger: [
         {
           platform: "sun",

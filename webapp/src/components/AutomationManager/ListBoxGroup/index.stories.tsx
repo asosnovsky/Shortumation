@@ -28,7 +28,7 @@ const { make, componentMeta } = makeStory({
           state: "on",
           source_file: "automation.yaml",
           source_file_type: "list",
-          configuration_key: "automation",
+          configuration_key: ["automation"],
           flags: {
             isSelected: false,
             isModified: false,
@@ -42,7 +42,7 @@ const { make, componentMeta } = makeStory({
           state: "on",
           source_file: "automation.yaml",
           source_file_type: "list",
-          configuration_key: "automation",
+          configuration_key: ["automation"],
           flags: {
             isSelected: false,
             isModified: false,
@@ -92,7 +92,7 @@ export const Nested = make({
               state: "on",
               source_file: "automation.yaml",
               source_file_type: "list",
-              configuration_key: "automation",
+              configuration_key: ["automation"],
               flags: {
                 isSelected: true,
                 isModified: false,
@@ -107,7 +107,7 @@ export const Nested = make({
               state: "off",
               source_file: "automation.yaml",
               source_file_type: "list",
-              configuration_key: "automation",
+              configuration_key: ["automation"],
               flags: {
                 isSelected: false,
                 isModified: false,
@@ -122,7 +122,7 @@ export const Nested = make({
               state: "offing",
               source_file: "automation.yaml",
               source_file_type: "list",
-              configuration_key: "automation",
+              configuration_key: ["automation"],
               flags: {
                 isSelected: false,
                 isModified: false,
@@ -163,7 +163,7 @@ export const Nested = make({
           },
           source_file: "automation.yaml",
           source_file_type: "list",
-          configuration_key: "automation",
+          configuration_key: ["automation"],
           state: "on",
           tags: {
             type: "good",

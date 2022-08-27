@@ -18,7 +18,7 @@ export const createMockAuto = ({
   condition: [],
   source_file: "automation.yaml",
   source_file_type: "list",
-  configuration_key: "automation",
+  configuration_key: ["automation"],
   trigger: [
     {
       platform: "numeric_state",
@@ -87,7 +87,7 @@ export const bigMockAutoList: AutomationData[] = [
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger: [
       {
         device_id: "asdasdasdas",
@@ -239,7 +239,7 @@ export const bigMockAutoList: AutomationData[] = [
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger: [
       {
         platform: "device",
@@ -282,7 +282,7 @@ export const bigMockAutoList: AutomationData[] = [
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger: [
       {
         platform: "state",
@@ -417,7 +417,7 @@ export const bigMockAutoList: AutomationData[] = [
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     trigger: [
       {
         platform: "time",
@@ -480,7 +480,7 @@ export const bigMockAutoList: AutomationData[] = [
     mode: "single",
     source_file: "automation.yaml",
     source_file_type: "list",
-    configuration_key: "automation",
+    configuration_key: ["automation"],
     tags: {},
     trigger: [
       {

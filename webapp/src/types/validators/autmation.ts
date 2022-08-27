@@ -12,7 +12,7 @@ export const AutomationData = st.object({
 
   source_file: st.optional(st.string()),
   source_file_type: st.optional(st.string()),
-  configuration_key: st.optional(st.string()),
+  configuration_key: st.optional(st.array(st.string())),
 
   trigger: st.array(st.object()),
   condition: st.array(st.object()),

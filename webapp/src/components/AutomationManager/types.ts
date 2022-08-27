@@ -11,7 +11,7 @@ export type AutomationManagerAuto = AutomationManagerAutoUpdatable & {
   isNew?: boolean;
   source_file: string;
   source_file_type: string;
-  configuration_key: string;
+  configuration_key: string[];
 };
 export type AutomationManagerAutoItem = AutomationManagerAuto & {
   flags: AutomationManagerItemFlags;
