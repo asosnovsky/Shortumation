@@ -51,9 +51,3 @@ class loader_tests(TestCase):
             with self.subTest(name=folder.name):
                 hass_config = HassConfig(folder)
                 assert isinstance(hass_config.homeassistant, dict)
-
-    def test_load_packages(self):
-        for folder in SAMPLES_FOLDER.iterdir():
-            with self.subTest(name=folder.name):
-                hass_config = HassConfig(folder)
-                assert isinstance(hass_config.pacakges, dict)

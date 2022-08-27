@@ -26,18 +26,6 @@ class HassConfig:
         return {}
 
     @property
-    def pacakges(self) -> dict:
-        if packages_config := self.homeassistant.get("packages", None):
-            if isinstance(packages_config, IncludedYamlDir):  # type: ignore
-                packages_config = packages_config.to_normalized_json()
-            if isinstance(packages_config, dict):
-                return packages_config
-            else:
-                raise AssertionError("configurations.homeassistant.packages must be a dictionary!")
-
-        return {}
-
-    @property
     def automation_tags(self) -> TagManager:
         tag_path = self.get_automation_tags_path()
         if not tag_path.exists():

@@ -1,0 +1,17 @@
+ha: !include packages/ha.yaml
+sub: !include_dir_merge_named packages/sub
+secret_ones:
+  automation:
+    - id: "inline-package-auto"
+      alias: package ha
+      description: Example package auto
+      mode: single
+      trigger:
+        - platform: homeassistant
+          event: start
+      condition: []
+      action:
+        - service: counter.increment
+          data: {}
+          target:
+            entity_id: counter.up_times

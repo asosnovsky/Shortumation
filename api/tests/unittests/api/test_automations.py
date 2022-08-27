@@ -7,9 +7,9 @@ from fastapi.testclient import TestClient
 from src.api.app import make_app
 from src.automations.types import Automation, ExtenededAutomation
 from tests.utils import (
-    HA_CONFIG10_EXAMPLE,
     HA_CONFIG2_EXAMPLE,
     HA_CONFIG6_EXAMPLE,
+    HA_CONFIG10_EXAMPLE,
     get_example_automation_loader,
 )
 
@@ -389,7 +389,7 @@ class automation_update_split_config_tests(automation_update_tests):
 
 class automation_update_split_config_and_inline_config_tests(automation_update_tests):
     test_params = {
-        "total": 3,
+        "total": 4,
         "modify_item": 0,
         "consitency_tests": {},
     }

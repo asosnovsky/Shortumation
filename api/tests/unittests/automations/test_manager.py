@@ -14,6 +14,8 @@ from tests.utils import (
     HA_CONFIG6_EXAMPLE,
     HA_CONFIG8_EXAMPLE,
     HA_CONFIG10_EXAMPLE,
+    HA_CONFIG11_EXAMPLE,
+    HA_CONFIG12_EXAMPLE,
     HA_CONFIG_EXAMPLE,
     create_copy_of_example_config,
 )
@@ -324,11 +326,53 @@ class manager_tests(TestWithDB):
             {},
         )
 
-    def test_load_pacakges(self):
+    def test_load_pacakges_include_dir_named(self):
         _, automation_manager = self.get_manager(HA_CONFIG8_EXAMPLE)
         automation_manager.reload()
-        auto = automation_manager.get("package-sub")
-        self.assertEqual(auto.configuration_key, ["pacakage2"])
+
+        with self.subTest(name="inline"):
+            auto = automation_manager.get("package-sub")
+            self.assertEqual(auto.source_file_type, "inline")
+            self.assertEqual(auto.source_file, "packages/sub/package2.yaml")
+            self.assertEqual(auto.configuration_key, ["automation"])
+
+        with self.subTest(name="sub !inlcude"):
+            auto = automation_manager.get("ui1")
+            self.assertEqual(auto.source_file, "automations/ui.yaml")
+            self.assertEqual(auto.source_file_type, "list")
+            self.assertEqual(auto.configuration_key, [])
+
+    def test_load_pacakges_include_dir_merge_named(self):
+        _, automation_manager = self.get_manager(HA_CONFIG10_EXAMPLE)
+        automation_manager.reload()
+
+        with self.subTest(name="inline"):
+            auto = automation_manager.get("package2")
+            self.assertEqual(auto.source_file_type, "inline")
+            self.assertEqual(auto.source_file, "packages/sub/package2.yaml")
+            self.assertEqual(auto.configuration_key, ["package2", "automation"])
+
+        with self.subTest(name="sub !inlcude"):
+            auto = automation_manager.get("ui1")
+            self.assertEqual(auto.source_file, "automations/ui.yaml")
+            self.assertEqual(auto.source_file_type, "list")
+            self.assertEqual(auto.configuration_key, ["ha"])
+
+    def test_load_pacakges_include(self):
+        _, automation_manager = self.get_manager(HA_CONFIG11_EXAMPLE)
+        automation_manager.reload()
+
+        with self.subTest(name="inline"):
+            auto = automation_manager.get("package2")
+            self.assertEqual(auto.source_file_type, "list")
+            self.assertEqual(auto.source_file, "packages/sub/automation.yaml")
+            self.assertEqual(auto.configuration_key, ["sub"])
+
+        with self.subTest(name="sub !inlcude"):
+            auto = automation_manager.get("ui1")
+            self.assertEqual(auto.source_file, "automations/ui.yaml")
+            self.assertEqual(auto.source_file_type, "list")
+            self.assertEqual(auto.configuration_key, ["ha"])
 
     def test_load_inline_auto(self):
         _, automation_manager = self.get_manager(HA_CONFIG10_EXAMPLE)
@@ -336,3 +380,19 @@ class manager_tests(TestWithDB):
         auto = automation_manager.get("inline-auto")
         self.assertEqual(auto.source_file_type, "inline")
         self.assertEqual(auto.configuration_key, ["automation"])
+
+    def test_load_pacakges_nested_include_dir_merge_named(self):
+        _, automation_manager = self.get_manager(HA_CONFIG12_EXAMPLE)
+        automation_manager.reload()
+
+        with self.subTest(name="inline"):
+            auto = automation_manager.get("package2")
+            self.assertEqual(auto.source_file_type, "inline")
+            self.assertEqual(auto.source_file, "packages/sub/automation.yaml")
+            self.assertEqual(auto.configuration_key, ["automation"])
+
+        with self.subTest(name="sub !inlcude"):
+            auto = automation_manager.get("ui1")
+            self.assertEqual(auto.source_file, "automations/ui.yaml")
+            self.assertEqual(auto.source_file_type, "list")
+            self.assertEqual(auto.configuration_key, ["ha"])

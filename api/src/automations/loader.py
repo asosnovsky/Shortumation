@@ -8,6 +8,9 @@ from src.utils import extract_files
 from src.yaml_serializer import (
     IncludedYaml,
     IncludedYamlDir,
+    IncludedYamlDirList,
+    IncludedYamlDirMergedNamed,
+    IncludedYamlDirNamed,
     dump_yaml,
     load_yaml,
 )
@@ -40,8 +43,10 @@ def load_and_iter_automations(
                     ref.configuration_key,
                     tag_manager,
                 )
-            else:
+            elif isinstance(ref, InlineAutomation):
                 yield from load_automation_inline_ref(hass_config.root_path, tag_manager, ref)
+            else:
+                raise AssertionError(f"ref has an invalid type of {type(ref)} = {ref}")
         except InvalidAutomationFile as e:
             logger.error(e)
 
@@ -58,7 +63,7 @@ def extract_automation_refs(
         yield ref
 
     if not found:
-        yield IncludedAutoamtion([""], IncludedYaml(hass_config.get_default_automation_path()))
+        yield IncludedAutoamtion([""], IncludedYaml(hass_config.root_path / "automations.yaml"))
 
 
 def extract_automation_root_refs(
@@ -67,7 +72,7 @@ def extract_automation_root_refs(
     for key, value in extract_automation_keys(hass_config):
         logger.info(f"Loading automations from '{key}'")
         if isinstance(value, IncludedYamlDir):  # type: ignore
-            yield IncludedAutoamtion([key], value)
+            yield IncludedAutoamtion([key], value)  # type: ignore
         elif isinstance(value, list):
             yield InlineAutomation(
                 configuration_key=[key],
@@ -79,20 +84,118 @@ def extract_automation_root_refs(
 
 
 def extract_automation_package_refs(hass_config: HassConfig) -> AutomationExtractedIter:
-    for package_name, package_data in hass_config.pacakges.items():
-        if not isinstance(package_data, dict):
-            logger.warning(f"The package {package_name} is incorrectly configured!")
-        else:
-            if automations := package_data.get("automation", None):
-                logger.info(f"Loading automations from package '{package_name}'")
-                if isinstance(automations, IncludedYamlDir):  # type: ignore
-                    yield IncludedAutoamtion([package_name], automations)
-                elif isinstance(automations, list):
-                    logger.warning(
-                        f"Failed to load from '{package_name}' as no support for inline automations yet."
+    if packages_config := hass_config.homeassistant.get("packages", None):
+        if isinstance(packages_config, IncludedYaml):
+            packages = packages_config.to_normalized_json()
+            yield from extract_automation_inline_package_refs(
+                packages_config.path,
+                ["homeassistant", "packages"],
+                packages,
+            )
+        elif isinstance(packages_config, IncludedYamlDirList):
+            raise AssertionError("cannot configure packages with 'included_dir_list' directive")
+        elif isinstance(packages_config, IncludedYamlDirNamed):
+            packages = packages_config.to_normalized_json(use_path_as_keys=True)
+            for package_path, package in packages.items():
+                yield from extract_automation_inline_package_refs(
+                    package_path,
+                    [],
+                    {package_path.stem: package},
+                    ignore_package_name=True,
+                )
+        elif isinstance(packages_config, IncludedYamlDirMergedNamed):
+            for (
+                pacakge_set_path,
+                package_set,
+            ) in iter(packages_config):
+                if not isinstance(package_set, dict):
+                    raise AssertionError(
+                        f"expected {pacakge_set_path} to be a dictionary but got {type(package_set)}"
                     )
-                else:
-                    logger.warning(f"found an invalid type in {package_name}!")
+                yield from extract_automation_inline_package_refs(
+                    source_file=pacakge_set_path,
+                    prefix_config_keys=[],
+                    packages_config=package_set,
+                )
+        elif isinstance(packages_config, dict):
+            yield from extract_automation_inline_package_refs(
+                hass_config.root_path,
+                ["homeassistant", "packages"],
+                packages_config,
+            )
+        else:
+            raise AssertionError("configurations.homeassistant.packages must be a dictionary!")
+
+
+def extract_automation_inline_package_refs(
+    source_file: Path,
+    prefix_config_keys: ConfigurationKey,
+    packages_config: dict,
+    ignore_package_name=False,
+) -> AutomationExtractedIter:
+    for package_name, package_data in packages_config.items():
+        if isinstance(package_data, IncludedYaml):
+            package_mapping = package_data.to_normalized_json()
+            yield from extract_automation_from_package(
+                package_data=package_mapping,
+                package_name=package_name,
+                source_file=source_file,
+                prefix_config_keys=prefix_config_keys,
+                ignore_package_name=ignore_package_name,
+            )
+        elif isinstance(package_data, IncludedYamlDirList):
+            raise NotImplementedError(package_data)
+        elif isinstance(package_data, IncludedYamlDirNamed):
+            for package_key_path in package_data.to_normalized_json(True).keys():
+                if package_key_path.stem == "automation":
+                    yield IncludedAutoamtion(
+                        configuration_key=[package_name], ref=IncludedYaml(package_key_path)
+                    )
+        elif isinstance(package_data, IncludedYamlDirMergedNamed):
+            for data_path, data_set in iter(package_data):
+                yield from extract_automation_from_package(
+                    package_name=package_name,
+                    package_data=data_set,
+                    source_file=data_path,
+                    prefix_config_keys=[],
+                    ignore_package_name=True,
+                )
+        elif isinstance(package_data, dict):
+            yield from extract_automation_from_package(
+                package_data=package_data,
+                package_name=package_name,
+                source_file=source_file,
+                prefix_config_keys=prefix_config_keys,
+                ignore_package_name=ignore_package_name,
+            )
+        else:
+            raise AssertionError(
+                f"configurations.homeassistant.packages[{package_name}] must be a dictionary!"
+            )
+
+
+def extract_automation_from_package(
+    package_name: str,
+    package_data: dict,
+    source_file: Path,
+    prefix_config_keys: ConfigurationKey,
+    ignore_package_name=False,
+) -> AutomationExtractedIter:
+    if automations := package_data.get("automation", None):
+        logger.info(f"Loading automations from package '{package_name}'")
+        suffix_keys = [package_name] if not ignore_package_name else []
+        if isinstance(automations, IncludedYamlDir):  # type: ignore
+            yield IncludedAutoamtion(suffix_keys, automations)
+        elif isinstance(automations, list):
+            yield InlineAutomation(
+                source_file=source_file,
+                configuration_key=[*prefix_config_keys, *suffix_keys, "automation"],
+                automations=automations,
+            )
+        else:
+            logger.warning(
+                f"found an invalid type in {package_name}! automations must be included or inlined as a list"
+            )
 
 
 def get_base_automation_key(hass_config: HassConfig) -> Tuple[ConfigurationKey, str]:
@@ -137,7 +240,7 @@ def load_automation_inline_ref(
                 **clean_automation(auto),
                 tags=tag_manager.get(auto["id"], {}),
                 configuration_key=inline_automation.configuration_key,
-                source_file=str(inline_automation.source_file.relative_to(root_path)),
+                source_file=str(inline_automation.source_file.resolve().relative_to(root_path)),
                 source_file_type="inline",
             )
         except Exception as err:
@@ -187,7 +290,7 @@ def load_automation_path(
                     **clean_automation(automations),
                     tags=tag_manager.get(automations["id"], {}),
                     configuration_key=configuration_key,
-                    source_file=str(automation_path.relative_to(root_path)),
+                    source_file=str(automation_path.resolve().relative_to(root_path)),
                     source_file_type="obj",
                 )
             except Exception as err:
@@ -206,7 +309,7 @@ def load_automation_path(
                         **clean_automation(automation),
                         tags=tag_manager.get(automation["id"], {}),
                         configuration_key=configuration_key,
-                        source_file=str(automation_path.relative_to(root_path)),
+                        source_file=str(automation_path.resolve().relative_to(root_path)),
                         source_file_type="list",
                     )
                 except Exception as err:

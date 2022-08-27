@@ -1,0 +1,14 @@
+automation:
+  - id: "package2"
+    alias: package ha
+    description: Example package auto
+    mode: single
+    trigger:
+      - platform: homeassistant
+        event: start
+    condition: []
+    action:
+      - service: counter.increment
+        data: {}
+        target:
+          entity_id: counter.up_times

@@ -1,0 +1,2 @@
+ha: !include packages/ha.yaml
+sub: !include_dir_named packages/sub

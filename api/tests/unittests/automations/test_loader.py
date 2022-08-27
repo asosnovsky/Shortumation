@@ -19,6 +19,8 @@ from tests.utils import (
     HA_CONFIG8_EXAMPLE,
     HA_CONFIG9_EXAMPLE,
     HA_CONFIG10_EXAMPLE,
+    HA_CONFIG11_EXAMPLE,
+    HA_CONFIG12_EXAMPLE,
     HA_CONFIG_EXAMPLE,
 )
 
@@ -153,9 +155,11 @@ class loader_tests(TestCase):
             (HA_CONFIG5_EXAMPLE, 3),
             (HA_CONFIG6_EXAMPLE, 4),
             (HA_CONFIG7_EXAMPLE, 1),
-            (HA_CONFIG8_EXAMPLE, 1),
+            (HA_CONFIG8_EXAMPLE, 2),
             (HA_CONFIG9_EXAMPLE, 1),
-            (HA_CONFIG10_EXAMPLE, 2),
+            (HA_CONFIG10_EXAMPLE, 3),
+            (HA_CONFIG11_EXAMPLE, 3),
+            (HA_CONFIG12_EXAMPLE, 4),
         ]:
             with self.subTest(config_name=ha_path.name, expected=expected):
                 hass_config = HassConfig(ha_path)

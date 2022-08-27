@@ -127,9 +127,17 @@ class AutomationManager:
             )
             automation_path.write_text(dump_yaml(objs, self.hass_config.root_path))
         elif automation.source_file_type == "inline":
+            if not isinstance(objs, dict):
+                raise AssertionError(
+                    f"expected {automation.source_file} to be a dict instead found {type(objs)}"
+                )
             update_obj = objs
             for key in automation.configuration_key:
                 update_obj = update_obj[key]
+            if not isinstance(update_obj, list):
+                raise AssertionError(
+                    f"expected {automation.source_file}@{automation.configuration_key} to be a list instead found {type(update_obj)}"
+                )
             update_or_append_to_automation_list(
                 objs=update_obj,
                 automation=automation,

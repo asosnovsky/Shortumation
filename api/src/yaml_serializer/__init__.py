@@ -78,9 +78,12 @@ class IncludedYamlDirMergedNamed(NamedTuple):
     def from_yaml(cls, constructor, node: Node):
         return cls(constructor.root_path / node.value)
 
+    def __iter__(self):
+        return load_dir_yaml(self.path)
+
     def to_normalized_json(self):
         out = {}
-        for path, data in load_dir_yaml(self.path):
+        for path, data in self:
             overlap = set(data.keys()).intersection(set(out.keys()))
             if len(overlap) > 0:
                 raise AssertionError(
@@ -111,11 +114,11 @@ class IncludedYamlDirNamed(NamedTuple):
     def from_yaml(cls, constructor, node: Node):
         return cls(constructor.root_path / node.value)
 
-    def to_normalized_json(self):
+    def to_normalized_json(self, use_path_as_keys=False):
         out = {}
         for path, data in load_dir_yaml(self.path):
             if out.get(path.name, None) is None:
-                out[path.stem] = data
+                out[path.stem if not use_path_as_keys else path] = data
             else:
                 raise AssertionError(
                     f"expected {path.name} to be a unique file name but found a second file name in {path}"
