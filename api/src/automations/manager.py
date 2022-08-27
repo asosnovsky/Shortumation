@@ -109,7 +109,7 @@ class AutomationManager:
                 )
             raw_auto = automation.to_primitive(include_tags=False)
             automation_path.write_text(dump_yaml(raw_auto, self.hass_config.root_path))
-        else:
+        elif automation.source_file_type == "list":
             if isinstance(objs, dict):
                 raise AttemptingToOverwriteAnIncompatibleFileError(
                     f"{automation_path} is a list, but expected a obj for {automation}"
@@ -120,20 +120,23 @@ class AutomationManager:
                 raise AssertionError(
                     f"Attemption to save automation to {automation_path} but encountering an invalid list yaml file. Did you modify this file prior to saving?\n{automation}"
                 )
-            found = False
-            for i, obj in enumerate(objs):
-                if obj["id"] == automation.id:
-                    objs[i] = automation.to_primitive(include_tags=False)
-                    found = True
-                    break
-            if not found:
-                if create_if_not_found:
-                    objs.append(automation.to_primitive(include_tags=False))
-                else:
-                    raise InvalidAutomationFile(
-                        "Could not update automations, not found in source file."
-                    )
+            update_or_append_to_automation_list(
+                objs=objs,
+                automation=automation,
+                create_if_not_found=create_if_not_found,
+            )
             automation_path.write_text(dump_yaml(objs, self.hass_config.root_path))
+        elif automation.source_file_type == "inline":
+            update_obj = objs
+            for key in automation.configuration_key:
+                update_obj = update_obj[key]
+            update_or_append_to_automation_list(
+                objs=update_obj,
+                automation=automation,
+                create_if_not_found=create_if_not_found,
+            )
+            automation_path.write_text(dump_yaml(objs, self.hass_config.root_path))
+
         self.update_tags(automation.id, automation.tags)
 
     def update_tags(self, automation_id: str, tags: dict[str, str]):
@@ -164,3 +167,19 @@ class AutomationManager:
                         kept.append(obj)
                 automation_path.write_text(dump_yaml(kept, self.hass_config.root_path))
         self.delete_tags(automation.id)
+
+
+def update_or_append_to_automation_list(
+    objs: list[dict],
+    automation: ExtenededAutomation,
+    create_if_not_found: bool = False,
+):
+    for i, obj in enumerate(objs):
+        if obj["id"] == automation.id:
+            objs[i] = automation.to_primitive(include_tags=False)
+            return True
+    if create_if_not_found:
+        objs.append(automation.to_primitive(include_tags=False))
+    else:
+        raise InvalidAutomationFile("Could not update automations, not found in source file.")
+    return False

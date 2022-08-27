@@ -1,11 +1,28 @@
 import json
-from typing import Iterator, Literal, Optional, Union
+from pathlib import Path
+from typing import Iterator, Literal, NamedTuple, Optional, Union
 
 from pydantic import BaseModel
 from pydantic.fields import Field
 
+from src.yaml_serializer import IncludedYamlDir
+
 ConfigurationKey = list[str]
-AutomationPathIter = Iterator[tuple[ConfigurationKey, str]]
+
+
+class InlineAutomation(NamedTuple):
+    configuration_key: ConfigurationKey
+    source_file: Path
+    automations: list[dict]
+
+
+class IncludedAutoamtion(NamedTuple):
+    configuration_key: ConfigurationKey
+    ref: IncludedYamlDir
+
+
+ExtractedAutomation = InlineAutomation | IncludedAutoamtion
+AutomationExtractedIter = Iterator[ExtractedAutomation]
 
 
 class BaseAutomation(BaseModel):

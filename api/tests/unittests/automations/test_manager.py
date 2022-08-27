@@ -334,5 +334,5 @@ class manager_tests(TestWithDB):
         _, automation_manager = self.get_manager(HA_CONFIG10_EXAMPLE)
         automation_manager.reload()
         auto = automation_manager.get("inline-auto")
-        self.assertEqual(auto.source_file_type, ["inline"])
+        self.assertEqual(auto.source_file_type, "inline")
         self.assertEqual(auto.configuration_key, ["automation"])

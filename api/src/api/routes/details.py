@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from src.automations.loader import extract_automation_paths
+from src.automations.loader import extract_automation_refs
 from src.env import BUILD_VERSION, HASSIO_TOKEN, HASSIO_WS
 from src.hass_config import HassConfig
 
@@ -18,7 +18,7 @@ def make_details_router(hass_config: HassConfig) -> APIRouter:
             "tags": hass_config.get_automation_tags_path(),
             "autos": {
                 config_key: auto_file
-                for config_key, auto_file in extract_automation_paths(hass_config)
+                for config_key, auto_file in extract_automation_refs(hass_config)
             },
         }
 

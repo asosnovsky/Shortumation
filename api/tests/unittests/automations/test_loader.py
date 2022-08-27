@@ -3,7 +3,7 @@ from tempfile import mktemp
 from unittest import TestCase
 
 from src.automations.loader import (
-    extract_automation_paths,
+    extract_automation_refs,
     load_automation_path,
 )
 from src.automations.tags import TagManager
@@ -155,9 +155,9 @@ class loader_tests(TestCase):
             (HA_CONFIG7_EXAMPLE, 1),
             (HA_CONFIG8_EXAMPLE, 1),
             (HA_CONFIG9_EXAMPLE, 1),
-            (HA_CONFIG10_EXAMPLE, 1),
+            (HA_CONFIG10_EXAMPLE, 2),
         ]:
             with self.subTest(config_name=ha_path.name, expected=expected):
                 hass_config = HassConfig(ha_path)
-                paths = list(extract_automation_paths(hass_config))
-                self.assertEqual(len(paths), expected)
+                refs = list(extract_automation_refs(hass_config))
+                self.assertEqual(len(refs), expected)

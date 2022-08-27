@@ -15,7 +15,13 @@ from src.yaml_serializer import (
 from ..hass_config.loader import HassConfig
 from .errors import InvalidAutomationFile
 from .tags import TagManager
-from .types import AutomationPathIter, ConfigurationKey, ExtenededAutomation
+from .types import (
+    AutomationExtractedIter,
+    ConfigurationKey,
+    ExtenededAutomation,
+    IncludedAutoamtion,
+    InlineAutomation,
+)
 
 logger = get_logger(__file__)
 
@@ -25,47 +31,54 @@ AUTOMATION_CONFIGURATION_KEY = "automation shortumation"
 def load_and_iter_automations(
     hass_config: HassConfig, tag_manager: TagManager
 ) -> Iterator[ExtenededAutomation]:
-    for config_key, p in extract_automation_paths(hass_config):
+    for ref in extract_automation_refs(hass_config):
         try:
-            yield from load_automation_path(
-                hass_config.root_path,
-                hass_config.root_path / p,
-                config_key,
-                tag_manager,
-            )
+            if isinstance(ref, IncludedAutoamtion):
+                yield from load_automation_path(
+                    hass_config.root_path,
+                    hass_config.root_path / ref.ref.path,
+                    ref.configuration_key,
+                    tag_manager,
+                )
+            else:
+                yield from load_automation_inline_ref(hass_config.root_path, tag_manager, ref)
         except InvalidAutomationFile as e:
             logger.error(e)
 
 
-def extract_automation_paths(
+def extract_automation_refs(
     hass_config: HassConfig,
-) -> AutomationPathIter:
+) -> AutomationExtractedIter:
     found = False
 
-    for config_key, automation_path in chain(
-        extract_automation_root_paths(hass_config), extract_package_automation_paths(hass_config)
+    for ref in chain(
+        extract_automation_root_refs(hass_config), extract_automation_package_refs(hass_config)
     ):
         found = True
-        yield config_key, automation_path
+        yield ref
 
     if not found:
-        yield [""], "automations.yaml"
+        yield IncludedAutoamtion([""], IncludedYaml(hass_config.get_default_automation_path()))
 
 
-def extract_automation_root_paths(
+def extract_automation_root_refs(
     hass_config: HassConfig,
-) -> AutomationPathIter:
+) -> AutomationExtractedIter:
     for key, value in extract_automation_keys(hass_config):
         logger.info(f"Loading automations from '{key}'")
         if isinstance(value, IncludedYamlDir):  # type: ignore
-            yield [key], str(value.path.relative_to(hass_config.root_path))
+            yield IncludedAutoamtion([key], value)
         elif isinstance(value, list):
-            logger.warning(f"Failed to load from '{key}' as no support for inline automations yet.")
+            yield InlineAutomation(
+                configuration_key=[key],
+                automations=value,
+                source_file=hass_config.get_configuration_path(),
+            )
         else:
             logger.warning(f"found an invalid type in {key}!")
 
 
-def extract_package_automation_paths(hass_config: HassConfig) -> AutomationPathIter:
+def extract_automation_package_refs(hass_config: HassConfig) -> AutomationExtractedIter:
     for package_name, package_data in hass_config.pacakges.items():
         if not isinstance(package_data, dict):
             logger.warning(f"The package {package_name} is incorrectly configured!")
@@ -73,7 +86,7 @@ def extract_package_automation_paths(hass_config: HassConfig) -> AutomationPathI
             if automations := package_data.get("automation", None):
                 logger.info(f"Loading automations from package '{package_name}'")
                 if isinstance(automations, IncludedYamlDir):  # type: ignore
-                    yield [package_name], str(automations.path.relative_to(hass_config.root_path))
+                    yield IncludedAutoamtion([package_name], automations)
                 elif isinstance(automations, list):
                     logger.warning(
                         f"Failed to load from '{package_name}' as no support for inline automations yet."
@@ -104,17 +117,35 @@ def get_base_automation_key(hass_config: HassConfig) -> Tuple[ConfigurationKey, 
 
 def extract_automation_keys(
     hass_config: HassConfig,
-) -> Iterator[Tuple[str, IncludedYamlDir]]:
+) -> Iterator[Tuple[str, IncludedYamlDir | list]]:
     for key, value in hass_config.configurations.items():
         if str(key).startswith("automation"):
-            if isinstance(value, dict) or isinstance(value, list):
-                raise NotImplementedError(
-                    "No support for automations baked into configuration.yaml! Please extract these into a seperate file"
-                )
+            if isinstance(value, list):
+                yield key, value
             elif isinstance(value, IncludedYamlDir):  # type: ignore
                 yield key, value
             else:
                 logger.warning(f"found an invalid type in {key}!")
+
+
+def load_automation_inline_ref(
+    root_path: Path, tag_manager: TagManager, inline_automation: InlineAutomation
+) -> Iterator[ExtenededAutomation]:
+    for auto in inline_automation.automations:
+        try:
+            yield ExtenededAutomation(
+                **clean_automation(auto),
+                tags=tag_manager.get(auto["id"], {}),
+                configuration_key=inline_automation.configuration_key,
+                source_file=str(inline_automation.source_file.relative_to(root_path)),
+                source_file_type="inline",
+            )
+        except Exception as err:
+            raise InvalidAutomationFile(
+                when="reading file contents",
+                automation_path=inline_automation.source_file,
+                error=err,
+            ) from err
 
 
 def load_automation_path(
