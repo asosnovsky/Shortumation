@@ -1,5 +1,14 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.6.3] - Packages Support & Minor UI improvements
+
+- Full split config support for packages and all advance include directives (i.e. !include_dir_named, !include_dir_merge_list etc)
+- Updated metadata box to display origin of the file
+- Support for inlined automations!
+
+![image](https://user-images.githubusercontent.com/7451445/187043147-15cea23b-0b64-4484-9c87-747998ea9fe6.png)
+
+
 ## [0.6.2] - Patches
 
 - Attempting to increasing websocket file limit
