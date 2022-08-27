@@ -28,10 +28,6 @@
     max-width: calc(80% - 5em);
 }
 
-.automation-manager--metadatabox .metadatabox--switch {
-    width: 5em;
-}
-
 .automation-manager--metadatabox .metadatabox--title .title {
     font-size: 1.25em;
     font-weight: bold;
@@ -91,7 +87,8 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 0.75em;
+    font-size: 0.5em;
+    width: 5em;
     user-select: none;
     max-width: var(--metadatabox--switch-width);
 }

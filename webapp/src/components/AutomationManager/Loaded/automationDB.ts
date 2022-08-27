@@ -87,8 +87,8 @@ const genMapping = (
   > = {};
   Object.entries(haEntities)
     .filter(([entityId, _]) => entityId.toLowerCase().startsWith("automation."))
-    .forEach(([entityId, entityData]) => {
-      const autoId = entityData.attributes.id;
+    .forEach(([entityId, entityData], i) => {
+      const autoId = entityData.attributes.id ?? `${entityData.state}-${i}`;
       let title = entityData.attributes.friendly_name ?? "";
       let description = "";
       let issue: string | undefined = ["on", "off"].includes(entityData.state)

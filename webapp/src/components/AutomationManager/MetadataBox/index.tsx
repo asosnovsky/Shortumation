@@ -48,15 +48,17 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           disabled={!isValidState}
           color={!isValidState ? "error" : "info"}
         />
-        {!isValidState && `Invalid state: '${props.state}'`}
+        {!isValidState && props.state}
       </div>
       <div className="metadatabox--title">
         <span className="metadatabox--title--source">
           <Tooltip
-            title={`This automation is located in the file ${props.source_file} and is set up in your configuration.yaml file under the key ${props.configuration_key}.`}
+            title={`This automation is located in the file ${props.source_file}. It's currently '${props.state}', it's entity id is '${props.entityId}' and it's automation id is '${props.id}'`}
           >
             <Chip
-              label={`@${props.source_file} (${props.source_file_type})`}
+              label={`@${props.source_file} (${props.source_file_type}) - ${
+                props.entityId ?? "n/a"
+              }`}
               className="text-ellipsis"
             />
           </Tooltip>
