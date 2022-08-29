@@ -13,6 +13,7 @@ import { prettyName } from "utils/formatting";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
+import { useLang } from "lang";
 
 export const CollectionNodeElement: FC<PropsWithChildren<CollectionNodeProps>> =
   ({
@@ -27,6 +28,7 @@ export const CollectionNodeElement: FC<PropsWithChildren<CollectionNodeProps>> =
     title,
     children,
   }) => {
+    const lang = useLang();
     const color = convertNodeTypeToSequenceNodeColor(collectionType);
     const nodeColor = useSequenceNodeColor(color);
     const confirm = useConfirm();
@@ -55,14 +57,19 @@ export const CollectionNodeElement: FC<PropsWithChildren<CollectionNodeProps>> =
                 })
                   .then(() => {
                     onDelete();
-                    snackbr.enqueueSnackbar("Deleted.", {
+                    snackbr.enqueueSnackbar(lang.get("DELETED"), {
                       variant: "info",
                     });
                   })
                   .catch(() =>
-                    snackbr.enqueueSnackbar(`Did not delete ${trueTile}.`, {
-                      variant: "info",
-                    })
+                    snackbr.enqueueSnackbar(
+                      lang.get("NOT_DELETED_THING", {
+                        item: trueTile,
+                      }),
+                      {
+                        variant: "info",
+                      }
+                    )
                   );
               }}
               borderless

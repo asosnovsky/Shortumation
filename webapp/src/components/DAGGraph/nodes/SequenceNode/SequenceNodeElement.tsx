@@ -16,6 +16,7 @@ import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { SpeedDial } from "components/SpeedDial";
 import { SequenceNodeElementProps } from "./types";
 import { useSequenceNodeColor } from "./util";
+import { useLang } from "lang";
 
 export const SequenceNodeElement: FC<
   PropsWithChildren<SequenceNodeElementProps>
@@ -35,6 +36,7 @@ export const SequenceNodeElement: FC<
   isClosed,
   setIsClosed,
 }) => {
+  const langStore = useLang();
   const confirm = useConfirm();
   const snackbr = useSnackbar();
   const nodeColor = useSequenceNodeColor(color);
@@ -89,18 +91,21 @@ export const SequenceNodeElement: FC<
               <IconButton
                 onClick={() => {
                   confirm({
-                    description: "Are you sure you want to delete this node?",
+                    description: langStore.get("CONFIRMATION_DELETE_THIS_NODE"),
                   })
                     .then(() => {
                       onXClick();
-                      snackbr.enqueueSnackbar("Deleted.", {
+                      snackbr.enqueueSnackbar(langStore.get("DELETED"), {
                         variant: "info",
                       });
                     })
                     .catch(() =>
-                      snackbr.enqueueSnackbar("Did not delete node.", {
-                        variant: "info",
-                      })
+                      snackbr.enqueueSnackbar(
+                        langStore.get("NOT_DELETED_NODE"),
+                        {
+                          variant: "info",
+                        }
+                      )
                     );
                 }}
                 size="small"

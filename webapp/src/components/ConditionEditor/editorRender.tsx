@@ -31,6 +31,7 @@ import { prettyName } from "utils/formatting";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";
 import { RemoveCircle } from "@mui/icons-material";
+import { LangStore } from "lang";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{
@@ -38,6 +39,7 @@ interface Editor<C extends AutomationCondition>
     onChange: (condition: C) => void;
     ha: HAService;
     initialViewMode: ConditionNodeBaseViewMode;
+    langStore: LangStore;
   }> {}
 
 export const getEditor = (condition: AutomationCondition): Editor<any> => {
@@ -70,11 +72,12 @@ export const getEditor = (condition: AutomationCondition): Editor<any> => {
 export const TemplateEditor: Editor<TemplateCondition> = ({
   onChange,
   condition,
+  langStore,
 }) => {
   return (
     <>
       <InputYaml
-        label="Template"
+        label={langStore.get("TEMPLATE")}
         value={condition.value_template}
         onChange={(value_template) =>
           onChange({
@@ -119,6 +122,7 @@ export const DeviceConditionEditor: Editor<DeviceCondition> = ({
 export const NumericStateEditor: Editor<NumericCondition> = ({
   onChange,
   condition,
+  langStore,
 }) => {
   return (
     <>
@@ -133,7 +137,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
         }
       />
       <InputText
-        label="Attribute"
+        label={langStore.get("ATTRIBUTE")}
         value={condition.attribute ?? ""}
         onChange={(attribute) =>
           onChange({
@@ -143,7 +147,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
         }
       />
       <InputNumber
-        label="Above"
+        label={langStore.get("ABOVE")}
         value={condition.above ? Number(condition.above) : undefined}
         onChange={(above) =>
           onChange({
@@ -153,7 +157,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
         }
       />
       <InputNumber
-        label="Below"
+        label={langStore.get("BELOW")}
         value={condition.below ? Number(condition.below) : undefined}
         onChange={(below) =>
           onChange({
@@ -163,7 +167,7 @@ export const NumericStateEditor: Editor<NumericCondition> = ({
         }
       />
       <InputYaml
-        label="Template"
+        label={langStore.get("TEMPLATE")}
         value={condition.value_template ?? ""}
         onChange={(value_template) =>
           onChange({
@@ -221,6 +225,7 @@ export const StateEditor: Editor<StateCondition> = ({
   onChange,
   condition,
   ha,
+  langStore,
 }) => {
   const restrictToDomain =
     !condition.entity_id || condition.entity_id.length === 0
@@ -241,7 +246,7 @@ export const StateEditor: Editor<StateCondition> = ({
         }
       />
       <InputAutoComplete
-        label="Attribute"
+        label={langStore.get("ATTRIBUTE")}
         value={condition.attribute ?? ""}
         options={ha.entities.getAttributes(condition.entity_id)}
         multiple={false}
@@ -253,11 +258,11 @@ export const StateEditor: Editor<StateCondition> = ({
         }
       />
       <InputText
-        label="State"
+        label={langStore.get("STATE")}
         value={String(condition.state)}
         placeholder={ha.entities
           .getStates(condition.entity_id, condition.attribute)
-          .join(" or ")}
+          .join(` ${langStore.get("OR").toLowerCase()} `)}
         onChange={(state) =>
           onChange({
             ...condition,
@@ -280,7 +285,11 @@ export const StateEditor: Editor<StateCondition> = ({
 };
 
 type TimeEditorShows = "after" | "before" | "weekday";
-export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
+export const TimeEditor: Editor<TimeCondition> = ({
+  onChange,
+  condition,
+  langStore,
+}) => {
   const [shows, setShows] = useState<TimeEditorShows[]>(
     Object.keys(condition).filter((k) =>
       ["after", "before", "weekday"].includes(k)
@@ -321,19 +330,19 @@ export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
               <b className="label">{prettyName(show)}</b>
               <InputAutoComplete
                 className="condition-node--time-editor--weekday"
-                label="Weekday"
+                label={langStore.get("WEEKDAY")}
                 value={condition.weekday ?? []}
                 multiple={true}
                 getID={(opt) => opt}
                 getLabel={(opt) => {
                   return {
-                    mon: "Monday",
-                    tue: "Tuesday",
-                    wed: "Wednesday",
-                    thu: "Thursday",
-                    fri: "Friday",
-                    sat: "Saturday",
-                    sun: "Sunday",
+                    mon: langStore.get("DAY_mon"),
+                    tue: langStore.get("DAY_tue"),
+                    wed: langStore.get("DAY_wed"),
+                    thu: langStore.get("DAY_thu"),
+                    fri: langStore.get("DAY_fri"),
+                    sat: langStore.get("DAY_sat"),
+                    sun: langStore.get("DAY_sun"),
                   }[opt];
                 }}
                 onChange={(weekday: any) =>
@@ -362,7 +371,7 @@ export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
       {shows.length < 3 && (
         <InputList
           className="condition-node--time-editor--new"
-          label="Option"
+          label={langStore.get("OPTION")}
           options={["after", "before", "weekday"].filter(
             (k: any) => !shows.includes(k)
           )}
@@ -378,11 +387,12 @@ export const TimeEditor: Editor<TimeCondition> = ({ onChange, condition }) => {
 export const TriggerEditor: Editor<TriggerCondition> = ({
   onChange,
   condition,
+  langStore,
 }) => {
   return (
     <>
       <InputText
-        label="Trigger ID"
+        label={langStore.get("TRIGGER_ID")}
         value={condition.id}
         onChange={(id) =>
           onChange({
@@ -395,11 +405,15 @@ export const TriggerEditor: Editor<TriggerCondition> = ({
   );
 };
 
-export const ZoneEditor: Editor<ZoneCondition> = ({ onChange, condition }) => {
+export const ZoneEditor: Editor<ZoneCondition> = ({
+  onChange,
+  condition,
+  langStore,
+}) => {
   return (
     <>
       <InputEntity
-        label="Zone"
+        label={langStore.get("ZONE")}
         value={condition.zone ?? []}
         multiple
         onChange={(zone) =>
@@ -411,7 +425,7 @@ export const ZoneEditor: Editor<ZoneCondition> = ({ onChange, condition }) => {
         restrictToDomain={["zone"]}
       />
       <InputEntity
-        label="Entity with Location"
+        label={langStore.get("ENTITY_WITH_LOCATION")}
         value={condition.entity_id}
         multiple
         onChange={(entity_id) =>

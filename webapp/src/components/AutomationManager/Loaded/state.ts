@@ -7,6 +7,7 @@ import { useAutomationDB } from "./automationDB";
 import { useConfirm } from "material-ui-confirm";
 import { AutomationManagerAutoUpdatable } from "../types";
 import { useSnackbar } from "notistack";
+import { useLang } from "lang";
 
 export type UseAutomationManagerStateArgs = {
   configAutomations: AutomationData[];
@@ -26,6 +27,7 @@ export const useAutomationManagerState = ({
   onAutomationStateChange,
 }: UseAutomationManagerStateArgs) => {
   // state
+  const langStore = useLang();
   const confirm = useConfirm();
   const snackbr = useSnackbar();
   const cookies = useAMSCookies();
@@ -44,10 +46,9 @@ export const useAutomationManagerState = ({
   const stillHaveNewAreYouSure = async () => {
     try {
       await confirm({
-        content:
-          "Selecting another automation will cause you to lose all work done on this new automation. Please save your work on this automation first.",
-        confirmationText: "Switch Automation",
-        cancellationText: "Cancel",
+        content: langStore.get("WARNING_SWITCHING_FROM_NONE_SAVE"),
+        confirmationText: langStore.get("SWITCH_AUTOMATION"),
+        cancellationText: langStore.get("CANCEL"),
       });
       return true;
     } catch (_) {
@@ -128,9 +129,10 @@ export const useAutomationManagerState = ({
         }
       } else {
         snackbr.enqueueSnackbar(
-          `Failed to save automation "${aid}" contents - ${JSON.stringify(
-            a
-          )} -- not found in /config`,
+          langStore.get("ERROR_FAILED_TO_SAVE", {
+            aid,
+            contents: JSON.stringify(a),
+          }),
           { variant: "error" }
         );
       }

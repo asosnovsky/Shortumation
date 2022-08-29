@@ -12,6 +12,7 @@ import { getViewer } from "./viewRender";
 import { getEditor } from "./editorRender";
 import useWindowSize from "utils/useWindowSize";
 import { ConditionNodeSettings } from "./ConditionNodeSettings";
+import { useLang } from "lang";
 
 export type ConditionNodeBaseProps = {
   condition: AutomationCondition;
@@ -24,6 +25,7 @@ export type ConditionNodeBaseViewMode = "edit" | "yaml" | "view";
 export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
   // state
   const ha = useHA();
+  const langStore = useLang();
   const { isMobile } = useWindowSize();
   const [{ isEdited, condition }, setCondition] = useState<{
     isEdited: boolean;
@@ -61,6 +63,7 @@ export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
         onChange={updateCondition}
         ha={ha}
         initialViewMode="edit"
+        langStore={langStore}
       />
     );
   }
@@ -101,6 +104,7 @@ export const ConditionNodeBase: FC<ConditionNodeBaseProps> = (props) => {
               },
             } as any)
           }
+          prettyOptionLabels={false}
         />
         {isMobile && icons}
       </div>

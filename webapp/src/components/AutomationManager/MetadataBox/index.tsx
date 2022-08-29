@@ -15,6 +15,7 @@ import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
 import { Chip, Tooltip } from "@mui/material";
+import { useLang } from "lang";
 
 export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;
@@ -28,6 +29,10 @@ export type MetadataBoxProps = AutomationManagerAuto & {
 };
 export const MetadataBox: FC<MetadataBoxProps> = (props) => {
   const isValidState = ["on", "off"].includes(props.state);
+  const langStore = useLang();
+  const prettyState = ["on", "off"].includes(props.state)
+    ? langStore.get(`AUTOMATION_STATE_${props.state}`)
+    : props.state;
   return (
     <div
       className={[
@@ -38,7 +43,13 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
     >
       <div
         className="metadatabox--switch"
-        title={!isValidState ? "Invalid state" : `Automation is ${props.state}`}
+        title={
+          !isValidState
+            ? langStore.get("ERROR_INVALID_AUTOMATION_STATE")
+            : langStore.get("AUTOMATION_STATE_IS", {
+                state: prettyState,
+              })
+        }
       >
         <Switch
           checked={props.state !== "off"}
@@ -53,11 +64,16 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
       <div className="metadatabox--title">
         <span className="metadatabox--title--source">
           <Tooltip
-            title={`This automation is located in the file ${props.source_file}. It's currently '${props.state}', it's entity id is '${props.entityId}' and it's automation id is '${props.id}'`}
+            title={langStore.get("AUTOMATION_METADATA_TOOLTIP_TEXT", {
+              source_file: props.source_file,
+              state: prettyState,
+              entityId: props.entityId,
+              id: props.id,
+            })}
           >
             <Chip
               label={`@${props.source_file} (${props.source_file_type}) - ${
-                props.entityId ?? "n/a"
+                props.entityId ?? langStore.get("N/A")
               }`}
               className="text-ellipsis"
             />
@@ -66,7 +82,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         <Tooltip title={`ID=${props.id}, EntityID=${props.entityId}`}>
           <InputTextView
             className="title"
-            placeholder="Title"
+            placeholder={langStore.get("TITLE")}
             value={props.title}
             onChange={props.onTitleUpdate}
             disabled={props.isNew}
@@ -74,7 +90,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
         </Tooltip>
         <InputTextView
           className="description"
-          placeholder="Description"
+          placeholder={langStore.get("DESCRIPTION")}
           value={props.description}
           onChange={props.onDescriptionUpdate}
           disabled={props.isNew}
@@ -93,19 +109,19 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
           className="select"
           icon={<SelectIcon />}
           onClick={props.onSelect}
-          title="Select automation"
+          title={langStore.get("SELECT_AUTOMATION")}
         />
         <ButtonIcon
           className="run"
           icon={<RunIcon />}
           onClick={props.onRun}
-          title="Trigger automation"
+          title={langStore.get("TRIGGER_AUTOMATION")}
         />
         <ButtonIcon
           className="delete"
           icon={<DeleteForeverIcon />}
           onClick={props.onDelete}
-          title="Delete automation"
+          title={langStore.get("DELETE_AUTOMATION")}
         />
       </div>
     </div>

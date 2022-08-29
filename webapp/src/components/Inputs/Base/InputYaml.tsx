@@ -9,6 +9,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import InputAdornment from "@mui/material/InputAdornment";
 import { Save } from "@mui/icons-material";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { useLang } from "lang";
 
 export interface Props<T extends {}> {
   label: string;
@@ -34,6 +35,7 @@ export default function InputYaml<T extends {}>({
   helperText,
   endAdornment,
 }: Props<T>) {
+  const langStore = useLang();
   const originalText = yaml.dump(value);
   const [{ text, error }, setState] = useState<{
     text: string;
@@ -48,7 +50,7 @@ export default function InputYaml<T extends {}>({
       yaml.load(t);
       setState({ text: t, error: undefined });
     } catch (_) {
-      setState({ text: t, error: "! Invalid Yaml !" });
+      setState({ text: t, error: langStore.get("ERROR_INVALID_YAML") });
     }
   };
   const onSave = () => {
@@ -94,7 +96,9 @@ export default function InputYaml<T extends {}>({
         <ButtonIcon
           disabled={!hasChanged}
           onClick={() => onSave()}
-          title={!!error ? "Invalid YAML" : hasChanged ? "Save" : ""}
+          title={
+            !!error ? "Invalid YAML" : hasChanged ? langStore.get("SAVE") : ""
+          }
           icon={
             <Save
               color={hasChanged ? (!!error ? "error" : "success") : "disabled"}

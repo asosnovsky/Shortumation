@@ -8,6 +8,7 @@ import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { cleanUpUndefined } from "utils/helpers";
 import { DeviceBaseType, DeviceTypeCapability } from "haService/types";
 import { AutomationDeviceState } from "types/automations/common";
+import { useLang } from "lang";
 
 export type DeviceEditorProps<DBT extends DeviceBaseType> = {
   type: "action" | "condition" | "trigger";
@@ -23,6 +24,8 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
   caps,
   options,
 }: DeviceEditorProps<DBT>) {
+  // state
+  const langStore = useLang();
   // aliases
   const update = (upd: Partial<AutomationDeviceState & Record<string, any>>) =>
     setState(
@@ -40,13 +43,13 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
     <>
       <InputDevice
         key="devices"
-        label="Device"
+        label={langStore.get("DEVICE")}
         value={state.device_id ?? ""}
         onChange={(device_id) => setState({ device_id: device_id ?? "" })}
       />
       <InputAutoComplete
         key="action"
-        label="Action"
+        label={langStore.get("ACTION")}
         multiple={false}
         value={actionId}
         options={Object.keys(options).map((k) => options[k])}
@@ -67,7 +70,7 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
       {entities.length > 0 && (
         <InputEntity
           key={"entities" + state.device_id}
-          label="Entity"
+          label={langStore.get("ENTITY")}
           value={state.entity_id ?? ""}
           multiple={false}
           onChange={(entity_id) =>
@@ -85,7 +88,11 @@ export function DeviceEditor<DBT extends DeviceBaseType>({
         />
       )}
       {Object.keys(options).length + entities.length === 0 && (
-        <>This device has no {type}s.</>
+        <>
+          {langStore.get("WARNING_DEVICE_NO_TYPES", {
+            type: `${type}s`,
+          })}
+        </>
       )}
     </>
   );

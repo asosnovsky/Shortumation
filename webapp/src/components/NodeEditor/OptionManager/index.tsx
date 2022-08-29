@@ -13,6 +13,7 @@ import { getDescriptionFromAutomationNode } from "utils/formatting";
 import { useHA } from "haService";
 import { Generic } from "./Generic";
 import { getNodeTypeAndValidate } from "utils/automations";
+import { useLang } from "lang";
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>];
 
@@ -23,6 +24,7 @@ export const useEditorNodeState = (
   uState: UseState = useState
 ) => {
   // state
+  const langStore = useLang();
   const [allState, setAllState] = uState({
     yamlMode: false,
     isModified: false,
@@ -77,7 +79,9 @@ export const useEditorNodeState = (
     isErrored: allState.isErrored,
     get prettyNodeType() {
       if (nodeType) {
-        return `${nodeType.slice(0, 1).toUpperCase()}${nodeType.slice(1)} Type`;
+        return `${langStore.get(nodeType.toUpperCase())} ${langStore.get(
+          "TYPE"
+        )}`;
       } else {
         return "n/a";
       }
@@ -100,7 +104,7 @@ export const useEditorNodeState = (
         aliasEditor = (
           <InputText
             key="alias"
-            label="Trigger ID"
+            label={langStore.get("TRIGGER_ID")}
             value={(allState.node as any).id}
             onChange={(id) =>
               setState({
@@ -115,7 +119,7 @@ export const useEditorNodeState = (
         aliasEditor = (
           <InputText
             key="alias"
-            label="Alias"
+            label={langStore.get("ALIAS")}
             value={getDescriptionFromAutomationNode(
               allState.node,
               ha.namer,

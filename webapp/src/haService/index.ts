@@ -12,6 +12,7 @@ import { TypedHassService } from "./fieldTypes";
 import { Option } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { getDeviceExtraWsCalls } from "./extras";
 import { useHAEntities } from "./HAEntities";
+import { useLang } from "lang";
 
 export type ServiceOption = Option<{
   domain: string;
@@ -137,6 +138,7 @@ export const useHAEntityRegistry = () => {
 
 export type HAService = ReturnType<typeof useHA>;
 export const useHA = () => {
+  const langStore = useLang();
   const entities = useHAEntities();
   const devices = useHADeviceRegistry();
   const services = useHAServices();
@@ -158,9 +160,14 @@ export const useHA = () => {
           target,
           service_data: data,
         });
-        snackbr.enqueueSnackbar(`Successfully called ${domain}.${service}`, {
-          variant: "success",
-        });
+        snackbr.enqueueSnackbar(
+          langStore.get("INFO_SUCCESS_CALL", {
+            entityId: `${domain}.${service}`,
+          }),
+          {
+            variant: "success",
+          }
+        );
         return result;
       } catch (err: any) {
         let msg = JSON.stringify(err);
@@ -168,7 +175,10 @@ export const useHA = () => {
           msg = err.message;
         }
         snackbr.enqueueSnackbar(
-          `Failed to call ${domain}.${service} because '${msg}'`,
+          langStore.get("ERROR_FAILED_CALLING", {
+            entityId: `${domain}.${service}`,
+            msg,
+          }),
           {
             variant: "error",
           }
@@ -178,14 +188,20 @@ export const useHA = () => {
     }
     if (conn.status === "error") {
       snackbr.enqueueSnackbar(
-        `Failed to call service because connection is '${conn.status}' -- ${conn.error}`,
+        langStore.get("ERROR_FAILED_CALLING_BC_CONNECTION", {
+          connStatus: conn.status,
+          connError: conn.error,
+        }),
         {
           variant: "error",
         }
       );
     } else {
       snackbr.enqueueSnackbar(
-        `Failed to call service because connection is '${conn.status}'`,
+        langStore.get("ERROR_FAILED_CALLING_BC_CONNECTION", {
+          connStatus: conn.status,
+          connError: "",
+        }),
         {
           variant: "error",
         }
@@ -210,7 +226,7 @@ export const useHA = () => {
           .map(entities.getLabel)
           .join(", ");
         if (entity_id.length > maxEntities) {
-          return out + " and more";
+          return out + " " + langStore.get("AND_MORE");
         }
         return out;
       }

@@ -10,6 +10,7 @@ import {
 } from "./state";
 import Alert from "@mui/material/Alert";
 import { useConfirm } from "material-ui-confirm";
+import { useLang } from "lang";
 
 export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
   onAutomationDelete: (aid: string, eid: string) => void;
@@ -17,13 +18,14 @@ export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
 export const AutomationManagerLoaded: FC<
   PropsWithChildren<AutomationManagerLoadedProps>
 > = ({ children, ...args }) => {
+  const langStore = useLang();
   const state = useAutomationManagerState(args);
   const confirm = useConfirm();
 
   const onAutomationDelete = async (aid: string, eid: string) =>
     confirm({
-      title: "Are you sure you want to delete this automation?",
-      confirmationText: "Delete",
+      title: langStore.get("CONFIRMATION_DELETE_THIS_AUTOMATION"),
+      confirmationText: langStore.get("DELETE"),
     })
       .then(() => {
         args.onAutomationDelete(aid, eid);
@@ -76,8 +78,9 @@ export const AutomationManagerLoaded: FC<
           ) : (
             <div>
               <Alert color="warning">
-                Failed to find an automation on disk with id{" "}
-                {state.currentAutomationId}.
+                {langStore.get("ISSUE_FAILED_TO_FIND_AUTOMATION_ON_DISK", {
+                  id: state.currentAutomationId,
+                })}
               </Alert>
             </div>
           )

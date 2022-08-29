@@ -12,6 +12,7 @@ import { Button } from "components/Inputs/Buttons/Button";
 import InputAutoText from "components/Inputs/InputAutoText";
 
 import { TagDB } from "../TagDB";
+import { useLang } from "lang";
 
 export type TagsProps = {
   automationId: string;
@@ -29,6 +30,7 @@ export type TagModalState =
     };
 
 export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
+  const langStore = useLang();
   const [modalState, setModal] = useState<TagModalState>({ open: false });
   const tags = tagsDB.getTags(automationId, true);
   const onUpdate = (t: Record<string, string>) =>
@@ -44,7 +46,7 @@ export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
         <InputAutoText
           className="name"
           options={tagsDB.getTagNames(Object.keys(tags))}
-          label="Tag Name"
+          label={langStore.get("TAG_NAME")}
           value={modalState.tag[0]}
           onChange={(v) =>
             setModal({
@@ -56,7 +58,7 @@ export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
         <InputAutoText
           className="value"
           options={tagsDB.getTagValues(modalState.tag[0])}
-          label="Tag Value"
+          label={langStore.get("TAG_VALUE")}
           value={modalState.tag[1]}
           onChange={(v) =>
             setModal({
@@ -67,7 +69,7 @@ export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
         />
         <div className="buttons">
           <Button onClick={() => setModal({ open: false })} color="info">
-            Close
+            {langStore.get("CLOSE")}
           </Button>
           <Button
             disabled={!validTag}
@@ -80,7 +82,7 @@ export const Tags: FC<TagsProps> = ({ automationId, tagsDB }) => {
             }}
             color="success"
           >
-            {modalState.isNew ? "Create" : "Save"}
+            {modalState.isNew ? langStore.get("CREATE") : langStore.get("SAVE")}
           </Button>
         </div>
       </div>

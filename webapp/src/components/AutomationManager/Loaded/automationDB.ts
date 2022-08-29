@@ -1,4 +1,5 @@
 import { HassEntities } from "home-assistant-js-websocket";
+import { LangStore, useLang } from "lang";
 import { useEffect, useState } from "react";
 import { AutomationData, BareAutomationData } from "types/automations";
 import { defaultAutomation } from "utils/defaults";
@@ -10,7 +11,8 @@ export const useAutomationDB = (
   configAutomations: AutomationData[],
   tagsDB: TagDB
 ) => {
-  const autoMap = genMapping(haEntities, configAutomations, tagsDB);
+  const langStore = useLang();
+  const autoMap = genMapping(haEntities, configAutomations, tagsDB, langStore);
   const [newAuto, setNewAuto] =
     useState<
       null | [AutomationManagerAuto, AutomationData | BareAutomationData]
@@ -54,13 +56,13 @@ export const useAutomationDB = (
           entityId: "",
           title: auto.alias ?? "",
           description: auto.description ?? "",
-          state: "unregistered",
+          state: langStore.get("AUTOMATION_STATE_UNREGISTERED"),
           tags: {},
-          issue: "New Automation",
+          issue: langStore.get("NEW_AUTOMATION"),
           isNew: true,
-          source_file: "n/a",
-          source_file_type: "n/a",
-          configuration_key: ["n/a"],
+          source_file: langStore.get("N/A"),
+          source_file_type: langStore.get("N/A"),
+          configuration_key: [],
         },
         auto,
       ]);
@@ -72,7 +74,8 @@ export const useAutomationDB = (
 const genMapping = (
   haEntities: HassEntities,
   configAutomations: AutomationData[],
-  tagsDB: TagDB
+  tagsDB: TagDB,
+  langStore: LangStore
 ) => {
   const configData: Record<string, AutomationData> = configAutomations.reduce(
     (all, n) => ({
@@ -93,7 +96,9 @@ const genMapping = (
       let description = "";
       let issue: string | undefined = ["on", "off"].includes(entityData.state)
         ? undefined
-        : `recived invalid state "${entityData.state}, this could be because you have a lingering automation that was not cleared by homeassistant, try to reboot HA or manually clear this automation from HA Database."`;
+        : langStore.get("ISSUES_INVALID_STATE", {
+            state: entityData.state,
+          });
       let found: AutomationData | null = null;
       let source_file = "n/a";
       let source_file_type = "n/a";
@@ -107,7 +112,7 @@ const genMapping = (
         configuration_key = found.configuration_key ?? configuration_key;
         delete configData[autoId];
       } else {
-        issue = "failed to find this automation in '/config' folder";
+        issue = langStore.get("ISSUES_FIND_AUTOMATION_IN_CONFIG");
       }
 
       automatioinMap[autoId] = [
@@ -134,13 +139,12 @@ const genMapping = (
         entityId: "",
         title: auto.alias ?? "",
         description: auto.description ?? "",
-        state: "unregistered",
+        state: langStore.get("AUTOMATION_STATE_UNREGISTERED"),
         tags: tagsDB.getTags(auto.id),
         source_file: auto.source_file,
         source_file_type: auto.source_file_type,
         configuration_key: auto.configuration_key,
-        issue:
-          "homeassistant did not load this automation, try to manually reload automations or restart homeassistant.",
+        issue: langStore.get("ISSUES_NO_LOAD_AUTOMATION"),
       },
       auto,
     ];

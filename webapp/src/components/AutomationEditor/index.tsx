@@ -31,6 +31,7 @@ import { MiniFailure } from "types/validators/helper";
 
 import { AutoInfoBox } from "./AutoInfoBox";
 import { useAutomatioEditorState, EditorData } from "./state";
+import { useLang } from "lang";
 
 interface Props {
   automation?: AutomationData | BareAutomationData;
@@ -51,6 +52,7 @@ export const AutomationEditor: FC<Props> = ({
   isNew,
 }) => {
   // state
+  const langStore = useLang();
   const {
     state,
     updateSequence,
@@ -131,7 +133,7 @@ export const AutomationEditor: FC<Props> = ({
               <div className="id">{state.data.id}</div>
               <InputTextView
                 value={state.data.alias ?? ""}
-                placeholder="Name"
+                placeholder={langStore.get("NAME")}
                 onChange={(alias) =>
                   updateMetadata(
                     {
@@ -145,7 +147,7 @@ export const AutomationEditor: FC<Props> = ({
             </span>
             <InputList
               fullWidth={false}
-              label="Mode"
+              label={langStore.get("MODE")}
               className="automation-editor--flow-wrapper--toolbar--modes"
               current={{
                 id: state.data.mode,
@@ -165,28 +167,26 @@ export const AutomationEditor: FC<Props> = ({
               options={[
                 {
                   id: "single",
-                  label: "Do not start a new run. Issue a warning.",
+                  label: langStore.get("MODE_SIGNLE_LABEL"),
                 },
                 {
                   id: "parallel",
-                  label:
-                    "Start a new, independent run in parallel with previous runs.",
+                  label: langStore.get("MODE_SIGNLE_PARALLEL"),
                 },
                 {
                   id: "queued",
-                  label:
-                    "Start a new run after all previous runs complete. Runs are guaranteed to execute in the order they were queued.",
+                  label: langStore.get("MODE_SIGNLE_QUEUED"),
                 },
                 {
                   id: "restart",
-                  label: "Start a new run after first stopping previous run.",
+                  label: langStore.get("MODE_SIGNLE_RESTART"),
                 },
               ]}
             />
             <InputTextView
               className="description"
               value={state.data.description ?? ""}
-              placeholder="Description"
+              placeholder={langStore.get("DESCRIPTION")}
               onChange={(description) =>
                 updateMetadata(
                   {
@@ -204,7 +204,7 @@ export const AutomationEditor: FC<Props> = ({
               onClick={() => setFlipped(!flipped)}
             >
               <Icon>{flipped ? "flip_to_front" : "flip_to_back"}</Icon>
-              Flip
+              {langStore.get("FLIPP")}
             </Button>
           )}
           {state.status === "changed" && (
@@ -217,7 +217,7 @@ export const AutomationEditor: FC<Props> = ({
             onClick={save}
             disabled={state.status !== "changed"}
           >
-            Save <CheckMarkIcon color="#bf4" />
+            {langStore.get("SAVE")} <CheckMarkIcon color="#bf4" />
           </Button>
         </div>
         <DAGAutomationGraph
@@ -242,26 +242,26 @@ export const AutomationEditor: FC<Props> = ({
             // tooltipOpen
             sx={{ pointerEvents: "auto" }}
             icon={<RunIcon />}
-            tooltipTitle={"Trigger"}
+            tooltipTitle={langStore.get("TRIGGER")}
             onClick={onTrigger}
           />
           <SpeedDialAction
             // tooltipOpen
             icon={<DeleteIcon />}
-            tooltipTitle={"Delete"}
+            tooltipTitle={langStore.get("DELETE")}
             onClick={onDelete}
           />
           <SpeedDialAction
             // tooltipOpen
             icon={<EditIcon />}
-            tooltipTitle={"Metadata"}
+            tooltipTitle={langStore.get("METADATA")}
             onClick={() => setInfoBox(!infoBoxOpen)}
           />
           {state.status === "changed" && (
             <SpeedDialAction
               // tooltipOpen
               icon={<UndoIcon />}
-              tooltipTitle={"Undo"}
+              tooltipTitle={langStore.get("UNDO")}
               onClick={undo}
             />
           )}
@@ -277,6 +277,7 @@ export const ValidationBox: FC<{
   data: EditorData;
   onSave: (d: EditorData) => void;
 }> = (props) => {
+  const langStore = useLang();
   const [{ failures, data }, setState] = useState({
     failures: props.failures,
     data: props.data,
@@ -317,12 +318,10 @@ export const ValidationBox: FC<{
           </>
         ))}
       </ul>
-      <span>
-        Please correct the automation file manually and then continue!
-      </span>
-      <InputYaml label="Raw" value={data} onChange={onSave} />
+      <span>{langStore.get("VALIDATION_PLEASE_CORRECT_FILE")}</span>
+      <InputYaml label={langStore.get("RAW")} value={data} onChange={onSave} />
       <Button disabled={failures.length > 0} onClick={() => props.onSave(data)}>
-        Save
+        {langStore.get("SAVE")}
       </Button>
     </div>
   );

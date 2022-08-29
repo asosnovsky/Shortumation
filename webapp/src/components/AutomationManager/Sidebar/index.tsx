@@ -18,6 +18,7 @@ import {
 } from "../types";
 import { Button } from "components/Inputs/Buttons/Button";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { useLang } from "lang";
 
 export type AutomationManagerSidebarProps = {
   tagsDB: TagDB;
@@ -41,6 +42,7 @@ export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
   onSelectedAutomationId,
   ...events
 }) => {
+  const langStore = useLang();
   const [searchText, setSearchText] = useState("");
   const [selectedTagIdx, setSelectedTagIdx] = useState<number[]>([]);
   const [isHidden, setHidden] = useState(false);
@@ -76,9 +78,13 @@ export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
       ].join(" ")}
     >
       <div className="automation-manager--sidebar-box--nav">
-        <InputText label="Search" value={searchText} onChange={setSearchText} />
+        <InputText
+          label={langStore.get("SEARCH")}
+          value={searchText}
+          onChange={setSearchText}
+        />
         <InputMultiSelect
-          label="Tags"
+          label={langStore.get("TAGS")}
           selected={selectedTagIdx}
           onChange={setSelectedTagIdx}
           options={tags}
@@ -109,7 +115,7 @@ export const AutomationManagerSidebar: FC<AutomationManagerSidebarProps> = ({
           color="primary"
           className="add-btn"
         >
-          Add
+          {langStore.get("ADD")}
         </Button>
         <ButtonIcon
           className="hide-btn"

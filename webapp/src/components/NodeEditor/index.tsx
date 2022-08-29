@@ -8,6 +8,7 @@ import { Button } from "components/Inputs/Buttons/Button";
 import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { useConfirm } from "material-ui-confirm";
 import { getNodeSubTypeDescription } from "./utils";
+import { useLang } from "lang";
 
 export interface NodeEditorProps {
   node: AutomationNode;
@@ -29,6 +30,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   children,
 }) => {
   // state
+  const langStore = useLang();
   const state = useEditorNodeState(node, allowedTypes, saveBtnCreateText);
   const confirm = useConfirm();
 
@@ -41,19 +43,19 @@ export const NodeEditor: FC<NodeEditorProps> = ({
   ) => {
     const notes: string[] = [];
     if (!isReady) {
-      notes.push("This node is missing some values");
+      notes.push(langStore.get("VALIDATION_MISSING_VALUES_FOR_NODE"));
     }
     if (state.isErrored) {
-      notes.push("This node contains errors");
+      notes.push(langStore.get("VALIDATION_ERROR_VALUES_IN_NODE"));
     }
     if (checkModified && isModified) {
-      notes.push("This node is has some unsaved work");
+      notes.push(langStore.get("VALIDATION_UNSAVED_WORK_IN_NODE"));
     }
     if (notes.length > 0) {
       try {
         await confirm({
           confirmationText: "Yes",
-          title: `Are you sure you want to ${what}?`,
+          title: langStore.get("CONFIRM_EXIT", { what }),
           description: (
             <ul>
               {notes.map((n, i) => (
@@ -85,11 +87,11 @@ export const NodeEditor: FC<NodeEditorProps> = ({
         <div className="node-editor--body-title">
           {allowedTypes.length > 1 ? (
             <InputList
-              label="Type"
+              label={langStore.get("TYPE")}
               current={state.nodeType}
               options={allowedTypes}
               onChange={state.setNodeType}
-              prettyOptionLabels
+              prettyOptionLabels={false}
             />
           ) : (
             <></>
@@ -101,7 +103,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
               getDescription={getNodeSubTypeDescription}
               options={state.subTypes}
               onChange={state.setSubType}
-              prettyOptionLabels
+              prettyOptionLabels={false}
             />
           ) : (
             <></>
@@ -115,7 +117,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
             />
             <InputBoolean
               className="enabled-flag"
-              label="Enabled"
+              label={langStore.get("ENABLED")}
               value={state.data.enabled ?? true}
               onChange={state.setEnabled}
             />
@@ -140,9 +142,11 @@ export const NodeEditor: FC<NodeEditorProps> = ({
           onClick={() =>
             areYouSureNotReady("save").then((ok) => ok && onSave(state.data))
           }
-          title={!isReady ? "Some fields have not been properly filled up" : ""}
+          title={
+            !isReady ? langStore.get("VALIDATION_NOT_ALL_FIELD_FILLED_IN") : ""
+          }
         >
-          {saveBtnCreateText ? "Create" : "Save"}
+          {saveBtnCreateText ? langStore.get("CREATE") : langStore.get("SAVE")}
         </Button>
         {children}
       </div>

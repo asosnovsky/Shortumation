@@ -7,6 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { prettyName } from "utils/formatting";
 import { ReactNode } from "react";
+import { useLang } from "lang";
 
 export type Props<T extends string | Object> = {
   current?: T;
@@ -17,6 +18,7 @@ export type Props<T extends string | Object> = {
   className?: string;
   prettyOptionLabels?: boolean;
   getKey?: (n: T) => string;
+  getLabel?: (n: T) => string;
   getDescription?: (n: T) => string;
   placeholder?: any;
   title?: string;
@@ -34,6 +36,7 @@ export function InputList<T extends string | Object>({
   className,
   prettyOptionLabels = true,
   getKey = String,
+  getLabel: _getLabel,
   getDescription,
   placeholder,
   title,
@@ -42,8 +45,17 @@ export function InputList<T extends string | Object>({
   disabled,
   fullWidth = true,
 }: Props<T>) {
+  const langStore = useLang();
   const invalidCurrent =
     current && !options.map(getKey).includes(getKey(current));
+
+  const getLabel =
+    _getLabel ??
+    function (x: T) {
+      return typeof x === "string"
+        ? prettyName(langStore.get(x.toUpperCase()))
+        : getKey(x);
+    };
   return (
     <FormControl
       className={className}
@@ -73,7 +85,11 @@ export function InputList<T extends string | Object>({
       >
         {options.map((t, i) => (
           <MenuItem key={i} value={getKey(t)} className="input-list--menu-item">
-            {prettyOptionLabels ? prettyName(getKey(t)) : getKey(t)}
+            {prettyOptionLabels
+              ? prettyName(getKey(t))
+              : getLabel
+              ? getLabel(t)
+              : getKey(t)}
             {!!getDescription && (
               <>
                 <br />

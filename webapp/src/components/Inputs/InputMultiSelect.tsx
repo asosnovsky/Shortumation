@@ -5,6 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import { useSnackbar } from "notistack";
+import { useLang } from "lang";
 
 export interface Props<T extends string> {
   label: string;
@@ -23,6 +24,7 @@ export default function InputMultiSelect<T extends string>({
   max = 3,
 }: Props<T>) {
   // alias
+  const langStore = useLang();
   const snackbr = useSnackbar();
   return (
     <Autocomplete
@@ -31,10 +33,13 @@ export default function InputMultiSelect<T extends string>({
       value={selected.map((i) => options[i])}
       onChange={(_, newValues: T[] = []) => {
         if (newValues.length > max) {
-          snackbr.enqueueSnackbar("Can only select up to 3 tags", {
-            variant: "warning",
-            autoHideDuration: 1500,
-          });
+          snackbr.enqueueSnackbar(
+            langStore.get("VALIDATION_MAX_TAG_SELECTION", { count: "3" }),
+            {
+              variant: "warning",
+              autoHideDuration: 1500,
+            }
+          );
         }
         onChange(
           newValues

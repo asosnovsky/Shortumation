@@ -15,6 +15,7 @@ import * as av from "types/validators/autmation";
 import { useConfirm } from "material-ui-confirm";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { APIResponse } from "apiService/types";
+import { useLang } from "lang";
 
 export type AutomationManagerProps = {
   onAutomationStateChange: (eid: string, on: boolean) => Promise<any>;
@@ -33,6 +34,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
   forceDeleteAutomation: _forceDeleteAutomation,
   triggerAutomation: _triggerAutomation,
 }) => {
+  const langStore = useLang();
   const snackbr = useSnackbar();
   const confirm = useConfirm();
   const validationsShown = useRef(false);
@@ -52,9 +54,14 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
       })
       .catch((err) => {
         console.error(err);
-        snackbr.enqueueSnackbar(errorMessage.replace("{{err}}", String(err)), {
-          variant: "error",
-        });
+        snackbr.enqueueSnackbar(
+          langStore.get(errorMessage, {
+            err: String(err),
+          }),
+          {
+            variant: "error",
+          }
+        );
         setIsSaving(isSaving.filter((k) => k !== name));
       });
   }
@@ -68,9 +75,14 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
         if (resp.ok) {
           refreshAutomations();
         } else {
-          snackbr.enqueueSnackbar(errorMessage.replace("{{err}}", resp.error), {
-            variant: "error",
-          });
+          snackbr.enqueueSnackbar(
+            langStore.get(errorMessage, {
+              err: resp.error,
+            }),
+            {
+              variant: "error",
+            }
+          );
         }
       }
     });
@@ -78,24 +90,26 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
 
   const onAutomationStateChange = (eid: string, on: boolean) =>
     wrapPromise(
-      "changing automation state",
-      'failed to toggle autonation due to "{{err}}"',
+      langStore.get("AUTOMATION_MANAGER_STATE_CHANGE"),
+      "AUTOMATION_MANAGER_STATE_CHANGE_FAIL",
       () => _onAutomationStateChange(eid, on)
     );
   const refreshAutomations = () =>
     wrapPromise(
-      "refreshing automations",
-      'failed refreshing automations due to "{{err}}"',
+      langStore.get("AUTOMATION_MANAGER_REFRESH"),
+      "AUTOMATION_MANAGER_REFRESH_FAIL",
       () => _refreshAutomations()
     );
   const forceDeleteAutomation = (eid: string) =>
-    wrapPromise("deleting automations", 'failed delete due to "{{err}}"', () =>
-      _forceDeleteAutomation(eid)
+    wrapPromise(
+      langStore.get("AUTOMATION_MANAGER_DELETE"),
+      "AUTOMATION_MANAGER_DELETE_FAIL",
+      () => _forceDeleteAutomation(eid)
     );
   const triggerAutomation = (eid: string) =>
     wrapPromise(
-      "triggering automations",
-      'failed trigger due to "{{err}}"',
+      langStore.get("AUTOMATION_MANAGER_TRIGGER"),
+      "AUTOMATION_MANAGER_TRIGGER_FAIL",
       () => _triggerAutomation(eid)
     );
 
@@ -129,7 +143,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           cancellationButtonProps: {
             style: { display: "none" },
           },
-          title: "Invalid Automations detected!",
+          title: langStore.get("ERROR_INVALID_AUTOMATION_DETECTED"),
           content: (
             <>
               <ol className="invalid-automation-modal-list">
@@ -165,6 +179,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           .catch(console.error);
       }
     }
+    // eslint-disable-next-line
   }, [api.state.automations, confirm]);
 
   // handle bad states
@@ -172,8 +187,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
     return (
       <div className="automation-manager error">
         <Alert color="error">
-          Failed to connect to websocket, please check that your access token is
-          properly setup
+          {langStore.get("ERROR_FAILED_CONNECTION_TO_HA")}
         </Alert>{" "}
         <br />
         <code>{JSON.stringify(haEntities.error)}</code>
@@ -205,7 +219,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
     return (
       <div className="automation-manager error">
         <Alert color="error">
-          Failed to load automations from <code>/config</code>
+          {langStore.get("ISSUES_FIND_AUTOMATION_IN_CONFIG")}
         </Alert>{" "}
         <br />
         <code>{error}</code>
@@ -237,8 +251,8 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
         onAutomationStateChange={onAutomationStateChange}
         onAutomationAdd={(auto) =>
           wrapApiPromise(
-            "adding automation",
-            "Failed to create automation, recieved error: {{err}}!",
+            langStore.get("AUTOMATION_MANAGER_ADD"),
+            "AUTOMATION_MANAGER_ADD_FAIL",
             () => api.createAutomation(auto) as any
           )
         }
@@ -258,7 +272,7 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
           }
           if (!deleteSent) {
             snackbr.enqueueSnackbar(
-              "Failed to delete automation, this may be resolved by a refresh or reboot of Home Assistant",
+              langStore.get("AUTOMATION_MANAGER_DELETE_LIGHT"),
               {
                 variant: "error",
               }
@@ -268,15 +282,15 @@ export const AutomationManager: FC<AutomationManagerProps> = ({
         }}
         onAutomationUpdate={(auto) =>
           wrapApiPromise(
-            "updating automation",
-            "Failed to update automation, recieved error: {{err}}!",
+            langStore.get("AUTOMATION_MANAGER_UPDATE"),
+            "AUTOMATION_MANAGER_UPDATE_FAIL",
             () => api.updateAutomation(auto) as any
           )
         }
         onUpdateTags={async (aid, t) => {
           wrapApiPromise(
-            "updating tags",
-            "Failed to update tags, recieved error: {{err}}!",
+            langStore.get("AUTOMATION_MANAGER_UPDATE_TAGS"),
+            "AUTOMATION_MANAGER_UPDATE_TAGS_FAIL",
             () =>
               api.updateTags({
                 automation_id: aid,

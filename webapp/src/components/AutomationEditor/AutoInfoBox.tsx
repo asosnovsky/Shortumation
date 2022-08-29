@@ -10,6 +10,7 @@ import { AddIcon, TrashIcon } from "components/Icons";
 import InputAutoText from "components/Inputs/InputAutoText";
 import { TagDB } from "components/AutomationManager/TagDB";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { useLang } from "lang";
 
 export interface AutoInfoBoxProps {
   metadata: AutomationMetadata & Partial<AutomationShortumationMetadata>;
@@ -26,6 +27,7 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
   tagDB,
 }) => {
   // state
+  const langStore = useLang();
   const [newTag, setNewTag] = useState<[string, string]>(["", ""]);
   const [[errorIndex, error], _setError] = useState<[number | "new", string]>([
     -1,
@@ -54,12 +56,12 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
       );
   const validTagName = (newName: string): string | undefined => {
     if (newName.length <= 0) {
-      return "Name must be at least 1 character long";
+      return langStore.get("VALIDATION_AUTOMATION_NAME");
     }
     // eslint-disable-next-line
     for (const [name, _] of tags) {
       if (name.trim() === newName.trim()) {
-        return `The tag '${name}' already exists`;
+        return langStore.get("VALIDATION_TAG_EXISTS", { name });
       }
     }
   };
@@ -101,23 +103,23 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
     <div className="automation-editor--info-box">
       <div className="automation-editor--info-box-inner">
         <InputText
-          label="ID"
+          label={langStore.get("ID")}
           value={metadata.id}
           onChange={onUpdateMetadata("id")}
         />
         <InputText
-          label="Name"
+          label={langStore.get("NAME")}
           value={metadata.alias ?? ""}
           onChange={onUpdateMetadata("alias")}
         />
         <InputText
           multiline
-          label="Description"
+          label={langStore.get("DESCRIPTION")}
           value={metadata.description ?? ""}
           onChange={onUpdateMetadata("description")}
         />
         <InputList
-          label="Mode"
+          label={langStore.get("MODE")}
           current={metadata.mode}
           onChange={onUpdateMetadata("mode")}
           options={["parallel", "single", "queued", "restart"]}
@@ -129,14 +131,14 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
               <div key={tagIndex} className="automation-editor--info-box--tag">
                 <InputAutoText
                   value={tagName}
-                  label="Name"
+                  label={langStore.get("NAME")}
                   onChange={(v) => updateTagName(v, tagIndex)}
                   options={foundNewTagNames}
                   error={errorIndex === tagIndex ? error : undefined}
                 />
                 <InputAutoText
                   value={tagValue}
-                  label="Tag"
+                  label={langStore.get("TAG")}
                   onChange={(v) => onUpdateTags(v, tagIndex)}
                   options={tagDB.getTagValues(tagName)}
                   error={errorIndex === tagIndex ? error : undefined}
@@ -153,14 +155,14 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
           <div className="automation-editor--info-box--tag">
             <InputAutoText
               value={newTag[0]}
-              label="Name"
+              label={langStore.get("NAME")}
               onChange={(v) => setNewTag([v, newTag[1]])}
               options={foundNewTagNames}
               error={errorIndex === "new" ? error : undefined}
             />
             <InputAutoText
               value={newTag[1]}
-              label="Tag"
+              label={langStore.get("TAG")}
               onChange={(v) => setNewTag([newTag[0], v])}
               options={tagDB.getTagValues(newTag[0])}
               error={errorIndex === "new" ? error : undefined}
