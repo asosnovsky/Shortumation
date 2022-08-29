@@ -1,27 +1,13 @@
-from pathlib import Path
-from unittest import TestCase
-
 import yaml
-from fastapi.testclient import TestClient
 
-from src.api.app import make_app
 from src.automations.types import Automation, ExtenededAutomation
 from tests.utils import (
     HA_CONFIG2_EXAMPLE,
     HA_CONFIG6_EXAMPLE,
     HA_CONFIG10_EXAMPLE,
-    get_example_automation_loader,
 )
 
-
-class BaseTestCase(TestCase):
-    def setUp(self) -> None:
-        (
-            self.config_folder,
-            self.hass_config,
-            self.automation_loader,
-        ) = get_example_automation_loader()
-        self.client = TestClient(make_app(self.automation_loader))
+from .util import BaseTestCase
 
 
 class automation_pagination_tests(BaseTestCase):
@@ -90,19 +76,12 @@ class automation_pagination_tests(BaseTestCase):
 
 
 class automation_pagination_tests_2(automation_pagination_tests):
+    source_config_path = HA_CONFIG2_EXAMPLE
     test_params = {
         "total": 1,
         "subtest2_found_items": 0,
         "subtest1_found_items": 1,
     }
-
-    def setUp(self) -> None:
-        (
-            self.config_folder,
-            self.hass_config,
-            self.automation_loader,
-        ) = get_example_automation_loader(HA_CONFIG2_EXAMPLE)
-        self.client = TestClient(make_app(self.automation_loader))
 
 
 class automation_update_tests(BaseTestCase):
@@ -350,6 +329,7 @@ class automation_update_tests(BaseTestCase):
 
 
 class automation_update_split_config_tests(automation_update_tests):
+    source_config_path = HA_CONFIG6_EXAMPLE
     test_params = {
         "total": 12,
         "modify_item": 3,
@@ -378,29 +358,14 @@ class automation_update_split_config_tests(automation_update_tests):
         },
     }
 
-    def setUp(self) -> None:
-        (
-            self.config_folder,
-            self.hass_config,
-            self.automation_loader,
-        ) = get_example_automation_loader(HA_CONFIG6_EXAMPLE)
-        self.client = TestClient(make_app(self.automation_loader))
-
 
 class automation_update_split_config_and_inline_config_tests(automation_update_tests):
+    source_config_path = HA_CONFIG10_EXAMPLE
     test_params = {
         "total": 4,
         "modify_item": 0,
         "consitency_tests": {},
     }
-
-    def setUp(self) -> None:
-        (
-            self.config_folder,
-            self.hass_config,
-            self.automation_loader,
-        ) = get_example_automation_loader(HA_CONFIG10_EXAMPLE)
-        self.client = TestClient(make_app(self.automation_loader))
 
 
 class automation_delete_tests(BaseTestCase):

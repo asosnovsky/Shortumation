@@ -15,10 +15,16 @@ class InlineAutomation(NamedTuple):
     source_file: Path
     automations: list[dict]
 
+    def __repr__(self) -> str:
+        return f"InlineAutomation(configuration_key='{self.configuration_key}', source_file='{self.source_file}')"
+
 
 class IncludedAutoamtion(NamedTuple):
     configuration_key: ConfigurationKey
     ref: IncludedYamlDir
+
+    def __repr__(self) -> str:
+        return f"InlineAutomation(configuration_key='{self.configuration_key}', ref='{self.ref}')"
 
 
 ExtractedAutomation = InlineAutomation | IncludedAutoamtion

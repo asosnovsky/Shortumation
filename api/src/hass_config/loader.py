@@ -60,5 +60,8 @@ class HassConfig:
     def get_automation_tags_path(self) -> Path:
         return self.get_shortumations_path() / "tags.yaml"
 
+    def get_profile_path(self) -> Path:
+        return self.get_shortumations_path() / "profile.yaml"
+
     def get_configuration_path(self) -> Path:
         return self.root_path / "configuration.yaml"
