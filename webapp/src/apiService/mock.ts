@@ -1,13 +1,15 @@
 import { useRef } from "react";
 import { AutomationData, BareAutomationData } from "types/automations";
 import { API } from "./base";
+import { UserProfile } from "./types";
 import {
   AUTOMTAION_LIST,
   AUTOMTAION_ITEM,
   AUTOMTAION_ITEM_TAGS,
+  USER_PROFILE_ROOT,
 } from "./paths";
 
-export const useMockAPI = (
+export const useAutoMockAPI = (
   initialAutos: AutomationData[] = [],
   makeRef = useRef,
   returnErrors: boolean = false
@@ -96,6 +98,42 @@ export const useMockAPI = (
             ok: true,
             data: {},
           };
+        }
+      }
+      return {
+        ok: false,
+        error: "PATH NOT FOUND " + method + ": " + path,
+      };
+    },
+  };
+};
+
+export const useProfileMockAPI = (
+  initialProfile: UserProfile = {
+    lang: "eng",
+    theme: "dark",
+  },
+  makeRef = useRef,
+  returnErrors: boolean = false
+): API => {
+  const profileRef = makeRef(initialProfile);
+  return {
+    async makeCall({ path, method = "POST", data = {} }) {
+      if (returnErrors) {
+        return {
+          ok: false,
+          error: "Test Error",
+        };
+      }
+      if (path === USER_PROFILE_ROOT) {
+        if (method === "GET") {
+          return {
+            ok: true,
+            data: JSON.parse(JSON.stringify(profileRef.current)),
+          } as any;
+        } else if (method === "PUT") {
+          profileRef.current = data as any;
+          return { saved: "" };
         }
       }
       return {

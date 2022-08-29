@@ -1,4 +1,4 @@
-import { useMockAPI } from "./mock";
+import { useAutoMockAPI } from "./mock";
 import { makeAutomationAPI } from "./automations";
 import { createMockAuto } from "../utils/mocks";
 import { AutomationData } from "types/automations";
@@ -6,7 +6,7 @@ import { AutomationData } from "types/automations";
 const fakeUseRef = (a: any) => ({ current: a });
 
 test("mock api uses initial autos for initial population -- empty", async () => {
-  const mockApi = makeAutomationAPI(useMockAPI([], fakeUseRef as any));
+  const mockApi = makeAutomationAPI(useAutoMockAPI([], fakeUseRef as any));
   const data = await mockApi.list({ limit: 10, offset: 0 });
   expect(data.ok).toBe(true);
   expect((data as any).data.data).toHaveLength(0);
@@ -15,7 +15,9 @@ test("mock api uses initial autos for initial population -- empty", async () => 
 
 test("mock api uses initial autos for initial population -- some data", async () => {
   const initials = [createMockAuto(), createMockAuto()];
-  const mockApi = makeAutomationAPI(useMockAPI(initials, fakeUseRef as any));
+  const mockApi = makeAutomationAPI(
+    useAutoMockAPI(initials, fakeUseRef as any)
+  );
   const data = await mockApi.list({ limit: 10, offset: 0 });
   expect(data.ok).toBe(true);
   expect((data as any).data.data).toHaveLength(2);
@@ -23,7 +25,7 @@ test("mock api uses initial autos for initial population -- some data", async ()
 });
 
 test("populate mock api with some data", async () => {
-  const mockApi = makeAutomationAPI(useMockAPI([], fakeUseRef as any));
+  const mockApi = makeAutomationAPI(useAutoMockAPI([], fakeUseRef as any));
   await mockApi.create(createMockAuto());
   let data = await mockApi.list({ limit: 10, offset: 0 });
   expect(data.ok).toBe(true);
@@ -37,7 +39,7 @@ test("populate mock api with some data", async () => {
 
 test("delete/update data from mock api", async () => {
   const mockApi = makeAutomationAPI(
-    useMockAPI(
+    useAutoMockAPI(
       [
         createMockAuto(),
         createMockAuto(),
@@ -61,7 +63,7 @@ test("delete/update data from mock api", async () => {
 
 test("update tags from mock api", async () => {
   const mockApi = makeAutomationAPI(
-    useMockAPI(
+    useAutoMockAPI(
       [
         createMockAuto(),
         createMockAuto(),

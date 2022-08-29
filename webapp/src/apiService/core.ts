@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useDefaultApiState, makeReloadAutomations } from "./util";
 import { AutomationAPI } from "./automations";
+import { UserProfileAPI } from "./profile";
 
 export type ApiService = ReturnType<typeof useAPIService>;
-export const useAPIService = (automationAPI: AutomationAPI) => {
+export const useAPIService = (
+  automationAPI: AutomationAPI,
+  userProfileAPI: UserProfileAPI
+) => {
   // state
   const [state, setState] = useDefaultApiState();
   const { reload, wrapCall } = makeReloadAutomations(
@@ -24,5 +28,7 @@ export const useAPIService = (automationAPI: AutomationAPI) => {
     updateAutomation: wrapCall(automationAPI.update),
     createAutomation: wrapCall(automationAPI.create),
     updateTags: wrapCall(automationAPI.updateTags),
+    getProfile: wrapCall(userProfileAPI.get),
+    setProfile: wrapCall(userProfileAPI.update),
   };
 };

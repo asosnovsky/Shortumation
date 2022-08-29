@@ -2,8 +2,9 @@ import { AutomationData } from "types/automations";
 import { makeAutomationAPI } from "./automations";
 import { makeRemoteAPI } from "./base";
 import { useAPIService } from "./core";
-import { useMockAPI } from "./mock";
+import { useAutoMockAPI, useProfileMockAPI } from "./mock";
 import { useRef } from "react";
+import { makeProfileAPI } from "./profile";
 
 const locationPrefixWeb = window.location.pathname.match(/(\/.+\/)web/i);
 const baseURL = new URL(
@@ -13,12 +14,14 @@ const baseURL = new URL(
 );
 export const wsURL = baseURL + "socket";
 export const remoteAutoAPI = makeRemoteAPI(baseURL + "automations");
+export const detailsAPI = makeRemoteAPI(baseURL + "details/");
 export const useConnectedApiService = () =>
-  useAPIService(makeAutomationAPI(remoteAutoAPI));
+  useAPIService(makeAutomationAPI(remoteAutoAPI), makeProfileAPI(detailsAPI));
 export const useMockApiService = (
   initialAutos: AutomationData[],
   returnErrors: boolean = false
 ) =>
   useAPIService(
-    makeAutomationAPI(useMockAPI(initialAutos, useRef, returnErrors))
+    makeAutomationAPI(useAutoMockAPI(initialAutos, useRef, returnErrors)),
+    makeProfileAPI(useProfileMockAPI())
   );

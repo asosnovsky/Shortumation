@@ -33,3 +33,8 @@ export interface ListData<D> {
 export interface ApiState {
   automations: Errorable<ListData<AutomationData>>;
 }
+
+export type UserProfile = {
+  theme: string;
+  lang: string;
+};
