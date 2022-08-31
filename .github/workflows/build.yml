@@ -102,7 +102,7 @@ jobs:
           path: webapp/build
 
       - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: asosnovsky/ha-builder@master
+        uses: home-assistant/builder@9340ac00d5802d71773d1abece8d611d10daa190
         continue-on-error: true
         with:
           args: |
@@ -110,7 +110,6 @@ jobs:
             --no-latest \
             --no-cache \
             --version ${{ needs.metadata.outputs.version }} \
-            --disable-buildx \
             --target .
 
   publish:
