@@ -3,10 +3,7 @@ from unittest import TestCase
 from fastapi.testclient import TestClient
 
 from src.api.app import make_app
-from tests.utils import (
-    HA_CONFIG_EXAMPLE,
-    get_example_automation_loader,
-)
+from tests.utils import HA_CONFIG_EXAMPLE, get_example_automation_loader
 
 
 class BaseTestCase(TestCase):

@@ -1,8 +1,9 @@
 from typing import Literal
+
 from pydantic import BaseModel
 
 from src.hass_config import HassConfig
-from src.yaml_serializer import load_yaml, dump_yaml
+from src.yaml_serializer import dump_yaml, load_yaml
 
 
 class UserProfile(BaseModel):
@@ -14,7 +15,7 @@ class UserProfile(BaseModel):
         path = hass_config.get_profile_path()
         if path.exists():
             with hass_config.get_profile_path().open("r") as fp:
-                return cls(**load_yaml(fp, hass_config.root_path))
+                return cls(**load_yaml(fp, hass_config.root_path))  # type: ignore
         else:
             return cls()
 
