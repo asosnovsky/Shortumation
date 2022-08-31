@@ -108,6 +108,7 @@ jobs:
           args: |
             --${{ matrix.arch }} \
             --no-latest \
+            --no-cache \
             --version ${{ needs.metadata.outputs.version }} \
             --target .
 
