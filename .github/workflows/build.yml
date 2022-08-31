@@ -110,6 +110,7 @@ jobs:
             --no-latest \
             --no-cache \
             --version ${{ needs.metadata.outputs.version }} \
+            --disable-buildx \
             --target .
 
   publish:
