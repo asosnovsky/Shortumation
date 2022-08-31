@@ -28,7 +28,6 @@ class manager_tests(TestWithDB):
         self.config_path = create_copy_of_example_config(ha_config_example)
         self.automation_manager = AutomationManager(
             HassConfig(self.config_path),
-            self.db_file,
         )
         return self.config_path, self.automation_manager
 
@@ -54,10 +53,6 @@ class manager_tests(TestWithDB):
             {"platform": "zone", "entity_id": "person.thor", "zone": "zone.azguard"}
         )
         automation_manager.update(automation)
-        self.assertEqual(
-            automation_manager.get("sublist3-mlist2").trigger,
-            [],
-        )
         automation_manager.reload()
         self.assertEqual(
             automation_manager.get("sublist3-mlist2").trigger,

@@ -2,7 +2,7 @@ from pathlib import Path
 from tempfile import mktemp
 from typing import Optional, Union
 
-from src.errors import ErrorSet
+from src.errors import ErrorSet, FormattedError
 from src.hass_config.loader import HassConfig
 from src.logger import get_logger
 from src.yaml_serializer import dump_yaml, load_yaml
@@ -24,12 +24,9 @@ class AutomationManager:
     def __init__(
         self,
         hass_config: HassConfig,
-        db_path: Optional[Path] = None,
     ) -> None:
-        if db_path is None:
-            db_path = Path(mktemp())  # nosec
         self.hass_config = hass_config
-        self.db = AutomationDBConnection(db_path)
+        self.db = AutomationDBConnection()
         self.tag_path = hass_config.get_automation_tags_path()
         self.tag_manager = TagManager()
         self.reload_tags()
@@ -62,7 +59,7 @@ class AutomationManager:
             if len(batch) >= 0:
                 self.db.insert_automations(batch)
         except DBError as e:
-            logger.warning(e)
+            logger.warning(FormattedError.from_error(e))
             errors.append(e)
         if len(errors) > 0:
             raise ErrorSet(*errors)
