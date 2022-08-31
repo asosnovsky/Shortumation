@@ -1,18 +1,14 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
-
 import { SearchItem } from "./extras";
 
-export default {
-  title: "Inputs/Extras/SearchItem",
-  component: SearchItem,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  argTypes: {},
-} as ComponentMeta<typeof SearchItem>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof SearchItem> = (args) => {
-  return (
-    <Page>
+const { make, componentMeta } = makeStory({
+  Component: SearchItem,
+  meta: {
+    title: "Inputs/Extras/SearchItem",
+  },
+  BaseTemplate: (args) => {
+    return (
       <div
         style={{
           width: "15em",
@@ -22,15 +18,16 @@ const Template: ComponentStory<typeof SearchItem> = (args) => {
       >
         <SearchItem {...args} />
       </div>
-    </Page>
-  );
-};
+    );
+  },
+});
 
-export const Simple = Template.bind({});
-Simple.args = {
+export default componentMeta;
+
+export const Simple = make({
   id: "sensor.humidity_main_bedroom",
   label: "Main Bedroom Humidity",
   searchTerm: "bedroom",
   listProps: {},
   onlyShowLabel: false,
-};
+});

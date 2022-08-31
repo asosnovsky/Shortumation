@@ -1,47 +1,35 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 import { InputList } from "./InputList";
 
-export default {
-  title: 'Inputs/InputList',
-  component: InputList,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-} as ComponentMeta<typeof InputList>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputList,
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState(args.current);
+    useEffect(() => {
+      if (value !== args.current) {
+        setValue(args.current);
+      }
+    }, [args.current]);
+    return <InputList {...args} current={value} onChange={setValue} />;
+  },
+  meta: {
+    title: "Inputs/InputList",
+  },
+});
 
-const Template: ComponentStory<typeof InputList> = args => {
+export default componentMeta;
 
-  const [value, setValue] = useState(args.current);
-  useEffect(() => {
-    if (value !== args.current) {
-      setValue(args.current)
-    }
-  }, [args.current])
-  return <Page>
-    <InputList {...args} current={value} onChange={setValue} />
-  </Page>
-}
-
-export const SimpleText = Template.bind({})
-SimpleText.args = {
+export const SimpleText = make({
   label: "Entity ID",
-  options: [
-    'Bob',
-    'Martin',
-    "Toots"
-  ]
-}
+  options: ["Bob", "Martin", "Toots"],
+});
 
-
-export const InvalidSelection = Template.bind({})
-InvalidSelection.args = {
+export const InvalidSelection = make({
   current: "Derek",
   label: "Entity ID",
-  options: [
-    'Bob',
-    'Martin',
-    "Toots"
-  ]
-}
+  options: ["Bob", "Martin", "Toots"],
+});

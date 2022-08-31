@@ -78,17 +78,14 @@ const Test: FC = () => {
   );
 };
 
-export default {
-  title: "Services/HA Service",
-  component: Test,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {},
-} as ComponentMeta<typeof Test>;
+import { makeStory } from "devUtils";
 
-export const AutomationCall: ComponentStory<typeof Test> = (props) => {
-  return (
-    <Page>
-      <Test {...props} />
-    </Page>
-  );
-};
+const { make, componentMeta } = makeStory({
+  Component: Test,
+  meta: {
+    title: "Services/HA Service",
+  },
+});
+
+export default componentMeta;
+export const AutomationCall = make({});

@@ -2,11 +2,10 @@ import React from "react";
 import { ComponentStory } from "@storybook/react";
 import { NodeEditor, NodeEditorProps } from ".";
 
-import { AutomationCondition } from "types/automations/conditions";
 import { Button } from "components/Inputs/Buttons/Button";
 import { useState } from "react";
 import { Modal } from "components/Modal";
-import { Page } from "components/Page";
+import { MockPage } from "components/Page";
 import { makeStory } from "devUtils";
 
 const { componentMeta, make } = makeStory({
@@ -23,16 +22,14 @@ const { componentMeta, make } = makeStory({
   Component: (props: NodeEditorProps) => {
     const [state, setState] = useState(props.node);
     return (
-      <Page>
-        <NodeEditor
-          {...props}
-          node={state}
-          onSave={(s) => {
-            setState(s);
-            props.onSave && props.onSave(s);
-          }}
-        />
-      </Page>
+      <NodeEditor
+        {...props}
+        node={state}
+        onSave={(s) => {
+          setState(s);
+          props.onSave && props.onSave(s);
+        }}
+      />
     );
   },
 });
@@ -77,12 +74,12 @@ export const DeviceTriggerExample = make({
 export const InAModal: ComponentStory<typeof NodeEditor> = (props) => {
   const [open, setOpen] = useState(false);
   return (
-    <Page>
+    <MockPage>
       <Button onClick={() => setOpen(!open)}>Open Editor</Button>
       <Modal open={open}>
         <NodeEditor {...props} onClose={() => setOpen(!open)} />
       </Modal>
-    </Page>
+    </MockPage>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import { MockPage } from "components/Page";
 import { useHAEntities } from "haService/HAEntities";
 
 const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
@@ -50,8 +50,8 @@ export default {
 
 export const Base: ComponentStory<typeof Test> = (props) => {
   return (
-    <Page>
+    <MockPage>
       <Test {...props} />
-    </Page>
+    </MockPage>
   );
 };

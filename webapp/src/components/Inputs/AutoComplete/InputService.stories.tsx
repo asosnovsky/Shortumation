@@ -1,36 +1,39 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useState } from "react";
 
 import { InputService } from "./InputService";
 
-export default {
-  title: 'Inputs/InputService',
-  component: InputService,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-  argTypes: {}
-} as ComponentMeta<typeof InputService>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputService,
+  meta: {
+    title: "Inputs/InputService",
+  },
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState(args.value);
+    return (
+      <div
+        style={{
+          maxWidth: 200,
+        }}
+      >
+        <InputService
+          {...args}
+          value={value as any}
+          onChange={(v: any) => {
+            setValue(v);
+            args.onChange(v as any);
+          }}
+        />
+      </div>
+    );
+  },
+});
 
+export default componentMeta;
+export const Example = make({});
 
-const Template: ComponentStory<typeof InputService> = args => {
-  const [value, setValue] = useState(args.value)
-  return <Page>
-    <div style={{
-      maxWidth: 200
-    }}>
-      <InputService {...args} value={value as any} onChange={(v: any) => {
-        setValue(v)
-        args.onChange(v as any)
-      }} />
-    </div>
-  </Page>
-
-}
-
-export const Single = Template.bind({})
-Single.args = {
-  ...Single.args,
+export const Single = make({
   multiple: false,
-  value: ''
-} as any
+  value: "",
+});

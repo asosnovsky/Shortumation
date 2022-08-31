@@ -1,32 +1,31 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useState } from "react";
 
 import InputNumber from "./InputNumber";
 
-export default {
-  title: 'Inputs/InputNumber',
-  component: InputNumber,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-  argTypes: {
-    label: {
-      defaultValue: 'Sample Title'
-    }
-  }
-} as ComponentMeta<typeof InputNumber>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputNumber,
+  meta: {
+    title: "Inputs/InputNumber",
+    argTypes: {
+      label: {
+        defaultValue: "Sample Title",
+      },
+    },
+  },
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState<number | undefined>(args.value);
+    return <InputNumber {...args} value={value} onChange={setValue} />;
+  },
+});
 
-export const NullStart: ComponentStory<typeof InputNumber> = args => {
+export default componentMeta;
 
-  const [value, setValue] = useState<number | undefined>(undefined)
-  return <Page>
-    <InputNumber {...args} value={value} onChange={setValue} />
-  </Page>
-}
-export const SomeStuffAtStart: ComponentStory<typeof InputNumber> = args => {
+export const NullStart = make({
+  value: undefined,
+});
 
-  const [value, setValue] = useState<number | undefined>(10)
-  return <Page>
-    <InputNumber {...args} value={value} onChange={setValue} />
-  </Page>
-}
+export const SomeStuffAtStart = make({
+  value: 10,
+});

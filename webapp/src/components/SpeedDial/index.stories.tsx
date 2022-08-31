@@ -6,26 +6,27 @@ import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { DeleteForeverOutlined } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
+import { makeStory } from "devUtils";
 
-export default {
-  title: "Nav/SpeedDial",
-  component: SpeedDial,
-};
+const { make, componentMeta } = makeStory({
+  Component: SpeedDial,
+  BaseTemplate: () => (
+    <div
+      style={{
+        maxWidth: "10em",
+        maxHeight: "10em",
+      }}
+    >
+      <SpeedDial icon={<SettingsApplicationsIcon />}>
+        <ButtonIcon icon={<DeleteForeverOutlined />} />
+        <ButtonIcon icon={<EditIcon />} />
+      </SpeedDial>
+    </div>
+  ),
+  meta: {
+    title: "Nav/SpeedDial",
+  },
+});
 
-export const IconList: ComponentStory<typeof SpeedDial> = () => {
-  return (
-    <Page>
-      <div
-        style={{
-          maxWidth: "10em",
-          maxHeight: "10em",
-        }}
-      >
-        <SpeedDial icon={<SettingsApplicationsIcon />}>
-          <ButtonIcon icon={<DeleteForeverOutlined />} />
-          <ButtonIcon icon={<EditIcon />} />
-        </SpeedDial>
-      </div>
-    </Page>
-  );
-};
+export default componentMeta;
+export const IconList = make({});

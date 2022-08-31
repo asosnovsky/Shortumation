@@ -8,7 +8,11 @@ import { Page } from "components/Page";
 
 const ConnectedAutomationRoute = () => {
   const api = useConnectedApiService();
-  return <AutomationRoute api={api} />;
+  return (
+    <Page api={api}>
+      <AutomationRoute api={api} />
+    </Page>
+  );
 };
 
 function App() {
@@ -18,14 +22,7 @@ function App() {
         <CookiesProvider>
           <BrowserRouter>
             <Routes>
-              <Route
-                path="*"
-                element={
-                  <Page>
-                    <ConnectedAutomationRoute />
-                  </Page>
-                }
-              />
+              <Route path="*" element={<ConnectedAutomationRoute />} />
             </Routes>
           </BrowserRouter>
         </CookiesProvider>

@@ -1,35 +1,43 @@
 import React, { FC } from "react";
-import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ErrorBoundary } from ".";
-import { Page } from "components/Page";
 
+import { makeStory } from "devUtils";
+import { MockPage } from "components/Page";
+import { ComponentStory } from "@storybook/react";
 
-export default {
-    title: 'ErrorBoundary',
+const { make, componentMeta } = makeStory({
+  Component: () => <div>Example</div>,
+  meta: {
+    title: "ErrorBoundary",
     component: ErrorBoundary,
-    parameters: { actions: { argTypesRegex: '^on.*' } },
-    args: {
-    }
-} as ComponentMeta<typeof ErrorBoundary>
+  },
+});
 
-export const ErrorThrown: ComponentStory<typeof ErrorBoundary> = args => {
-    const BadComponent: FC = () => {
-        throw new Error("!!!")
-    }
-    return <Page>
-        <ErrorBoundary>
-            <BadComponent />
-        </ErrorBoundary>
-    </Page>
-}
+export default componentMeta;
+export const Example = make({});
 
-export const NoError: ComponentStory<typeof ErrorBoundary> = args => {
-    const GoodComponent: FC = () => {
-        return <span>All Good.</span>
-    }
-    return <Page>
-        <ErrorBoundary>
-            <GoodComponent />
-        </ErrorBoundary>
-    </Page>
-}
+export const ErrorThrown: ComponentStory<typeof ErrorBoundary> = (args) => {
+  const BadComponent: FC = () => {
+    throw new Error("!!!");
+  };
+  return (
+    <MockPage>
+      <ErrorBoundary>
+        <BadComponent />
+      </ErrorBoundary>
+    </MockPage>
+  );
+};
+
+export const NoError: ComponentStory<typeof ErrorBoundary> = (args) => {
+  const GoodComponent: FC = () => {
+    return <span>All Good.</span>;
+  };
+  return (
+    <MockPage>
+      <ErrorBoundary>
+        <GoodComponent />
+      </ErrorBoundary>
+    </MockPage>
+  );
+};

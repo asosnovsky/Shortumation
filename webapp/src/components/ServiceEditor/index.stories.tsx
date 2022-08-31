@@ -1,21 +1,15 @@
-import React, { FC, useEffect, useState } from "react";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import React, { useState } from "react";
 import { ServiceEditor } from ".";
 import { TypedHassService } from "haService/fieldTypes";
 import InputYaml from "components/Inputs/Base/InputYaml";
 
-export default {
-  title: "Services/ServiceEditor",
-  component: ServiceEditor,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {},
-} as ComponentMeta<typeof ServiceEditor>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof ServiceEditor> = (props) => {
-  const [state, setState] = useState(props.data);
-  return (
-    <Page>
+const { make, componentMeta } = makeStory({
+  Component: ServiceEditor,
+  BaseTemplate: (props) => {
+    const [state, setState] = useState(props.data);
+    return (
       <div
         style={{
           maxHeight: "99vh",
@@ -63,22 +57,24 @@ const Template: ComponentStory<typeof ServiceEditor> = (props) => {
           />
         </div>
       </div>
-    </Page>
-  );
-};
+    );
+  },
+  meta: {
+    title: "Services/ServiceEditor",
+  },
+});
 
-const makeExample = (service: TypedHassService) => {
-  const Eg = Template.bind({});
-  Eg.args = {
-    ...Eg,
+export default componentMeta;
+export const Example = make({});
+
+const makeExample = (service: TypedHassService) =>
+  make({
     service,
     data: {
       target: {},
       field: {},
     },
-  };
-  return Eg;
-};
+  });
 
 export const NumberSetValue = makeExample({
   name: "Set",

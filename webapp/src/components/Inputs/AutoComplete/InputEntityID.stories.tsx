@@ -1,84 +1,77 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useState } from "react";
 
 import { InputEntity } from "./InputEntities";
 
-export default {
-  title: 'Inputs/InputEntity',
-  component: InputEntity,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-  argTypes: {}
-} as ComponentMeta<typeof InputEntity>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputEntity,
+  meta: {
+    title: "Inputs/InputEntity",
+  },
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState(args.value);
+    return (
+      <div
+        style={{
+          maxWidth: 200,
+        }}
+      >
+        <InputEntity
+          {...args}
+          value={value as any}
+          onChange={(v: any) => {
+            setValue(v);
+            args.onChange(v as any);
+          }}
+        />
+      </div>
+    );
+  },
+});
 
+export default componentMeta;
+export const Example = make({});
 
-const Template: ComponentStory<typeof InputEntity> = args => {
-  const [value, setValue] = useState(args.value)
-  return <Page>
-    <div style={{
-      maxWidth: 200
-    }}>
-      <InputEntity {...args} value={value as any} onChange={(v: any) => {
-        setValue(v)
-        args.onChange(v as any)
-      }} />
-    </div>
-  </Page>
-
-}
-
-export const Single = Template.bind({})
-Single.args = {
-  ...Single.args,
+export const Single = make({
   multiple: false,
-  value: 'sensor.bathroom'
-} as any
+  value: "sensor.bathroom",
+});
 
-export const Many = Template.bind({})
-Many.args = {
-  ...Many.args,
+export const Many = make({
   multiple: true,
-  value: ['sensor.bathroom', 'person.ari']
-} as any
+  value: ["sensor.bathroom", "person.ari"],
+});
 
-export const ManyEmpty = Template.bind({})
-ManyEmpty.args = {
-  ...ManyEmpty.args,
+export const ManyEmpty = make({
   multiple: true,
-  value: []
-} as any
+  value: [],
+});
 
-
-export const ManyButGotSingle = Template.bind({})
-ManyButGotSingle.args = {
-  ...ManyButGotSingle.args,
+export const ManyButGotSingle = make({
   multiple: true,
-  value: 'sensor.bathroom'
-} as any
+  value: "sensor.bathroom",
+});
 
-
-export const InvalidDomain = Template.bind({})
-InvalidDomain.args = {
-  ...InvalidDomain.args,
+export const InvalidDomain = make({
   multiple: true,
-  value: 'sensor.bathroom',
-  restrictToDomain: ['zone'],
-} as any
+  value: "sensor.bathroom",
+  restrictToDomain: ["zone"],
+});
 
-
-export const InvalidManyDomain = Template.bind({})
-InvalidManyDomain.args = {
-  ...InvalidManyDomain.args,
+export const InvalidManyDomain = make({
   multiple: true,
-  value: 'sensor.bathroom',
-  restrictToDomain: ['zone', 'switch'],
-} as any
+  value: "sensor.bathroom",
+  restrictToDomain: ["zone", "switch"],
+});
 
-export const InvalidLots = Template.bind({})
-InvalidLots.args = {
-  ...InvalidLots.args,
+export const InvalidLots = make({
   multiple: true,
-  value: ['person.ari', 'sensor.bathroom', 'binary_sensor.ping_tv', 'device_tracker.phone'],
-  restrictToDomain: ['zone', 'switch'],
-} as any
+  value: [
+    "person.ari",
+    "sensor.bathroom",
+    "binary_sensor.ping_tv",
+    "device_tracker.phone",
+  ],
+  restrictToDomain: ["zone", "switch"],
+});

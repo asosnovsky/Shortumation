@@ -1,8 +1,7 @@
 import React, { FC } from "react";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useHADeviceRegistry } from "haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
+import { makeStory } from "devUtils";
 
 const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
   const conn = useHADeviceRegistry();
@@ -35,17 +34,12 @@ const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
   return <code>Loading...</code>;
 };
 
-export default {
-  title: "Services/Device Registry",
-  component: Test,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {},
-} as ComponentMeta<typeof Test>;
+const { make, componentMeta } = makeStory({
+  Component: Test,
+  meta: {
+    title: "Services/Device Registry",
+  },
+});
 
-export const Base: ComponentStory<typeof Test> = (props) => {
-  return (
-    <Page>
-      <Test {...props} />
-    </Page>
-  );
-};
+export default componentMeta;
+export const Basic = make({});

@@ -4,22 +4,21 @@ import { useState } from "react";
 
 import InputText from "./InputText";
 
-export default {
-  title: 'Inputs/InputText',
-  component: InputText,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-} as ComponentMeta<typeof InputText>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputText,
+  meta: {
+    title: "Inputs/InputText",
+  },
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState("");
+    return <InputText {...args} value={value} onChange={setValue} />;
+  },
+});
 
-const Template: ComponentStory<typeof InputText> = args => {
+export default componentMeta;
 
-  const [value, setValue] = useState('')
-  return <Page>
-    <InputText {...args} value={value} onChange={setValue} />
-  </Page>
-}
-
-export const SimpleText = Template.bind({})
-SimpleText.args = {
+export const SimpleText = make({
   label: "Entity ID",
-}
+});

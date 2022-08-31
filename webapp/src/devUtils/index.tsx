@@ -2,6 +2,8 @@ import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { ComponentProps, JSXElementConstructor } from "react";
+import { ApiService } from "apiService/core";
+import { useConnectedApiService, useMockApiService } from "apiService";
 
 export type MakeStoryArgs<
   T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>
@@ -9,6 +11,7 @@ export type MakeStoryArgs<
   Component: T;
   BaseTemplate?: ComponentStory<T>;
   meta: Partial<ComponentMeta<T>> & { title: string };
+  useLiveApi?: boolean;
 };
 export const makeStory = <
   T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>
@@ -16,6 +19,7 @@ export const makeStory = <
   BaseTemplate,
   Component,
   meta,
+  useLiveApi = false,
 }: MakeStoryArgs<T>) => {
   const componentMeta: ComponentMeta<T> = {
     component: Component as any,
@@ -24,8 +28,15 @@ export const makeStory = <
     ...meta,
   };
   const Template: ComponentStory<T> = (args) => {
+    let api: ApiService;
+    if (useLiveApi) {
+      api = useConnectedApiService();
+    } else {
+      api = useMockApiService([]);
+    }
+
     return (
-      <Page>
+      <Page api={api}>
         {BaseTemplate ? <BaseTemplate {...args} /> : <Component {...args} />}
       </Page>
     );

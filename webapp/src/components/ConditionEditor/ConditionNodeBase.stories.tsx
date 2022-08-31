@@ -1,22 +1,17 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useState } from "react";
 import { AutomationCondition } from "types/automations/conditions";
 import { ConditionNodeBase } from "./ConditionNodeBase";
 
-export default {
-  title: "ConditionEditor/NodeBase",
-  component: ConditionNodeBase,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-} as ComponentMeta<typeof ConditionNodeBase>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof ConditionNodeBase> = ({
-  condition,
-  ...args
-}) => {
-  const [data, setData] = useState(condition);
-  return (
-    <Page>
+const { make, componentMeta } = makeStory({
+  Component: ConditionNodeBase,
+  meta: {
+    title: "ConditionEditor/NodeBase",
+  },
+  BaseTemplate: ({ condition, ...args }) => {
+    const [data, setData] = useState(condition);
+    return (
       <ConditionNodeBase
         {...args}
         condition={data}
@@ -24,20 +19,20 @@ const Template: ComponentStory<typeof ConditionNodeBase> = ({
           setData(data);
         }}
       />
-    </Page>
-  );
-};
+    );
+  },
+});
 
-export const TemplateViewer = Template.bind({});
-TemplateViewer.args = {
+export default componentMeta;
+
+export const TemplateViewer = make({
   condition: {
     condition: "template",
     value_template: "states('switch.light_kitchen') == 'on'",
   } as AutomationCondition,
-};
+});
 
-export const MultipleThings = Template.bind({});
-MultipleThings.args = {
+export const MultipleThings = make({
   condition: {
     condition: "or",
     conditions: [
@@ -62,4 +57,4 @@ MultipleThings.args = {
       },
     ],
   } as AutomationCondition,
-};
+});

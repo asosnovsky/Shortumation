@@ -1,6 +1,6 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import { MockPage } from "components/Page";
 import { ButtonNode } from "./ButtonNode";
 import { DAGGraphBoard } from "components/DAGGraph/board";
 import { ButtonNodeMaker } from ".";
@@ -25,7 +25,7 @@ const Template: ComponentStory<typeof ButtonNode> = (args) => {
     ...args,
   };
   return (
-    <Page>
+    <MockPage>
       <DAGGraphBoard
         closeModal={() => {}}
         state={{
@@ -80,7 +80,7 @@ const Template: ComponentStory<typeof ButtonNode> = (args) => {
           },
         }}
       />
-    </Page>
+    </MockPage>
   );
 };
 

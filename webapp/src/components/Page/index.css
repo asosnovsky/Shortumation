@@ -16,3 +16,8 @@
     /* background */
     background-color: var(--mui-background-default);
 }
+
+.page>.page-contents {
+    flex: 1;
+    overflow: hidden;
+}

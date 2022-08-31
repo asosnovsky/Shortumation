@@ -4,17 +4,11 @@ import InputText from "./Base/InputText";
 
 import { InputTextView } from "./InputTextView";
 
-export default {
-  title: "Inputs/InputTextView",
-  component: InputTextView,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    value: "example",
-  },
-} as ComponentMeta<typeof InputTextView>;
+import { makeStory } from "devUtils";
 
-export const Basic: ComponentStory<typeof InputTextView> = (args) => (
-  <Page>
+const { make, componentMeta } = makeStory({
+  Component: InputTextView,
+  BaseTemplate: (args) => (
     <div
       style={{
         display: "flex",
@@ -26,5 +20,15 @@ export const Basic: ComponentStory<typeof InputTextView> = (args) => (
       <InputTextView {...args} />
       <InputText {...args} />
     </div>
-  </Page>
-);
+  ),
+  meta: {
+    title: "Inputs/InputTextView",
+    args: {
+      value: "example",
+    },
+  },
+});
+
+export default componentMeta;
+
+export const Basic = make({});

@@ -1,0 +1,43 @@
+.bottom-bar {
+    width: 100%;
+    font-size: 0.5em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    justify-content: space-between;
+}
+
+.bottom-bar>*, .bottom-bar>div>* {
+    max-height: 1em;
+    height: 1em;
+    min-height: 1em;
+    gap: 0.25em;
+}
+
+.bottom-bar #circle {
+    color: var(--mui-primary-main);
+}
+
+.bottom-bar #circle::before {
+    content: " ";
+}
+
+.bottom-bar #circle.error {
+    color: var(--mui-error-main);
+}
+
+
+.bottom-bar #circle.loaded {
+    color: var(--mui-success-light);
+}
+
+.bottom-bar .settings {
+    font-size: 0.75em;
+    padding: 1em 0.5em;
+    z-index: 10;
+}
+
+.bottom-bar .settings svg {
+    height: 0.5em;
+    width: 0.5em;
+}

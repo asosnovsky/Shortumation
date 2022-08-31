@@ -4,24 +4,30 @@ import { useState } from "react";
 
 import InputBoolean from "./InputBoolean";
 
-export default {
-  title: 'Inputs/InputBoolean',
-  component: InputBoolean,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-} as ComponentMeta<typeof InputBoolean>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputBoolean,
+  meta: {
+    title: "Inputs/InputBoolean",
+    args: {
+      label: "Template",
+    },
+  },
+  BaseTemplate: (args) => {
+    const [state, onChange] = useState(args.value);
+    return (
+      <InputBoolean
+        {...args}
+        value={state}
+        onChange={(v) => {
+          args.onChange(v);
+          onChange(v);
+        }}
+      />
+    );
+  },
+});
 
-const Template: ComponentStory<typeof InputBoolean> = args => {
-  const [state, onChange] = useState(args.value)
-  return <Page>
-    <InputBoolean {...args} value={state} onChange={v => {
-      args.onChange(v)
-      onChange(v)
-    }} />
-  </Page>
-}
-
-export const SimpleText = Template.bind({})
-SimpleText.args = {
-  label: "Template",
-}
+export default componentMeta;
+export const Example = make({});

@@ -1,26 +1,22 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import { MockPage, Page } from "components/Page";
 import { useState } from "react";
 import { AutomationCondition } from "types/automations/conditions";
 
 import { ConditionEditor } from ".";
+import { makeStory } from "devUtils";
 
-export default {
-  title: "ConditionEditor",
-  component: ConditionEditor,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    initialViewMode: "edit",
+const { make, componentMeta } = makeStory({
+  Component: ConditionEditor,
+  meta: {
+    title: "ConditionEditor",
+    args: {
+      initialViewMode: "edit",
+    },
   },
-} as ComponentMeta<typeof ConditionEditor>;
-
-const Template: ComponentStory<typeof ConditionEditor> = ({
-  condition,
-  ...args
-}) => {
-  const [data, setData] = useState(condition);
-  return (
-    <Page>
+  BaseTemplate: ({ condition, ...args }) => {
+    const [data, setData] = useState(condition);
+    return (
       <ConditionEditor
         {...args}
         condition={data}
@@ -28,29 +24,28 @@ const Template: ComponentStory<typeof ConditionEditor> = ({
           setData(data);
         }}
       />
-    </Page>
-  );
-};
+    );
+  },
+});
 
-export const TemplateViewer = Template.bind({});
-TemplateViewer.args = {
+export default componentMeta;
+
+export const TemplateViewer = make({
   condition: {
     condition: "template",
     value_template: "states('switch.light_kitchen') == 'on'",
   } as AutomationCondition,
-};
+});
 
-export const NumericStateViewer = Template.bind({});
-NumericStateViewer.args = {
+export const NumericStateViewer = make({
   condition: {
     condition: "numeric_state",
     entity_id: "sensor.humidity_kitchen",
     above: "10",
   } as AutomationCondition,
-};
+});
 
-export const LogicCondition = Template.bind({});
-LogicCondition.args = {
+export const LogicCondition = make({
   condition: {
     condition: "or",
     conditions: [
@@ -81,9 +76,8 @@ LogicCondition.args = {
       },
     ],
   } as AutomationCondition,
-};
-export const TimeCondition = Template.bind({});
-TimeCondition.args = {
+});
+export const TimeCondition = make({
   condition: {
     condition: "or",
     conditions: [
@@ -104,7 +98,7 @@ TimeCondition.args = {
       },
     ],
   } as AutomationCondition,
-};
+});
 
 export const MultipleConditions: ComponentStory<typeof ConditionEditor> = (
   args
@@ -134,12 +128,12 @@ export const MultipleConditions: ComponentStory<typeof ConditionEditor> = (
     ],
   });
   return (
-    <Page>
+    <MockPage>
       <ConditionEditor
         onUpdate={setState}
         onDelete={() => {}}
         condition={state}
       />
-    </Page>
+    </MockPage>
   );
 };

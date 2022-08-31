@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
-import { CollectionNode } from "./CollectionNode";
+import { MockPage } from "components/Page";
 import { DAGGraphBoard } from "components/DAGGraph/board";
 import { CollectionNodeMaker } from "./index";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
@@ -19,7 +18,7 @@ type DemoProps = {
 };
 const Demo: FC<DemoProps> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <DAGGraphBoard
         closeModal={() => {}}
         state={{
@@ -64,7 +63,7 @@ const Demo: FC<DemoProps> = (args) => {
           },
         }}
       />
-    </Page>
+    </MockPage>
   );
 };
 
@@ -84,7 +83,7 @@ export const Colors: ComponentStory<typeof Demo> = (args) => <Demo {...args} />;
 
 export const Empty: ComponentStory<typeof Demo> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <DAGGraphBoard
         closeModal={() => {}}
         state={{
@@ -124,7 +123,7 @@ export const Empty: ComponentStory<typeof Demo> = (args) => {
           },
         }}
       />
-    </Page>
+    </MockPage>
   );
 };
 
@@ -135,7 +134,7 @@ Empty.args = {
 
 export const ReturnTarget: ComponentStory<typeof Demo> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <DAGGraphBoard
         closeModal={() => {}}
         state={{
@@ -222,7 +221,7 @@ export const ReturnTarget: ComponentStory<typeof Demo> = (args) => {
           },
         }}
       />
-    </Page>
+    </MockPage>
   );
 };
 

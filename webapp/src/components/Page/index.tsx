@@ -1,5 +1,5 @@
 import "./index.css";
-import { createRef, FC, ReactNode, useEffect, useRef } from "react";
+import { createRef, FC, PropsWithChildren, useEffect, useRef } from "react";
 import {
   createTheme,
   Palette,
@@ -7,23 +7,21 @@ import {
   ThemeProvider,
   useTheme,
 } from "@mui/material/styles";
-import { VersionBox } from "components/VersionBox";
+import { BottomBar } from "components/BottomBar";
 import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { useHAConnection } from "haService/connection";
 import { ConfirmProvider } from "material-ui-confirm";
 import { Color } from "@mui/material";
 import useWindowSize from "utils/useWindowSize";
+import { ApiService } from "apiService/core";
+import { useMockApiService } from "apiService";
 
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+export type PageProps = PropsWithChildren<{
+  api: ApiService;
+}>;
 
-export const InternalPage: FC<{
-  children: ReactNode;
-}> = ({ children }) => {
+export const InternalPage: FC<PageProps> = ({ children, api }) => {
   const conn = useHAConnection();
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -62,25 +60,31 @@ export const InternalPage: FC<{
   }, [conn, snackbar]);
 
   return (
-    <main className={["page", isMobile ? "mobile" : ""].join(" ")}>
+    <main
+      className={["page", "center column", isMobile ? "mobile" : ""].join(" ")}
+    >
+      <div className="page-contents center column">{children}</div>
+      <BottomBar api={api} />
       <style>
         {`:root {
             ${convertPaletteToCss(theme.palette)}
         }`}
       </style>
-      <VersionBox />
-      {children}
     </main>
   );
 };
 
-export const Page: FC<{
-  children: ReactNode;
-}> = ({ children }) => {
+export const Page: FC<PageProps> = (props) => {
   const notistackRef = createRef<any>();
   const onClickDismiss = (key: SnackbarKey) => () => {
     notistackRef.current.closeSnackbar(key);
   };
+  const theme = createTheme({
+    palette: {
+      mode: props.api.state.theme,
+    },
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <ConfirmProvider>
@@ -96,11 +100,16 @@ export const Page: FC<{
           dense
           preventDuplicate
         >
-          <InternalPage>{children}</InternalPage>
+          <InternalPage {...props} />
         </SnackbarProvider>
       </ConfirmProvider>
     </ThemeProvider>
   );
+};
+
+export const MockPage: FC<PropsWithChildren<{}>> = (props) => {
+  const api = useMockApiService([]);
+  return <Page api={api} {...props} />;
 };
 
 export const convertPaletteToCss = (p: Palette): string => {

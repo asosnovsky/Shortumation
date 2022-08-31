@@ -5,6 +5,7 @@ import { USER_PROFILE_ROOT } from "./paths";
 export const makeProfileAPI = (api: API) => ({
   async get() {
     const data = await api.makeCall<UserProfile>({
+      method: "GET",
       path: USER_PROFILE_ROOT,
     });
     return data;

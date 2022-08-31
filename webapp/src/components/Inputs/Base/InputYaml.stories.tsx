@@ -4,24 +4,24 @@ import { useState } from "react";
 
 import InputYaml from "./InputYaml";
 
-export default {
-  title: 'Inputs/InputYaml',
-  component: InputYaml,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-} as ComponentMeta<typeof InputYaml>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputYaml,
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState({
+      test: "data",
+    });
+    return <InputYaml {...args} value={value} onChange={setValue} />;
+  },
+  meta: {
+    title: "Inputs/InputYaml",
+  },
+});
 
-const Template: ComponentStory<typeof InputYaml> = args => {
+export default componentMeta;
+export const Example = make({});
 
-  const [value, setValue] = useState({
-    "test": "data"
-  })
-  return <Page>
-    <InputYaml {...args} value={value} onChange={setValue} />
-  </Page>
-}
-
-export const SimpleText = Template.bind({})
-SimpleText.args = {
+export const SimpleText = make({
   label: "Template",
-}
+});

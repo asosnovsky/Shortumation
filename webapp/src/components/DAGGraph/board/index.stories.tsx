@@ -1,46 +1,34 @@
-import React from "react";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { DAGGraphBoard } from ".";
-import { Page } from "components/Page";
 import { SimpleErrorElement } from "components/SimpleErrorElement";
 
-export default {
-  title: "DAGGraph/Board",
-  component: DAGGraphBoard,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {},
-} as ComponentMeta<typeof DAGGraphBoard>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof DAGGraphBoard> = (args) => {
-  return (
-    <Page>
-      <DAGGraphBoard {...args} />
-    </Page>
-  );
-};
+const { make, componentMeta } = makeStory({
+  Component: DAGGraphBoard,
+  meta: {
+    title: "DAGGraph/Board",
+  },
+});
 
-export const Loading = Template.bind({});
-Loading.args = {
-  ...Loading.args,
+export default componentMeta;
+export const Example = make({});
+
+export const Loading = make({
   state: {
     ready: false,
   },
-};
+});
 
-export const Errored = Template.bind({});
-Errored.args = {
-  ...Loading.args,
+export const Errored = make({
   state: {
     ready: true,
     data: {
       error: <SimpleErrorElement error={new Error("Test")} />,
     },
   },
-};
+});
 
-export const Empty = Template.bind({});
-Empty.args = {
-  ...Empty.args,
+export const Empty = make({
   state: {
     ready: true,
     data: {
@@ -50,11 +38,9 @@ Empty.args = {
       },
     },
   },
-};
+});
 
-export const Basic = Template.bind({});
-Basic.args = {
-  ...Basic.args,
+export const Basic = make({
   state: {
     ready: true,
     data: {
@@ -88,4 +74,4 @@ Basic.args = {
       },
     },
   },
-};
+});

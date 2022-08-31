@@ -57,6 +57,10 @@
   "SUN": "Sol",
   "MQTT": "MQTT",
 
+  "CONNECTED": "Connecté",
+  "FAILED": "Manquée",
+  "LOADING": "Chargement",
+
   "AND": "et",
   "NOT": "non",
   "NUMERIC_STATE": "État numérique",
@@ -72,6 +76,9 @@
 
   "WEEKDAY": "Jour de la semaine",
   "OPTION": "Option",
+
+  "THEME": "Thème",
+  "LANGUAGE": "Langue",
 
   "SELECT_AUTOMATION": "Sélectionnez l'automatisation",
   "TRIGGER_AUTOMATION": "Déclencher l'automatisation",

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import { MockPage } from "components/Page";
 import { useHA } from "haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { InputList } from "components/Inputs/InputList";
@@ -89,8 +89,8 @@ export default {
 
 export const ServiceCall: ComponentStory<typeof Test> = (props) => {
   return (
-    <Page>
+    <MockPage>
       <Test {...props} />
-    </Page>
+    </MockPage>
   );
 };

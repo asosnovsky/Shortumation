@@ -1,6 +1,6 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import { MockPage } from "components/Page";
 import { SequenceNode } from "./SequenceNode";
 import { DAGGraphBoard } from "components/DAGGraph/board";
 import { SequenceNodeMaker } from "./index";
@@ -21,7 +21,7 @@ export default {
 
 const Template: ComponentStory<typeof SequenceNode> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <DAGGraphBoard
         closeModal={() => {}}
         state={{
@@ -46,13 +46,13 @@ const Template: ComponentStory<typeof SequenceNode> = (args) => {
           },
         }}
       />
-    </Page>
+    </MockPage>
   );
 };
 
 export const Colors: ComponentStory<typeof SequenceNode> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <DAGGraphBoard
         closeModal={() => {}}
         state={{
@@ -85,7 +85,7 @@ export const Colors: ComponentStory<typeof SequenceNode> = (args) => {
           },
         }}
       />
-    </Page>
+    </MockPage>
   );
 };
 

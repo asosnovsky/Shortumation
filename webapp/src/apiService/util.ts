@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { ApiState } from "./types";
 import { AutomationAPI } from "./automations";
+import { UserProfileAPI } from "./profile";
+import { UserProfile } from "apiService/types";
 
 export const useDefaultApiState = () =>
   useState<ApiState>({
     automations: { ready: false },
+    userProfile: { ready: false },
   });
 
 export const makeReloadAutomations = (
@@ -36,5 +39,43 @@ export const makeReloadAutomations = (
   return {
     reload,
     wrapCall,
+  };
+};
+
+export const makeProfileManager = (
+  userProfileAPI: UserProfileAPI,
+  state: ApiState,
+  setState: (s: ApiState) => void
+) => {
+  const reload = () =>
+    userProfileAPI
+      .get()
+      .then((data) => {
+        setState({
+          ...state,
+          userProfile: {
+            ready: true,
+            ...data,
+          },
+        });
+      })
+      .catch((error) =>
+        setState({
+          ...state,
+          userProfile: {
+            ready: true,
+            ok: false,
+            error: JSON.stringify(error),
+          },
+        })
+      );
+
+  return {
+    reload,
+    update: (data: UserProfile) =>
+      userProfileAPI
+        .update(data)
+        .then(() => reload())
+        .catch(() => reload()),
   };
 };

@@ -12,7 +12,7 @@ import {
   GearIcon,
 } from ".";
 import { ButtonIcon } from "./ButtonIcons";
-import { Page } from "components/Page";
+import { MockPage } from "components/Page";
 
 export default {
   title: "Icons",
@@ -21,7 +21,7 @@ export default {
 
 export const IconList: ComponentStory<typeof IconBase> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <PencilIcon {...args} />
       <CheckMarkIcon {...args} />
       <AddIcon {...args} />
@@ -29,7 +29,7 @@ export const IconList: ComponentStory<typeof IconBase> = (args) => {
       <InfoIcon {...args} />
       <ZoomIcon {...args} />
       <GearIcon {...args} />
-    </Page>
+    </MockPage>
   );
 };
 IconList.args = {
@@ -39,9 +39,9 @@ IconList.args = {
 
 export const ButtonIconExample: ComponentStory<typeof IconBase> = (args) => {
   return (
-    <Page>
+    <MockPage>
       <ButtonIcon icon={<ArrowIcon {...args} />} />
-    </Page>
+    </MockPage>
   );
 };
 ButtonIconExample.args = {

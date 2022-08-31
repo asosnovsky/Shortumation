@@ -32,6 +32,7 @@ export interface ListData<D> {
 
 export interface ApiState {
   automations: Errorable<ListData<AutomationData>>;
+  userProfile: Errorable<UserProfile>;
 }
 
 export type UserProfile = {

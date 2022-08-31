@@ -59,6 +59,10 @@
   "SUN": "Sun",
   "MQTT": "MQTT",
 
+  "CONNECTED": "Connected",
+  "FAILED": "Failed",
+  "LOADING": "Loading",
+
   "DAY_MON": "Monday",
   "DAY_TUE": "Tuesday",
   "DAY_WED": "Wednesday",
@@ -69,6 +73,9 @@
 
   "WEEKDAY": "Weekday",
   "OPTION": "Option",
+
+  "THEME": "Theme",
+  "LANGUAGE": "Language",
 
   "SELECT_AUTOMATION": "Select automation",
   "TRIGGER_AUTOMATION": "Trigger automation",

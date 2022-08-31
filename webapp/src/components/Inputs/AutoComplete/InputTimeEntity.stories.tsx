@@ -1,19 +1,17 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useState } from "react";
 
 import { InputTimeEntity } from "./InputTimeEntity";
 
-export default {
-  title: "Inputs/InputTimeEntity",
-  component: InputTimeEntity,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-} as ComponentMeta<typeof InputTimeEntity>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof InputTimeEntity> = (args) => {
-  const [value, setValue] = useState("");
-  return (
-    <Page>
+const { make, componentMeta } = makeStory({
+  Component: InputTimeEntity,
+  meta: {
+    title: "Inputs/InputTimeEntity",
+  },
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState("");
+    return (
       <div
         style={{
           padding: "1em",
@@ -28,8 +26,8 @@ const Template: ComponentStory<typeof InputTimeEntity> = (args) => {
           }}
         />
       </div>
-    </Page>
-  );
-};
+    );
+  },
+});
 
-export const SimpleText = Template.bind({});
+export const SimpleText = make({});

@@ -1,23 +1,21 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { AutomationEditor } from "./index";
 import { useState } from "react";
-import { Page } from "components/Page";
 import { useTagDB } from "components/AutomationManager/TagDB";
 import { DEFAULT_DIMS } from "components/DAGGraph/elements/constants";
 
-export default {
-  title: "App/AutomationEditor",
-  component: AutomationEditor,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {
-    dims: DEFAULT_DIMS,
-  },
-} as ComponentMeta<typeof AutomationEditor>;
+import { makeStory } from "devUtils";
 
-const Template: ComponentStory<typeof AutomationEditor> = (args) => {
-  const [state, setState] = useState(args.automation);
-  return (
-    <Page>
+const { make, componentMeta } = makeStory({
+  Component: AutomationEditor,
+  meta: {
+    title: "App/AutomationEditor",
+    args: {
+      dims: DEFAULT_DIMS,
+    },
+  },
+  BaseTemplate: (args) => {
+    const [state, setState] = useState(args.automation);
+    return (
       <AutomationEditor
         {...args}
         tagDB={useTagDB(
@@ -29,15 +27,15 @@ const Template: ComponentStory<typeof AutomationEditor> = (args) => {
           window.setTimeout(() => setState(s), 3000);
         }}
       />
-    </Page>
-  );
-};
+    );
+  },
+});
 
-export const Loading = Template.bind({});
+export default componentMeta;
 
-export const Simple = Template.bind({});
-Simple.args = {
-  ...Simple.args,
+export const Loading = make({});
+
+export const Simple = make({
   automation: {
     condition: [],
     tags: {
@@ -94,11 +92,9 @@ Simple.args = {
       },
     ],
   },
-};
+});
 
-export const EmptyStart = Template.bind({});
-EmptyStart.args = {
-  ...EmptyStart.args,
+export const EmptyStart = make({
   automation: {
     condition: [],
     tags: {},
@@ -115,22 +111,18 @@ EmptyStart.args = {
     trigger: [],
     action: [],
   },
-};
+});
 
-export const BadAutomationInvalidMetadata = Template.bind({});
-BadAutomationInvalidMetadata.args = {
-  ...BadAutomationInvalidMetadata.args,
+export const BadAutomationInvalidMetadata = make({
   automation: {
     condition: [],
     tags: {},
     trigger: [],
     action: [],
   } as any,
-};
+});
 
-export const BadAutomationInvalidTriggers = Template.bind({});
-BadAutomationInvalidTriggers.args = {
-  ...BadAutomationInvalidTriggers.args,
+export const BadAutomationInvalidTriggers = make({
   automation: {
     condition: [],
     tags: {},
@@ -147,11 +139,9 @@ BadAutomationInvalidTriggers.args = {
     trigger: ["haha I am a string"] as any,
     action: [],
   },
-};
+});
 
-export const BadAutomationInvalidSequence = Template.bind({});
-BadAutomationInvalidSequence.args = {
-  ...BadAutomationInvalidSequence.args,
+export const BadAutomationInvalidSequence = make({
   automation: {
     condition: [],
     tags: {},
@@ -165,14 +155,12 @@ BadAutomationInvalidSequence.args = {
     action: [
       {
         choose: {},
-      },
+      } as any,
     ],
   } as any,
-};
+});
 
-export const RepeatExample = Template.bind({});
-RepeatExample.args = {
-  ...RepeatExample.args,
+export const RepeatExample = make({
   automation: {
     id: "1654976151462",
     alias: "Get out of baby room",
@@ -243,4 +231,4 @@ RepeatExample.args = {
     ],
     tags: {},
   },
-};
+});

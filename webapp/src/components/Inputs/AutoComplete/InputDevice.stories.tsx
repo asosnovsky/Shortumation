@@ -1,36 +1,39 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
 import { useState } from "react";
 
 import { InputDevice } from "./InputDevice";
 
-export default {
-  title: 'Inputs/InputDevice',
-  component: InputDevice,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-  argTypes: {}
-} as ComponentMeta<typeof InputDevice>;
+import { makeStory } from "devUtils";
 
+const { make, componentMeta } = makeStory({
+  Component: InputDevice,
+  meta: {
+    title: "Inputs/InputDevice",
+  },
+  BaseTemplate: (args) => {
+    const [value, setValue] = useState(args.value);
+    return (
+      <div
+        style={{
+          maxWidth: 200,
+        }}
+      >
+        <InputDevice
+          {...args}
+          value={value as any}
+          onChange={(v: any) => {
+            setValue(v);
+            args.onChange(v as any);
+          }}
+        />
+      </div>
+    );
+  },
+});
 
+export default componentMeta;
+export const Example = make({});
 
-const Template: ComponentStory<typeof InputDevice> = args => {
-  const [value, setValue] = useState(args.value)
-  return <Page>
-    <div style={{
-      maxWidth: 200
-    }}>
-      <InputDevice {...args} value={value as any} onChange={(v: any) => {
-        setValue(v)
-        args.onChange(v as any)
-      }} />
-    </div>
-  </Page>
-
-}
-
-export const Single = Template.bind({})
-Single.args = {
-  ...Single.args,
+export const Single = make({
   multiple: false,
-  value: 'sensor.humidity_bathroom'
-} as any
+  value: "sensor.humidity_bathroom",
+});
