@@ -102,8 +102,8 @@ jobs:
           path: webapp/build
 
       - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: home-assistant/builder@9340ac00d5802d71773d1abece8d611d10daa190
-        continue-on-error: true
+        uses: home-assistant/builder@2022.06.2
+        # continue-on-error: true
         with:
           args: |
             --${{ matrix.arch }} \
