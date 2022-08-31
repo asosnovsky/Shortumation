@@ -15,7 +15,7 @@ import { ConfirmProvider } from "material-ui-confirm";
 import { Color } from "@mui/material";
 import useWindowSize from "utils/useWindowSize";
 import { ApiService } from "apiService/core";
-import { useMockApiService } from "apiService";
+import { ApiStateProvider, useMockApiService } from "apiService";
 
 export type PageProps = PropsWithChildren<{
   api: ApiService;
@@ -100,7 +100,9 @@ export const Page: FC<PageProps> = (props) => {
           dense
           preventDuplicate
         >
-          <InternalPage {...props} />
+          <ApiStateProvider value={props.api.state}>
+            <InternalPage {...props} />
+          </ApiStateProvider>
         </SnackbarProvider>
       </ConfirmProvider>
     </ThemeProvider>

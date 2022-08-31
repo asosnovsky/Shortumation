@@ -9,14 +9,15 @@ export interface ModalStyleProps {
 }
 export interface Props extends ModalStyleProps {
   children: ReactNode;
+  className?: string;
 }
-export const Modal: FC<Props> = ({ children, open }) => {
+export const Modal: FC<Props> = ({ children, open, className }) => {
   const { isMobile } = useWindowSize();
   return (
     <MuiModal open={open}>
       <div className={["modal--root", isMobile ? "mobile" : ""].join(" ")}>
         <Card variant="outlined">
-          <CardContent>{children}</CardContent>
+          <CardContent className={className}>{children}</CardContent>
         </Card>
       </div>
     </MuiModal>

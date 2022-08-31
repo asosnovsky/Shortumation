@@ -3,8 +3,9 @@ import { makeAutomationAPI } from "./automations";
 import { makeRemoteAPI } from "./base";
 import { useAPIService } from "./core";
 import { useAutoMockAPI, useProfileMockAPI } from "./mock";
-import { useRef } from "react";
+import { createContext, useContext, useRef } from "react";
 import { makeProfileAPI } from "./profile";
+import { ApiState } from "./types";
 
 const locationPrefixWeb = window.location.pathname.match(/(\/.+\/)web/i);
 const baseURL = new URL(
@@ -25,3 +26,10 @@ export const useMockApiService = (
     makeAutomationAPI(useAutoMockAPI(initialAutos, useRef, returnErrors)),
     makeProfileAPI(useProfileMockAPI())
   );
+
+const ApiStateContext = createContext<ApiState>({
+  automations: { ready: false },
+  userProfile: { ready: false },
+});
+export const ApiStateProvider = ApiStateContext.Provider;
+export const useApiState = () => useContext(ApiStateContext);

@@ -16,7 +16,7 @@ export const BottomBar: FC<BottomBarProps> = ({ api }) => {
 
   return (
     <div className="bottom-bar center row">
-      <Modal open={isOpen}>
+      <Modal open={isOpen} className="center column">
         <UserProfileEditor api={api} />
         <Button onClick={() => setOpen(false)}>{lang.get("CLOSE")}</Button>
       </Modal>
