@@ -80,6 +80,8 @@
   "THEME": "Thème",
   "LANGUAGE": "Langue",
 
+  "USER_PRERENCES": "Préférences de l'utilisateur",
+
   "SELECT_AUTOMATION": "Sélectionnez l'automatisation",
   "TRIGGER_AUTOMATION": "Déclencher l'automatisation",
   "DELETE_AUTOMATION": "Supprimer l'automatisation",

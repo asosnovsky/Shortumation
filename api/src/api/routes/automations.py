@@ -5,13 +5,15 @@ from src.automations.errors import FailedDeletion
 from src.automations.manager import AutomationManager
 from src.automations.types import Automation, ExtenededAutomation
 from src.errors import ErrorSet
+from src.hass_config.loader import HassConfig
 
 
-def make_automation_router(automations: AutomationManager) -> APIRouter:
+def make_automation_router(hass_config: HassConfig) -> APIRouter:
     router = APIRouter()
 
     @router.post("/list")
     def list_autos(body: ListParams) -> ListData[ExtenededAutomation]:
+        automations = AutomationManager(hass_config)
         try:
             automations.reload()
             return ListData(
@@ -27,18 +29,22 @@ def make_automation_router(automations: AutomationManager) -> APIRouter:
 
     @router.post("/item")
     def insert_auto(body: Automation):
+        automations = AutomationManager(hass_config)
         automations.create(body)
 
     @router.put("/item")
     def update_auto(body: ExtenededAutomation):
+        automations = AutomationManager(hass_config)
         automations.update(body)
 
     @router.post("/item/tags")
     def update_tags(body: UpdateTags):
+        automations = AutomationManager(hass_config)
         automations.update_tags(body.automation_id, body.tags)
 
     @router.delete("/item")
     def delete_auto(body: ExtenededAutomation):
+        automations = AutomationManager(hass_config)
         try:
             automations.delete(body)
         except FailedDeletion as err:

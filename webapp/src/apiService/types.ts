@@ -19,7 +19,8 @@ export type APIResponse<D> =
       ok: false;
       error: string;
     };
-export type Errorable<D> =
+export type Waitable<D> =
+  | { ready: undefined }
   | ({ ready: true } & APIResponse<D>)
   | {
       ready: false;
@@ -31,8 +32,8 @@ export interface ListData<D> {
 }
 
 export interface ApiState {
-  automations: Errorable<ListData<AutomationData>>;
-  userProfile: Errorable<UserProfile>;
+  automations: Waitable<ListData<AutomationData>>;
+  userProfile: Waitable<UserProfile>;
 }
 
 export type UserProfile = {

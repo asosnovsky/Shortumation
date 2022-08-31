@@ -23,10 +23,16 @@ export const useAPIService = (
 
   // initial load of autos
   useEffect(() => {
-    autoManager.reload();
-    userProfileManager.reload();
-    // eslint-disable-next-line
-  }, []);
+    if (state.automations.ready === undefined) {
+      autoManager.reload();
+    }
+  }, [state.automations.ready, autoManager]);
+  // initial load of profile
+  useEffect(() => {
+    if (state.userProfile.ready === undefined) {
+      userProfileManager.reload();
+    }
+  }, [state.userProfile.ready, userProfileManager]);
 
   return {
     state: {

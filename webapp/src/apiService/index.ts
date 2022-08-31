@@ -15,7 +15,7 @@ const baseURL = new URL(
 );
 export const wsURL = baseURL + "socket";
 export const remoteAutoAPI = makeRemoteAPI(baseURL + "automations");
-export const detailsAPI = makeRemoteAPI(baseURL + "details/");
+export const detailsAPI = makeRemoteAPI(baseURL + "details");
 export const useConnectedApiService = () =>
   useAPIService(makeAutomationAPI(remoteAutoAPI), makeProfileAPI(detailsAPI));
 export const useMockApiService = (

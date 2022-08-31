@@ -77,6 +77,8 @@
   "THEME": "Theme",
   "LANGUAGE": "Language",
 
+  "USER_PRERENCES": "Settings",
+
   "SELECT_AUTOMATION": "Select automation",
   "TRIGGER_AUTOMATION": "Trigger automation",
   "DELETE_AUTOMATION": "Delete automation",
@@ -91,6 +93,7 @@
   "MISSING_TEXT": "MISSING TEXT -- {{langId}}",
 
   "AUTOMATION_METADATA_TOOLTIP_TEXT": "This automation is located in the file {{source_file}}. It's currently '{{state}}', it's entity id is '{{entityId}}' and it's automation id is '{{id}}'",
+  "AUTOMATION_METADATA_TOOLTIP_SIMPLE": "ID={{id}}, EntityID={{entityId}}",
 
   "ERROR_FAILED_TO_SAVE": "Failed to save automation \"{{aid}}\" contents - {{contents}} -- not found in `/config`",
   "ERROR_INVALID_AUTOMATION_STATE": "Invalid state",

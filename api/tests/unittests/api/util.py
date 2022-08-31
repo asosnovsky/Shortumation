@@ -19,4 +19,4 @@ class BaseTestCase(TestCase):
             self.hass_config,
             self.automation_loader,
         ) = get_example_automation_loader(config_to_copy=self.source_config_path)
-        self.client = TestClient(make_app(self.automation_loader))
+        self.client = TestClient(make_app(self.hass_config))

@@ -6,8 +6,8 @@ import { UserProfile } from "apiService/types";
 
 export const useDefaultApiState = () =>
   useState<ApiState>({
-    automations: { ready: false },
-    userProfile: { ready: false },
+    automations: { ready: undefined },
+    userProfile: { ready: undefined },
   });
 
 export const makeReloadAutomations = (
@@ -76,6 +76,15 @@ export const makeProfileManager = (
       userProfileAPI
         .update(data)
         .then(() => reload())
-        .catch(() => reload()),
+        .catch((err) =>
+          setState({
+            ...state,
+            userProfile: {
+              ok: false,
+              error: String(err),
+              ready: true,
+            },
+          })
+        ),
   };
 };

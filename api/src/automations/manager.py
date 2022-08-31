@@ -16,7 +16,6 @@ from .errors import (
 from .loader import (
     get_base_automation_key,
     load_and_iter_automations,
-    load_automation_path,
 )
 from .tags import TagManager
 from .types import Automation, ExtenededAutomation

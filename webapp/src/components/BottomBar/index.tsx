@@ -34,7 +34,7 @@ export const BottomBar: FC<BottomBarProps> = ({ api }) => {
       <span>version: {version}</span>
       <Button className="settings" onClick={() => setOpen(!isOpen)}>
         <SettingsSuggestOutlinedIcon />
-        settings
+        {lang.get("USER_PRERENCES")}
       </Button>
     </div>
   );

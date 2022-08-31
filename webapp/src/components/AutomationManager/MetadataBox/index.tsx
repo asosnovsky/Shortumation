@@ -9,12 +9,15 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SelectIcon from "@mui/icons-material/HighlightAltSharp";
 import RunIcon from "@mui/icons-material/RunCircleOutlined";
 
+import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+
 import { InputTextView } from "components/Inputs/InputTextView";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
-import { Chip, Tooltip } from "@mui/material";
 import { useLang } from "lang";
 
 export type MetadataBoxProps = AutomationManagerAuto & {
@@ -34,7 +37,7 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
     ? langStore.get(`AUTOMATION_STATE_${props.state}`)
     : props.state;
   return (
-    <div
+    <Box
       className={[
         "automation-manager--metadatabox",
         props.isSelected ? "selected" : "",
@@ -79,15 +82,18 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
             />
           </Tooltip>
         </span>
-        <Tooltip title={`ID=${props.id}, EntityID=${props.entityId}`}>
-          <InputTextView
-            className="title"
-            placeholder={langStore.get("TITLE")}
-            value={props.title}
-            onChange={props.onTitleUpdate}
-            disabled={props.isNew}
-          />
-        </Tooltip>
+        <InputTextView
+          titleSlug="AUTOMATION_METADATA_TOOLTIP_SIMPLE"
+          titleParams={{
+            id: props.id,
+            entityId: props.entityId,
+          }}
+          className="title"
+          placeholder={langStore.get("TITLE")}
+          value={props.title}
+          onChange={props.onTitleUpdate}
+          disabled={props.isNew}
+        />
         <InputTextView
           className="description"
           placeholder={langStore.get("DESCRIPTION")}
@@ -106,24 +112,24 @@ export const MetadataBox: FC<MetadataBoxProps> = (props) => {
       </div>
       <div className="buttons">
         <ButtonIcon
+          titleSlug="SELECT_AUTOMATION"
           className="select"
           icon={<SelectIcon />}
           onClick={props.onSelect}
-          title={langStore.get("SELECT_AUTOMATION")}
         />
         <ButtonIcon
+          titleSlug="TRIGGER_AUTOMATION"
           className="run"
           icon={<RunIcon />}
           onClick={props.onRun}
-          title={langStore.get("TRIGGER_AUTOMATION")}
         />
         <ButtonIcon
+          titleSlug="DELETE_AUTOMATION"
           className="delete"
           icon={<DeleteForeverIcon />}
           onClick={props.onDelete}
-          title={langStore.get("DELETE_AUTOMATION")}
         />
       </div>
-    </div>
+    </Box>
   );
 };
