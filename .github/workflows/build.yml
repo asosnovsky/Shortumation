@@ -102,7 +102,7 @@ jobs:
           path: webapp/build
 
       - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
-        uses: home-assistant/builder@master
+        uses: asosnovsky/ha-builder@master
         continue-on-error: true
         with:
           args: |
