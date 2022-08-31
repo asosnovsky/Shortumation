@@ -103,7 +103,7 @@ jobs:
 
       - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
         uses: home-assistant/builder@2022.06.2
-        continue-on-error: true
+        # continue-on-error: true
         with:
           args: |
             --${{ matrix.arch }} \
