@@ -1,5 +1,14 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.7.0] Configuration Menu / Light Mode / Lang Support
+
+- Added configuration menu
+  ![image](https://user-images.githubusercontent.com/7451445/187817636-311b5a83-4e08-4b6b-b3b8-2e7086ace136.png)
+- Experimental light mode
+  ![image](https://user-images.githubusercontent.com/7451445/187817711-c7a8e23c-b9a4-472b-a348-c1492f3c5d56.png)
+- First attempt at a french translation
+- No longer using sqllite for automation db
+
 ## [0.6.3] - Packages Support & Minor UI improvements
 
 - Full split config support for packages and all advance include directives (i.e. !include_dir_named, !include_dir_merge_list etc)
@@ -7,7 +16,6 @@
 - Support for inlined automations!
 
 ![image](https://user-images.githubusercontent.com/7451445/187043147-15cea23b-0b64-4484-9c87-747998ea9fe6.png)
-
 
 ## [0.6.2] - Patches
 
