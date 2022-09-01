@@ -10,18 +10,18 @@ export const ActionEventState: OptionManager<FireEventAction> = {
     event_data: {},
   }),
   isReady: ({ alias, event }) => alias !== "" && event !== "",
-  renderOptionList: (state, setState) => {
+  Component: ({ state, setState, langStore }) => {
     const update = updateActionData(state, setState);
     return (
       <>
         <InputText
           textBoxFor="event"
-          label="Event"
+          label={langStore.get("EVENT")}
           value={state.event}
           onChange={(event) => update({ event })}
         />
         <InputYaml
-          label="Event Data"
+          label={langStore.get("EVENT_DATA")}
           value={state.event_data}
           onChange={(event_data) => update({ event_data })}
         />

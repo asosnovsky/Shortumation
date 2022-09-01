@@ -12,6 +12,7 @@ import {
 } from "utils/time";
 import { InputEntity } from "./InputEntities";
 import { InputTime } from "components/Inputs/Base/InputTime";
+import { useLang } from "lang";
 
 export type InputTimeEntityProps = {
   value: string;
@@ -23,6 +24,7 @@ export const InputTimeEntity: FC<InputTimeEntityProps> = ({
   onChange,
   className = "",
 }) => {
+  const lang = useLang();
   const is24Hour = isAutomationTimeString24Hours(value);
   let editor: ReactNode;
   if (is24Hour) {
@@ -39,7 +41,7 @@ export const InputTimeEntity: FC<InputTimeEntityProps> = ({
   } else {
     editor = (
       <InputEntity
-        label="Time Entity"
+        label={lang.get("TIME_ENTITY")}
         restrictMode="or"
         restrictedDeviceClass={["timestamp"]}
         restrictToDomain={["input_datetime"]}

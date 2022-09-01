@@ -8,11 +8,11 @@ export const ActionStopState: OptionManager<StopAction> = {
     stop: "",
   }),
   isReady: () => true,
-  Component: ({ state, setState }) => {
+  Component: ({ state, setState, langStore }) => {
     return (
       <>
         <InputText
-          label="Stop Reason"
+          label={langStore.get("STOP_REASON")}
           value={state.stop ?? []}
           onChange={(d) => setState({ ...state, stop: d })}
         />

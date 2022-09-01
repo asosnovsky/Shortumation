@@ -37,7 +37,11 @@ export const useAutomationManagerState = ({
       .map(({ id, tags = {} }) => ({
         id,
         tags,
-      })),
+      }))
+      .filter(({ id }) => typeof id === "string") as Array<{
+      id: string;
+      tags: Record<string, string>;
+    }>,
     onUpdateTags
   );
   const automationDB = useAutomationDB(hassEntities, configAutomations, tagsDB);
@@ -78,6 +82,14 @@ export const useAutomationManagerState = ({
     get currentAutomationEntityId(): string | null {
       return currentAutomation === null ? null : currentAutomation[0].entityId;
     },
+    get currentAutomationIsReadOnly(): boolean {
+      return currentAutomation === null ? true : currentAutomation[0].readonly;
+    },
+    get currentAutomationIssue(): string | undefined {
+      return currentAutomation === null
+        ? undefined
+        : currentAutomation[0].issue;
+    },
     async setSelectedAutomationId(i: string | null, force: boolean = false) {
       if (methods.currentAutomationIsNew && !force) {
         if (!(await stillHaveNewAreYouSure())) {
@@ -94,7 +106,9 @@ export const useAutomationManagerState = ({
         }
       }
       const auto = automationDB.addNew();
-      methods.setSelectedAutomationId(auto.id, true);
+      if (auto.id) {
+        methods.setSelectedAutomationId(auto.id, true);
+      }
     },
     editorUpdateAutomation(auto: AutomationData | BareAutomationData) {
       if (methods.currentAutomationIsNew) {

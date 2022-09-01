@@ -23,6 +23,7 @@ const { make, componentMeta } = makeStory({
           id: "1",
           title: "Example",
           entityId: "automation.1",
+          readonly: false,
           description: "Amazing automation!",
           tags: {},
           state: "on",
@@ -38,6 +39,7 @@ const { make, componentMeta } = makeStory({
           id: "2",
           title: "Example 2",
           entityId: "automation.2",
+          readonly: false,
           description: "Cool!",
           state: "on",
           source_file: "automation.yaml",
@@ -89,6 +91,7 @@ export const Nested = make({
               entityId: "automation.1",
               description: "",
               title: "Automation #1",
+              readonly: false,
               state: "on",
               source_file: "automation.yaml",
               source_file_type: "list",
@@ -102,6 +105,7 @@ export const Nested = make({
             {
               id: "2",
               entityId: "automation.2",
+              readonly: false,
               description: "another one",
               title: "Automation #2",
               state: "off",
@@ -117,6 +121,7 @@ export const Nested = make({
             {
               id: "3",
               entityId: "automation.3",
+              readonly: false,
               description: "bad one",
               title: "Automation #3",
               state: "offing",
@@ -153,6 +158,7 @@ export const Nested = make({
       },
       data: [
         {
+          readonly: false,
           id: "4",
           entityId: "automation.4",
           description: "Cool thing",

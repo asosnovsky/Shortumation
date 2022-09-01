@@ -11,14 +11,18 @@ logger = get_logger(__file__)
 class AutomationDBConnection:
     def __init__(self) -> None:
         self.db: dict[str, ExtenededAutomation] = {}
+        self.missing_id_db: list[ExtenededAutomation] = []
 
     def reset(self):
         self.db = {}
+        self.missing_id_db = []
 
     def insert_automations(self, automations: list[ExtenededAutomation]):
         repeated_automations = []
         for automation in automations:
-            if self.db.get(automation.id, None) is None:
+            if automation.id is None:
+                self.missing_id_db.append(automation)
+            elif self.db.get(automation.id, None) is None:
                 self.db[automation.id] = automation
             else:
                 repeated_automations.append(
@@ -33,7 +37,7 @@ class AutomationDBConnection:
         raise DBNoAutomationFound(automation_id)
 
     def list_automations(self, offset: int, limit: int) -> Iterable[ExtenededAutomation]:
-        for i, auto in enumerate(self.db.values()):
+        for i, auto in enumerate([*self.missing_id_db, *self.db.values()]):
             if i >= offset and i < limit + offset:
                 yield auto
 

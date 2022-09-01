@@ -1,5 +1,6 @@
 {
   "ADD": "Add",
+  "AREA": "Area",
   "ALIAS": "Alias",
   "ATTRIBUTE": "Attribute",
   "ABOVE": "Above",
@@ -34,8 +35,10 @@
   "OR": "Or",
   "ZONE": "Zone",
   "ENTITY": "Entity",
+  "ENTITY_ID": "Entity ID",
   "ENABLED": "Enabled",
   "ENTITY_WITH_LOCATION": "Entity with Location",
+  "TIME_ENTITY": "Time Entity",
   "AND_MORE": "and more",
   "YES": "Yes",
   "NO": "No",
@@ -43,16 +46,28 @@
   "SERVICE": "Service",
   "REPEAT": "Repeat",
   "WAIT": "Wait",
+  "WAIT_TYPE": "Wait Type",
   "STOP": "Stop",
+  "STOP_REASON": "Stop Reason",
   "CHOOSE": "Choose",
   "PARALLEL": "Parallel",
   "SCENE": "Scene",
 
+  "TIME_UNITS_HOURS": "hours",
+  "TIME_UNITS_MINUTES": "minutes",
+  "TIME_UNITS_SECONDS": "seconds",
+  "TIME_UNITS_MILISECONDS": "milliseconds",
+
+  "TIMEOUT": "Timeout",
+  "CONTINUTE_ON_TIMEOUT": "Continue on Timeout",
+
+  "FOR": "For",
   "AND": "and",
   "NOT": "not",
   "NUMERIC_STATE": "Numeric State",
   "TIME": "Time",
   "EVENT": "Event",
+  "EVENT_DATA": "Event Data",
   "HOMEASSISTANT": "Home Assistant",
   "CALENDAR": "Calendar",
   "WEBHOOK": "Webhook",
@@ -109,6 +124,7 @@
   "ISSUES_INVALID_STATE": "Recived invalid state '{{state}}', this could be because you have a lingering automation that was not cleared by homeassistant, try to reboot HA or manually clear this automation from HA Database.",
   "ISSUES_FIND_AUTOMATION_IN_CONFIG": "failed to find this automation in '/config' folder",
   "ISSUES_NO_LOAD_AUTOMATION": "homeassistant did not load this automation, try to manually reload automations or restart homeassistant.",
+  "ISSUE_MUST_CONTAIN_A_UNQIUE_ID_TO_EDIT": "In order to modify an automation you have specify a unique id. Please go to the file '{{sourceFile}}' and add an `id` field to the automation.",
 
   "AUTOMATION_STATE_UNREGISTERED": "unregistered",
   "AUTOMATION_STATE_ON": "On",
@@ -154,5 +170,10 @@
   "WARNING_SWITCHING_FROM_NONE_SAVE": "Selecting another automation will cause you to lose all work done on this new automation. Please save your work on this automation first.",
   "WARNING_DEVICE_NO_TYPES": "This device has no {{type}}.",
 
-  "INFO_SUCCESS_CALL": "Successfully called {{entityId}}"
+  "INFO_SUCCESS_CALL": "Successfully called {{entityId}}",
+
+  "HOW_MANY_TIMES": "How many times?",
+
+  "READONLY_MODE": "Read Only Mode",
+  "READONLY_CANNOT_UPDATE": "Cannot update in readonly mode"
 }

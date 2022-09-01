@@ -7,11 +7,11 @@ export const ActionSceneState: OptionManager<SceneAction> = {
     scene: "",
   }),
   isReady: () => true,
-  Component: ({ state, setState }) => {
+  Component: ({ state, setState, langStore }) => {
     return (
       <>
         <InputEntity
-          label="Scene"
+          label={langStore.get("SCENE")}
           restrictToDomain={["scene"]}
           value={state.scene ?? ""}
           onChange={(d) => setState({ ...state, scene: d ?? "" })}

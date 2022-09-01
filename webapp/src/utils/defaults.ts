@@ -62,7 +62,9 @@ export const getConditionDefaultValues = (
   } as any;
 };
 
-export const defaultAutomation = (id: string): BareAutomationData => ({
+export const defaultAutomation = (
+  id: string
+): BareAutomationData & { id: string } => ({
   id,
   alias: "New Automation",
   description: "",

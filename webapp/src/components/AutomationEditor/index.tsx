@@ -32,6 +32,8 @@ import { MiniFailure } from "types/validators/helper";
 import { AutoInfoBox } from "./AutoInfoBox";
 import { useAutomatioEditorState, EditorData } from "./state";
 import { useLang } from "lang";
+import { useSnackbar } from "notistack";
+import { Alert } from "@mui/material";
 
 interface Props {
   automation?: AutomationData | BareAutomationData;
@@ -41,6 +43,8 @@ interface Props {
   onDelete: () => void;
   tagDB: TagDB;
   isNew?: boolean;
+  readonly: boolean;
+  issue?: string;
 }
 export const AutomationEditor: FC<Props> = ({
   dims,
@@ -49,10 +53,12 @@ export const AutomationEditor: FC<Props> = ({
   onDelete,
   onTrigger,
   tagDB,
-  isNew,
+  readonly,
+  issue,
 }) => {
   // state
   const langStore = useLang();
+  const snackbr = useSnackbar();
   const {
     state,
     updateSequence,
@@ -63,7 +69,15 @@ export const AutomationEditor: FC<Props> = ({
     save,
     saveAndUpdate,
     undo,
-  } = useAutomatioEditorState(propsAutos, propsOnUpdate);
+  } = useAutomatioEditorState(propsAutos, (auto) => {
+    if (readonly) {
+      snackbr.enqueueSnackbar(langStore.get("READONLY_CANNOT_UPDATE"), {
+        color: "warning",
+      });
+    } else {
+      propsOnUpdate(auto);
+    }
+  });
   const [infoBoxOpen, setInfoBox] = useState(false);
   const [
     { ckFlipped },
@@ -95,7 +109,13 @@ export const AutomationEditor: FC<Props> = ({
     );
   }
   return (
-    <div className={["automation-editor", state.status].join(" ")}>
+    <div
+      className={[
+        "automation-editor",
+        state.status,
+        readonly ? "readonly" : "",
+      ].join(" ")}
+    >
       {state.status === "saving" && (
         <LinearProgress className="linear-loader" />
       )}
@@ -112,13 +132,15 @@ export const AutomationEditor: FC<Props> = ({
               state.status,
             ].join(" ")}
           >
-            <Button onClick={() => setInfoBox(false)}>Close</Button>
+            <Button onClick={() => setInfoBox(false)}>
+              {langStore.get("CLOSE")}
+            </Button>
             <Button
               className={"automation-editor--flow-wrapper--toolbar--save-btn"}
               onClick={save}
-              disabled={state.status !== "changed"}
+              disabled={state.status !== "changed" || readonly}
             >
-              Save <CheckMarkIcon color="#bf4" />
+              {langStore.get("SAVE")} <CheckMarkIcon color="#bf4" />
             </Button>
           </div>
         </AutoInfoBox>
@@ -220,6 +242,11 @@ export const AutomationEditor: FC<Props> = ({
             {langStore.get("SAVE")} <CheckMarkIcon color="#bf4" />
           </Button>
         </div>
+        {readonly && (
+          <Alert color="warning">
+            {langStore.get("READONLY_MODE")} - {issue}
+          </Alert>
+        )}
         <DAGAutomationGraph
           action={state.data.action}
           trigger={state.data.trigger}
@@ -306,16 +333,14 @@ export const ValidationBox: FC<{
     <div className="automation-editor-failures">
       <ul>
         {failures.map((f, i) => (
-          <>
-            <li key={i}>
-              <b>{f.path}</b>:
-              <ul>
-                {f.message.map((m, j) => (
-                  <li key={j}>{m}</li>
-                ))}
-              </ul>
-            </li>
-          </>
+          <li key={i}>
+            <b>{f.path}</b>:
+            <ul>
+              {f.message.map((m, j) => (
+                <li key={j}>{m}</li>
+              ))}
+            </ul>
+          </li>
         ))}
       </ul>
       <span>{langStore.get("VALIDATION_PLEASE_CORRECT_FILE")}</span>

@@ -24,7 +24,7 @@ export const ActionWaitState: OptionManager<ThisAction> = {
     delay: "",
   }),
   isReady: () => true,
-  Component: ({ state, setState }) => {
+  Component: ({ state, setState, langStore }) => {
     // state
     const update = updateActionData(state, setState);
     const [current, _setCurrent] = useState(getCurrentOption(state));
@@ -63,7 +63,7 @@ export const ActionWaitState: OptionManager<ThisAction> = {
         <>
           <InputTime
             className="for"
-            label="for"
+            label={langStore.get("FOR")}
             value={(state as any).delay}
             onChange={(delay) => update({ delay })}
           />
@@ -87,7 +87,7 @@ export const ActionWaitState: OptionManager<ThisAction> = {
         <>
           <InputYaml
             className="triggers"
-            label="Triggers"
+            label={langStore.get("TRIGGERS")}
             value={state.wait_for_trigger ?? []}
             onChange={(wait_for_trigger) => update({ wait_for_trigger })}
           />
@@ -100,7 +100,7 @@ export const ActionWaitState: OptionManager<ThisAction> = {
       <div className="node-editor--action-wait">
         <InputList
           className="wait-type"
-          label="Wait Type"
+          label={langStore.get("WAIT_TYPE")}
           prettyOptionLabels
           options={["template", "trigger", "delay"]}
           current={current}
@@ -110,7 +110,7 @@ export const ActionWaitState: OptionManager<ThisAction> = {
         {current !== "delay" ? (
           <div className="wait-options">
             <InputNumber
-              label="Timeout"
+              label={langStore.get("TIMEOUT")}
               value={
                 (state as any).timeout
                   ? Number((state as any).timeout)
@@ -123,7 +123,7 @@ export const ActionWaitState: OptionManager<ThisAction> = {
               }
             />
             <InputBoolean
-              label="Continue on Timeout"
+              label={langStore.get("CONTINUTE_ON_TIMEOUT")}
               value={(state as any).continue_on_timeout ?? false}
               onChange={(continue_on_timeout) =>
                 update({ continue_on_timeout })

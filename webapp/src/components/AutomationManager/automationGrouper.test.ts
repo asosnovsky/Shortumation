@@ -38,10 +38,11 @@ const automations: AutomationManagerAuto[] = [
   description: a.description ?? "",
   state: "on",
   tags: a.tags,
-  id: a.id,
+  id: a.id as string,
   isSelected: false,
   source_file: "automation.yaml",
   source_file_type: "list",
+  readonly: false,
   configuration_key: ["automation"],
 }));
 
@@ -51,7 +52,8 @@ const bigList = bigMockAutoList.map<AutomationManagerAuto>((a) => ({
   description: a.description ?? "",
   state: "on",
   tags: a.tags,
-  id: a.id,
+  id: a.id as string,
+  readonly: false,
   isSelected: false,
   source_file: "automation.yaml",
   source_file_type: "list",

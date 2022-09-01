@@ -1,7 +1,7 @@
 import * as st from "superstruct";
 
 export const AutomationData = st.object({
-  id: st.string(),
+  id: st.nullable(st.string()),
   alias: st.optional(st.string()),
   description: st.optional(st.string()),
   trigger_variables: st.optional(
@@ -20,7 +20,7 @@ export const AutomationData = st.object({
 });
 
 export const BareAutomationData = st.object({
-  id: st.string(),
+  id: st.nullable(st.string()),
   alias: st.optional(st.string()),
   description: st.optional(st.string()),
   trigger_variables: st.optional(

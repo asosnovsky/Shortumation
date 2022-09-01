@@ -32,7 +32,7 @@ AutomationExtractedIter = Iterator[ExtractedAutomation]
 
 
 class BaseAutomation(BaseModel):
-    id: str
+    id: Optional[str]
     alias: Optional[str] = None
     description: Optional[str] = None
     trigger_variables: Optional[dict[str, Union[str, int, bool, float]]] = None

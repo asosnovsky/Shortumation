@@ -271,7 +271,7 @@ export const StateEditor: Editor<StateCondition> = ({
         }
       />
       <InputTime
-        label="For"
+        label={langStore.get("FOR")}
         value={condition.for}
         onChange={(_for) =>
           onChange({

@@ -19,7 +19,7 @@ const { make, componentMeta } = makeStory({
       <AutomationEditor
         {...args}
         tagDB={useTagDB(
-          state ? [{ id: state.id, tags: state.tags }] : [],
+          state && state.id ? [{ id: state.id, tags: state.tags }] : [],
           () => {}
         )}
         automation={state}

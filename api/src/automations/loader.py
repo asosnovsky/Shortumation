@@ -236,9 +236,11 @@ def load_automation_inline_ref(
 ) -> Iterator[ExtenededAutomation]:
     for auto in inline_automation.automations:
         try:
+            cleaned_automation = clean_automation(auto)
+            automation_id = cleaned_automation.get("id", None)
             yield ExtenededAutomation(
-                **clean_automation(auto),
-                tags=tag_manager.get(auto["id"], {}),
+                **cleaned_automation,
+                tags={} if automation_id is None else tag_manager.get(automation_id, {}),
                 configuration_key=inline_automation.configuration_key,
                 source_file=str(inline_automation.source_file.resolve().relative_to(root_path)),
                 source_file_type="inline",
@@ -286,9 +288,11 @@ def load_automation_path(
 
         if isinstance(automations, dict):
             try:
+                cleaned_automation = clean_automation(automations)
+                automation_id = cleaned_automation.get("id", None)
                 yield ExtenededAutomation(
-                    **clean_automation(automations),
-                    tags=tag_manager.get(automations["id"], {}),
+                    **cleaned_automation,
+                    tags={} if automation_id is None else tag_manager.get(automation_id, {}),
                     configuration_key=configuration_key,
                     source_file=str(automation_path.resolve().relative_to(root_path)),
                     source_file_type="obj",
@@ -305,9 +309,11 @@ def load_automation_path(
                 return
             for automation in automations:
                 try:
+                    cleaned_automation = clean_automation(automation)
+                    automation_id = cleaned_automation.get("id", None)
                     yield ExtenededAutomation(
-                        **clean_automation(automation),
-                        tags=tag_manager.get(automation["id"], {}),
+                        **cleaned_automation,
+                        tags={} if automation_id is None else tag_manager.get(automation_id, {}),
                         configuration_key=configuration_key,
                         source_file=str(automation_path.resolve().relative_to(root_path)),
                         source_file_type="list",

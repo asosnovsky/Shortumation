@@ -12,6 +12,7 @@ import {
 } from "utils/time";
 import { prettyName } from "utils/formatting";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
+import { useLang } from "lang";
 
 // constants
 const fields: Array<keyof AutomationTimeObject> = [
@@ -29,6 +30,7 @@ export type InputTimeProps = {
 };
 export const InputTime: FC<InputTimeProps> = (props) => {
   // state
+  const lang = useLang();
   const [disabled, setDisabled] = useState(!props.value);
   const [displayValue, setDisplayValue] = useState(
     convertAutomationTimeToTimeObject(props.value)
@@ -127,21 +129,26 @@ export const InputTime: FC<InputTimeProps> = (props) => {
     <div className={["input-time", props.className ?? ""].join(" ")}>
       {/* <InputLabel >{props.label}</InputLabel> */}
       <div className="input-time--inner">
-        {fields.map((name) => (
-          <TextField
-            key={name}
-            variant="filled"
-            label={prettyName(name)}
-            defaultValue="00"
-            InputProps={{
-              disabled,
-              type: "number",
-              title: prettyName(name),
-            }}
-            value={displayValue[name] ?? 0}
-            onChange={(e) => updateOne(name)(e.target.value)}
-          />
-        ))}
+        {fields.map((name) => {
+          const label = prettyName(
+            lang.get(`TIME_UNITS_${name}`.toUpperCase())
+          );
+          return (
+            <TextField
+              key={name}
+              variant="filled"
+              label={label}
+              defaultValue="00"
+              InputProps={{
+                disabled,
+                type: "number",
+                title: label,
+              }}
+              value={displayValue[name] ?? 0}
+              onChange={(e) => updateOne(name)(e.target.value)}
+            />
+          );
+        })}
         {!props.restrictEmpty && (
           <ButtonIcon
             onClick={() => setDisabled(!disabled)}

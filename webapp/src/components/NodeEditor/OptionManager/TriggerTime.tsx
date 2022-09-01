@@ -15,6 +15,7 @@ import { Button } from "components/Inputs/Buttons/Button";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { InputTimeEntity } from "components/Inputs/AutoComplete/InputTimeEntity";
+import { useLang } from "lang";
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {
   defaultState: () => ({
@@ -115,10 +116,11 @@ export const TriggerTimePattern: FC<{
   state: AutomationTriggerTimePattern;
   setState: (t: AutomationTriggerTimePattern) => void;
 }> = ({ state, setState }) => {
+  const lang = useLang();
   return (
     <div className="trigger-time--pattern">
       <InputText
-        label="Hours"
+        label={lang.get("TIME_UNITS_HOURS")}
         value={state.hours ?? ""}
         onChange={(hours) =>
           setState({
@@ -128,7 +130,7 @@ export const TriggerTimePattern: FC<{
         }
       />
       <InputText
-        label="Minutes"
+        label={lang.get("TIME_UNITS_MINUTES")}
         value={state.minutes ?? ""}
         onChange={(minutes) =>
           setState({
@@ -138,7 +140,7 @@ export const TriggerTimePattern: FC<{
         }
       />
       <InputText
-        label="Seconds"
+        label={lang.get("TIME_UNITS_SECONDS")}
         value={state.seconds ?? ""}
         onChange={(seconds) =>
           setState({

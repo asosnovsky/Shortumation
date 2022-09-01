@@ -50,6 +50,8 @@ export const AutomationManagerLoaded: FC<
         {state.currentAutomationId !== null ? (
           state.currentAutomation ? (
             <AutomationEditor
+              readonly={state.currentAutomationIsReadOnly}
+              issue={state.currentAutomationIssue}
               dims={{
                 ...DEFAULT_DIMS,
                 flipped: true,

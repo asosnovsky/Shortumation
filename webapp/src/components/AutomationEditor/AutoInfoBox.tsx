@@ -104,7 +104,7 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
       <div className="automation-editor--info-box-inner">
         <InputText
           label={langStore.get("ID")}
-          value={metadata.id}
+          value={metadata.id ?? langStore.get("N/A")}
           onChange={onUpdateMetadata("id")}
         />
         <InputText
@@ -125,7 +125,7 @@ export const AutoInfoBox: FC<AutoInfoBoxProps> = ({
           options={["parallel", "single", "queued", "restart"]}
         />
         <div className="automation-editor--info-box--tags">
-          <h1>Tags</h1>
+          <h1>{langStore.get("TAGS")}</h1>
           <div className="automation-editor--info-box--tag-list">
             {tags.map(([tagName, tagValue], tagIndex) => (
               <div key={tagIndex} className="automation-editor--info-box--tag">

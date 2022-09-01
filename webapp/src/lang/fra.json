@@ -1,5 +1,6 @@
 {
   "ADD": "Ajouter",
+  "AREA": "Zone",
   "ALIAS": "Alias",
   "ATTRIBUTE": "Attribuer",
   "ABOVE": "Plus grand que",
@@ -37,8 +38,10 @@
   "OR": "Ou",
   "ZONE": "Zone",
   "ENTITY": "Entité",
+  "ENTITY_ID": "ID d'entité",
   "ENABLED": "Activé",
   "ENTITY_WITH_LOCATION": "Entité avec emplacement",
+  "TIME_ENTITY": "Entité temporelle",
   "AND_MORE": "et plus",
   "YES": "Oui",
   "NO": "Non",
@@ -46,21 +49,33 @@
   "SERVICE": "Service",
   "REPEAT": "Répéter",
   "WAIT": "Attendre",
+  "WAIT_TYPE": "Type d'attente",
   "STOP": "Arrêt",
+  "STOP_REASON": "Raison d'arrêt",
   "CHOOSE": "Choisir",
   "PARALLEL": "Parallèle",
   "SCENE": "Scène",
   "EVENT": "Événement",
+  "EVENT_DATA": "Données d'événement",
   "HOMEASSISTANT": "Home Assistant",
   "CALENDAR": "Calendrier",
   "WEBHOOK": "Webhook",
   "SUN": "Soleil",
   "MQTT": "MQTT",
 
+  "TIME_UNITS_HOURS": "heures",
+  "TIME_UNITS_MINUTES": "minutes",
+  "TIME_UNITS_SECONDS": "secondes",
+  "TIME_UNITS_MILISECONDS": "millisecondes",
+
+  "TIMEOUT": "Temps libre",
+  "CONTINUTE_ON_TIMEOUT": "Continuer sur Timeout",
+
   "CONNECTED": "Connecté",
   "FAILED": "Échoué",
   "LOADING": "Chargement",
 
+  "FOR": "Pour",
   "AND": "et",
   "NOT": "non",
   "NUMERIC_STATE": "État numérique",
@@ -111,6 +126,7 @@
   "ISSUES_INVALID_STATE": "État invalide reçu '{{state}}', cela peut être dû au fait que vous avez une automatisation persistante qui n'a pas été effacée par Home Assistant, essayez de redémarrer Home Assistant ou effacez manuellement cette automatisation de la base de données HA.",
   "ISSUES_FIND_AUTOMATION_IN_CONFIG": "impossible de trouver cette automatisation dans le dossier '/config'",
   "ISSUES_NO_LOAD_AUTOMATION": "homeassistant n'a pas chargé cette automatisation, essayez de recharger manuellement les automatisations ou redémarrez Home Assistant.",
+  "ISSUE_MUST_CONTAIN_A_UNQIUE_ID_TO_EDIT": "Pour modifier une automatisation, vous devez spécifier un identifiant unique. Veuillez aller dans le fichier '{{sourceFile}}' et ajouter un champ `id` à l'automatisation.",
 
   "AUTOMATION_STATE_UNREGISTERED": "non enregistré",
   "AUTOMATION_STATE_ON": "Activé",
@@ -156,5 +172,10 @@
   "WARNING_SWITCHING_FROM_NONE_SAVE": "La sélection d'une autre automatisation vous fera perdre tout le travail effectué sur cette nouvelle automatisation. Veuillez d'abord enregistrer votre travail sur cette automatisation.",
   "WARNING_DEVICE_NO_TYPES": "Cet appareil n'a pas de {{type}}.",
 
-  "INFO_SUCCESS_CALL": "{{entityId}} a été appelé avec succès"
+  "INFO_SUCCESS_CALL": "{{entityId}} a été appelé avec succès",
+
+  "HOW_MANY_TIMES": "Données d'événementaCombien de fois?",
+
+  "READONLY_MODE": "Mode lecture seule",
+  "READONLY_CANNOT_UPDATE": "Impossible de mettre à jour en mode lecture seule"
 }

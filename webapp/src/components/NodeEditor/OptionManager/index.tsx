@@ -158,6 +158,7 @@ export const useEditorNodeState = (
               setState={setState}
               ha={ha}
               createMode={createMode}
+              langStore={langStore}
             />
           )}
         </>

@@ -76,7 +76,7 @@ test("update tags from mock api", async () => {
   );
   let data = ((await mockApi.list({ limit: 10, offset: 0 })) as any).data
     .data as AutomationData[];
-  const autoId = data[0].id;
+  const autoId = data[0].id as string;
   expect(data[0].tags).toStrictEqual({});
   mockApi.updateTags({
     automation_id: autoId,

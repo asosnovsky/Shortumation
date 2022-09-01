@@ -15,12 +15,12 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
     },
   }),
   isReady: () => true,
-  Component: ({ state, setState }) => {
+  Component: ({ state, setState, langStore }) => {
     const repeatType = determineType(state.repeat);
     return (
       <>
         <InputAutoComplete
-          label="Type"
+          label={langStore.get("TYPE")}
           value={repeatType}
           options={["while", "until", "count"]}
           onChange={(v) => {
@@ -53,7 +53,7 @@ export const ActionRepeatState: OptionManager<RepeatAction> = {
         />
         {"count" in state.repeat && (
           <InputNumber
-            label="How many times?"
+            label={langStore.get("HOW_MANY_TIMES")}
             value={state.repeat.count}
             onChange={(count = 1) =>
               setState({

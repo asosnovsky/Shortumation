@@ -134,7 +134,7 @@ export const NodeEditor: FC<NodeEditorProps> = ({
             areYouSureNotReady("close", true).then((ok) => ok && onClose())
           }
         >
-          Close
+          {langStore.get("CLOSE")}
         </Button>
         <Button
           className="node-editor--footer--save"

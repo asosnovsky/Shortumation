@@ -1,5 +1,6 @@
 import { HAService } from "haService";
 import { HAEntitiesState } from "haService/HAEntities";
+import { LangStore } from "lang";
 import { FC } from "react";
 import { AutomationAction } from "types/automations/actions";
 import { AutomationCondition } from "types/automations/conditions";
@@ -21,6 +22,7 @@ export type OptionManager<T> = {
         setState: (s: T) => void;
         ha: HAService;
         createMode: boolean;
+        langStore: LangStore;
       }>;
     }
 );

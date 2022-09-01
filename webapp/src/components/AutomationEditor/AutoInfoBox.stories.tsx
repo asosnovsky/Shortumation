@@ -14,7 +14,7 @@ const { componentMeta, make } = makeStory({
   }) => {
     const [[metadata, tags], setState] = useState([args.metadata, args.tags]);
     const tagDB = useTagDB(
-      [{ id: metadata.id, tags: Object.fromEntries(tags) }],
+      metadata.id ? [{ id: metadata.id, tags: Object.fromEntries(tags) }] : [],
       (_, t) => setState([metadata, Object.entries(t)])
     );
 

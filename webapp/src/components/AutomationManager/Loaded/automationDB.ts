@@ -52,6 +52,7 @@ export const useAutomationDB = (
       const auto = defaultAutomation(String(Date.now()));
       setNewAuto([
         {
+          readonly: false,
           id: auto.id,
           entityId: "",
           title: auto.alias ?? "",
@@ -77,13 +78,18 @@ const genMapping = (
   tagsDB: TagDB,
   langStore: LangStore
 ) => {
-  const configData: Record<string, AutomationData> = configAutomations.reduce(
-    (all, n) => ({
-      ...all,
-      [n.id]: n,
-    }),
-    {}
-  );
+  const configDataNoId: AutomationData[] = [];
+  const configData: Record<string, AutomationData & { id: string }> =
+    configAutomations.reduce((all, n) => {
+      if (n.id) {
+        return {
+          ...all,
+          [n.id]: n,
+        };
+      }
+      configDataNoId.push(n);
+      return all;
+    }, {});
   const automatioinMap: Record<
     string,
     [AutomationManagerAuto, AutomationData | null]
@@ -91,7 +97,7 @@ const genMapping = (
   Object.entries(haEntities)
     .filter(([entityId, _]) => entityId.toLowerCase().startsWith("automation."))
     .forEach(([entityId, entityData], i) => {
-      const autoId = entityData.attributes.id ?? `${entityData.state}-${i}`;
+      const autoId = entityData.attributes.id ?? entityId.split(".")[1];
       let title = entityData.attributes.friendly_name ?? "";
       let description = "";
       let issue: string | undefined = ["on", "off"].includes(entityData.state)
@@ -127,12 +133,13 @@ const genMapping = (
           source_file_type,
           configuration_key,
           issue,
+          readonly: found == null,
         },
         found,
       ];
     });
 
-  Object.values(configData).forEach((auto) => {
+  Object.values(configData).forEach((auto, i) => {
     automatioinMap[auto.id] = [
       {
         id: auto.id,
@@ -145,9 +152,54 @@ const genMapping = (
         source_file_type: auto.source_file_type,
         configuration_key: auto.configuration_key,
         issue: langStore.get("ISSUES_NO_LOAD_AUTOMATION"),
+        readonly: false,
       },
       auto,
     ];
+  });
+  let failedGeneration: number = 0;
+  configDataNoId.forEach((auto) => {
+    let generatedAutoId = `automation_${failedGeneration + 1}`;
+    if (auto.alias) {
+      generatedAutoId = auto.alias
+        .toLowerCase()
+        .replaceAll(/\W/g, " ")
+        .trim()
+        .replaceAll(" ", "_");
+    } else {
+      failedGeneration += 1;
+    }
+    if (automatioinMap[generatedAutoId]) {
+      automatioinMap[generatedAutoId] = [
+        {
+          ...automatioinMap[generatedAutoId][0],
+          issue: langStore.get("ISSUE_MUST_CONTAIN_A_UNQIUE_ID_TO_EDIT", {
+            sourceFile: auto.source_file,
+          }),
+          readonly: true,
+        },
+        auto,
+      ];
+    } else {
+      automatioinMap[generatedAutoId] = [
+        {
+          id: generatedAutoId,
+          entityId: "",
+          title: auto.alias ?? "",
+          description: auto.description ?? "",
+          state: langStore.get("AUTOMATION_STATE_UNREGISTERED"),
+          tags: {},
+          source_file: auto.source_file,
+          source_file_type: auto.source_file_type,
+          configuration_key: auto.configuration_key,
+          issue: langStore.get("ISSUE_MUST_CONTAIN_A_UNQIUE_ID_TO_EDIT", {
+            sourceFile: auto.source_file,
+          }),
+          readonly: true,
+        },
+        auto,
+      ];
+    }
   });
 
   return automatioinMap;

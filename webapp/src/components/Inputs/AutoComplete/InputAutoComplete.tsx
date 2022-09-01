@@ -7,6 +7,7 @@ import Popper from "@mui/material/Popper";
 import { SearchItem } from "./extras";
 import { ReactNode } from "react";
 import { prettyName } from "utils/formatting";
+import { useLang } from "lang";
 
 export type BaseOption<T = {}> = {
   id: string;
@@ -65,6 +66,7 @@ export function computeSimilarity(
 export function InputAutoComplete<T extends Option>(
   props: InputAutoCompleteProps<T>
 ) {
+  const lang = useLang();
   // aliases
   const getID = (opt: T): string => {
     if (props.getID) {
@@ -212,7 +214,7 @@ export function InputAutoComplete<T extends Option>(
           }}
           variant="filled"
           required={props.required}
-          label={props.label ?? "Entity ID"}
+          label={props.label ?? lang.get("ENTITY_ID")}
           helperText={helperText}
           disabled={props.disabled}
           error={error}

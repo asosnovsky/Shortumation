@@ -29,11 +29,15 @@ def make_automation_router(hass_config: HassConfig) -> APIRouter:
 
     @router.post("/item")
     def insert_auto(body: Automation):
+        if body.id is None:
+            raise HTTPException(status_code=400, detail={"msg": "must contain an id"})
         automations = AutomationManager(hass_config)
         automations.create(body)
 
     @router.put("/item")
     def update_auto(body: ExtenededAutomation):
+        if body.id is None:
+            raise HTTPException(status_code=400, detail={"msg": "must contain an id"})
         automations = AutomationManager(hass_config)
         automations.update(body)
 

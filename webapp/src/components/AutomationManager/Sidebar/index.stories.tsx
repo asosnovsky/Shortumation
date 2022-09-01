@@ -71,6 +71,7 @@ const story = makeStory({
               source_file: "automation.yaml",
               source_file_type: "list",
               configuration_key: ["automation"],
+              readonly: false,
             },
           ]);
           setSelAutoId(id);
@@ -100,6 +101,7 @@ const makeAuto = (
     source_file: "automation.yaml",
     source_file_type: "list",
     configuration_key: ["automation"],
+    readonly: false,
     ...data,
   };
 };
