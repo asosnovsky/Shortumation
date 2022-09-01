@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - main
+concurrency:
+  group: ${{ github.head_ref	|| github.ref	 }}
+  cancel-in-progress: true
 jobs:
   metadata:
     runs-on: ubuntu-latest

@@ -8,6 +8,9 @@ on:
   push:
     branches:
       - main
+concurrency:
+  group: ${{ github.event.inputs.version || github.head_ref	|| github.ref	 }}
+  cancel-in-progress: true
 jobs:
   metadata:
     runs-on: ubuntu-latest
