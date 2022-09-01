@@ -36,4 +36,13 @@ If applicable, add screenshots to help explain your problem.
  - Version [e.g. 22]
 
 **Additional context**
+- Home Assistant Version: [e.g. core-2022.5.4]
+- Shortumation Version: [e.g. v0.7.0]
+- Homeassistant server type: [e.g. raspberry pi 4 / intel nuc]
 Add any other context about the problem here.
+
+**Shortumation Logs**
+
+```log
+<--- copy here --->
+```
