@@ -46,3 +46,4 @@ ENTRYPOINT [ "/app/bin/run.sh" ]
 CMD [ "/app" ]
 
 LABEL org.opencontainers.image.source https://github.com/asosnovsky/Shortumation
+LABEL org.opencontainers.image.description "A better way to write automations in home-assistant without having to install and run a seperate automation engine!"
