@@ -148,10 +148,10 @@
 
   "CONFIRM_EXIT": "Êtes-vous sûr de vouloir {{what}}?",
 
-  "MODE_SIGNLE_LABEL": "Ne démarrez pas une nouvelle exécution. Émettre un avertissement.",
-  "MODE_SIGNLE_PARALLEL": "Démarrez une nouvelle exécution indépendante en parallèle avec les exécutions précédentes.",
-  "MODE_SIGNLE_QUEUED": "Démarrez une nouvelle exécution une fois toutes les exécutions précédentes terminées. Les exécutions sont garanties de s'exécuter dans l'ordre dans lequel elles ont été mises en file d'attente.",
-  "MODE_SIGNLE_RESTART": "Démarrez une nouvelle exécution après avoir arrêté l'exécution précédente.",
+  "MODE_SIGNLE_LABEL": "Ne pas démarrer une nouvelle exécution. Émettre un avertissement.",
+  "MODE_SIGNLE_PARALLEL": "Démarrer une nouvelle exécution indépendante en parallèle avec les exécutions précédentes.",
+  "MODE_SIGNLE_QUEUED": "Démarrer une nouvelle exécution une fois toutes les exécutions précédentes terminées. Les exécutions sont garanties de s'exécuter dans l'ordre dans lequel elles ont été mises en file d'attente.",
+  "MODE_SIGNLE_RESTART": "Démarrer une nouvelle exécution après avoir arrêté l'exécution précédente.",
 
   "WARNING_SWITCHING_FROM_NONE_SAVE": "La sélection d'une autre automatisation vous fera perdre tout le travail effectué sur cette nouvelle automatisation. Veuillez d'abord enregistrer votre travail sur cette automatisation.",
   "WARNING_DEVICE_NO_TYPES": "Cet appareil n'a pas de {{type}}.",
