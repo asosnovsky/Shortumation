@@ -9,7 +9,7 @@ on:
     branches:
       - main
 concurrency:
-  group: ${{ github.event.inputs.version || github.head_ref	|| github.ref	 }}
+  group: build-${{ github.event.inputs.version || github.head_ref	|| github.ref	 }}
   cancel-in-progress: true
 jobs:
   metadata:
@@ -96,6 +96,7 @@ jobs:
 
       # - name: Login to Github Container Registry
       #   run: echo ${{ github.token }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+
       - name: Login to DockerHub
         uses: docker/login-action@v2.0.0
         with:
