@@ -2,7 +2,7 @@
 ARG BUILD_ARCH
 
 # <--- Main Image --> 
-FROM python:3.10-buster
+FROM python:3.10-slim-bullseye
 WORKDIR /app
 
 # <--- Post-Build Args --> 
@@ -10,6 +10,7 @@ ARG BUILD_VERSION
 
 # <--- Environment Variables --> 
 ENV BUILD_VERSION $BUILD_VERSION
+ENV BUILD_ARCH $BUILD_ARCH
 
 # <--- System Wide Dependencies --> 
 ENV LANG C.UTF-8
