@@ -53,7 +53,7 @@ export const UserProfileEditor: FC<UserProfileProps> = ({ api }) => {
       />
       <InputList
         label={lang.get("LANGUAGE")}
-        options={["eng", "fra"]}
+        options={["eng", "fra", "ita"]}
         current={profile.data.lang}
         onChange={update("lang")}
       />
