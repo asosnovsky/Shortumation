@@ -80,7 +80,7 @@ jobs:
         arch:
           - "aarch64"
           - "amd64"
-          - "armhf" # see https://github.com/asosnovsky/Shortumation/issues/147
+          - "armhf"
           - "armv7"
           - "i386"
 
@@ -105,12 +105,10 @@ jobs:
 
       - name: ${{ matrix.arch }} / ${{ needs.metadata.outputs.version }}
         uses: home-assistant/builder@master
-        # continue-on-error: true
         with:
           args: |
             --${{ matrix.arch }} \
             --no-latest \
-            --no-cache \
             --version ${{ needs.metadata.outputs.version }} \
             --target .
 
