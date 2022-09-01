@@ -60,9 +60,7 @@ export const InternalPage: FC<PageProps> = ({ children, api }) => {
   }, [conn, snackbar]);
 
   return (
-    <main
-      className={["page", "center column", isMobile ? "mobile" : ""].join(" ")}
-    >
+    <main className={["page", "column", isMobile ? "mobile" : ""].join(" ")}>
       <div className="page-contents column">{children}</div>
       <BottomBar api={api} />
       <style>

@@ -65,6 +65,52 @@ class dumping_yamls_tests(TestCase):
             },
         )
 
+    def test_load_template_in_yaml(self):
+        yaml_obj = load_yaml(
+            io.StringIO(
+                """
+- id: '1652069225859'
+  alias: 'Lower the volume'
+  description: ''
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: input_number.preferred_temperature
+  condition: []
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.denon_avr_x2500h
+        volume_level: '{{ ((states(''input_number.volume_video'')|int)+80)/100 }}'
+        """
+            ),
+            Path.cwd(),
+        )
+        self.assertIsInstance(yaml_obj, list)
+        self.assertEqual(len(yaml_obj), 1)
+        self.assertDictEqual(
+            dict(yaml_obj[0]),
+            {
+                "id": "1652069225859",
+                "alias": "Lower the volume",
+                "description": "",
+                "mode": "single",
+                "trigger": [
+                    {"platform": "state", "entity_id": "input_number.preferred_temperature"}
+                ],
+                "condition": [],
+                "action": [
+                    {
+                        "service": "media_player.volume_set",
+                        "data_template": {
+                            "entity_id": "media_player.denon_avr_x2500h",
+                            "volume_level": "{{ ((states('input_number.volume_video')|int)+80)/100 }}",
+                        },
+                    }
+                ],
+            },
+        )
+
     def test_load_stub(self):
         yaml_obj = load_yaml(
             io.StringIO(
