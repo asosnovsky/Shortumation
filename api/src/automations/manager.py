@@ -84,6 +84,8 @@ class AutomationManager:
         )
 
     def update(self, automation: ExtenededAutomation, create_if_not_found: bool = False):
+        if automation.id is None:
+            raise AssertionError("automation.id must be defined to update!")
         automation_path = self.hass_config.root_path / automation.source_file
         if not automation_path.parent.exists():
             automation_path.parent.mkdir(parents=True)
@@ -150,6 +152,8 @@ class AutomationManager:
             self.tag_manager.save(self.tag_path)
 
     def delete(self, automation: ExtenededAutomation):
+        if automation.id is None:
+            raise AssertionError("automation.id must be defined to update!")
         automation_path = self.hass_config.root_path / automation.source_file
         if automation.source_file_type == "obj":
             automation_path.unlink(missing_ok=True)

@@ -10,7 +10,6 @@ from src.automations.tags import TagManager
 from src.automations.types import ExtenededAutomation
 from src.hass_config.loader import HassConfig
 from tests.utils import (
-    HA_CONFIG13_EXAMPLE,
     HA_CONFIG2_EXAMPLE,
     HA_CONFIG3_EXAMPLE,
     HA_CONFIG4_EXAMPLE,
@@ -22,6 +21,7 @@ from tests.utils import (
     HA_CONFIG10_EXAMPLE,
     HA_CONFIG11_EXAMPLE,
     HA_CONFIG12_EXAMPLE,
+    HA_CONFIG13_EXAMPLE,
     HA_CONFIG_EXAMPLE,
 )
 
