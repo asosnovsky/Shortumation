@@ -1,5 +1,9 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.7.3] Bugfixes
+
+- Backend now correctly returns unset alias + description
+
 ## [0.7.1] Bugfixes + Italian!
 
 - Added support for automations that do not have an `id`
