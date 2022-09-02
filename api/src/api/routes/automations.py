@@ -11,7 +11,7 @@ from src.hass_config.loader import HassConfig
 def make_automation_router(hass_config: HassConfig) -> APIRouter:
     router = APIRouter()
 
-    @router.post("/list")
+    @router.post("/list", response_model_exclude_unset=True, response_model_exclude_none=True)
     def list_autos(body: ListParams) -> ListData[ExtenededAutomation]:
         automations = AutomationManager(hass_config)
         try:
