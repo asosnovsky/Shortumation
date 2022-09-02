@@ -29,10 +29,12 @@ export const makeStory = <
   };
   const Template: ComponentStory<T> = (args) => {
     let api: ApiService;
+    const connApi = useConnectedApiService();
+    const mockApi = useMockApiService([]);
     if (useLiveApi) {
-      api = useConnectedApiService();
+      api = connApi;
     } else {
-      api = useMockApiService([]);
+      api = mockApi;
     }
 
     return (

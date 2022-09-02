@@ -109,7 +109,7 @@ export const MissingAutoInConfig = make({
         entity_id: `automation.${auto1.id}`,
         attributes: {
           id: auto1.id,
-          friendly_name: auto1.alias,
+          friendly_name: auto1.alias ?? auto1.id ?? "",
         },
         context: { id: "", parent_id: null, user_id: null },
         last_changed: "",

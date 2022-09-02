@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Page } from "components/Page";
+import { makeStory } from "devUtils";
 import { useHA } from "haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { InputList } from "components/Inputs/InputList";
@@ -77,8 +76,6 @@ const Test: FC = () => {
     </div>
   );
 };
-
-import { makeStory } from "devUtils";
 
 const { make, componentMeta } = makeStory({
   Component: Test,
