@@ -1,6 +1,6 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
-## [0.7.3] Bugfixes
+## [0.7.4] Bugfixes
 
 - Backend now correctly returns unset alias + description
 
