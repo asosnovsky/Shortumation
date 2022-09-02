@@ -41,7 +41,7 @@ class BaseAutomation(BaseModel):
     condition: list[dict] = []
     action: list[dict] = []
 
-    def to_primitive(self, **kwrgs):
+    def to_primitive(self):
         return self.dict(exclude_unset=True, exclude_none=True)
 
 
