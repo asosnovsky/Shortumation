@@ -1,12 +1,16 @@
 from pathlib import Path
-from typing import Iterator, NamedTuple, Tuple, Union
+from typing import Iterator, NamedTuple, Tuple
 
 from yaml.nodes import Node
+
+from src.logger import get_logger
 
 from .manager import YamlManager
 
 dump_yaml = YamlManager.dump_yaml
 load_yaml = YamlManager.load_yaml
+
+logger = get_logger(__file__)
 
 
 def load_dir_yaml(folder_or_file: Path) -> Iterator[Tuple[Path, dict | list]]:
@@ -14,8 +18,11 @@ def load_dir_yaml(folder_or_file: Path) -> Iterator[Tuple[Path, dict | list]]:
         for file in folder_or_file.iterdir():
             yield from load_dir_yaml(file)
     else:
-        with folder_or_file.open("r") as fp:
-            yield folder_or_file, load_yaml(fp, root_path=folder_or_file.parent)
+        if folder_or_file.suffix.lower() == ".yaml":
+            with folder_or_file.open("r") as fp:
+                yield folder_or_file, load_yaml(fp, root_path=folder_or_file.parent)
+        else:
+            logger.info(f"Ignoring the file {folder_or_file}")
 
 
 @YamlManager.as_constructor("!include")
