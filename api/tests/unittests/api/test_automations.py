@@ -249,7 +249,7 @@ class automation_update_tests(BaseTestCase):
         )
         autos = resp.json()["data"]
         self.assertEqual(resp.json()["totalItems"], self.test_params["total"])
-        self.assertNotIn("i am new", set([a["id"] for a in autos]))
+        self.assertNotIn("i am new", set([a.get("id", "") for a in autos]))
         resp = self.client.post(
             "/automations/item",
             json=Automation(
@@ -262,7 +262,7 @@ class automation_update_tests(BaseTestCase):
         )
         data = resp.json()
         self.assertEqual(data["totalItems"], self.test_params["total"] + 1)
-        self.assertIn("i am new", set([a["id"] for a in data["data"]]))
+        self.assertIn("i am new", set([a.get("id", "") for a in data["data"]]))
 
     def test_update_some(self):
         resp = self.client.post(

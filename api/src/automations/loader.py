@@ -330,6 +330,8 @@ def load_automation_path(
 def clean_automation(auto_raw: dict):
     return {
         **auto_raw,
+        "alias": auto_raw.get("alias", "") or "",
+        "description": auto_raw.get("description", "") or "",
         "condition": ifempty_or_null_then_list(load_conditions(auto_raw.get("condition", []))),
         "action": ifempty_or_null_then_list(load_conditions(auto_raw.get("action", []))),
         "trigger": ifempty_or_null_then_list(normalize_obj(auto_raw.get("trigger", []))),
