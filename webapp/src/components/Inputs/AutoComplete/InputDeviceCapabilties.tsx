@@ -1,5 +1,5 @@
 import "./InputDeviceCapabilties.css";
-import { HaFormSchema } from "haService/types";
+import { HaFormSchema } from "services/haService/types";
 import { useSnackbar } from "notistack";
 import { useRef } from "react";
 import { prettyName } from "utils/formatting";

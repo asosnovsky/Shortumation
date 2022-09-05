@@ -8,7 +8,7 @@ import { Button } from "components/Inputs/Buttons/Button";
 import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { useConfirm } from "material-ui-confirm";
 import { getNodeSubTypeDescription } from "./utils";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export interface NodeEditorProps {
   node: AutomationNode;

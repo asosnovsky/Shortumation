@@ -12,7 +12,7 @@ import {
 } from "utils/time";
 import { prettyName } from "utils/formatting";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 // constants
 const fields: Array<keyof AutomationTimeObject> = [

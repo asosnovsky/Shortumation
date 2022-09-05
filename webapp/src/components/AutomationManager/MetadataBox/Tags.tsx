@@ -12,7 +12,7 @@ import { Button } from "components/Inputs/Buttons/Button";
 import InputAutoText from "components/Inputs/InputAutoText";
 
 import { TagDB } from "../TagDB";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type TagsProps = {
   automationId: string;

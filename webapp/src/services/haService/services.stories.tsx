@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { MockPage } from "components/Page";
-import { useHA } from "haService";
+import { useHA } from "services/haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";

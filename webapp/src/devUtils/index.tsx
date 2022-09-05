@@ -2,8 +2,8 @@ import "styles/root.css";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { ComponentProps, JSXElementConstructor } from "react";
-import { ApiService } from "apiService/core";
-import { useConnectedApiService, useMockApiService } from "apiService";
+import { ApiService } from "services/apiService/core";
+import { useConnectedApiService, useMockApiService } from "services/apiService";
 
 export type MakeStoryArgs<
   T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>

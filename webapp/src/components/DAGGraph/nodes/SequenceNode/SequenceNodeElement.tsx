@@ -16,7 +16,7 @@ import InputBoolean from "components/Inputs/Base/InputBoolean";
 import { SpeedDial } from "components/SpeedDial";
 import { SequenceNodeElementProps } from "./types";
 import { useSequenceNodeColor } from "./util";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export const SequenceNodeElement: FC<
   PropsWithChildren<SequenceNodeElementProps>

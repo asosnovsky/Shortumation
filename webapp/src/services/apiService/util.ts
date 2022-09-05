@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ApiState } from "./types";
 import { AutomationAPI } from "./automations";
 import { UserProfileAPI } from "./profile";
-import { UserProfile } from "apiService/types";
+import { UserProfile } from "services/apiService/types";
 
 export const useDefaultApiState = () =>
   useState<ApiState>({

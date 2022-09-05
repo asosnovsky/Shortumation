@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Page } from "components/Page";
 import { DAGGraphBoard } from "components/DAGGraph/board";
 import { useAutomationNodes } from "./index";
-import { useHA } from "haService";
+import { useHA } from "services/haService";
 import { AutomationActionData } from "types/automations";
 import { createUpdaterFromAutomationData } from "../updater";
 import { ModalState } from "../board/types";

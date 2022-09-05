@@ -3,8 +3,8 @@ import {
   InputAutoComplete,
   InputAutoCompletePropsBase,
 } from "./InputAutoComplete";
-import { useHAAreas } from "haService/AreaRegistry";
-import { useLang } from "lang";
+import { useHAAreas } from "services/haService/AreaRegistry";
+import { useLang } from "services/lang";
 
 export type InputAreaProps = InputAutoCompletePropsBase & {
   restrictToDomain?: string[];

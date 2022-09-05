@@ -1,5 +1,5 @@
 import { BaseOption } from "components/Inputs/AutoComplete/InputAutoComplete";
-import { FieldData, TypedHassService } from "haService/fieldTypes";
+import { FieldData, TypedHassService } from "services/haService/fieldTypes";
 import { prettyName } from "utils/formatting";
 
 export type ServiceEditorData = {

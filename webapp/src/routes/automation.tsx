@@ -1,6 +1,6 @@
-import { ApiService } from "apiService/core";
+import { ApiService } from "services/apiService/core";
 import { FC } from "react";
-import { useHA } from "haService";
+import { useHA } from "services/haService";
 import { AutomationManager } from "components/AutomationManager";
 
 export const AutomationRoute: FC<{ api: ApiService }> = ({ api }) => {

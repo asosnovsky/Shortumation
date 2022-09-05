@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { useHADeviceRegistry } from "haService";
-import { useLang } from "lang";
+import { useHADeviceRegistry } from "services/haService";
+import { useLang } from "services/lang";
 import {
   InputAutoComplete,
   InputAutoCompletePropsBase,

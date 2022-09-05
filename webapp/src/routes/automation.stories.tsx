@@ -1,4 +1,4 @@
-import { useConnectedApiService } from "apiService";
+import { useConnectedApiService } from "services/apiService";
 import { makeStory } from "devUtils";
 import { AutomationRoute } from "./automation";
 

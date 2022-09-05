@@ -7,7 +7,7 @@ import Popper from "@mui/material/Popper";
 import { SearchItem } from "./extras";
 import { ReactNode } from "react";
 import { prettyName } from "utils/formatting";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type BaseOption<T = {}> = {
   id: string;

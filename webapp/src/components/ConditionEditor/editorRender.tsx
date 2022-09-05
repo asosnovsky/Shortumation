@@ -20,7 +20,7 @@ import {
 import { genUpdateMethods } from "./nestedUpdater";
 import { InputTime } from "components/Inputs/Base/InputTime";
 import InputYaml from "components/Inputs/Base/InputYaml";
-import { HAService } from "haService";
+import { HAService } from "services/haService";
 import { DeviceEditor } from "components/DeviceEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import AddIcon from "@mui/icons-material/Add";
@@ -31,7 +31,7 @@ import { prettyName } from "utils/formatting";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";
 import { RemoveCircle } from "@mui/icons-material";
-import { LangStore } from "lang";
+import { LangStore } from "services/lang";
 
 interface Editor<C extends AutomationCondition>
   extends FC<{

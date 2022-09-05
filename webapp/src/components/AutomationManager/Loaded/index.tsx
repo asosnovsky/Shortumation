@@ -10,7 +10,7 @@ import {
 } from "./state";
 import Alert from "@mui/material/Alert";
 import { useConfirm } from "material-ui-confirm";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type AutomationManagerLoadedProps = UseAutomationManagerStateArgs & {
   onAutomationDelete: (aid: string, eid: string) => void;

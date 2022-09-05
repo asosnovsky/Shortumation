@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { AutomationRoute } from "routes/automation";
-import { useConnectedApiService } from "apiService";
+import { useConnectedApiService } from "services/apiService";
 import { ErrorBoundary } from "components/ErrorBoundary";
 import { CookiesProvider } from "react-cookie";
 import { Page } from "components/Page";

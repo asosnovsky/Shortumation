@@ -6,13 +6,13 @@ import { FC, useState } from "react";
 import { AutomationCondition } from "types/automations/conditions";
 import { getSubTypeList } from "utils/automations";
 import { getConditionDefaultValues } from "utils/defaults";
-import { useHA } from "haService";
+import { useHA } from "services/haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { getViewer } from "./viewRender";
 import { getEditor } from "./editorRender";
 import useWindowSize from "utils/useWindowSize";
 import { ConditionNodeSettings } from "./ConditionNodeSettings";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type ConditionNodeBaseProps = {
   condition: AutomationCondition;

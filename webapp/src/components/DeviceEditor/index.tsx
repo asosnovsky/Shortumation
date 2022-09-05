@@ -6,9 +6,9 @@ import { InputDevice } from "components/Inputs/AutoComplete/InputDevice";
 import { InputDeviceCapabilties } from "components/Inputs/AutoComplete/InputDeviceCapabilties";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { cleanUpUndefined } from "utils/helpers";
-import { DeviceBaseType, DeviceTypeCapability } from "haService/types";
+import { DeviceBaseType, DeviceTypeCapability } from "services/haService/types";
 import { AutomationDeviceState } from "types/automations/common";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type DeviceEditorProps<DBT extends DeviceBaseType> = {
   type: "action" | "condition" | "trigger";

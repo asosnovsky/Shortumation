@@ -15,7 +15,7 @@ import { Button } from "components/Inputs/Buttons/Button";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { InputTimeEntity } from "components/Inputs/AutoComplete/InputTimeEntity";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export const TriggerTime: OptionManager<AutomationTriggerTime> = {
   defaultState: () => ({

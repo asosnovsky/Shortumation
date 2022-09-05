@@ -1,4 +1,4 @@
-import { useApiState } from "apiService";
+import { useApiState } from "services/apiService";
 import { useEffect, useState } from "react";
 
 const MISSING_TEXT = "<<MISSING TEXT -- {{langId}}>>";

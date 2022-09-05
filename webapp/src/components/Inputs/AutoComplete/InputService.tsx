@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { useHAServices } from "haService";
+import { useHAServices } from "services/haService";
 import {
   InputAutoComplete,
   InputAutoCompletePropsBase,
 } from "./InputAutoComplete";
 import { prettyName } from "utils/formatting";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type InputServiceProps = InputAutoCompletePropsBase & {
   multiple?: false;

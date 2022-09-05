@@ -13,7 +13,7 @@ import { prettyName } from "utils/formatting";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export const CollectionNodeElement: FC<PropsWithChildren<CollectionNodeProps>> =
   ({

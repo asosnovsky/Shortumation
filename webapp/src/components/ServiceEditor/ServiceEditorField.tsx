@@ -10,7 +10,7 @@ import {
 } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { prettyName } from "utils/formatting";
 import InputBoolean from "components/Inputs/Base/InputBoolean";
-import { SelectorNumber, SelectorText } from "haService/fieldTypes";
+import { SelectorNumber, SelectorText } from "services/haService/fieldTypes";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { useSnackbar } from "notistack";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";

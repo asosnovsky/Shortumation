@@ -12,7 +12,7 @@ import {
 } from "utils/time";
 import { InputEntity } from "./InputEntities";
 import { InputTime } from "components/Inputs/Base/InputTime";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type InputTimeEntityProps = {
   value: string;

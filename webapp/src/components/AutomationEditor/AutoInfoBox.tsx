@@ -10,7 +10,7 @@ import { AddIcon, TrashIcon } from "components/Icons";
 import InputAutoText from "components/Inputs/InputAutoText";
 import { TagDB } from "components/AutomationManager/TagDB";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export interface AutoInfoBoxProps {
   metadata: AutomationMetadata & Partial<AutomationShortumationMetadata>;

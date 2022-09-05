@@ -5,7 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import { useSnackbar } from "notistack";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export interface Props<T extends string> {
   label: string;

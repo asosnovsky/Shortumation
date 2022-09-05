@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { prettyName } from "utils/formatting";
 import { ReactNode } from "react";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type Props<T extends string | Object> = {
   current?: T;

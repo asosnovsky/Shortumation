@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { useHADeviceRegistry } from "haService";
+import { useHADeviceRegistry } from "services/haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { makeStory } from "devUtils";
 

@@ -18,7 +18,7 @@ import {
 } from "../types";
 import { Button } from "components/Inputs/Buttons/Button";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type AutomationManagerSidebarProps = {
   tagsDB: TagDB;

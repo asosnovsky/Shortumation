@@ -18,7 +18,7 @@ import { ButtonIcon } from "components/Icons/ButtonIcons";
 import { AutomationManagerAuto } from "../types";
 import { Tags } from "./Tags";
 import { TagDB } from "../TagDB";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type MetadataBoxProps = AutomationManagerAuto & {
   onDelete: () => void;

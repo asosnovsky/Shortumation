@@ -9,7 +9,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import InputAdornment from "@mui/material/InputAdornment";
 import { Save } from "@mui/icons-material";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export interface Props<T extends {}> {
   label: string;

@@ -7,7 +7,7 @@ import { useAutomationDB } from "./automationDB";
 import { useConfirm } from "material-ui-confirm";
 import { AutomationManagerAutoUpdatable } from "../types";
 import { useSnackbar } from "notistack";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type UseAutomationManagerStateArgs = {
   configAutomations: AutomationData[];

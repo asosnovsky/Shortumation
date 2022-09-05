@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { makeStory } from "devUtils";
-import { useHA } from "haService";
+import { useHA } from "services/haService";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";

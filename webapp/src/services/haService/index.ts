@@ -12,7 +12,7 @@ import { TypedHassService } from "./fieldTypes";
 import { Option } from "components/Inputs/AutoComplete/InputAutoComplete";
 import { getDeviceExtraWsCalls } from "./extras";
 import { useHAEntities } from "./HAEntities";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type ServiceOption = Option<{
   domain: string;

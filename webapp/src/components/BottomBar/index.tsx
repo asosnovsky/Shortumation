@@ -1,9 +1,9 @@
 import "./index.css";
 import { FC, useState } from "react";
-import { useHAConnection } from "haService/connection";
+import { useHAConnection } from "services/haService/connection";
 import { Button } from "components/Inputs/Buttons/Button";
 import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 import { Modal } from "components/Modal";
 import { UserProfileEditor, UserProfileProps } from "./UserProfile";
 

@@ -10,10 +10,10 @@ import {
 import InputYaml from "components/Inputs/Base/InputYaml";
 import InputText from "components/Inputs/Base/InputText";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
-import { useHA } from "haService";
+import { useHA } from "services/haService";
 import { Generic } from "./Generic";
 import { getNodeTypeAndValidate } from "utils/automations";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 type UseState = <S>(s: S) => [S, Dispatch<SetStateAction<S>>];
 

@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { MockPage } from "components/Page";
-import { useHAEntities } from "haService/HAEntities";
+import { useHAEntities } from "services/haService/HAEntities";
 
 const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
   const [searchTerm, setSearch] = useState("");

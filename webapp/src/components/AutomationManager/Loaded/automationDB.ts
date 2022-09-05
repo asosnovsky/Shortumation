@@ -1,5 +1,5 @@
 import { HassEntities } from "home-assistant-js-websocket";
-import { LangStore, useLang } from "lang";
+import { LangStore, useLang } from "services/lang";
 import { useEffect, useState } from "react";
 import { AutomationData, BareAutomationData } from "types/automations";
 import { defaultAutomation } from "utils/defaults";

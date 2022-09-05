@@ -1,10 +1,10 @@
 import { makeStory } from "devUtils";
-import { useMockApiService } from "apiService";
+import { useMockApiService } from "services/apiService";
 import { AutomationManager } from ".";
 import {
   MockHAEntitiesProps,
   useMockHAEntities,
-} from "haService/HAEntities.mock";
+} from "services/haService/HAEntities.mock";
 import { AutomationData } from "types/automations";
 import { createMockAuto } from "utils/mocks";
 import { useState } from "react";

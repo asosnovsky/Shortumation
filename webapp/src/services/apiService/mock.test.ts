@@ -1,6 +1,6 @@
 import { useAutoMockAPI } from "./mock";
 import { makeAutomationAPI } from "./automations";
-import { createMockAuto } from "../utils/mocks";
+import { createMockAuto } from "utils/mocks";
 import { AutomationData } from "types/automations";
 
 const fakeUseRef = (a: any) => ({ current: a });

@@ -31,7 +31,7 @@ import { MiniFailure } from "types/validators/helper";
 
 import { AutoInfoBox } from "./AutoInfoBox";
 import { useAutomatioEditorState, EditorData } from "./state";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 import { useSnackbar } from "notistack";
 import { Alert } from "@mui/material";
 

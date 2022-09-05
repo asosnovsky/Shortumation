@@ -1,7 +1,7 @@
 import "./ServiceEditorTarget.css";
 import { InputDevice } from "components/Inputs/AutoComplete/InputDevice";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
-import { Targets } from "haService/fieldTypes";
+import { Targets } from "services/haService/fieldTypes";
 import { FC } from "react";
 import { InputArea } from "components/Inputs/AutoComplete/InputArea";
 

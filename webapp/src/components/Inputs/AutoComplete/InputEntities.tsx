@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useHAEntities } from "haService/HAEntities";
+import { useHAEntities } from "services/haService/HAEntities";
 import {
   InputAutoComplete,
   InputAutoCompletePropsBase,

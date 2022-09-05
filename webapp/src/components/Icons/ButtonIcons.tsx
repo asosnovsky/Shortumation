@@ -2,7 +2,7 @@ import "./ButtonIcons.css";
 import Tooltip from "@mui/material/Tooltip";
 import { FC, ReactNode } from "react";
 import IconButton, { IconButtonTypeMap } from "@mui/material/IconButton";
-import { useLang } from "lang";
+import { useLang } from "services/lang";
 
 export type ButtonIconProps = {
   icon: ReactNode;
