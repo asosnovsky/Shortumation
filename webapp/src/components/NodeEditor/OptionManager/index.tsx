@@ -10,7 +10,7 @@ import {
 import InputYaml from "components/Inputs/Base/InputYaml";
 import InputText from "components/Inputs/Base/InputText";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
-import { useHA } from "services/haService";
+import { useHA } from "services/ha";
 import { Generic } from "./Generic";
 import { getNodeTypeAndValidate } from "utils/automations";
 import { useLang } from "services/lang";

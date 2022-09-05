@@ -1,7 +1,7 @@
 import Alert from "@mui/material/Alert";
 import Skeleton from "@mui/material/Skeleton";
-import { ApiService } from "services/apiService/core";
-import { UserProfile } from "services/apiService/types";
+import { ApiService } from "services/api/core";
+import { UserProfile } from "services/api/types";
 import { InputList } from "components/Inputs/InputList";
 import { useLang } from "services/lang";
 import { FC, useState } from "react";

@@ -1,7 +1,7 @@
 import "./index.css";
 
 import { AutomationNode, AutomationNodeMapping } from "types/automations";
-import { useHA } from "services/haService";
+import { useHA } from "services/ha";
 import { CollectionNodeElement } from "components/DAGGraph/nodes/CollectionNode/CollectionNodeElement";
 import { getDescriptionFromAutomationNode } from "utils/formatting";
 import { Size } from "components/DAGGraph/elements/types";

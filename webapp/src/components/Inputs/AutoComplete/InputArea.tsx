@@ -3,7 +3,7 @@ import {
   InputAutoComplete,
   InputAutoCompletePropsBase,
 } from "./InputAutoComplete";
-import { useHAAreas } from "services/haService/AreaRegistry";
+import { useHAAreas } from "services/ha/AreaRegistry";
 import { useLang } from "services/lang";
 
 export type InputAreaProps = InputAutoCompletePropsBase & {

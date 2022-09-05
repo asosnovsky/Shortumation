@@ -4,8 +4,8 @@ import { FC, useEffect, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Skeleton from "@mui/material/Skeleton";
 
-import { ApiService } from "services/apiService/core";
-import { HAEntitiesState } from "services/haService/HAEntities";
+import { ApiService } from "services/api/core";
+import { HAEntitiesState } from "services/ha/HAEntities";
 import { AutomationManagerLoaded } from "./Loaded";
 import { Alert } from "@mui/material";
 import { useSnackbar } from "notistack";
@@ -14,7 +14,7 @@ import { getFailures } from "types/validators/helper";
 import * as av from "types/validators/autmation";
 import { useConfirm } from "material-ui-confirm";
 import InputYaml from "components/Inputs/Base/InputYaml";
-import { APIResponse } from "services/apiService/types";
+import { APIResponse } from "services/api/types";
 import { useLang } from "services/lang";
 
 export type AutomationManagerProps = {

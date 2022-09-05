@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ServiceEditor } from ".";
-import { TypedHassService } from "services/haService/fieldTypes";
+import { TypedHassService } from "services/ha/fieldTypes";
 import InputYaml from "components/Inputs/Base/InputYaml";
 
 import { makeStory } from "devUtils";

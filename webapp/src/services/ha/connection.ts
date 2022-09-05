@@ -9,7 +9,7 @@ import {
   ERR_INVALID_HTTPS_TO_HTTP,
   createConnection as _createConnection,
 } from "home-assistant-js-websocket";
-import { wsURL } from "services/apiService";
+import { wsURL } from "services/api";
 
 export type HAConnection =
   | {

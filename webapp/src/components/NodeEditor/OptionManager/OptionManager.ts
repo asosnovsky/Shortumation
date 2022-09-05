@@ -1,5 +1,5 @@
-import { HAService } from "services/haService";
-import { HAEntitiesState } from "services/haService/HAEntities";
+import { HAService } from "services/ha";
+import { HAEntitiesState } from "services/ha/HAEntities";
 import { LangStore } from "services/lang";
 import { FC } from "react";
 import { AutomationAction } from "types/automations/actions";

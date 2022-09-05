@@ -6,7 +6,7 @@ import { FC, useState } from "react";
 import { AutomationCondition } from "types/automations/conditions";
 import { getSubTypeList } from "utils/automations";
 import { getConditionDefaultValues } from "utils/defaults";
-import { useHA } from "services/haService";
+import { useHA } from "services/ha";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { getViewer } from "./viewRender";
 import { getEditor } from "./editorRender";

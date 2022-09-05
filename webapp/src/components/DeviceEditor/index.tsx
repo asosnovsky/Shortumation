@@ -6,7 +6,7 @@ import { InputDevice } from "components/Inputs/AutoComplete/InputDevice";
 import { InputDeviceCapabilties } from "components/Inputs/AutoComplete/InputDeviceCapabilties";
 import { InputEntity } from "components/Inputs/AutoComplete/InputEntities";
 import { cleanUpUndefined } from "utils/helpers";
-import { DeviceBaseType, DeviceTypeCapability } from "services/haService/types";
+import { DeviceBaseType, DeviceTypeCapability } from "services/ha/types";
 import { AutomationDeviceState } from "types/automations/common";
 import { useLang } from "services/lang";
 

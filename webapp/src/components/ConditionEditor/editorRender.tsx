@@ -20,7 +20,7 @@ import {
 import { genUpdateMethods } from "./nestedUpdater";
 import { InputTime } from "components/Inputs/Base/InputTime";
 import InputYaml from "components/Inputs/Base/InputYaml";
-import { HAService } from "services/haService";
+import { HAService } from "services/ha";
 import { DeviceEditor } from "components/DeviceEditor";
 import { ButtonIcon } from "components/Icons/ButtonIcons";
 import AddIcon from "@mui/icons-material/Add";

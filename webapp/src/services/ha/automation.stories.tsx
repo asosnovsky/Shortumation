@@ -1,19 +1,17 @@
 import React, { FC, useEffect, useState } from "react";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { MockPage } from "components/Page";
-import { useHA } from "services/haService";
+import { makeStory } from "devUtils";
+import { useHA } from "services/ha";
 import InputYaml from "components/Inputs/Base/InputYaml";
 import { InputList } from "components/Inputs/InputList";
 import { Button } from "components/Inputs/Buttons/Button";
 import { ServiceEditor } from "components/ServiceEditor";
 
 const Test: FC = () => {
-  const { services, callService } = useHA();
+  const { services, callService, entities } = useHA();
 
   const data = services.collection ?? {};
-  const options = Object.keys(data).sort();
 
-  const [domain, setDomain] = useState(options[0] ?? "");
+  const domain = "automation";
 
   const domains = Object.keys(data[domain] ?? "").sort();
 
@@ -56,12 +54,6 @@ const Test: FC = () => {
   return (
     <div style={{ overflow: "auto", maxHeight: "100vh" }}>
       <InputList
-        label="Domains"
-        current={domain}
-        onChange={setDomain}
-        options={options}
-      />
-      <InputList
         label="Services"
         current={service}
         onChange={setService}
@@ -76,21 +68,21 @@ const Test: FC = () => {
       </Button>
       {serviceEditElm}
       <InputYaml label="Service Data" value={serviceDefn} onChange={() => {}} />
+      {(((serviceData.target ?? {}) as any).entity_id ?? []).map((eid: any) => (
+        <span>
+          {eid}: {entities.getStates([eid])}
+        </span>
+      ))}
     </div>
   );
 };
 
-export default {
-  title: "Services/HA Service",
-  component: Test,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-  args: {},
-} as ComponentMeta<typeof Test>;
+const { make, componentMeta } = makeStory({
+  Component: Test,
+  meta: {
+    title: "Services/HA Service",
+  },
+});
 
-export const ServiceCall: ComponentStory<typeof Test> = (props) => {
-  return (
-    <MockPage>
-      <Test {...props} />
-    </MockPage>
-  );
-};
+export default componentMeta;
+export const AutomationCall = make({});

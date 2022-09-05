@@ -1,6 +1,6 @@
 import "./index.css";
 import { FC, useState } from "react";
-import { useHAConnection } from "services/haService/connection";
+import { useHAConnection } from "services/ha/connection";
 import { Button } from "components/Inputs/Buttons/Button";
 import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
 import { useLang } from "services/lang";

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useHADeviceRegistry } from "services/haService";
+import { useHADeviceRegistry } from "services/ha";
 import { useLang } from "services/lang";
 import {
   InputAutoComplete,

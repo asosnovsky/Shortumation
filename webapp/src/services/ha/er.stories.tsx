@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { MockPage } from "components/Page";
-import { useHAEntityRegistry } from "services/haService";
+import { useHAEntityRegistry } from "services/ha";
 
 const Test: FC<{ onRender: () => void }> = ({ onRender }) => {
   const conn = useHAEntityRegistry();

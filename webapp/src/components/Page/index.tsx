@@ -10,12 +10,12 @@ import {
 import { BottomBar } from "components/BottomBar";
 import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
-import { useHAConnection } from "services/haService/connection";
+import { useHAConnection } from "services/ha/connection";
 import { ConfirmProvider } from "material-ui-confirm";
 import { Color } from "@mui/material";
 import useWindowSize from "utils/useWindowSize";
-import { ApiService } from "services/apiService/core";
-import { ApiStateProvider, useMockApiService } from "services/apiService";
+import { ApiService } from "services/api/core";
+import { ApiStateProvider, useMockApiService } from "services/api";
 
 export type PageProps = PropsWithChildren<{
   api: ApiService;

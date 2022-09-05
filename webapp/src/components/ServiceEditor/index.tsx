@@ -1,7 +1,7 @@
 import "./index.css";
 
 import { cleanUpUndefined } from "utils/helpers";
-import { TypedHassService } from "services/haService/fieldTypes";
+import { TypedHassService } from "services/ha/fieldTypes";
 import { FC, useState } from "react";
 import {
   ServiceEditorOption,
