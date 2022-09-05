@@ -1,5 +1,4 @@
 import React, { ReactNode, useState } from "react";
-import { useToolTip } from "tooltip/context";
 import TextField from "@mui/material/TextField";
 
 export interface Props {
@@ -22,19 +21,16 @@ export default function InputText({
   label,
   title,
   helperText,
-  textBoxFor,
   value = "",
   onChange,
   endAdornment,
   onEnter = () => {},
-  additionalTooltipFilters = {},
   multiline = false,
   maxRows = 4,
   className,
   placeholder,
   required,
 }: Props) {
-  const tooltip = useToolTip();
   const [isFocused, setIsFocused] = useState(false);
   return (
     <TextField
@@ -68,17 +64,6 @@ export default function InputText({
       }}
       onFocus={(e) => {
         setIsFocused(true);
-        if (textBoxFor) {
-          tooltip.setFocus(
-            e.target.getBoundingClientRect(),
-            {
-              searchObject: textBoxFor,
-              searchText: value,
-              filterObjects: additionalTooltipFilters,
-            },
-            onChange
-          );
-        }
       }}
     />
   );
