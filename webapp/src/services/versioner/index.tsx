@@ -74,7 +74,7 @@ export const useVersioner = () => {
                 {lang
                   .get("NEW_VERSION_AVAILABLE_BODY", {
                     latest: "v" + latestVersionString,
-                    current: "v" + gicurrentVersionString,
+                    current: "v" + currentVersionString,
                   })
                   .split("\n")
                   .map((p, i) => (
