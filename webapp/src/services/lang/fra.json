@@ -20,6 +20,7 @@
   "TEMPLATE": "Modèle",
   "MODE": "Mode",
   "CLOSE": "Fermer",
+  "CONFIRM": "Confirmer",
   "DESCRIPTION": "Description",
   "TRIGGER": "Déclencheur",
   "TRIGGERS": "Déclencheurs",
@@ -45,6 +46,9 @@
   "AND_MORE": "et plus",
   "YES": "Oui",
   "NO": "Non",
+
+  "NEW_VERSION_AVAILABLE": "Une nouvelle version est disponible!",
+  "NEW_VERSION_AVAILABLE_BODY": "Version installée : {{current}}\nDernière version : {{latest}}",
 
   "SERVICE": "Service",
   "REPEAT": "Répéter",

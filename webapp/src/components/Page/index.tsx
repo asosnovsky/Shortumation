@@ -12,21 +12,26 @@ import { SnackbarKey, SnackbarProvider, useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { useHAConnection } from "services/ha/connection";
 import { ConfirmProvider } from "material-ui-confirm";
-import { Color } from "@mui/material";
+import { Color, Skeleton, Theme } from "@mui/material";
 import useWindowSize from "utils/useWindowSize";
 import { ApiService } from "services/api/core";
 import { ApiStateProvider, useMockApiService } from "services/api";
+import { LangProvider, LangStore, useLang } from "services/lang";
 
 export type PageProps = PropsWithChildren<{
   api: ApiService;
 }>;
 
-export const InternalPage: FC<PageProps> = ({ children, api }) => {
+export const BareInternalPage: FC<
+  PageProps & {
+    isMobile: boolean;
+    theme: Theme;
+    lang: LangStore;
+  }
+> = ({ children, api, isMobile, theme, lang }) => {
   const conn = useHAConnection();
-  const theme = useTheme();
   const snackbar = useSnackbar();
   const snackbarKeyHAConKey = useRef<SnackbarKey | null>(null);
-  const { isMobile } = useWindowSize();
 
   useEffect(() => {
     if (conn.status === "error") {
@@ -46,12 +51,6 @@ export const InternalPage: FC<PageProps> = ({ children, api }) => {
       if (snackbarKeyHAConKey.current) {
         snackbar.closeSnackbar(snackbarKeyHAConKey.current);
       }
-      snackbarKeyHAConKey.current = snackbar.enqueueSnackbar(
-        `Connecting to websocket...`,
-        {
-          variant: "info",
-        }
-      );
     } else if (conn.status === "loaded") {
       if (snackbarKeyHAConKey.current) {
         snackbar.closeSnackbar(snackbarKeyHAConKey.current);
@@ -60,15 +59,38 @@ export const InternalPage: FC<PageProps> = ({ children, api }) => {
   }, [conn, snackbar]);
 
   return (
-    <main className={["page", "column", isMobile ? "mobile" : ""].join(" ")}>
-      <div className="page-contents column">{children}</div>
-      <BottomBar api={api} />
-      <style>
-        {`:root {
-            ${convertPaletteToCss(theme.palette)}
-        }`}
-      </style>
-    </main>
+    <ConfirmProvider
+      defaultOptions={{
+        cancellationText: lang.get("CLOSE"),
+        confirmationText: lang.get("CONFIRM"),
+      }}
+    >
+      <main className={["page", "column", isMobile ? "mobile" : ""].join(" ")}>
+        <div className="page-contents column">{children}</div>
+        <BottomBar api={api} />
+        <style>
+          {`:root {
+      ${convertPaletteToCss(theme.palette)}
+  }`}
+        </style>
+      </main>
+    </ConfirmProvider>
+  );
+};
+
+export const InternalPage: FC<PageProps> = ({ children, api }) => {
+  const theme = useTheme();
+  const { isMobile } = useWindowSize();
+  const lang = useLang();
+
+  if (!lang.ready) {
+    return <Skeleton />;
+  }
+
+  return (
+    <BareInternalPage api={api} isMobile={isMobile} theme={theme} lang={lang}>
+      {children}
+    </BareInternalPage>
   );
 };
 
@@ -85,24 +107,22 @@ export const Page: FC<PageProps> = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <ConfirmProvider>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-          ref={notistackRef}
-          action={(key) => (
-            <Button onClick={onClickDismiss(key)}>Dismiss</Button>
-          )}
-          dense
-          preventDuplicate
-        >
-          <ApiStateProvider value={props.api.state}>
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        ref={notistackRef}
+        action={(key) => <Button onClick={onClickDismiss(key)}>Dismiss</Button>}
+        dense
+        preventDuplicate
+      >
+        <ApiStateProvider value={props.api.state}>
+          <LangProvider>
             <InternalPage {...props} />
-          </ApiStateProvider>
-        </SnackbarProvider>
-      </ConfirmProvider>
+          </LangProvider>
+        </ApiStateProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

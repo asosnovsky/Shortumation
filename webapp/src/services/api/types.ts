@@ -21,10 +21,11 @@ export type APIResponse<D> =
     };
 export type Waitable<D> =
   | { ready: undefined }
-  | ({ ready: true } & APIResponse<D>)
+  | ({ ready: true } & D)
   | {
       ready: false;
     };
+export type ApiWaitable<D> = Waitable<APIResponse<D>>;
 export interface ListData<D> {
   params: ListParams;
   totalItems: number;
@@ -32,8 +33,8 @@ export interface ListData<D> {
 }
 
 export interface ApiState {
-  automations: Waitable<ListData<AutomationData>>;
-  userProfile: Waitable<UserProfile>;
+  automations: ApiWaitable<ListData<AutomationData>>;
+  userProfile: ApiWaitable<UserProfile>;
 }
 
 export type UserProfile = {

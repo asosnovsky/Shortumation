@@ -1,11 +1,39 @@
 import { useApiState } from "services/api";
-import { useEffect, useState } from "react";
+import {
+  FC,
+  useEffect,
+  useState,
+  createContext,
+  PropsWithChildren,
+  useContext,
+} from "react";
+import { Waitable } from "../api/types";
 
 const MISSING_TEXT = "<<MISSING TEXT -- {{langId}}>>";
 const LOADING_TEXT = "...";
 
-export type LangStore = ReturnType<typeof useLang>;
-export const useLang = () => {
+export type LangStore = {
+  get(langId: string, replacements?: Record<string, string>): string;
+};
+const LangContext = createContext<Waitable<LangStore>>({
+  ready: false,
+});
+
+export const useLang = (): LangStore & { ready: boolean } => {
+  const langState = useContext(LangContext);
+
+  if (langState.ready) {
+    return langState;
+  }
+  return {
+    ready: false,
+    get() {
+      return LOADING_TEXT;
+    },
+  };
+};
+
+export const LangProvider: FC<PropsWithChildren> = ({ children }) => {
   const apiState = useApiState();
   const [langStore, setLangStore] =
     useState<Record<string, string> | null>(null);
@@ -37,7 +65,7 @@ export const useLang = () => {
     return text;
   };
 
-  return {
+  const methods = {
     get: (langId: string, replacements: Record<string, string> = {}) => {
       let out = LOADING_TEXT;
       if (langStore !== null) {
@@ -54,4 +82,14 @@ export const useLang = () => {
       return updateParams(out, { ...replacements, langId });
     },
   };
+
+  const value: Waitable<LangStore> =
+    langStore === null && langEngStore === null
+      ? { ready: false }
+      : {
+          ready: true,
+          ...methods,
+        };
+
+  return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
 };

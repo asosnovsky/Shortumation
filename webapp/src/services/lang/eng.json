@@ -19,6 +19,7 @@
   "TEMPLATE": "Template",
   "MODE": "Mode",
   "CLOSE": "Close",
+  "CONFIRM": "Confirm",
   "DESCRIPTION": "Description",
   "TRIGGER": "Trigger",
   "CONDITION": "Condition",
@@ -42,6 +43,9 @@
   "AND_MORE": "and more",
   "YES": "Yes",
   "NO": "No",
+
+  "NEW_VERSION_AVAILABLE": "New Version is Available!",
+  "NEW_VERSION_AVAILABLE_BODY": "Installed version: {{current}}\nLatest version: {{latest}}",
 
   "SERVICE": "Service",
   "REPEAT": "Repeat",

@@ -6,12 +6,13 @@ import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutl
 import { useLang } from "services/lang";
 import { Modal } from "components/Modal";
 import { UserProfileEditor, UserProfileProps } from "./UserProfile";
+import { useVersioner } from "services/versioner";
 
 export type BottomBarProps = UserProfileProps;
 export const BottomBar: FC<BottomBarProps> = ({ api }) => {
   const lang = useLang();
   const ha = useHAConnection();
-  const version = process.env.REACT_APP_BUILD_VERSION ?? "n/a";
+  const versionMgr = useVersioner();
   const [isOpen, setOpen] = useState(false);
 
   return (
@@ -31,7 +32,7 @@ export const BottomBar: FC<BottomBarProps> = ({ api }) => {
           🟢
         </b>
       </span>
-      <span>version: {version}</span>
+      <span>version: {versionMgr.current}</span>
       <Button className="settings" onClick={() => setOpen(!isOpen)}>
         <SettingsSuggestOutlinedIcon />
         {lang.get("USER_PRERENCES")}

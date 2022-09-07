@@ -19,6 +19,7 @@
   "TEMPLATE": "Modello",
   "MODE": "Modalità",
   "CLOSE": "Chiudi",
+  "CONFIRM": "Confermare",
   "DESCRIPTION": "Descrizione",
   "TRIGGER": "Attivazione",
   "CONDITION": "Condizione",
@@ -42,6 +43,9 @@
   "AND_MORE": "e altro",
   "YES": "Sì",
   "NO": "No",
+
+  "NEW_VERSION_AVAILABLE": "È disponibile una nuova versione!",
+  "NEW_VERSION_AVAILABLE_BODY": "Versione installata: {{current}}\nUltima versione: {{latest}}",
 
   "SERVICE": "Chiama Servizio",
   "REPEAT": "Ripeti",
