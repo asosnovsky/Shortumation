@@ -1,0 +1,16 @@
+- platform: ping
+  host: 192.168.0.119
+  name: "Ping Pc Tv"
+  scan_interval: 10
+- platform: ping
+  host: 192.168.0.181
+  name: "Ping Living Room Tv"
+  scan_interval: 10
+- platform: ping
+  host: 192.168.0.100
+  name: "Ping Printer"
+  scan_interval: 15
+- platform: ping
+  host: 192.168.0.177
+  name: "Ping Broadlink"
+  scan_interval: 15

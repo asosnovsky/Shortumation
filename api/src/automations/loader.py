@@ -1,4 +1,3 @@
-from itertools import chain
 from pathlib import Path
 from typing import Any, Iterator, Tuple, Union
 
@@ -141,6 +140,7 @@ def extract_automation_inline_package_refs(
     ignore_package_name=False,
 ) -> AutomationExtractedIter:
     for package_name, package_data in packages_config.items():
+        logger.info(f"Loading package={package_name}:{type(package_data)} from {package_data}")
         try:
             if isinstance(package_data, IncludedYaml):
                 package_mapping = package_data.to_normalized_json()
@@ -176,11 +176,11 @@ def extract_automation_inline_package_refs(
                     prefix_config_keys=prefix_config_keys,
                     ignore_package_name=ignore_package_name,
                 )
-            else:
+            elif package_data is not None:
                 raise InvalidPackage(
-                    f"configurations.homeassistant.packages[{package_name}] must be a dictionary!"
+                    f"configurations.homeassistant.packages.{package_name} must be a dictionary but got {type(package_data)}!"
                 )
-        except Exception as err:
+        except InvalidPackage as err:
             logger.error(err)
 
 

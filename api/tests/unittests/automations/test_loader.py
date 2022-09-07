@@ -10,7 +10,6 @@ from src.automations.tags import TagManager
 from src.automations.types import ExtenededAutomation
 from src.hass_config.loader import HassConfig
 from tests.utils import (
-    HA_CONFIG14_EXAMPLE,
     HA_CONFIG2_EXAMPLE,
     HA_CONFIG3_EXAMPLE,
     HA_CONFIG4_EXAMPLE,
@@ -23,6 +22,10 @@ from tests.utils import (
     HA_CONFIG11_EXAMPLE,
     HA_CONFIG12_EXAMPLE,
     HA_CONFIG13_EXAMPLE,
+    HA_CONFIG14_EXAMPLE,
+    HA_CONFIG15_EXAMPLE,
+    HA_CONFIG16_EXAMPLE,
+    HA_CONFIG17_EXAMPLE,
     HA_CONFIG_EXAMPLE,
 )
 
@@ -164,6 +167,9 @@ class loader_tests(TestCase):
             (HA_CONFIG12_EXAMPLE, 4),
             (HA_CONFIG13_EXAMPLE, 4),
             (HA_CONFIG14_EXAMPLE, 1),
+            (HA_CONFIG15_EXAMPLE, 1),
+            (HA_CONFIG16_EXAMPLE, 1),
+            (HA_CONFIG17_EXAMPLE, 1),
         ]:
             with self.subTest(config_name=ha_path.name, expected=expected):
                 hass_config = HassConfig(ha_path)
