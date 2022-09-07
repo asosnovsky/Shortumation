@@ -1,5 +1,10 @@
 # Changelog ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=for-the-badge)
 
+## [0.7.6] Bugfixes
+
+- Less deadly error for invalid packages with better logs
+- Update notification
+
 ## [0.7.4] Bugfixes
 
 - Backend now correctly returns unset alias + description
