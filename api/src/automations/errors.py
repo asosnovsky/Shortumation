@@ -17,6 +17,10 @@ class FailedDeletion(AutomationLoaderException):
     pass
 
 
+class InvalidPackage(AutomationLoaderException):
+    pass
+
+
 class DBError(Exception):
     pass
 
