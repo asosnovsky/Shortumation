@@ -1,22 +1,5 @@
 import "./index.css";
 
-//*   <div className="nodes-row--inner row">
-//     {data.map((node, i) => {
-//       return (
-//         <SequenceNodeElement
-//           key={i}
-//           {...makeCollectionNodeMakerChildProps(
-//             collectionType,
-//             node,
-//             i,
-//             stateUpdater,
-//             namer
-//           )}
-//         />
-//       );
-//     })}
-//   </div>*/
-
 import { AutomationNode, AutomationNodeMapping } from "types/automations";
 import { useHA } from "services/ha";
 import { CollectionNodeElement } from "components/DAGGraph/nodes/CollectionNode/CollectionNodeElement";
@@ -26,7 +9,6 @@ import { makeCollectionNodeMakerChildProps } from "components/DAGGraph/elements/
 import { AutomationCondition } from "types/automations/conditions";
 import { AutomationTrigger } from "types/automations/triggers";
 import { FC } from "react";
-import { SequenceNodeElement } from "components/DAGGraph/nodes/SequenceNode/SequenceNodeElement";
 
 export type NodesRowProps<
   K extends keyof AutomationNodeMapping,

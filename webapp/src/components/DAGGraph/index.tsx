@@ -8,7 +8,7 @@ import { DEFAULT_DIMS } from "./elements/constants";
 import { DAGGraphBoard } from "./board";
 import { AutomationTrigger } from "types/automations/triggers";
 import { AutomationCondition } from "types/automations/conditions";
-import { NodesRow, TriggerConditionNodeRow } from "./NodesRow";
+import { TriggerConditionNodeRow } from "./NodesRow";
 
 export const DAGAutomationGraph: FC<{
   action: AutomationSequenceNode[];

@@ -7,7 +7,7 @@ import { validateNode } from "utils/automations";
 import { AutomationCondition } from "types/automations/conditions";
 import { AutomationTrigger } from "types/automations/triggers";
 
-import { DAGDims, ElementMaker, ElementMakerProps, Size } from "./types";
+import { DAGDims, ElementMaker, ElementMakerProps } from "./types";
 import { DAGElementsOutputState } from "./outputState";
 import { convertFailuresToSequenceNodeDataProps } from "./util";
 

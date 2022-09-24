@@ -1,8 +1,8 @@
 import "./index.css";
 
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import ReactFlow, { Controls, useReactFlow } from "react-flow-renderer";
+import ReactFlow, { Controls } from "react-flow-renderer";
 
 import { NodeEditor } from "components/NodeEditor";
 import { Modal } from "components/Modal";
@@ -16,7 +16,6 @@ export const DAGGraphBoard: FC<DAGGraphBoardProps> = ({
   closeModal,
   additionalControls,
 }) => {
-  const reactFlow = useReactFlow();
   // render unready or errored states
   if (!state.ready) {
     return (
