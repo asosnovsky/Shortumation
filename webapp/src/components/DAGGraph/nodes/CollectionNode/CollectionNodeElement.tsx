@@ -15,87 +15,89 @@ import { useConfirm } from "material-ui-confirm";
 import { useSnackbar } from "notistack";
 import { useLang } from "services/lang";
 
-export const CollectionNodeElement: FC<PropsWithChildren<CollectionNodeProps>> =
-  ({
-    onAddNode,
-    nodes,
-    sequenceNode,
-    height,
-    width,
-    flipped,
-    collectionType,
-    onDelete,
-    title,
-    children,
-  }) => {
-    const lang = useLang();
-    const color = convertNodeTypeToSequenceNodeColor(collectionType);
-    const nodeColor = useSequenceNodeColor(color);
-    const confirm = useConfirm();
-    const snackbr = useSnackbar();
-    const trueTile = title ?? collectionType;
+export const CollectionNodeElement: FC<
+  PropsWithChildren<CollectionNodeProps & { className?: string }>
+> = ({
+  onAddNode,
+  nodes,
+  sequenceNode,
+  height,
+  width,
+  flipped,
+  collectionType,
+  onDelete,
+  title,
+  children,
+  className,
+}) => {
+  const lang = useLang();
+  const color = convertNodeTypeToSequenceNodeColor(collectionType);
+  const nodeColor = useSequenceNodeColor(color);
+  const confirm = useConfirm();
+  const snackbr = useSnackbar();
+  const trueTile = title ?? collectionType;
 
-    return (
-      <div
-        className="collection-nodes--wrap"
-        style={
-          {
-            "--node-color": nodeColor,
-            "--node-height": `${height}px`,
-            "--node-width": `${width}px`,
-          } as any
-        }
-      >
-        <div className="collection-nodes">
-          {!!onDelete && (
-            <ButtonIcon
-              className="delete-icon"
-              icon={<DeleteForeverIcon />}
-              onClick={() => {
-                confirm({
-                  description: `Are you sure you want to delete ${trueTile}?`,
+  return (
+    <div
+      className={["collection-nodes--wrap", className ?? ""].join(" ")}
+      style={
+        {
+          "--node-color": nodeColor,
+          "--node-height": `${height}px`,
+          "--node-width": `${width}px`,
+        } as any
+      }
+    >
+      <div className="collection-nodes">
+        {!!onDelete && (
+          <ButtonIcon
+            className="delete-icon"
+            icon={<DeleteForeverIcon />}
+            onClick={() => {
+              confirm({
+                description: `Are you sure you want to delete ${trueTile}?`,
+              })
+                .then(() => {
+                  onDelete();
+                  snackbr.enqueueSnackbar(lang.get("DELETED"), {
+                    variant: "info",
+                  });
                 })
-                  .then(() => {
-                    onDelete();
-                    snackbr.enqueueSnackbar(lang.get("DELETED"), {
+                .catch(() =>
+                  snackbr.enqueueSnackbar(
+                    lang.get("NOT_DELETED_THING", {
+                      item: trueTile,
+                    }),
+                    {
                       variant: "info",
-                    });
-                  })
-                  .catch(() =>
-                    snackbr.enqueueSnackbar(
-                      lang.get("NOT_DELETED_THING", {
-                        item: trueTile,
-                      }),
-                      {
-                        variant: "info",
-                      }
-                    )
-                  );
-              }}
-              borderless
-              color="secondary"
+                    }
+                  )
+                );
+            }}
+            borderless
+            color="secondary"
+          />
+        )}
+        <span className="collection-nodes--title">
+          {prettyName(collectionType)}s
+        </span>
+        <div className="collection-nodes--inner">
+          {nodes.map((n, i) => (
+            <SequenceNodeElement
+              key={i}
+              color={color}
+              flipped={flipped}
+              {...n}
+              {...sequenceNode}
             />
-          )}
-          <span className="collection-nodes--title">
-            {prettyName(collectionType)}s
-          </span>
-          <div className="collection-nodes--inner">
-            {nodes.map((n, i) => (
-              <SequenceNodeElement
-                key={i}
-                color={color}
-                flipped={flipped}
-                {...n}
-                {...sequenceNode}
-              />
-            ))}
-          </div>
-          <ButtonIcon className="add" icon={<Add />} onClick={onAddNode} />
-          {children}
-          <span className="collection-nodes--total">
-            {nodes.length} node{nodes.length !== 1 ? "s" : ""}
-          </span>
+          ))}
         </div>
+        <ButtonIcon className="add" icon={<Add />} onClick={onAddNode} />
+        {children}
+        <span className="collection-nodes--total">
+          {nodes.length} node{nodes.length !== 1 ? "s" : ""}
+        </span>
       </div>
-    );
-  };
+    </div>
+  );
+};

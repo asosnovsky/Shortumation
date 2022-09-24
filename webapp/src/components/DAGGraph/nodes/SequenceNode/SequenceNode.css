@@ -11,8 +11,6 @@
     width: var(--sequence-node-width);
     min-height: var(--sequence-node-height);
     min-width: var(--sequence-node-width);
-
-    /* outline: 1px dotted white; */
 }
 
 .sequence-node.disabled .sequence-node--inner {

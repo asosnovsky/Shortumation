@@ -8,6 +8,7 @@ import { DEFAULT_DIMS } from "./elements/constants";
 import { DAGGraphBoard } from "./board";
 import { AutomationTrigger } from "types/automations/triggers";
 import { AutomationCondition } from "types/automations/conditions";
+import { NodesRow, TriggerConditionNodeRow } from "./NodesRow";
 
 export const DAGAutomationGraph: FC<{
   action: AutomationSequenceNode[];
@@ -17,6 +18,7 @@ export const DAGAutomationGraph: FC<{
   onTriggerUpdate: (t: AutomationTrigger[]) => void;
   onConditionUpdate: (c: AutomationCondition[]) => void;
   isFlipped: boolean;
+  useNodesRow: boolean;
   additionalControls?: ReactNode;
 }> = (props) => {
   const { namer } = useHA();
@@ -37,6 +39,10 @@ export const DAGAutomationGraph: FC<{
       onUpdate: props.onTriggerUpdate as any,
     },
   });
+  const dims = {
+    ...DEFAULT_DIMS,
+    flipped: props.isFlipped,
+  };
   const elementData = useAutomationNodes(
     {
       action: props.action,
@@ -44,26 +50,34 @@ export const DAGAutomationGraph: FC<{
       trigger: props.trigger,
     },
     {
-      dims: {
-        ...DEFAULT_DIMS,
-        flipped: props.isFlipped,
-      },
+      dims,
       namer,
       openModal: setModalState,
       stateUpdater: updater,
-    }
+    },
+    props.useNodesRow
   );
   return (
-    <DAGGraphBoard
-      modalState={modalState}
-      closeModal={() => setModalState(undefined)}
-      state={{
-        ready: true,
-        data: {
-          elements: elementData,
-        },
-      }}
-      additionalControls={props.additionalControls}
-    />
+    <>
+      {props.useNodesRow && (
+        <TriggerConditionNodeRow
+          trigger={props.trigger}
+          condition={props.condition}
+          stateUpdater={updater}
+          sequenceNodeDims={dims.node}
+        />
+      )}
+      <DAGGraphBoard
+        modalState={modalState}
+        closeModal={() => setModalState(undefined)}
+        state={{
+          ready: true,
+          data: {
+            elements: elementData,
+          },
+        }}
+        additionalControls={props.additionalControls}
+      />
+    </>
   );
 };

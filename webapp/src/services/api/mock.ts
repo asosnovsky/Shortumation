@@ -112,6 +112,7 @@ export const useProfileMockAPI = (
   initialProfile: UserProfile = {
     lang: "eng",
     theme: "dark",
+    flags: {},
   },
   makeRef = useRef,
   returnErrors: boolean = false

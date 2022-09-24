@@ -1,8 +1,8 @@
 import "./index.css";
 
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import ReactFlow, { Controls, ReactFlowProvider } from "react-flow-renderer";
+import ReactFlow, { Controls, useReactFlow } from "react-flow-renderer";
 
 import { NodeEditor } from "components/NodeEditor";
 import { Modal } from "components/Modal";
@@ -10,20 +10,13 @@ import { Modal } from "components/Modal";
 import { nodeTypes } from "../nodes";
 import { DAGGraphBoardProps } from "./types";
 
-export const DAGGraphBoard: FC<DAGGraphBoardProps> = (props) => {
-  return (
-    <ReactFlowProvider>
-      <DAGGraphBoardInner {...props} />
-    </ReactFlowProvider>
-  );
-};
-
-export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
+export const DAGGraphBoard: FC<DAGGraphBoardProps> = ({
   modalState,
   state,
   closeModal,
   additionalControls,
 }) => {
+  const reactFlow = useReactFlow();
   // render unready or errored states
   if (!state.ready) {
     return (
@@ -36,6 +29,12 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
   if ("error" in state.data) {
     return <div className="dag-graphboard errored">{state.data.error}</div>;
   }
+
+  // useEffect(() => {
+  //   if (state.ready) {
+  //     reactFlow.fitView();
+  //   }
+  // }, [state.ready, reactFlow]);
 
   // modal
   let modalBody = <></>;
@@ -70,7 +69,7 @@ export const DAGGraphBoardInner: FC<DAGGraphBoardProps> = ({
         nodesDraggable={false}
         {...elements}
       >
-        <Controls showInteractive={false} showFitView>
+        <Controls showInteractive={false} showFitView={false}>
           {additionalControls}
         </Controls>
       </ReactFlow>

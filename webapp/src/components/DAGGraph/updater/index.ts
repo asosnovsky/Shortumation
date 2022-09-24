@@ -86,7 +86,6 @@ export const createDummyUpdater = (): DAGUpdaterInput<any> => ({
   data: [],
   onUpdate: console.warn,
 });
-// export const createScriptConditionFieldUpdater = (f: ScriptConditionField, )
 
 export type DAGGraphUpdater = ReturnType<typeof createUpdater>;
 export type DAGGraphChooseUpdater = ReturnType<

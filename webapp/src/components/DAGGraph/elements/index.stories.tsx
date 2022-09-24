@@ -24,15 +24,19 @@ const { make, componentMeta } = makeStory({
       state,
       setState
     );
-    const elementData = useAutomationNodes(state, {
-      dims: {
-        ...DEFAULT_DIMS,
-        flipped: props.flipped,
+    const elementData = useAutomationNodes(
+      state,
+      {
+        dims: {
+          ...DEFAULT_DIMS,
+          flipped: props.flipped,
+        },
+        namer,
+        openModal: setModalState,
+        stateUpdater: updater,
       },
-      namer,
-      openModal: setModalState,
-      stateUpdater: updater,
-    });
+      false
+    );
     return (
       <DAGGraphBoard
         modalState={modalState}

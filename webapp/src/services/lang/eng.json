@@ -31,6 +31,7 @@
   "STATE": "State",
   "SEARCH": "Search",
   "FLIPP": "Flip",
+  "FLIPP_GRAPH": "Flip Graph",
   "CANCEL": "Cancel",
   "CREATE": "Create",
   "OR": "Or",
@@ -179,5 +180,7 @@
   "HOW_MANY_TIMES": "How many times?",
 
   "READONLY_MODE": "Read Only Mode",
-  "READONLY_CANNOT_UPDATE": "Cannot update in readonly mode"
+  "READONLY_CANNOT_UPDATE": "Cannot update in readonly mode",
+
+  "NODES_ROW": "Do not inlcude automation triggers & conditions in graph."
 }

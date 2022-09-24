@@ -2,17 +2,46 @@ import { XYPosition } from "react-flow-renderer";
 
 import AddBox from "@mui/icons-material/AddBox";
 
-import { getDescriptionFromAutomationNode } from "utils/formatting";
+import { getDescriptionFromAutomationNode, Namer } from "utils/formatting";
 import { validateNode } from "utils/automations";
 import { AutomationCondition } from "types/automations/conditions";
 import { AutomationTrigger } from "types/automations/triggers";
 
-import { DAGDims, ElementMaker, ElementMakerProps } from "./types";
+import { DAGDims, ElementMaker, ElementMakerProps, Size } from "./types";
 import { DAGElementsOutputState } from "./outputState";
 import { convertFailuresToSequenceNodeDataProps } from "./util";
 
 import { ButtonNodeMaker } from "../nodes/ButtonNode";
 import { CollectionNodeMaker } from "../nodes/CollectionNode";
+import { DAGGraphUpdater } from "../updater/index";
+import { AutomationActionData } from "types/automations";
+
+export function makeCollectionNodeMakerChildProps<
+  NodeType extends keyof AutomationActionData,
+  Node extends AutomationActionData[NodeType][0]
+>(
+  nodeType: NodeType,
+  node: Node,
+  index: number,
+  stateUpdater: DAGGraphUpdater,
+  namer: Namer
+) {
+  const failures = validateNode(node, [nodeType]);
+
+  if (failures) {
+    return {
+      enabled: node.enabled ?? true,
+      ...stateUpdater.createNodeActions(nodeType, index, {}),
+      ...convertFailuresToSequenceNodeDataProps(failures),
+    };
+  }
+
+  return {
+    enabled: node.enabled ?? true,
+    label: getDescriptionFromAutomationNode(node, namer, true),
+    ...stateUpdater.createNodeActions(nodeType, index, {}),
+  };
+}
 
 export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
   nodes,
@@ -24,23 +53,15 @@ export const makeTriggerNodes: ElementMaker<AutomationTrigger> = (
       ...dims.collection,
       collectionType: "trigger",
       onAddNode: () => stateUpdater.basic.trigger.addNode(null),
-      nodes: nodes.map((node, index) => {
-        const failures = validateNode(node, ["trigger"]);
-
-        if (failures) {
-          return {
-            enabled: node.enabled ?? true,
-            ...stateUpdater.createNodeActions("trigger", index, {}),
-            ...convertFailuresToSequenceNodeDataProps(failures),
-          };
-        }
-
-        return {
-          enabled: node.enabled ?? true,
-          label: getDescriptionFromAutomationNode(node, namer, true),
-          ...stateUpdater.createNodeActions("trigger", index, {}),
-        };
-      }),
+      nodes: nodes.map((node, index) =>
+        makeCollectionNodeMakerChildProps(
+          "trigger",
+          node,
+          index,
+          stateUpdater,
+          namer
+        )
+      ),
     })
   );
   return outputState;
@@ -57,23 +78,15 @@ export const makeConditionNodes: ElementMaker<AutomationCondition> = (
       collectionType: "condition",
       hasInput: !!lastNodeId,
       onAddNode: () => stateUpdater.basic.condition.addNode(null),
-      nodes: nodes.map((node, index) => {
-        const failures = validateNode(node, ["condition"]);
-
-        if (failures) {
-          return {
-            enabled: node.enabled ?? true,
-            ...stateUpdater.createNodeActions("condition", index, {}),
-            ...convertFailuresToSequenceNodeDataProps(failures),
-          };
-        }
-
-        return {
-          enabled: node.enabled ?? true,
-          label: getDescriptionFromAutomationNode(node, namer, true),
-          ...stateUpdater.createNodeActions("condition", index, {}),
-        };
-      }),
+      nodes: nodes.map((node, index) =>
+        makeCollectionNodeMakerChildProps(
+          "condition",
+          node,
+          index,
+          stateUpdater,
+          namer
+        )
+      ),
     })
   );
   if (lastNodeId && outputState.lastNodeId) {

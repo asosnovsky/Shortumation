@@ -40,4 +40,8 @@ export interface ApiState {
 export type UserProfile = {
   theme: string;
   lang: string;
+  flags: Partial<{
+    useNodesRow: boolean;
+    flipped: boolean;
+  }>;
 };

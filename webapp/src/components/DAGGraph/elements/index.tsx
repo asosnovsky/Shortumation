@@ -28,52 +28,57 @@ import * as helpers from "./helpers";
 
 export const useAutomationNodes = (
   automation: AutomationActionData,
-  args: ElementMakerBaseProps
+  args: ElementMakerBaseProps,
+  hideConditionAndTriggers: boolean
 ) => {
   const dims: DAGDims = {
     ...args.dims,
   };
   const state = useDAGElementsState();
   const outputState = new DAGElementsOutputState(dims.position, dims);
-  outputState.extend(
-    helpers.makeTriggerNodes(automation.trigger, {
-      ...args,
-      state,
+  let actionStartPos = dims.position;
+  if (!hideConditionAndTriggers) {
+    outputState.extend(
+      helpers.makeTriggerNodes(automation.trigger, {
+        ...args,
+        state,
+        dims,
+        position: dims.position,
+        nodeId: `${dims.flipped}-trigger`,
+        nodeIndex: 0,
+      })
+    );
+    outputState.extend(
+      helpers.makeConditionNodes(automation.condition, {
+        ...args,
+        state,
+        dims,
+        position: distance.moveFromTo(
+          "collection",
+          "collection",
+          outputState.getLastNodePos(),
+          dims
+        ),
+        nodeId: `${dims.flipped}-condition`,
+        nodeIndex: 1,
+        lastNodeId: outputState.lastNodeId,
+      })
+    );
+    actionStartPos = distance.moveFromTo(
+      "collection",
+      "node",
+      outputState.getLastNodePos(),
       dims,
-      position: dims.position,
-      nodeId: `${dims.flipped}-trigger`,
-      nodeIndex: 0,
-    })
-  );
-  outputState.extend(
-    helpers.makeConditionNodes(automation.condition, {
-      ...args,
-      state,
-      dims,
-      position: distance.moveFromTo(
-        "collection",
-        "collection",
-        outputState.getLastNodePos(),
-        dims
-      ),
-      nodeId: `${dims.flipped}-condition`,
-      nodeIndex: 1,
-      lastNodeId: outputState.lastNodeId,
-    })
-  );
+      true
+    );
+  }
 
   outputState.extend(
     makeSequenceNodes(automation.action, {
       ...args,
       state,
       dims,
-      position: distance.moveFromTo(
-        "collection",
-        "node",
-        outputState.getLastNodePos(),
-        dims,
-        true
-      ),
+      position: actionStartPos,
       nodeId: `${dims.flipped}-action`,
       nodeIndex: 2,
       lastNodeId: outputState.lastNodeId,

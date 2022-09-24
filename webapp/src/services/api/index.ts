@@ -6,6 +6,7 @@ import { useAutoMockAPI, useProfileMockAPI } from "./mock";
 import { createContext, useContext, useRef } from "react";
 import { makeProfileAPI } from "./profile";
 import { ApiState } from "./types";
+import { UserProfile } from "services/api/types";
 
 const locationPrefixWeb = window.location.pathname.match(/(\/.+\/)web/i);
 const baseURL = new URL(
@@ -33,3 +34,15 @@ const ApiStateContext = createContext<ApiState>({
 });
 export const ApiStateProvider = ApiStateContext.Provider;
 export const useApiState = () => useContext(ApiStateContext);
+export const useUserProfile = (): UserProfile => {
+  const apiUserProfile = useApiState().userProfile;
+  if (apiUserProfile.ready && apiUserProfile.ok) {
+    return apiUserProfile.data;
+  } else {
+    return {
+      lang: "eng",
+      theme: "dark",
+      flags: {},
+    };
+  }
+};

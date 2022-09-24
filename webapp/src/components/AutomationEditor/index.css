@@ -128,3 +128,12 @@
     display: flex;
     gap: 1em;
 }
+
+.automation-editor.fullscreen .automation-editor--flow-wrapper--toolbar--title {
+    display: none;
+}
+
+.automation-editor.fullscreen .automation-editor--flow-wrapper--toolbar {
+    justify-content: flex-end;
+    margin-top: 0.5em;
+}

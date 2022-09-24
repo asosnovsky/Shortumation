@@ -2,7 +2,6 @@ import "./index.css";
 import "./index.mobile.css";
 
 import { FC, useState } from "react";
-import { useCookies } from "react-cookie";
 
 import Skeleton from "@mui/material/Skeleton";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -11,7 +10,6 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 
 import SpeedDialIcon from "@mui/icons-material/SettingsRounded";
 import UndoIcon from "@mui/icons-material/UndoSharp";
-import Icon from "@mui/material/Icon";
 import EditIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 import DeleteIcon from "@mui/icons-material/DeleteForever";
 import { CheckMarkIcon } from "components/Icons";
@@ -34,7 +32,16 @@ import { useAutomatioEditorState, EditorData } from "./state";
 import { useLang } from "services/lang";
 import { useSnackbar } from "notistack";
 import { Alert } from "@mui/material";
-
+import { useUserProfile } from "services/api";
+import {
+  ControlButton,
+  ReactFlowProvider,
+  useReactFlow,
+} from "react-flow-renderer";
+import FitInIcon from "@mui/icons-material/FitScreenRounded";
+import FullscreenIcon from "@mui/icons-material/FullscreenRounded";
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExitRounded";
+import { useEffect } from "react";
 interface Props {
   automation?: AutomationData | BareAutomationData;
   dims: DAGDims;
@@ -46,7 +53,14 @@ interface Props {
   readonly: boolean;
   issue?: string;
 }
-export const AutomationEditor: FC<Props> = ({
+export const AutomationEditor: FC<Props> = (props) => {
+  return (
+    <ReactFlowProvider>
+      <AutomationEditorInner {...props} />
+    </ReactFlowProvider>
+  );
+};
+export const AutomationEditorInner: FC<Props> = ({
   dims,
   automation: propsAutos,
   onUpdate: propsOnUpdate,
@@ -57,6 +71,8 @@ export const AutomationEditor: FC<Props> = ({
   issue,
 }) => {
   // state
+  const reactFlow = useReactFlow();
+  const userProfile = useUserProfile();
   const langStore = useLang();
   const snackbr = useSnackbar();
   const {
@@ -79,15 +95,18 @@ export const AutomationEditor: FC<Props> = ({
     }
   });
   const [infoBoxOpen, setInfoBox] = useState(false);
-  const [
-    { ckFlipped },
-    setCookies,
-    // eslint-disable-next-line
-    _,
-  ] = useCookies(["ckFlipped"]);
+  const [fullScreenMode, setFullScreenMode] = useState(false);
   // alias
-  const flipped = dims.flipped ? true : ckFlipped === "1";
-  const setFlipped = (v: boolean) => setCookies("ckFlipped", v ? "1" : "0");
+  const flipped = userProfile.flags.flipped ?? !dims.flipped;
+  const useNodesRow = userProfile.flags.useNodesRow !== false;
+  // effect
+  useEffect(() => {
+    if (reactFlow) {
+      setTimeout(() => {
+        reactFlow.fitView();
+      }, 500);
+    }
+  }, [flipped, fullScreenMode, reactFlow]);
   // render
   if (state.status === "loading") {
     return (
@@ -114,6 +133,7 @@ export const AutomationEditor: FC<Props> = ({
         "automation-editor",
         state.status,
         readonly ? "readonly" : "",
+        fullScreenMode ? "fullscreen" : "",
       ].join(" ")}
     >
       {state.status === "saving" && (
@@ -220,15 +240,6 @@ export const AutomationEditor: FC<Props> = ({
               }
             />
           </div>
-          {!dims.flipped && (
-            <Button
-              className={"automation-editor--flow-wrapper--toolbar--flip-btn"}
-              onClick={() => setFlipped(!flipped)}
-            >
-              <Icon>{flipped ? "flip_to_front" : "flip_to_back"}</Icon>
-              {langStore.get("FLIPP")}
-            </Button>
-          )}
           {state.status === "changed" && (
             <Button onClick={undo}>
               <UndoIcon />
@@ -255,6 +266,17 @@ export const AutomationEditor: FC<Props> = ({
           onTriggerUpdate={updateTrigger}
           onConditionUpdate={updateCondition}
           isFlipped={flipped}
+          useNodesRow={useNodesRow}
+          additionalControls={
+            <>
+              <ControlButton onClick={() => setFullScreenMode(!fullScreenMode)}>
+                {fullScreenMode ? <FullscreenExitIcon /> : <FullscreenIcon />}
+              </ControlButton>
+              <ControlButton onClick={() => reactFlow.fitView()}>
+                <FitInIcon />
+              </ControlButton>
+            </>
+          }
         />
         <SpeedDial
           ariaLabel="options label"

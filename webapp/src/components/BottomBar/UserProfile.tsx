@@ -6,6 +6,7 @@ import { InputList } from "components/Inputs/InputList";
 import { useLang } from "services/lang";
 import { FC, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
+import InputBoolean from "components/Inputs/Base/InputBoolean";
 
 export type UserProfileProps = {
   api: ApiService;
@@ -43,6 +44,26 @@ export const UserProfileEditor: FC<UserProfileProps> = ({ api }) => {
           });
       }
     };
+  const updateFlag =
+    <K extends keyof UserProfile["flags"], D extends UserProfile["flags"][K]>(
+      key: K
+    ) =>
+    (data: D) => {
+      if (profile.ready) {
+        setIsSaving(true);
+        api
+          .setProfile({
+            ...profile.data,
+            flags: {
+              ...profile.data.flags,
+              [key]: data,
+            },
+          })
+          .then(() => {
+            setIsSaving(false);
+          });
+      }
+    };
   return (
     <div className="user-profile">
       <InputList
@@ -56,6 +77,16 @@ export const UserProfileEditor: FC<UserProfileProps> = ({ api }) => {
         options={["eng", "fra", "ita"]}
         current={profile.data.lang}
         onChange={update("lang")}
+      />
+      <InputBoolean
+        label={lang.get("FLIPP_GRAPH")}
+        value={profile.data.flags.flipped ?? false}
+        onChange={updateFlag("flipped")}
+      />
+      <InputBoolean
+        label={lang.get("NODES_ROW")}
+        value={profile.data.flags.useNodesRow ?? true}
+        onChange={updateFlag("useNodesRow")}
       />
       {saving && <LinearProgress />}
     </div>

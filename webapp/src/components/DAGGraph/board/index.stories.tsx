@@ -11,7 +11,6 @@ const { make, componentMeta } = makeStory({
 });
 
 export default componentMeta;
-export const Example = make({});
 
 export const Loading = make({
   state: {

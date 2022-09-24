@@ -34,6 +34,7 @@
   "STATE": "Statut",
   "SEARCH": "Chercher",
   "FLIPP": "Retourner",
+  "FLIPP_GRAPH": "Inverser le graphique",
   "CANCEL": "Annuler",
   "CREATE": "Créer",
   "OR": "Ou",
