@@ -188,16 +188,14 @@ export function InputAutoComplete<T extends Option>(
         const id = getID(option);
 
         return (
-          <>
-            <SearchItem
-              key={label + id}
-              listProps={listProps}
-              id={id}
-              label={label}
-              searchTerm={inputValue}
-              onlyShowLabel={props.onlyShowLabel}
-            />
-          </>
+          <SearchItem
+            key={label + id}
+            listProps={listProps}
+            id={id}
+            label={label}
+            searchTerm={inputValue}
+            onlyShowLabel={props.onlyShowLabel}
+          />
         );
       }}
       renderInput={(params) => (
@@ -225,12 +223,13 @@ export function InputAutoComplete<T extends Option>(
       )}
       renderTags={(tagValue, getTagProps) => {
         const inner = (
-          <div className="input-autocomplete--tags">
+          <div className="input-autocomplete--tags" key={"inner"}>
             {tagValue.map((option, index) => {
               const label = getLabel(option);
               const id = getID(option);
               const tagProps = getTagProps({ index });
               tagProps.className += " input-autocomplete--chip";
+              tagProps.key = tagProps.key ?? index;
               return (
                 <Chip
                   size="medium"
@@ -258,7 +257,11 @@ export function InputAutoComplete<T extends Option>(
         }
         if (props.multiple) {
           return (
-            <Badge badgeContent={tagValue.length} color="info">
+            <Badge
+              badgeContent={tagValue.length}
+              color="info"
+              key="badge-wrapper"
+            >
               {inner}
             </Badge>
           );

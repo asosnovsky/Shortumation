@@ -15,6 +15,7 @@ const { make, componentMeta } = makeStory({
       <div
         style={{
           maxWidth: 200,
+          margin: "5em",
         }}
       >
         <InputEntity

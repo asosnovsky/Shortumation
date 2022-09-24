@@ -43,10 +43,6 @@ body,
     background: var(--mui-grey-400);
 }
 
-* {
-    transition: all 200ms ease-out;
-}
-
 .column {
     display: flex;
     flex-direction: column;

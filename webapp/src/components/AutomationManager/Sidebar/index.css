@@ -6,6 +6,11 @@
     position: relative;
     height: 100%;
     min-width: calc(min(max(25vw, 35em), 50vw));
+    transition: min-width ease-in-out 500ms,
+        min-height ease-in-out 500ms,
+        height ease-in-out 500ms,
+        width ease-in-out 500ms,
+        opacity ease-in-out 500ms;
 }
 
 .automation-manager--sidebar-box--nav {
@@ -35,8 +40,12 @@
 }
 
 .automation-manager--sidebar.hidden {
-    width: 2.5em;
+    width: 3em;
     min-width: 0;
+}
+
+.automation-manager--sidebar.hidden .add-btn {
+    display: none;
 }
 
 .automation-manager--sidebar.hidden .automation-manager--sidebar-box--nav,

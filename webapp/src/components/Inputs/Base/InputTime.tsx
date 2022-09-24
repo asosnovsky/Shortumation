@@ -127,18 +127,16 @@ export const InputTime: FC<InputTimeProps> = (props) => {
 
   return (
     <div className={["input-time", props.className ?? ""].join(" ")}>
-      {/* <InputLabel >{props.label}</InputLabel> */}
       <div className="input-time--inner">
-        {fields.map((name) => {
+        {fields.map((name, index) => {
           const label = prettyName(
             lang.get(`TIME_UNITS_${name}`.toUpperCase())
           );
           return (
             <TextField
-              key={name}
+              key={`${name}-${index}`}
               variant="filled"
               label={label}
-              defaultValue="00"
               InputProps={{
                 disabled,
                 type: "number",
@@ -151,6 +149,7 @@ export const InputTime: FC<InputTimeProps> = (props) => {
         })}
         {!props.restrictEmpty && (
           <ButtonIcon
+            key="disable-btn"
             onClick={() => setDisabled(!disabled)}
             icon={disabled ? <EditIcon /> : <CloseIcon />}
           />

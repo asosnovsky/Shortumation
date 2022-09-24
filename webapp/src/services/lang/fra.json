@@ -71,7 +71,7 @@
   "TIME_UNITS_HOURS": "heures",
   "TIME_UNITS_MINUTES": "minutes",
   "TIME_UNITS_SECONDS": "secondes",
-  "TIME_UNITS_MILISECONDS": "millisecondes",
+  "TIME_UNITS_MILLISECONDS": "millisecondes",
 
   "TIMEOUT": "Temps libre",
   "CONTINUTE_ON_TIMEOUT": "Continuer sur Timeout",

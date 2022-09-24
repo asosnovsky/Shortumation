@@ -1,6 +1,6 @@
-from typing import Literal
+from typing import Dict, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.hass_config import HassConfig
 from src.yaml_serializer import dump_yaml, load_yaml
@@ -9,6 +9,7 @@ from src.yaml_serializer import dump_yaml, load_yaml
 class UserProfile(BaseModel):
     theme: Literal["dark", "light"] = "dark"
     lang: str = "eng"
+    flags: Dict[str, bool] = Field(default_factory=dict)
 
     @classmethod
     def from_hass_config(cls, hass_config: HassConfig):

@@ -61,7 +61,7 @@
   "TIME_UNITS_HOURS": "ore",
   "TIME_UNITS_MINUTES": "minuti",
   "TIME_UNITS_SECONDS": "secondi",
-  "TIME_UNITS_MILISECONDS": "millisecondi",
+  "TIME_UNITS_MILLISECONDS": "millisecondi",
 
   "TIMEOUT": "Tempo scaduto",
   "CONTINUTE_ON_TIMEOUT": "Continua su Timeout",
