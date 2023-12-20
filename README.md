@@ -1,4 +1,4 @@
-Due to lack of time on my part, this project is no longer being worked on. :(
+:no_entry: [DEPRECATED] Due to lack of time on my part, this project is no longer being worked on. :( :no_entry: [DEPRECATED]
 
 ----
 # <img src="logo.png" height="40x"/> Shortumation ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=platsic)
