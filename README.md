@@ -1,3 +1,6 @@
+Due to lack of time on my part, this project is no longer being worked on. :(
+
+----
 # <img src="logo.png" height="40x"/> Shortumation ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asosnovsky/Shortumation?label=&style=platsic)
 
 [![Test](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/test.yml) [![Build](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml/badge.svg)](https://github.com/asosnovsky/Shortumation/actions/workflows/build.yml)
