@@ -16,7 +16,7 @@ setuptools.setup(
             "mypy==0.971",
             "mypy-extensions==0.4.3",
             "black==22.6.0",
-            "bandit==1.7.4",
+            "bandit==1.7.8",
             "isort==5.10.1",
             "coverage==6.4.2",
             "pre-commit==2.20.0",
