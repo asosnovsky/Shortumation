@@ -22,7 +22,7 @@ setuptools.setup(
             "pre-commit==2.20.0",
             "vulture==2.5",
             "types-requests==2.28.4",
-            "types-PyYAML==6.0.11",
+            "types-PyYAML==6.0.12.20240311",
             "requests==2.28.1",
         ],
     },
