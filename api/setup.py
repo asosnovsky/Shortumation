@@ -4,7 +4,7 @@ import setuptools  # type: ignore
 setuptools.setup(
     python_requires=">=3.10",
     install_requires=[
-        "PyYAML==6.0",
+        "PyYAML==6.0.1",
         "fastapi==0.78.0",
         "pydantic==1.10.13",
         "hypercorn==0.13.2",
